@@ -1,0 +1,16 @@
+{
+  "name": "@riosst100/pwa-marketplace",
+  "author": "riosst100@gmail.com",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "pwa-studio": {
+    "targets": {
+      "intercept": "src/intercept.js"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.6.5"
+  },
+  "license": "MIT",
+  "private": false
+}
