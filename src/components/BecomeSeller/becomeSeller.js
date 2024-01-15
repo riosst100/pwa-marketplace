@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Form } from 'informed';
 import { func, shape, string, bool } from 'prop-types';
-import { useBecomeSeller } from '@riosst100/pwa-seller-registration/src/talons/BecomeSeller/useBecomeSeller';
+import { useBecomeSeller } from '@riosst100/pwa-marketplace/src/talons/BecomeSeller/useBecomeSeller';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import combine from '@magento/venia-ui/lib/util/combineValidators';
@@ -68,7 +68,7 @@ const BecomeSeller = props => {
         >
             <FormattedMessage
                 id={'becomeSeller.becomeSellerText'}
-                defaultMessage={'Create an Account'}
+                defaultMessage={'Become a Seller'}
             />
         </Button>
     );
@@ -83,7 +83,7 @@ const BecomeSeller = props => {
             <h2 data-cy="BecomeSeller-title" className={classes.title}>
                 <FormattedMessage
                     id={'becomeSeller.becomeSellerText'}
-                    defaultMessage={'Create an Account'}
+                    defaultMessage={'Become a Seller'}
                 />
             </h2>
             <FormError errors={Array.from(errors.values())} />

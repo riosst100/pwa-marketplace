@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 
-import { useWebsiteSwitcher } from '@riosst100/pwa-marketplace/src/talons/Header/useWebsiteSwitcher';
+import { useWebsiteSwitcher } from '@riosst100/pwa-marketplace/src/talons/WebsiteSwitcher/useWebsiteSwitcher';
 import { availableRoutes } from '@magento/venia-ui/lib/components/Routes/routes';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -75,13 +75,13 @@ const WebsiteSwitcher = props => {
             <button
                 data-cy="WebsiteSwitcher-triggerButton"
                 className={classes.trigger}
-                aria-label={currentWebsiteName || ''}
+                aria-label={currentWebsiteName}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
                 data-cy="WebsiteSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
-                {triggerLabel}
+                {triggerLabel || ''}
             </button>
             <div
                 ref={storeMenuRef}
