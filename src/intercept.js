@@ -47,4 +47,24 @@ module.exports = async targets => {
       WEBSITE_CODE: process.env.WEBSITE_CODE
     }).apply(compiler);
   });
+  
+  // targets.of("@magento/venia-ui").routes.tap(routes => {
+  //   routes.push({
+  //     name: "Become Seller",
+  //     pattern: "/become-seller",
+  //     path: require.resolve("../components/BecomeSeller/index.js")
+  //   });
+  //   return routes;
+  // });
+};
+
+module.exports = (targets) => {
+  targets.of("@magento/venia-ui").routes.tap((routes) => {
+    routes.push({
+      name: "BecomeSellerRoute",
+      pattern: "/become-seller",
+      path: require.resolve("./components/BecomeSellerPage/index.js"),
+    });
+    return routes;
+  });
 };

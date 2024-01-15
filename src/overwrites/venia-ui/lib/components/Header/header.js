@@ -16,6 +16,7 @@ import defaultClasses from '@magento/venia-ui/lib/components/Header/header.modul
 import StoreSwitcher from '@magento/venia-ui/lib/components/Header/storeSwitcher';
 import WebsiteSwitcher from '@riosst100/pwa-marketplace/src/components/Header/websiteSwitcher';
 import CurrencySwitcher from '@magento/venia-ui/lib/components/Header/currencySwitcher';
+import BecomeSellerLink from '@riosst100/pwa-marketplace/src/components/Header/becomeSellerLink';
 import MegaMenu from '@magento/venia-ui/lib/components/MegaMenu';
 import PageLoadingIndicator from '@magento/venia-ui/lib/components/PageLoadingIndicator';
 import { useIntl } from 'react-intl';
@@ -60,6 +61,7 @@ const Header = props => {
         <Fragment>
             <div className={classes.switchersContainer}>
                 <div className={classes.switchers} data-cy="Header-switchers">
+                    <BecomeSellerLink />
                     <WebsiteSwitcher />
                     <StoreSwitcher />
                     <CurrencySwitcher />
