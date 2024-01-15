@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 
-import { useWebsiteSwitcher } from '@riosst100/pwa-multi-website/src/talons/Header/useWebsiteSwitcher';
+import { useWebsiteSwitcher } from '@riosst100/pwa-marketplace/src/talons/Header/useWebsiteSwitcher';
 import { availableRoutes } from '@magento/venia-ui/lib/components/Routes/routes';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { useAdapter } from '@magento/peregrine/lib/talons/Adapter/useAdapter';
 import App, { AppContextProvider } from '@magento/venia-ui/lib/components/App';
 import StoreCodeRoute from '@magento/venia-ui/lib/components/StoreCodeRoute';
-import { useWebsiteByIp } from '@riosst100/pwa-multi-website/src/talons/WebsiteByIp/useWebsiteByIp';
+import { useWebsiteByIp } from '@riosst100/pwa-marketplace/src/talons/WebsiteByIp/useWebsiteByIp';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
 const storage = new BrowserPersistence();

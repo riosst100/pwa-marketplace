@@ -1,7 +1,7 @@
 const debug = require('@magento/pwa-buildpack/lib/util/debug').makeFileLogger(__filename);
 
 const fetch = require('node-fetch');
-const graphQLQueries = require('@riosst100/pwa-multi-website/src/queries');
+const graphQLQueries = require('@riosst100/pwa-marketplace/src/queries');
 const https = require('https');
 
 // To be used with `node-fetch` in order to allow self-signed certificates.
