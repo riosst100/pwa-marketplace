@@ -1,7 +1,7 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 
-import { useWebsiteSwitcher } from '@riosst100/pwa-marketplace/src/talons/Header/useWebsiteSwitcher';
+import { useWebsiteSwitcher } from '@riosst100/pwa-marketplace/src/talons/WebsiteSwitcher/useWebsiteSwitcher';
 import { availableRoutes } from '@magento/venia-ui/lib/components/Routes/routes';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -68,7 +68,7 @@ const WebsiteSwitcher = props => {
         );
     });
 
-    let triggerLabel = `${currentWebsiteName}`;
+    let triggerLabel = currentWebsiteName ? `${currentWebsiteName}` : '';
 
     return (
         <div className={classes.root} data-cy="WebsiteSwitcher-root">
@@ -81,7 +81,7 @@ const WebsiteSwitcher = props => {
                 data-cy="WebsiteSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
-                {triggerLabel}
+                {triggerLabel || ''}
             </button>
             <div
                 ref={storeMenuRef}

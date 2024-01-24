@@ -108,7 +108,6 @@ export const useWebsiteSwitcher = (props = {}) => {
 
     // availableStores => mapped options or empty map if undefined.
     const availableStores = useMemo(() => {
-        console.log(availableStoresData)
         return (
             (storeConfigData &&
                 availableStoresData &&
