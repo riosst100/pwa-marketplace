@@ -13,7 +13,9 @@ const BecomeSellerPage = props => {
     const { becomeSellerProps } = useBecomeSellerPage(props);
     const { formatMessage } = useIntl();
 
-    return (
+    const { isSeller } = becomeSellerProps
+
+    return !isSeller ? (
         <div className={classes.root}>
             <StoreTitle>
                 {formatMessage({
@@ -21,30 +23,23 @@ const BecomeSellerPage = props => {
                     defaultMessage: 'Become a Seller'
                 })}
             </StoreTitle>
-            <h1 className={classes.header}>
-                <FormattedMessage
-                    id="becomeSellerPage.header"
-                    defaultMessage="Become a Seller"
-                />
-            </h1>
             <div className={classes.contentContainer}>
                 <BecomeSeller {...becomeSellerProps} />
             </div>
         </div>
-    );
+    ) : ''
 }
 
 export default BecomeSellerPage;
 
 BecomeSellerPage.defaultProps = {
     signedInRedirectUrl: '/become-seller',
-    signInPageUrl: 'https://seller-local.tcgcollective.co'
+    signInPageUrl: '/sign-in'
 };
 
 BecomeSellerPage.propTypes = {
     classes: shape({
         root: string
     }),
-    signedInRedirectUrl: string,
-    signInPageUrl: string
+    signedInRedirectUrl: string
 };

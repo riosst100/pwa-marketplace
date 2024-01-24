@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
-import { useUserContext } from '@magento/peregrine/lib/context/user';
+const validBecomeSellerParams = ['sellerUrl', 'companyName', 'sellerProfileName'];
 
-const validBecomeSellerParams = ['email', 'firstName', 'lastName'];
+const storage = new BrowserPersistence();
 
 const getBecomeSellerInitialValues = search => {
     const params = new URLSearchParams(search);
@@ -27,24 +28,20 @@ const getBecomeSellerInitialValues = search => {
 export const useBecomeSellerPage = props => {
     const { signedInRedirectUrl, signInPageUrl } = props;
     const history = useHistory();
-    const [{ isSignedIn }] = useUserContext();
     const { search } = useLocation();
+
+    const isSeller = storage.getItem('is_seller') || false;
+    useEffect(() => {
+        if (isSeller) {
+            history.push('/')
+        }
+    }, [isSeller, history])
 
     // Keep location state in memory when pushing history and redirect to
     // the `from` url instead when creating an account
     const historyState = useMemo(() => {
         return history && history.location.state ? history.location.state : {};
     }, [history]);
-    const fromRedirectUrl = historyState.from || null;
-
-    // Redirect if user is signed in
-    useEffect(() => {
-        if (isSignedIn) {
-            if (fromRedirectUrl || signedInRedirectUrl) {
-                history.push(fromRedirectUrl || signedInRedirectUrl);
-            }
-        }
-    }, [fromRedirectUrl, history, isSignedIn, signedInRedirectUrl]);
 
     const handleOnCancel = useCallback(() => {
         if (signInPageUrl) {
@@ -59,7 +56,8 @@ export const useBecomeSellerPage = props => {
     const becomeSellerProps = {
         initialValues,
         isCancelButtonHidden: false,
-        onCancel: handleOnCancel
+        onCancel: handleOnCancel,
+        isSeller: isSeller
     };
 
     return {

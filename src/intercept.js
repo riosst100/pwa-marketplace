@@ -36,11 +36,21 @@ module.exports = targets => {
   // Define the routes using the results of the asynchronous operation
   const routes = [
     {
+      exact: true,
       name: "BecomeSellerRoute",
       pattern: "/become-seller",
       path: require.resolve("./components/BecomeSellerPage/index.js"),
+      authed: true,
+      redirectTo: "/sign-in"
     },
-    // Add other routes as needed
+    {
+      exact: true,
+      name: "SellerAccountRoute",
+      pattern: "/seller-account",
+      path: require.resolve("./components/SellerAccountPage/index.js"),
+      authed: true,
+      redirectTo: "/become-seller"
+    },
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation
@@ -49,6 +59,10 @@ module.exports = targets => {
       AVAILABLE_WEBSITES: JSON.stringify(availableWebsites.availableStoresByUserIp),
       WEBSITE_CODE: process.env.WEBSITE_CODE
     }).apply(compiler);
+  });
+
+  targets.of('@magento/pwa-buildpack').specialFeatures.tap(flags => {
+    flags[targets.name] = { esModules: true, cssModules: true, graphqlQueries: true };
   });
 
   // Handle the routes directly within the routes tap

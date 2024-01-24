@@ -1,136 +1,46 @@
 import { gql } from '@apollo/client';
-import { CheckoutPageFragment } from '@magento/peregrine/lib/talons/CheckoutPage/checkoutPageFragments.gql';
 
-export const CREATE_ACCOUNT = gql`
+export const BECOME_SELLER = gql`
     mutation BecomeSeller(
-        $email: String!
-        $firstname: String!
-        $lastname: String!
-        $password: String!
-        $is_subscribed: Boolean!
+        $seller_type: String
+        $group_id: String!
+        $url_key: String!
+        $name: String!
+        $company: String
+        $company_registration_number: String
+        $country_id: String
+        $address_line_1: String!
+        $address_line_2: String
+        $city: String!
+        $region: String
+        $region_id: String
+        $postcode: String!
+        $contact_number: String!
     ) {
-        createCustomer(
+        becomeSeller(
             input: {
-                email: $email
-                firstname: $firstname
-                lastname: $lastname
-                password: $password
-                is_subscribed: $is_subscribed
+                seller_type: $seller_type
+                group_id: $group_id
+                url_key: $url_key
+                name: $name
+                company: $company
+                company_registration_number: $company_registration_number,
+                country_id: $country_id
+                address_line_1: $address_line_1
+                address_line_2: $address_line_2
+                city: $city
+                region: $region
+                region_id: $region_id
+                postcode: $postcode
+                contact_number: $contact_number
             }
         ) {
-            # The createCustomer mutation returns a non-nullable CustomerOutput type
-            # which requires that at least one of the sub fields be returned.
-
-            # eslint-disable-next-line @graphql-eslint/require-id-when-available
-            customer {
-                email
-            }
+            code
+            message
         }
     }
-`;
-
-export const GET_CUSTOMER = gql`
-    query GetCustomerAfterCreate {
-        # eslint-disable-next-line @graphql-eslint/require-id-when-available
-        customer {
-            email
-            firstname
-            lastname
-            is_subscribed
-        }
-    }
-`;
-
-export const SIGN_IN = gql`
-    mutation SignInAfterCreate($email: String!, $password: String!) {
-        generateCustomerToken(email: $email, password: $password) {
-            token
-        }
-    }
-`;
-
-export const CREATE_CART = gql`
-    mutation CreateCartAfterAccountCreation {
-        cartId: createEmptyCart
-    }
-`;
-
-export const GET_CART_DETAILS = gql`
-    query GetCartDetailsAfterAccountCreation($cartId: String!) {
-        cart(cart_id: $cartId) {
-            id
-            # eslint-disable-next-line @graphql-eslint/require-id-when-available
-            items {
-                uid
-                prices {
-                    price {
-                        value
-                    }
-                }
-                # eslint-disable-next-line @graphql-eslint/require-id-when-available
-                product {
-                    uid
-                    name
-                    sku
-                    small_image {
-                        url
-                        label
-                    }
-                    price {
-                        regularPrice {
-                            amount {
-                                value
-                            }
-                        }
-                    }
-                }
-                quantity
-                # eslint-disable-next-line @graphql-eslint/require-id-when-available
-                ... on ConfigurableCartItem {
-                    # eslint-disable-next-line @graphql-eslint/require-id-when-available
-                    configurable_options {
-                        configurable_product_option_uid
-                        option_label
-                        configurable_product_option_value_uid
-                        value_label
-                    }
-                }
-            }
-            prices {
-                grand_total {
-                    value
-                    currency
-                }
-            }
-        }
-    }
-`;
-
-export const MERGE_CARTS = gql`
-    mutation MergeCartsAfterAccountCreation(
-        $sourceCartId: String!
-        $destinationCartId: String!
-    ) {
-        mergeCarts(
-            source_cart_id: $sourceCartId
-            destination_cart_id: $destinationCartId
-        ) {
-            id
-            # eslint-disable-next-line @graphql-eslint/require-id-when-available
-            items {
-                uid
-            }
-            ...CheckoutPageFragment
-        }
-    }
-    ${CheckoutPageFragment}
 `;
 
 export default {
-    becomeSellerMutation: CREATE_ACCOUNT,
-    createCartMutation: CREATE_CART,
-    getCartDetailsQuery: GET_CART_DETAILS,
-    getCustomerQuery: GET_CUSTOMER,
-    mergeCartsMutation: MERGE_CARTS,
-    signInMutation: SIGN_IN
+    becomeSellerMutation: BECOME_SELLER
 };

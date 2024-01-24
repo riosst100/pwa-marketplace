@@ -68,14 +68,14 @@ const WebsiteSwitcher = props => {
         );
     });
 
-    let triggerLabel = `${currentWebsiteName}`;
+    let triggerLabel = currentWebsiteName ? `${currentWebsiteName}` : '';
 
     return (
         <div className={classes.root} data-cy="WebsiteSwitcher-root">
             <button
                 data-cy="WebsiteSwitcher-triggerButton"
                 className={classes.trigger}
-                aria-label={currentWebsiteName}
+                aria-label={currentWebsiteName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
                 data-cy="WebsiteSwitcher-trigger"

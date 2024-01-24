@@ -1,13 +1,11 @@
-import { useCallback, useMemo } from 'react';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
-export const useWebsiteSwitcher = (props = {}) => {
-    const handleTriggerClick = useCallback(() => {
-        // Toggle Stores Menu.
-        // setStoreMenuIsOpen(isOpen => !isOpen);
-        // globalThis.location.assign(`${newPath || ''}`);
-    }, []);
+const storage = new BrowserPersistence();
+
+export const useBecomeSellerLink = (props = {}) => {
+    const isSeller = storage.getItem('is_seller') || false;
 
     return {
-        handleTriggerClick
+        isSeller
     };
 };

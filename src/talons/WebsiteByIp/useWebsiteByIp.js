@@ -24,6 +24,8 @@ export const useWebsiteByIp = websiteCodeInUrl => {
     const getWebsiteByUserIp = useMemo(() => {
         if (websiteByUserIpData) {
             return websiteByUserIpData;
+        } else {
+            return null;
         }
     }, [websiteByUserIpData]);
 

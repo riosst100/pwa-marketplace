@@ -74,7 +74,7 @@ const StoreSwitcher = props => {
 
     let triggerLabel;
     if (hasOnlyOneGroup) {
-        triggerLabel = `${currentStoreName}`;
+        triggerLabel = currentStoreName ? `${currentStoreName}` : '';
     } else {
         triggerLabel = `${currentGroupName} - ${currentStoreName}`;
     }
@@ -84,7 +84,7 @@ const StoreSwitcher = props => {
             <button
                 data-cy="StoreSwitcher-triggerButton"
                 className={classes.trigger}
-                aria-label={currentStoreName}
+                aria-label={currentStoreName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
                 data-cy="StoreSwitcher-trigger"

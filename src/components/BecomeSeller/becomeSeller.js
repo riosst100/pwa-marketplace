@@ -14,11 +14,14 @@ import {
 import Button from '@magento/venia-ui/lib/components/Button';
 import Checkbox from '@magento/venia-ui/lib/components/Checkbox';
 import Field from '@magento/venia-ui/lib/components/Field';
+import Select from '@magento/venia-ui/lib/components/Select';
 import TextInput from '@magento/venia-ui/lib/components/TextInput';
 import defaultClasses from './becomeSeller.module.css';
 import FormError from '@magento/venia-ui/lib/components/FormError';
-import Password from '@magento/venia-ui/lib/components/Password';
 import GoogleRecaptcha from '@magento/venia-ui/lib/components/GoogleReCaptcha';
+import Country from '@magento/venia-ui/lib/components/Country';
+import Region from '@magento/venia-ui/lib/components/Region';
+import Postcode from '@magento/venia-ui/lib/components/Postcode';
 
 const BecomeSeller = props => {
     const talonProps = useBecomeSeller({
@@ -29,34 +32,18 @@ const BecomeSeller = props => {
 
     const {
         errors,
-        handleCancel,
         handleSubmit,
+        handleChange,
+        sellerType,
         handleEnterKeyPress,
-        handleCancelKeyPress,
         isDisabled,
         initialValues,
-        recaptchaWidgetProps
+        recaptchaWidgetProps,
+        isSeller
     } = talonProps;
     const { formatMessage } = useIntl();
     const classes = useStyle(defaultClasses, props.classes);
-
-    const cancelButton = props.isCancelButtonHidden ? null : (
-        <Button
-            data-cy="BecomeSeller-cancelButton"
-            className={classes.cancelButton}
-            disabled={isDisabled}
-            type="button"
-            priority="low"
-            onClick={handleCancel}
-            onKeyDown={handleCancelKeyPress}
-        >
-            <FormattedMessage
-                id={'becomeSeller.cancelText'}
-                defaultMessage={'Cancel'}
-            />
-        </Button>
-    );
-
+    
     const submitButton = (
         <Button
             className={classes.submitButton}
@@ -73,12 +60,28 @@ const BecomeSeller = props => {
         </Button>
     );
 
-    return (
+    const sellerTypeOptions = [
+        {
+            value: "individual",
+            label: "Individual"
+        },
+        {
+            value: "company",
+            label: "Company"
+        }
+    ];
+
+    if (isSeller) {
+        return '';
+    }
+
+    return !isSeller ? (
         <Form
             data-cy="BecomeSeller-form"
             className={classes.root}
             initialValues={initialValues}
             onSubmit={handleSubmit}
+            onChange={handleChange}
         >
             <h2 data-cy="BecomeSeller-title" className={classes.title}>
                 <FormattedMessage
@@ -88,111 +91,212 @@ const BecomeSeller = props => {
             </h2>
             <FormError errors={Array.from(errors.values())} />
             <Field
-                id="firstName"
+                id="sellerType"
                 label={formatMessage({
-                    id: 'becomeSeller.firstNameText',
-                    defaultMessage: 'First Name'
+                    id: 'becomeSeller.sellerTypeText',
+                    defaultMessage: 'Seller Type'
+                })}
+            >
+                <Select
+                    field="seller.seller_type"
+                    id={classes.root}
+                    items={sellerTypeOptions}
+                />
+            </Field>
+            {sellerType == "company" && (
+                <>
+                    <Field
+                        id="companyName"
+                        label={formatMessage({
+                            id: 'becomeSeller.companyNameText',
+                            defaultMessage: 'Company Name'
+                        })}
+                    >
+                        <TextInput
+                            id="companyName"
+                            field="seller.company_name"
+                            validate={isRequired}
+                            validateOnBlur
+                            mask={value => value && value.trim()}
+                            maskOnBlur={true}
+                            data-cy="seller-companyname"
+                            aria-label={formatMessage({
+                                id: 'global.companyNameRequired',
+                                defaultMessage: 'Company Name Required'
+                            })}
+                        />
+                    </Field>
+                    <Field
+                        id="companyRegistrationNumber"
+                        label={formatMessage({
+                            id: 'becomeSeller.companyRegistrationNumberText',
+                            defaultMessage: 'Company Registration Number'
+                        })}
+                    >
+                        <TextInput
+                            id="companyRegistrationNumber"
+                            field="seller.company_registration_number"
+                            validate={isRequired}
+                            validateOnBlur
+                            mask={value => value && value.trim()}
+                            maskOnBlur={true}
+                            data-cy="seller-registrationnumber"
+                            aria-label={formatMessage({
+                                id: 'global.registration_numberRequired',
+                                defaultMessage: 'Company Registration Number Required'
+                            })}
+                        />
+                    </Field>
+                </>
+            )}
+            <Field
+                id="sellerProfileName"
+                label={formatMessage({
+                    id: 'becomeSeller.sellerProfileNameText',
+                    defaultMessage: 'Store Name'
                 })}
             >
                 <TextInput
-                    id="firstName"
-                    field="customer.firstname"
-                    autoComplete="given-name"
+                    id="sellerProfileName"
+                    field="seller.seller_profile_name"
                     validate={isRequired}
                     validateOnBlur
                     mask={value => value && value.trim()}
                     maskOnBlur={true}
-                    data-cy="customer-firstname"
+                    data-cy="seller-profilename"
                     aria-label={formatMessage({
-                        id: 'global.firstNameRequired',
-                        defaultMessage: 'First Name Required'
+                        id: 'global.sellerProfileNameRequired',
+                        defaultMessage: 'Store Name is required.'
                     })}
                 />
             </Field>
             <Field
-                id="lastName"
+                id="storeURL"
                 label={formatMessage({
-                    id: 'becomeSeller.lastNameText',
-                    defaultMessage: 'Last Name'
+                    id: 'becomeSeller.storeURLText',
+                    defaultMessage: 'Store URL'
                 })}
             >
                 <TextInput
-                    id="lastName"
-                    field="customer.lastname"
-                    autoComplete="family-name"
+                    id="storeUrl"
+                    field="seller.store_url"
                     validate={isRequired}
                     validateOnBlur
                     mask={value => value && value.trim()}
                     maskOnBlur={true}
-                    data-cy="customer-lastname"
+                    data-cy="seller-storeurl"
                     aria-label={formatMessage({
-                        id: 'global.lastNameRequired',
-                        defaultMessage: 'Last Name Required'
+                        id: 'global.storeUrlRequired',
+                        defaultMessage: 'Store URL is required.'
+                    })}
+                />
+            </Field>
+            <Country
+                field="seller.country_id"
+                validate={isRequired}
+            />
+            <Field
+                id="addressLine1"
+                label={formatMessage({
+                    id: 'becomeSeller.addressLine1Text',
+                    defaultMessage: 'Address Line 1'
+                })}
+            >
+                <TextInput
+                    id="addressLine1"
+                    field="seller.address_line_1"
+                    validate={isRequired}
+                    validateOnBlur
+                    mask={value => value && value.trim()}
+                    maskOnBlur={true}
+                    data-cy="seller-addressline1"
+                    aria-label={formatMessage({
+                        id: 'global.addressLine1Required',
+                        defaultMessage: 'Address Line 1 is required'
                     })}
                 />
             </Field>
             <Field
-                id="Email"
+                id="addressLine2"
                 label={formatMessage({
-                    id: 'becomeSeller.emailText',
-                    defaultMessage: 'Email'
+                    id: 'becomeSeller.addressLine2Text',
+                    defaultMessage: 'Address Line 2'
                 })}
             >
                 <TextInput
-                    id="Email"
-                    field="customer.email"
-                    autoComplete="email"
+                    id="addressLine2"
+                    field="seller.address_line_2"
                     validate={isRequired}
                     validateOnBlur
                     mask={value => value && value.trim()}
                     maskOnBlur={true}
-                    data-cy="customer-email"
+                    data-cy="seller-addressline2"
                     aria-label={formatMessage({
-                        id: 'global.emailRequired',
-                        defaultMessage: 'Email Required'
+                        id: 'global.addressLine2Required',
+                        defaultMessage: 'Address Line 2 is required'
                     })}
                 />
             </Field>
-            <Password
-                id="Password"
-                autoComplete="new-password"
-                fieldName="password"
-                isToggleButtonHidden={false}
+            <Field
+                id="city"
                 label={formatMessage({
-                    id: 'becomeSeller.passwordText',
-                    defaultMessage: 'Password'
+                    id: 'global.city',
+                    defaultMessage: 'City'
                 })}
-                validate={combine([
-                    isRequired,
-                    [hasLengthAtLeast, 8],
-                    validatePassword
-                ])}
-                validateOnBlur
-                mask={value => value && value.trim()}
-                maskOnBlur={true}
-                data-cy="password"
-                aria-label={formatMessage({
-                    id: 'global.passwordRequired',
-                    defaultMessage: 'Password Required'
+            >
+                <TextInput
+                    id="city"
+                    field="seller.city"
+                    validate={isRequired}
+                />
+            </Field>
+            <Region
+                fieldInput="seller.region"
+                fieldSelect="seller.region_id"
+                label={formatMessage({
+                    id: 'global.region',
+                    defaultMessage: 'Region'
+                })}
+                countryCodeField="seller.country_id"
+                validate={isRequired}
+            />
+            <Postcode
+                validate={isRequired}
+                fieldInput="seller.postcode"
+                label={formatMessage({
+                    id: 'global.postcode',
+                    defaultMessage: 'Postal Code'
                 })}
             />
+            <Field
+                id="contactNumber"
+                label={formatMessage({
+                    id: 'global.contactNumber',
+                    defaultMessage: 'Contact Number'
+                })}
+            >
+                <TextInput
+                    id="contactNumber"
+                    field="seller.contact_number"
+                    validate={isRequired}
+                />
+            </Field>
             <div className={classes.subscribe}>
                 <Checkbox
-                    field="subscribe"
-                    id="subscribe"
+                    field="become_seller_agreement"
+                    id="becomeSellerAgreement"
                     label={formatMessage({
-                        id: 'becomeSeller.subscribeText',
-                        defaultMessage: 'Subscribe to news and updates'
+                        id: 'becomeSeller.becomeSellerAgreementText',
+                        defaultMessage: 'I agree the Terms and Condition (Terms and Conditions)'
                     })}
                 />
             </div>
             <GoogleRecaptcha {...recaptchaWidgetProps} />
             <div className={classes.actions}>
                 {submitButton}
-                {cancelButton}
             </div>
         </Form>
-    );
+    ) : '';
 };
 
 BecomeSeller.propTypes = {
@@ -203,9 +307,8 @@ BecomeSeller.propTypes = {
         subscribe: string
     }),
     initialValues: shape({
-        email: string,
-        firstName: string,
-        lastName: string
+        sellerProfileName: string,
+        companyName: string
     }),
     isCancelButtonHidden: bool,
     onSubmit: func,
