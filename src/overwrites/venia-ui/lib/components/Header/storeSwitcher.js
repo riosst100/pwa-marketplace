@@ -28,18 +28,12 @@ const StoreSwitcher = props => {
     if (!availableStores) return <Shimmer />;
 
     const groups = [];
-    const hasOnlyOneGroup = storeGroups.size === 1;
 
     storeGroups.forEach((group, key) => {
         const stores = [];
-        group.forEach(({ storeGroupName, storeName, isCurrent, storeCode, websiteCode }) => {
-            let label;
-            if (hasOnlyOneGroup) {
-                label = `${storeName}`;
-            } else {
-                label = `${storeGroupName} - ${storeName}`;
-            }
-
+        group.forEach(({ storeName, isCurrent, storeCode, websiteCode }) => {
+            let label = `${storeName}`;
+            
             stores.push(
                 <li
                     aria-selected={currentStoreName}
@@ -72,13 +66,6 @@ const StoreSwitcher = props => {
         );
     });
 
-    let triggerLabel;
-    if (hasOnlyOneGroup) {
-        triggerLabel = currentStoreName ? `${currentStoreName}` : '';
-    } else {
-        triggerLabel = `${currentGroupName} - ${currentStoreName}`;
-    }
-
     return (
         <div className={classes.root} data-cy="StoreSwitcher-root">
             <button
@@ -90,7 +77,7 @@ const StoreSwitcher = props => {
                 data-cy="StoreSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
-                {triggerLabel || ''}
+                {currentStoreName || ''}
             </button>
             <div
                 ref={storeMenuRef}

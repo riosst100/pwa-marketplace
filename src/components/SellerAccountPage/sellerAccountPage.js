@@ -40,30 +40,6 @@ const SellerAccountPage = props => {
         const customerName = `${customer.firstname} ${customer.lastname}`;
         const passwordValue = 'Same as current';
 
-        sellerAccountDetails = (
-            <Fragment>
-                <div className={classes.accountDetails}>
-                    <span className={classes.nameLabel}>
-                        <FormattedMessage
-                            id={'global.sellerAccountDetailsText'}
-                            defaultMessage={'Seller Account Details'}
-                        />
-                    </span>
-                    <div className={classes.lineItemsContainer}>
-                        <span className={classes.nameLabel}>
-                            <FormattedMessage
-                                id={'global.status'}
-                                defaultMessage={'Status'}
-                            />
-                        </span>
-                        <span className={classes.nameValue}>
-                            Not Verified
-                        </span>
-                    </div>
-                </div>
-            </Fragment>
-        );
-
         sellerLoginAccount = (
             <Fragment>
                 <div className={classes.accountDetails}>
@@ -94,9 +70,7 @@ const SellerAccountPage = props => {
                         </span>
                     </div>
                     <div className={classes.editButtonContainer}>
-                        <a href="https://seller-local.tcgcollective.co/lofmarketplace/seller/login/"
-                            className={classes.editInformationButton}
-                        >
+                        <a href={process.env.MAGENTO_BACKEND_URL + "/lofmarketplace/seller/login"} className={classes.editInformationButton}>
                             <FormattedMessage
                                 id={'global.sellerDashboardText'}
                                 defaultMessage={'Seller Dashboard'}
@@ -116,8 +90,6 @@ const SellerAccountPage = props => {
                     defaultMessage: 'Seller Account'
                 })}
             </StoreTitle>
-            {sellerAccountDetails}
-            <br />
             {sellerLoginAccount}
         </div>
     )

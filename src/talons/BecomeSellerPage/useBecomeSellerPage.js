@@ -37,6 +37,16 @@ export const useBecomeSellerPage = props => {
         }
     }, [isSeller, history])
 
+    // const userCountryCode = storage.getItem('user_country_code');
+
+    // const isNotAllowedCountry = userCountryCode != "ID";
+
+    // useEffect(() => {
+    //     if (isNotAllowedCountry) {
+    //         history.push('/')
+    //     }
+    // }, [isNotAllowedCountry, history])
+
     // Keep location state in memory when pushing history and redirect to
     // the `from` url instead when creating an account
     const historyState = useMemo(() => {

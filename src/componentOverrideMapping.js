@@ -7,6 +7,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/Adapter/useAdapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Adapter/useAdapter.js',
     [`@magento/peregrine/lib/talons/Header/useStoreSwitcher.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/useStoreSwitcher.js',
     [`@magento/peregrine/lib/talons/Header/storeSwitcher.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/storeSwitcher.gql.js',
+    [`@magento/peregrine/lib/talons/Region/useRegion.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Region/useRegion.js',
     [`@magento/pwa-buildpack/lib/queries/getAvailableStoresConfigData.graphql`]: '@riosst100/pwa-marketplace/src/overwrites/pwa-buildpack/lib/queries/getAvailableStoresConfigData.graphql',
     [`@magento/peregrine/lib/store/actions/user/asyncActions.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/store/actions/user/asyncActions.js',
     [`@magento/peregrine/lib/talons/SignIn/signIn.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/signIn.gql.js',

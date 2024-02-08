@@ -19,9 +19,11 @@ import TextInput from '@magento/venia-ui/lib/components/TextInput';
 import defaultClasses from './becomeSeller.module.css';
 import FormError from '@magento/venia-ui/lib/components/FormError';
 import GoogleRecaptcha from '@magento/venia-ui/lib/components/GoogleReCaptcha';
-import Country from '@magento/venia-ui/lib/components/Country';
+import SellerCountry from '@riosst100/pwa-marketplace/src/components/SellerCountry';
 import Region from '@magento/venia-ui/lib/components/Region';
 import Postcode from '@magento/venia-ui/lib/components/Postcode';
+import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
+import { Link } from 'react-router-dom';
 
 const BecomeSeller = props => {
     const talonProps = useBecomeSeller({
@@ -191,7 +193,7 @@ const BecomeSeller = props => {
                     })}
                 />
             </Field>
-            <Country
+            <SellerCountry
                 field="seller.country_id"
                 validate={isRequired}
             />
@@ -221,20 +223,15 @@ const BecomeSeller = props => {
                 label={formatMessage({
                     id: 'becomeSeller.addressLine2Text',
                     defaultMessage: 'Address Line 2'
-                })}
+                })} optional={true}
             >
                 <TextInput
                     id="addressLine2"
                     field="seller.address_line_2"
-                    validate={isRequired}
                     validateOnBlur
                     mask={value => value && value.trim()}
                     maskOnBlur={true}
                     data-cy="seller-addressline2"
-                    aria-label={formatMessage({
-                        id: 'global.addressLine2Required',
-                        defaultMessage: 'Address Line 2 is required'
-                    })}
                 />
             </Field>
             <Field
@@ -255,8 +252,9 @@ const BecomeSeller = props => {
                 fieldSelect="seller.region_id"
                 label={formatMessage({
                     id: 'global.region',
-                    defaultMessage: 'Region'
+                    defaultMessage: 'State / Province'
                 })}
+                translationId="global.region"
                 countryCodeField="seller.country_id"
                 validate={isRequired}
             />
@@ -285,10 +283,24 @@ const BecomeSeller = props => {
                 <Checkbox
                     field="become_seller_agreement"
                     id="becomeSellerAgreement"
-                    label={formatMessage({
-                        id: 'becomeSeller.becomeSellerAgreementText',
-                        defaultMessage: 'I agree the Terms and Condition (Terms and Conditions)'
-                    })}
+                    validate={isRequired}
+                    label={(
+                        <>
+                            {formatMessage({
+                                id: 'becomeSeller.becomeSellerAgreementText',
+                                defaultMessage: 'I agree the Terms and Condition'
+                            })} <span>
+                                (<a href={'/seller-term-conditions'}>
+                                    <u>
+                                        {formatMessage({
+                                            id: 'becomeSellerPage.termConditions',
+                                            defaultMessage: 'Terms and Conditions'
+                                        })}
+                                    </u>
+                                </a>)
+                            </span>
+                        </>
+                    )}
                 />
             </div>
             <GoogleRecaptcha {...recaptchaWidgetProps} />

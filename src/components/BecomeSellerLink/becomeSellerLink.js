@@ -17,7 +17,7 @@ const BecomeSellerLink = props => {
 
     return isSeller ? (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
-            <a href="https://seller-local.tcgcollective.co/lofmarketplace/seller/login/">
+            <a href={process.env.MAGENTO_BACKEND_URL + "/lofmarketplace/seller/login"}>
                 {formatMessage({
                     id: 'sellerDashboard.title',
                     defaultMessage: 'Seller Dashboard'
