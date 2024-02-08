@@ -12,8 +12,8 @@ module.exports = targets => {
     availableWebsites = await getAvailableWebsitesConfigData();
   })();
 
-  targets.of('@magento/pwa-buildpack').specialFeatures.tap(flags => {
-    flags[targets.name] = { esModules: true, cssModules: true, graphqlQueries: true };
+  targets.of('@magento/pwa-buildpack').specialFeatures.tap(features => {
+    features[targets.name] = { i18n: true, esModules: true, cssModules: true, graphqlQueries: true };
   });
 
   targets.of('@magento/pwa-buildpack').webpackCompiler.tap(compiler => {
@@ -59,10 +59,6 @@ module.exports = targets => {
       AVAILABLE_WEBSITES: JSON.stringify(availableWebsites.availableStoresByUserIp),
       WEBSITE_CODE: process.env.WEBSITE_CODE
     }).apply(compiler);
-  });
-
-  targets.of('@magento/pwa-buildpack').specialFeatures.tap(flags => {
-    flags[targets.name] = { esModules: true, cssModules: true, graphqlQueries: true };
   });
 
   // Handle the routes directly within the routes tap

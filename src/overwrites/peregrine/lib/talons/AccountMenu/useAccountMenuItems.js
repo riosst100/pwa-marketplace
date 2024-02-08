@@ -1,4 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
+
+const storage = new BrowserPersistence();
 
 /**
  * @param {Object}      props
@@ -14,12 +17,7 @@ export const useAccountMenuItems = props => {
         onSignOut();
     }, [onSignOut]);
 
-    const MENU_ITEMS = [
-        {
-            name: 'Seller Account Information',
-            id: 'accountMenu.sellerAccountInfoLink',
-            url: '/seller-account'
-        },
+    let MENU_ITEMS = [
         {
             name: 'Order History',
             id: 'accountMenu.orderHistoryLink',
@@ -57,6 +55,17 @@ export const useAccountMenuItems = props => {
             url: '/account-information'
         }
     ];
+    
+    if (storage && storage.getItem('is_seller')) {
+        MENU_ITEMS = [
+            ...MENU_ITEMS,
+            {
+                name: 'Seller Account Information',
+                id: 'accountMenu.sellerAccountInfoLink',
+                url: '/seller-account'
+            }
+        ];
+    }
 
     return {
         handleSignOut,

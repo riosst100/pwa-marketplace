@@ -90,6 +90,8 @@ export const useSignIn = props => {
                 const token = signInResponse.data.generateCustomerToken.token;
                 await setToken(token);
 
+                await getUserDetails({ fetchUserDetails });
+
                 // Clear all cart/customer data from cache and redux.
                 await apolloClient.clearCacheData(apolloClient, 'cart');
                 await apolloClient.clearCacheData(apolloClient, 'customer');
@@ -111,7 +113,7 @@ export const useSignIn = props => {
 
                 // Ensure old stores are updated with any new data.
 
-                await getUserDetails({ fetchUserDetails });
+                
 
                 const { data } = await fetchUserDetails({
                     fetchPolicy: 'cache-only'

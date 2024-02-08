@@ -2,7 +2,6 @@ import React, { Fragment, Suspense } from 'react';
 import { shape, string } from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 
-import Logo from '@magento/venia-ui/lib/components/Logo';
 import AccountTrigger from '@magento/venia-ui/lib/components/Header/accountTrigger';
 import CartTrigger from '@magento/venia-ui/lib/components/Header/cartTrigger';
 import NavTrigger from '@magento/venia-ui/lib/components/Header/navTrigger';
@@ -79,7 +78,8 @@ const Header = props => {
                         className={classes.logoContainer}
                         data-cy="Header-logoContainer"
                     >
-                        <Logo classes={{ logo: classes.logo }} />
+                        <div><b>TCG Collective</b></div>
+                        <small>Toys | Card | Games</small>
                     </Link>
                     <MegaMenu />
                     <div className={classes.secondaryActions}>

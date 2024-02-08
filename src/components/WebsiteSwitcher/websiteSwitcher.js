@@ -34,7 +34,7 @@ const WebsiteSwitcher = props => {
 
     storeGroups.forEach((group, key) => {
         const stores = [];
-        group.forEach(({ storeGroupName, websiteCode, websiteName, isCurrent, storeCode }) => {
+        group.forEach(({ websiteCode, websiteName, isCurrent, storeCode }) => {
             let label = `${websiteName}`;
             stores.push(
                 <li

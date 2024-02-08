@@ -65,26 +65,28 @@ const Adapter = props => {
 
             const websiteCode = getWebsiteByUserIp.countryCode && !isAccessBaseWebsite ? getWebsiteByUserIp.countryCode.toLowerCase() : process.env.WEBSITE_CODE;
 
-            routerProps.basename = websiteCode != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCode : '/';
+            if (websiteCodes.find((str) => str === websiteCode)) {
+                routerProps.basename = websiteCode != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCode : '/';
 
-            setNewRouterProps(routerProps);
+                setNewRouterProps(routerProps);
 
-            if (isAccessBaseWebsite) {
-                storage.setItem('access_base_website', 1);
+                if (isAccessBaseWebsite) {
+                    storage.setItem('access_base_website', 1);
+                }
+
+                let storeCodeInUrl = websiteStores[websiteCode];
+
+                storage.setItem('store_view_code', storeCodeInUrl);
+                storage.setItem('website_code', websiteCode);
+                storage.setItem(
+                    'store_view_currency',
+                    storeCurrencies[storeCodeInUrl]
+                );
+                storage.setItem(
+                    'store_view_secure_base_media_url',
+                    storeSecureBaseMediaUrl[storeCodeInUrl]
+                );
             }
-
-            let storeCodeInUrl = websiteStores[websiteCode];
-
-            storage.setItem('store_view_code', storeCodeInUrl);
-            storage.setItem('website_code', websiteCode);
-            storage.setItem(
-                'store_view_currency',
-                storeCurrencies[storeCodeInUrl]
-            );
-            storage.setItem(
-                'store_view_secure_base_media_url',
-                storeSecureBaseMediaUrl[storeCodeInUrl]
-            );
         }
     }, [websiteCodeInUrl, getWebsiteByUserIp])
 
