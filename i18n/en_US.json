@@ -26,7 +26,7 @@
     "addressBookPage.addDialogTitle": "New Address",
     "addressBookPage.addressBookText": "Address Book",
     "addressBookPage.editDialogTitle": "Edit Address",
-    "addressBookPage.makeDefaultAddress": "Make this my default address222",
+    "addressBookPage.makeDefaultAddress": "Make this my default address",
     "addressBookPage.addAddressMessage": "You have added {count} address in your address book.",
     "addressBookPage.telephone": "Contact Number {telephone}",
     "addressCard.defaultText": "Default",
