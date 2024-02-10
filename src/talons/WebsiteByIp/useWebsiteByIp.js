@@ -13,7 +13,6 @@ export const useWebsiteByIp = websiteCodeInUrl => {
                         setWebsiteByUserIpData(data)
                     }
                 }).catch((error) => {
-                    console.log(error);
                 });
             };
         

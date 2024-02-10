@@ -8,6 +8,9 @@ import Field from '@magento/venia-ui/lib/components/Field';
 import Select from '@magento/venia-ui/lib/components/Select';
 import defaultClasses from './sellerCountry.module.css';
 import { GET_SELLER_COUNTRIES_QUERY } from './sellerCountry.gql';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
+
+const storage = new BrowserPersistence();
 
 const SellerCountry = props => {
     const talonProps = useSellerCountry({
@@ -26,11 +29,14 @@ const SellerCountry = props => {
     const { formatMessage } = useIntl();
 
     const classes = useStyle(defaultClasses, propClasses);
+    const websiteCode = storage.getItem('website_code') || null;
+    const currentWebsiteCountry = websiteCode && websiteCode != "base" ? websiteCode.toUpperCase() : DEFAULT_COUNTRY_CODE;
     const selectProps = {
         classes,
         disabled: loading,
         field,
         items: countries,
+        initialValue: currentWebsiteCountry,
         ...inputProps
     };
 

@@ -119,8 +119,6 @@ export const useSignIn = props => {
                     fetchPolicy: 'cache-only'
                 });
 
-                console.log(data.customer)
-
                 if (data.customer.is_seller) {
                     storage.setItem('is_seller', true);
                 }

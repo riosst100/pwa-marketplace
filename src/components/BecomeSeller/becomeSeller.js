@@ -24,6 +24,7 @@ import Region from '@magento/venia-ui/lib/components/Region';
 import Postcode from '@magento/venia-ui/lib/components/Postcode';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import { Link } from 'react-router-dom';
+import PhoneTextInput from '@riosst100/pwa-marketplace/src/components/PhoneTextInput';
 
 const BecomeSeller = props => {
     const talonProps = useBecomeSeller({
@@ -273,9 +274,10 @@ const BecomeSeller = props => {
                     defaultMessage: 'Contact Number'
                 })}
             >
-                <TextInput
+                <PhoneTextInput
                     id="contactNumber"
                     field="seller.contact_number"
+                    countryCodeField="seller.country_id"
                     validate={isRequired}
                 />
             </Field>
@@ -309,6 +311,17 @@ const BecomeSeller = props => {
             </div>
         </Form>
     ) : '';
+};
+
+BecomeSeller.defaultProps = {
+    seller: {
+        country: {
+            code: DEFAULT_COUNTRY_CODE
+        },
+        region: {
+            id: null
+        }
+    }
 };
 
 BecomeSeller.propTypes = {
