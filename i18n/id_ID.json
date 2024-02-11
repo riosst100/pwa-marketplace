@@ -451,7 +451,7 @@
     "validation.invalidRegions": "Country \"{value}\" does not contain any available regions.",
     "validation.isEqualToField": "{value} must match.",
     "validation.isNotEqualToField": "{value} must be different",
-    "validation.isRequired": "Is required.",
+    "validation.isRequired": "This is required field.",
     "validation.mustBeChecked": "Must be checked.",
     "validation.validatePassword": "A password must contain at least 3 of the following: lowercase, uppercase, digits, special characters.",
     "wishlist.name": "Wish List",

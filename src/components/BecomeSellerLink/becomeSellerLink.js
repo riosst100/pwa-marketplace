@@ -7,6 +7,10 @@ import { shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import { useBecomeSellerLink } from '@riosst100/pwa-marketplace/src/talons/BecomeSellerLink/useBecomeSellerLink';
 
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
+
+const storage = new BrowserPersistence();
+
 const BecomeSellerLink = props => {
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
@@ -15,9 +19,12 @@ const BecomeSellerLink = props => {
         isSeller
     } = useBecomeSellerLink(props);
 
+    const websiteCountry = storage.getItem('website_code') && storage.getItem('website_code') != "base" ? '/' + storage.getItem('website_code') : '';
+    const sellerDashboardUrl = process.env.MAGENTO_BACKEND_URL ? process.env.MAGENTO_BACKEND_URL + websiteCountry : '';
+
     return isSeller ? (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
-            <a href={process.env.MAGENTO_BACKEND_URL + "/lofmarketplace/seller/login"}>
+            <a href={sellerDashboardUrl + "/lofmarketplace/seller/login"}>
                 {formatMessage({
                     id: 'sellerDashboard.title',
                     defaultMessage: 'Seller Dashboard'
