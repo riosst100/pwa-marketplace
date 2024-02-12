@@ -92,7 +92,7 @@ module.exports = targets => {
     {
       exact: true,
       name: "SellerPage",
-      pattern: "/seller",
+      pattern: "/seller/:urlKey",
       path: require.resolve("./components/SellerPage/index.js"),
       authed: false,
     },
