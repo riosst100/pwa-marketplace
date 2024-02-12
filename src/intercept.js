@@ -89,6 +89,13 @@ module.exports = targets => {
       authed: true,
       redirectTo: "/become-seller"
     },
+    {
+      exact: true,
+      name: "SellerPage",
+      pattern: "/seller",
+      path: require.resolve("./components/SellerPage/index.js"),
+      authed: false,
+    },
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation
