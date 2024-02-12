@@ -1,9 +1,9 @@
 import React from 'react';
-import ReviewItem from '@riosst100/pwa-marketplace/src/components/ReviewItem';
-import Pagination from '@riosst100/pwa-marketplace/src/components/Pagination';
+import SellerReviewItem from '../SellerReviewItem';
+import Pagination from '../Pagination';
 import { Star1 } from 'iconsax-react';
 
-const reviews = () => {
+const SellerReview = () => {
     return (
         <>
             <div className='w-full flex items-start gap-[30px] '>
@@ -124,13 +124,13 @@ const reviews = () => {
                 </div>
                 <div className='flex flex-col w-full'>
                     <div className='flex flex-col w-full items-start gap-[20px] relative mb-[30px]'>
-                        <ReviewItem />
-                        <ReviewItem />
-                        <ReviewItem />
-                        <ReviewItem />
-                        <ReviewItem />
-                        <ReviewItem />
-                        <ReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
+                        <SellerReviewItem />
                     </div>
                     <div className='pagination-container w-full flex justify-center'>
                         <Pagination />
@@ -141,4 +141,4 @@ const reviews = () => {
     )
 }
 
-export default reviews;
+export default SellerReview;

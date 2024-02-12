@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider from '@riosst100/pwa-marketplace/src/components/commons/Slider';
 import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
-import AllProduct from '@riosst100/pwa-marketplace/src/modules/seller/components/allProduct';
-import StoreInformation from '@riosst100/pwa-marketplace/src/modules/seller/components/storeInformation';
-import Reviews from '@riosst100/pwa-marketplace/src/modules/seller/components/reviews';
+import SellerProducts from '../SellerProducts';
+import SellerInformation from '../SellerInformation';
+import Reviews from '../SellerReview';
 import {
     Verify,
     Sms,
@@ -14,25 +14,25 @@ import {
     Star1,
 } from 'iconsax-react';
 
-const sellerPage = () => {
+const SellerPage = () => {
     const dataTabs =
         [
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <AllProduct />,
+                content: <SellerProducts />
             },
             {
                 id: 'store-information',
                 title: 'Store Information',
-                content: <StoreInformation />,
+                content: <SellerInformation />
             },
             {
                 id: 'reviews',
                 title: 'Reviews',
-                content: <Reviews />,
-            },
-        ]
+                content: <Reviews />
+            }
+        ];
     return (
         <div className=' py-8'>
             <Slider rootClassname='mb-[30px]' />
@@ -117,4 +117,4 @@ const sellerPage = () => {
     )
 }
 
-export default sellerPage
+export default SellerPage;

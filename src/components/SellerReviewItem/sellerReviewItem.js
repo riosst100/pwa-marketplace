@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star1 } from 'iconsax-react';
 
-const ReviewItem = () => {
+const SellerReviewItem = () => {
     return (
         <>
             <div class="flex flex-col items-start gap-[10px] p-[25px] relative self-stretch w-full flex-[0_0_auto] bg-white rounded-[6px] border border-solid border-[#e6e9ea]">
@@ -58,4 +58,4 @@ const ReviewItem = () => {
     )
 }
 
-export default ReviewItem;
+export default SellerReviewItem;

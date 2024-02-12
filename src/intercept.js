@@ -91,9 +91,9 @@ module.exports = targets => {
     },
     {
       exact: true,
-      name: "Seller Page",
-      pattern: "/sellerpage",
-      path: require.resolve("./modules/seller/index.js"),
+      name: "SellerPage",
+      pattern: "/seller",
+      path: require.resolve("./components/SellerPage/index.js"),
       authed: false,
     },
   ];

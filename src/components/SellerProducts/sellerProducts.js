@@ -3,9 +3,9 @@ import ProductItem from '@riosst100/pwa-marketplace/src/components/ProductItem';
 import Filter from '@riosst100/pwa-marketplace/src/components/Filter';
 import Search from '@riosst100/pwa-marketplace/src/components/Search';
 import SortBy from '@riosst100/pwa-marketplace/src/components/SortBy';
-import Pagination from '@riosst100/pwa-marketplace/src/components/Pagination';
+import Pagination from '..//Pagination';
 
-const allProduct = () => {
+const SellerProducts = () => {
     return (
         <>
             <div className='w-full mb-[30px]'>
@@ -43,4 +43,4 @@ const allProduct = () => {
     )
 }
 
-export default allProduct
+export default SellerProducts;

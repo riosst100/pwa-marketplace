@@ -1,1 +1,0 @@
-export { default } from '@riosst100/pwa-marketplace/src/modules/seller/core';

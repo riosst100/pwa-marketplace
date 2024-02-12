@@ -1,8 +1,8 @@
 import React from 'react';
-import StoreItem from '@riosst100/pwa-marketplace/src/modules/seller/components/storeItem';
+import SellerLocation from '../SellerLocation';
 import { Location, ShopAdd } from 'iconsax-react';
 
-const storeInformation = () => {
+const SellerInformation = () => {
     return (
         <>
             <div class="flex flex-col items-start gap-[30px] px-[10px]">
@@ -100,18 +100,10 @@ const storeInformation = () => {
                         </div>
                     </div>
                 </div>
-                <div class="w-full flex flex-col items-start gap-[25px]">
-                    <div class="relative w-fit font-semibold  text-[20px] tracking-[0] leading-[normal]">Our Store</div>
-                    <div class="w-full grid grid-cols-3 gap-4">
-                        <StoreItem />
-                        <StoreItem />
-                        <StoreItem />
-                        <StoreItem />
-                    </div>
-                </div>
+                <SellerLocation />
             </div>
         </>
     )
 }
 
-export default storeInformation
+export default SellerInformation;

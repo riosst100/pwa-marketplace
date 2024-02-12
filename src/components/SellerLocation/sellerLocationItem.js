@@ -1,7 +1,7 @@
 import React from 'react';
 import { Location, Clock } from 'iconsax-react';
 
-const storeItem = () => {
+const SellerLocationItem = () => {
     return (
         <>
             <div class="flex flex-col w-full items-start gap-[15px] p-[20px] relative rounded-[8px] border border-solid border-[#e6e9ea]">
@@ -25,4 +25,4 @@ const storeItem = () => {
     )
 }
 
-export default storeItem
+export default SellerLocationItem;
