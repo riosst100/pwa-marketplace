@@ -2,7 +2,8 @@ import React from 'react';
 import SellerLocation from '../SellerLocation';
 import { Location, ShopAdd } from 'iconsax-react';
 
-const SellerInformation = () => {
+const SellerInformation = ({ seller }) => {
+    console.log(seller.operating_hours)
     return (
         <>
             <div class="flex flex-col items-start gap-[30px] px-[10px]">
@@ -12,9 +13,10 @@ const SellerInformation = () => {
                             <div class="relative w-fit mt-[-1.00px] [font-family:'Frederik-DemiBold',Helvetica] font-bold text-[#1b1b1b] text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">Description</div>
                             <div class="inline-flex items-center justify-center gap-[10px] relative flex-[0_0_auto]">
                                 <p class="relative w-[300px] mt-[-1.00px] [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[16px]">
-                                    Zen Market was established in 12003 and has grown over the years to be the largest hobby store.<br />
+                                    {seller ? seller.description : ''}
                                     <br />
-                                    +6556754325
+                                    <br />
+                                    {seller ? seller.contact_number : ''}
                                 </p>
                             </div>
                             <div class="inline-flex items-center gap-[10px] relative flex-[0_0_auto]">
@@ -78,24 +80,7 @@ const SellerInformation = () => {
                         <div class="relative w-fit mt-[-1.00px] [font-family:'Frederik-DemiBold',Helvetica] font-bold text-[#1b1b1b] text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">Terms &amp; Condition</div>
                         <div class="inline-flex items-center justify-center gap-[10px] relative flex-[0_0_auto]">
                             <div class="flex flex-col w-[500px] items-start gap-[2px]">
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]">- Delivery is made on the same day the order is received<br /></span>
-                                </p>
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]"><br /></span>
-                                </p>
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]">- Maximum until 5 PM<br /></span>
-                                </p>
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]"><br /></span>
-                                </p>
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]">- Orders received after 17.00 WIB will be delivered the next day<br /></span>
-                                </p>
-                                <p class="relative self-stretch [font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal]">
-                                    <span class="[font-family:'Frederik-Regular',Helvetica] font-normal text-[#1b1b1b] text-[14px] tracking-[0]"></span>
-                                </p>
+                                {seller ? seller.term_and_conditions : ''}
                             </div>
                         </div>
                     </div>
