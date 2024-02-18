@@ -13,5 +13,6 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/SignIn/signIn.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/signIn.gql.js',
     [`@magento/peregrine/lib/talons/SignIn/useSignIn.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/useSignIn.js',
     [`@magento/peregrine/lib/talons/AccountMenu/useAccountMenuItems.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/AccountMenu/useAccountMenuItems.js',
-    [`@magento/peregrine/lib/util/deriveErrorMessage.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/util/deriveErrorMessage.js'
+    [`@magento/peregrine/lib/util/deriveErrorMessage.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/util/deriveErrorMessage.js',
+    [`@magento/venia-ui/lib/components/MegaMenu/megaMenu.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/megaMenu.js',
 };

@@ -19,8 +19,9 @@ import BecomeSellerLink from '@riosst100/pwa-marketplace/src/components/BecomeSe
 import MegaMenu from '@magento/venia-ui/lib/components/MegaMenu';
 import PageLoadingIndicator from '@magento/venia-ui/lib/components/PageLoadingIndicator';
 import { useIntl } from 'react-intl';
-
-const SearchBar = React.lazy(() => import('@magento/venia-ui/lib/components/SearchBar'));
+import cn from 'classnames';
+// const SearchBar = React.lazy(() => import('@magento/venia-ui/lib/components/SearchBar'));
+const SearchBar = React.lazy(() => import('@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SearchBar'));
 
 const Header = props => {
     const {
@@ -45,19 +46,20 @@ const Header = props => {
             </div>
         </div>
     );
-    const searchBar = isSearchOpen ? (
-        <Suspense fallback={searchBarFallback}>
-            <Route>
-                <SearchBar isOpen={isSearchOpen} ref={searchRef} />
-            </Route>
-        </Suspense>
-    ) : null;
+    // const searchBar = isSearchOpen ? (
+    //     <Suspense fallback={searchBarFallback}>
+    //         <Route>
+    //             <SearchBar isOpen={true} ref={searchRef} />
+    //         </Route>
+    //     </Suspense>
+    // ) : null;
 
     const { formatMessage } = useIntl();
     const title = formatMessage({ id: 'logo.title', defaultMessage: 'Venia' });
 
     return (
         <Fragment>
+            <PageLoadingIndicator absolute />
             <div className={classes.switchersContainer}>
                 <div className={classes.switchers} data-cy="Header-switchers">
                     <BecomeSellerLink />
@@ -66,33 +68,43 @@ const Header = props => {
                     <CurrencySwitcher />
                 </div>
             </div>
-            <header className={rootClass} data-cy="Header-root">
-                <div className={classes.toolbar}>
-                    <div className={classes.primaryActions}>
-                        <NavTrigger />
-                    </div>
-
-                    <Link
-                        aria-label={title}
-                        to={resourceUrl('/')}
-                        className={classes.logoContainer}
-                        data-cy="Header-logoContainer"
-                    >
-                        <div><b>TCG Collective</b></div>
-                        <small>Toys | Card | Games</small>
-                    </Link>
-                    <MegaMenu />
-                    <div className={classes.secondaryActions}>
-                        <SearchTrigger
-                            onClick={handleSearchTriggerClick}
-                            ref={searchTriggerRef}
-                        />
-                        <AccountTrigger />
-                        <CartTrigger />
+            <header className={cn(rootClass, '!flex flex-col !px-0 border-gray-100 ')} data-cy="Header-root">
+                <div className={cn('middle-header border-b border-gray-100')}>
+                    <div className={cn('w-full max-w-[1210px] px-[15px] py-[20px] mx-[auto] flex justify-between items-center')}>
+                        <div className='flex'>
+                            <NavTrigger />
+                            <Link
+                                aria-label={title}
+                                to={resourceUrl('/')}
+                                className={''}
+                                data-cy="Header-logoContainer"
+                            >
+                                <div><b>TCG Collective</b></div>
+                                <small>Toys | Card | Games</small>
+                            </Link>
+                        </div>
+                        <div className='flex'>
+                            <Suspense fallback={searchBarFallback}>
+                                <Route>
+                                    <SearchBar isOpen={true} ref={searchRef} />
+                                </Route>
+                            </Suspense>
+                        </div>
+                        <div className={classes.secondaryActions}>
+                            {/* <SearchTrigger
+                                onClick={handleSearchTriggerClick}
+                                ref={searchTriggerRef}
+                            /> */}
+                            <AccountTrigger />
+                            <CartTrigger />
+                        </div>
                     </div>
                 </div>
-                {searchBar}
-                <PageLoadingIndicator absolute />
+                <MegaMenu
+                    rootClassName={cn('nav-menu w-full max-w-[1210px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
+                    megaMenuItemClassname={cn('px-0 py-[15px] leading-[20px]')}
+                    titleClassName={cn('font-medium leading-[20px]')}
+                />
             </header>
             <OnlineIndicator
                 hasBeenOffline={hasBeenOffline}
