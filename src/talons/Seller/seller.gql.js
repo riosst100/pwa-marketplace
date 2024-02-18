@@ -11,8 +11,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SELLER_DETAIL_QUERY = gql`
-    query getSellerDetailForSellerPage($urlKey: String!) {
-        sellerByUrl(seller_url: $urlKey) {
+    query getSellerDetailForSellerPage($urlKey: String!, $getOtherInfo: Boolean, $getProducts: Boolean) {
+        sellerByUrl(seller_url: $urlKey, get_other_info: $getOtherInfo, get_products: $getProducts) {
             seller_id
             contact_number
             shop_title
@@ -21,15 +21,81 @@ export const GET_SELLER_DETAIL_QUERY = gql`
             website_url
             ship_to
             ship_to_country
+            seller_rates {
+                total_count
+                page_info {
+                    current_page
+                    page_size
+                    total_pages
+                }
+                items {
+                    rating_id
+                    seller_id
+                    customer_id
+                    rate1
+                    rate2
+                    rate3
+                    rate4
+                    rate5
+                    rating
+                    email
+                    title
+                    status
+                    detail
+                    nickname
+                    created_at
+                    verified_buyer
+                    is_recommended
+                    is_hidden
+                    answer
+                    admin_note
+                    like_about
+                    not_like_about
+                    guest_email
+                    plus_review
+                    minus_review
+                    report_abuse
+                    country
+                }
+            }
+            products {
+                total_count
+                page_info {
+                    current_page
+                    page_size
+                    total_pages
+                }
+                items {
+                    name
+                    sku
+                }
+            }
             operating_hours {
                 day
+                status
                 time {
                     opening_time
                     closing_time
                 }
             }
+            store_locators {
+                name
+                country
+                region
+                address_line_1
+                address_line_2
+                city
+                postcode
+                operating_hours {
+                    day
+                    status
+                    time {
+                        opening_time
+                        closing_time
+                    }
+                }
+            }
             description
-            address
             country
             image
             thumbnail
@@ -38,11 +104,10 @@ export const GET_SELLER_DETAIL_QUERY = gql`
             group
             group_id
             url
-            customer_id
             email
             name
             sale
-            commission_id
+            creation_time
             page_layout
             status
             position

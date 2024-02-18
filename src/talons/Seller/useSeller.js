@@ -28,12 +28,17 @@ export const useSeller = props => {
     const productUrlSuffix = storeConfigData?.storeConfig?.product_url_suffix;
     const urlKey = productUrlSuffix ? slug.replace(productUrlSuffix, '') : slug;
 
+    const getOtherInfo = true;
+    const getProducts = true;
+
     const { error, loading, data } = useQuery(getSellerDetailQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first',
         skip: !storeConfigData,
         variables: {
-            urlKey
+            urlKey,
+            getOtherInfo,
+            getProducts
         }
     });
 
