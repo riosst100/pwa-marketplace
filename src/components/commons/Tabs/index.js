@@ -1,5 +1,5 @@
 import React from 'react';
-import cx from 'classnames';
+import cn from 'classnames';
 
 const Tabs = (props) => {
     const {
@@ -11,14 +11,16 @@ const Tabs = (props) => {
         tabContentContainerClassName = '',
         tabContentWrapperClassName = '',
         tabActiveClassName = '',
+        tabWrapperClassName = '',
     } = props
 
     const [activeTabs, setActiveTabs] = React.useState(0);
-    const rootClass = cx('mb-4 border-b border-gray-200 dark:border-gray-700', rootClassName);
-    const tabTitleClass = cx('inline-block p-4 rounded-t-lg', tabTitleClassName);
-    const tabContainerClass = cx('tab-content-container', tabContentContainerClassName);
-    const tabContentWrapperClass = cx('tab-content-wrapper', tabContentWrapperClassName);
-    const tabActiveClass = cx('border-solid border-b-2', tabActiveClassName)
+    const rootClass = cn('mb-4 border-b border-gray-100', rootClassName);
+    const tabTitleClass = cn('inline-block p-[10px] rounded-t-lg text-[16px] font-semibold', tabTitleClassName);
+    const tabContainerClass = cn('tab-content-container', tabContentContainerClassName);
+    const tabContentWrapperClass = cn('tab-content-wrapper', tabContentWrapperClassName);
+    const tabActiveClass = cn('border-solid border-b-2', tabActiveClassName);
+    const tabWrapperClass = cn('flex flex-wrap -mb-px text-sm font-medium text-center gap-4', tabWrapperClassName);
 
     const handleSwicthTab = (index) => {
         setActiveTabs(index);
@@ -27,11 +29,11 @@ const Tabs = (props) => {
     return (
         <>
             <div className={rootClass}>
-                <ul className='flex flex-wrap -mb-px text-sm font-medium text-center' role='tablist'>
+                <ul className={tabWrapperClass} role='tablist'>
                     {data.map((item, index) => (
                         <li className='me-2' role='presentation'>
                             <button
-                                className={cx(tabTitleClass, index === activeTabs ? tabActiveClass : '')}
+                                className={cn(tabTitleClass, index === activeTabs ? tabActiveClass : '')}
                                 id={item.id}
                                 role='tab'
                                 aria-controls={`${item.id}-tab`}
@@ -50,7 +52,7 @@ const Tabs = (props) => {
             {hasContent ? (
                 <div className={tabContainerClass}>
                     {data.map((item, index) => (
-                        <div className={cx(index !== activeTabs ? 'hidden' : '', tabContentWrapperClass)} role='tabpanel' aria-labelledby={`${item.id}-tab`}>
+                        <div className={cn(index !== activeTabs ? 'hidden' : '', tabContentWrapperClass)} role='tabpanel' aria-labelledby={`${item.id}-tab`}>
                             {item.content}
                         </div>
                     ))}

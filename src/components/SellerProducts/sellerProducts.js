@@ -1,198 +1,47 @@
-import React, { Fragment, Suspense, useMemo, useRef } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { array, number, shape, string } from 'prop-types';
-
-import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
-
-import { useStyle } from '@magento/venia-ui/lib/classify';
-import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
-import FilterModalOpenButton, {
-    FilterModalOpenButtonShimmer
-} from '@magento/venia-ui/lib/components/FilterModalOpenButton';
-import { FilterSidebarShimmer } from '@magento/venia-ui/lib/components/FilterSidebar';
-import Gallery, { GalleryShimmer } from '@magento/venia-ui/lib/components/Gallery';
-import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
-import Pagination from '@magento/venia-ui/lib/components/Pagination';
-import ProductSort, { ProductSortShimmer } from '@magento/venia-ui/lib/components/ProductSort';
-import RichContent from '@magento/venia-ui/lib/components/RichContent';
-import Shimmer from '@magento/venia-ui/lib/components/Shimmer';
-import SortedByContainer, {
-    SortedByContainerShimmer
-} from '@magento/venia-ui/lib/components/SortedByContainer';
-import defaultClasses from '@magento/venia-ui/lib/RootComponents/Category/category.module.css';
-import NoProductsFound from '@magento/venia-ui/lib/RootComponents/Category/NoProductsFound';
-import { useSellerProducts } from '@riosst100/pwa-marketplace/src/talons/SellerProducts/useSellerProducts';
-
-const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
-const FilterSidebar = React.lazy(() =>
-    import('@magento/venia-ui/lib/components/FilterSidebar')
-);
-
-const SellerProducts = props => {
-    const {
-        categoryId,
-        data,
-        isLoading,
-        pageControl,
-        sortProps,
-        pageSize
-    } = props;
-    const [currentSort] = sortProps;
-
-    const talonProps = useSellerProducts({
-        categoryId,
-        data,
-        pageSize
-    });
-
-    const {
-        availableSortMethods,
-        categoryName,
-        categoryDescription,
-        filters,
-        items,
-        totalCount,
-        totalPagesFromData
-    } = talonProps;
-
-    const sidebarRef = useRef(null);
-    const classes = useStyle(defaultClasses, props.classes);
-    const shouldRenderSidebarContent = useIsInViewport({
-        elementRef: sidebarRef
-    });
-
-    const shouldShowFilterButtons = filters && filters.length;
-    const shouldShowFilterShimmer = filters === null;
-
-    // If there are no products we can hide the sort button.
-    const shouldShowSortButtons = totalPagesFromData && availableSortMethods;
-    const shouldShowSortShimmer = !totalPagesFromData && isLoading;
-
-    const maybeFilterButtons = shouldShowFilterButtons ? (
-        <FilterModalOpenButton filters={filters} />
-    ) : shouldShowFilterShimmer ? (
-        <FilterModalOpenButtonShimmer />
-    ) : null;
-
-    const filtersModal = shouldShowFilterButtons ? (
-        <FilterModal filters={filters} />
-    ) : null;
-
-    const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar filters={filters} />
-    ) : shouldShowFilterShimmer ? (
-        <FilterSidebarShimmer />
-    ) : null;
-
-    const maybeSortButton = shouldShowSortButtons ? (
-        <ProductSort
-            sortProps={sortProps}
-            availableSortMethods={availableSortMethods}
-        />
-    ) : shouldShowSortShimmer ? (
-        <ProductSortShimmer />
-    ) : null;
-
-    const maybeSortContainer = shouldShowSortButtons ? (
-        <SortedByContainer currentSort={currentSort} />
-    ) : shouldShowSortShimmer ? (
-        <SortedByContainerShimmer />
-    ) : null;
-
-    const categoryResultsHeading =
-        totalCount > 0 ? (
-            <FormattedMessage
-                id={'categoryContent.resultCount'}
-                values={{
-                    count: totalCount
-                }}
-                defaultMessage={'{count} Results'}
-            />
-        ) : isLoading ? (
-            <Shimmer width={5} />
-        ) : null;
-
-    const categoryDescriptionElement = categoryDescription ? (
-        <RichContent html={categoryDescription} />
-    ) : null;
-
-    const content = useMemo(() => {
-        if (!totalPagesFromData && !isLoading) {
-            return <NoProductsFound categoryId={categoryId} />;
-        }
-
-        const gallery = totalPagesFromData ? (
-            <Gallery items={items} />
-        ) : (
-            <GalleryShimmer items={items} />
-        );
-
-        const pagination = totalPagesFromData ? (
-            <Pagination pageControl={pageControl} />
-        ) : null;
-
-        return (
-            <Fragment>
-                <section className={classes.gallery}>{gallery}</section>
-                <div className={classes.pagination}>{pagination}</div>
-            </Fragment>
-        );
-    }, [
-        categoryId,
-        classes.gallery,
-        classes.pagination,
-        isLoading,
-        items,
-        pageControl,
-        totalPagesFromData
-    ]);
-
-    const categoryTitle = categoryName ? categoryName : <Shimmer width={5} />;
+import React from 'react';
+import ProductItem from '@riosst100/pwa-marketplace/src/components/ProductItem';
+import Filter from '@riosst100/pwa-marketplace/src/components/Filter';
+import Search from '@riosst100/pwa-marketplace/src/components/Search';
+import SortBy from '@riosst100/pwa-marketplace/src/components/SortBy';
+import Pagination from '..//Pagination';
+import { Link } from "react-router-dom";
 
     return (
-        <Fragment>
-            <Breadcrumbs categoryId={categoryId} />
-            <StoreTitle>{categoryName}</StoreTitle>
-            <article className={classes.root} data-cy="SellerProducts-root">
-                <div className={classes.categoryHeader}>
-                    <h1 aria-live="polite" className={classes.title}>
-                        <div
-                            className={classes.categoryTitle}
-                            data-cy="SellerProducts-categoryTitle"
-                        >
-                            {categoryTitle}
-                        </div>
-                    </h1>
-                    {categoryDescriptionElement}
+        <>
+            <div className='w-full mb-[30px]'>
+                <div class='flex items-end gap-[40px] px-[30px] py-0 rounded-[6px] border border-solid border-gray-100'>
+                    <Link to='#' class='px-0 py-[12px] inline-flex items-center gap-[5px] relative flex-[0_0_auto]'>
+                        <span class='relative w-fit font-medium text-[16px] tracking-[0] leading-[20px] whitespace-nowrap'>Action Figures</span>
+                    </Link>
+                    <Link to='#' class='px-0 py-[12px] inline-flex items-center gap-[5px] relative flex-[0_0_auto]'>
+                        <span class='relative w-fit font-medium text-[16px] tracking-[0] leading-[20px] whitespace-nowrap'>Anime</span>
+                    </Link>
                 </div>
-                <div className={classes.contentWrapper}>
-                    <div ref={sidebarRef} className={classes.sidebar}>
-                        <Suspense fallback={<FilterSidebarShimmer />}>
-                            {shouldRenderSidebarContent ? sidebar : null}
-                        </Suspense>
+            </div>
+            <div className='w-full flex items-start gap-x-[30px]'>
+                <div className='xs_hidden xl_block filter-container w-full max-w-[240px]'>
+                    <Filter />
+                </div>
+                <div className='flex flex-col gap-y-[30px]'>
+                    <div className='flex xs_flex-wrap gap-y-4 w-full items-center justify-between'>
+                        <Search />
+                        <SortBy />
                     </div>
-                    <div className={classes.categoryContent}>
-                        <div className={classes.heading}>
-                            <div
-                                data-cy="SellerProducts-categoryInfo"
-                                className={classes.categoryInfo}
-                            >
-                                {categoryResultsHeading}
-                            </div>
-                            <div className={classes.headerButtons}>
-                                {maybeFilterButtons}
-                                {maybeSortButton}
-                            </div>
-                            {maybeSortContainer}
-                        </div>
-                        {content}
-                        <Suspense fallback={null}>{filtersModal}</Suspense>
+                    <div className='product-list w-full grid xs_grid-cols-2 md_grid-cols-3 lg_grid-cols-4 gap-4'>
+                        <ProductItem />
+                        <ProductItem />
+                        <ProductItem />
+                        <ProductItem />
+                        <ProductItem />
+                    </div>
+                    <div className='pagination-container w-full flex justify-center'>
+                        <Pagination />
                     </div>
                 </div>
-            </article>
-        </Fragment>
-    );
-};
+            </div>
+        </>
+    )
+}
 
 export default SellerProducts;
 
