@@ -2,8 +2,12 @@ import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSeller';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
-import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import mapSeller from '@riosst100/pwa-marketplace/src/util/mapSeller';
+import Slider from '@riosst100/pwa-marketplace/src/components/commons/Slider';
+import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
+import SellerProducts from '../SellerProducts';
+import SellerInformation from '../SellerInformation';
+import Reviews from '../SellerReview';
 import Slider from '@riosst100/pwa-marketplace/src/components/commons/Slider';
 import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import SellerProducts from '../SellerProducts';
@@ -17,6 +21,7 @@ import {
     Share,
     BoxTick,
     Star1,
+    Shop,
 } from 'iconsax-react';
 import Image from '@magento/venia-ui/lib/components/Image';
 
