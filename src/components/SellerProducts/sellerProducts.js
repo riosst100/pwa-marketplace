@@ -6,6 +6,7 @@ import SortBy from '@riosst100/pwa-marketplace/src/components/SortBy';
 import Pagination from '..//Pagination';
 import { Link } from "react-router-dom";
 
+const SellerProducts = () => {
     return (
         <>
             <div className='w-full mb-[30px]'>
@@ -44,24 +45,3 @@ import { Link } from "react-router-dom";
 }
 
 export default SellerProducts;
-
-SellerProducts.propTypes = {
-    classes: shape({
-        gallery: string,
-        pagination: string,
-        root: string,
-        categoryHeader: string,
-        title: string,
-        categoryTitle: string,
-        sidebar: string,
-        categoryContent: string,
-        heading: string,
-        categoryInfo: string,
-        headerButtons: string
-    }),
-    // sortProps contains the following structure:
-    // [{sortDirection: string, sortAttribute: string, sortText: string},
-    // React.Dispatch<React.SetStateAction<{sortDirection: string, sortAttribute: string, sortText: string}]
-    sortProps: array,
-    pageSize: number
-};
