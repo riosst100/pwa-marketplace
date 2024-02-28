@@ -2,8 +2,15 @@ import React from 'react';
 import SellerReviewItem from '../SellerReviewItem';
 import Pagination from '../Pagination';
 import { Star1 } from 'iconsax-react';
+import { useSellerReview } from '@riosst100/pwa-marketplace/src/talons/SellerReview/useSellerReview';
 
-const SellerReview = () => {
+const SellerReview = ({ seller }) => {
+    const talonProps = useSellerReview({
+        sellerUrl: seller.url_key
+    });
+
+    const { reviews, loading } = talonProps;
+
     return (
         <>
             <div className='w-full flex items-start xs_flex-col lg_flex-row gap-[30px] '>
@@ -28,7 +35,7 @@ const SellerReview = () => {
                                     <Star1 color='#D9D9D9' size={14} className='fill-[#D9D9D9]' />
                                 </div>
                             </div>
-                            <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">(26 Reviews)</div>
+                            <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">({reviews ? reviews.items.length : 0} Reviews)</div>
                         </div>
                     </div>
                     <div className="w-full flex-col items-start gap-2 flex">
@@ -124,21 +131,22 @@ const SellerReview = () => {
                 </div>
                 <div className='flex flex-col w-full'>
                     <div className='flex flex-col w-full items-start gap-[20px] relative mb-[30px]'>
-                        <SellerReviewItem />
-                        <SellerReviewItem />
-                        <SellerReviewItem />
-                        <SellerReviewItem />
-                        <SellerReviewItem />
-                        <SellerReviewItem />
-                        <SellerReviewItem />
+                        <SellerReviews reviews={reviews} />
                     </div>
                     <div className='pagination-container w-full flex justify-center'>
-                        <Pagination />
+                        {reviews && reviews.page_info ? <Pagination 
+                        currentPage={reviews.page_info.current_page} 
+                        totalPages={reviews.page_info.total_pages} 
+                        pageSize={reviews.page_info.page_size} /> : ''}
                     </div>
                 </div>
             </div>
         </>
     )
+}
+
+const SellerReviews = ({ reviews }) => {
+    return reviews && reviews.items.length ? reviews.items.map((review, index) => <SellerReviewItem review={review} key={index} /> ) : ''
 }
 
 export default SellerReview;

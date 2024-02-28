@@ -8,11 +8,6 @@ import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import SellerProducts from '../SellerProducts';
 import SellerInformation from '../SellerInformation';
 import Reviews from '../SellerReview';
-import Slider from '@riosst100/pwa-marketplace/src/components/commons/Slider';
-import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
-import SellerProducts from '../SellerProducts';
-import SellerInformation from '../SellerInformation';
-import Reviews from '../SellerReview';
 import {
     Verify,
     Sms,
@@ -54,7 +49,7 @@ const SellerDetail = props => {
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <SellerProducts />
+                content: <SellerProducts seller={seller} />
             },
             {
                 id: 'store-information',
@@ -64,7 +59,7 @@ const SellerDetail = props => {
             {
                 id: 'reviews',
                 title: 'Reviews',
-                content: <Reviews />
+                content: <Reviews seller={seller} />
             }
         ];
 
@@ -128,17 +123,6 @@ const SellerDetail = props => {
                     </div>
                 </div>
                 <div class="flex items-center gap-[20px] px-[10px] py-[30px] relative">
-                    <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
-                        <div class="flex items-center gap-[6px] relative">
-                            <BoxTick color="#B9AEC5" variant="Outline" size={18} className='stroke-[#B9AEC5] stroke-[.5px]' />
-                            <div class="[font-family:'Noto_Sans',Helvetica] font-semibold text-[#005947] text-[18px] relative w-fit tracking-[0] leading-[normal] whitespace-nowrap">
-                                {seller ? seller.sale : 0}
-                            </div>
-                        </div>
-                        <div class="relative w-fit [font-family:'Frederik-Regular',Helvetica] font-normal text-[#009a7b] text-[10px] tracking-[0] leading-[normal] whitespace-nowrap">
-                            Total Sales
-                        </div>
-                    </div>
                     <img class="relative self-stretch w-px object-cover" alt="Line" src="https://c.animaapp.com/2pP7niVX/img/line-16.svg" />
                     <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
                         <div class="flex items-center gap-[5px] relative">

@@ -16,6 +16,7 @@ const SellerInformation = ({ seller }) => {
                                 <p class="relative mt-[-1.00px]  font-normal text-[14px] tracking-[0] leading-[16px]">
                                     {seller ? seller.description : ''}<br />
                                     <br />
+                                    <br />
                                     {seller ? seller.contact_number : ''}
                                 </p>
                             </div>
@@ -76,7 +77,7 @@ const SellerShipTo = ({seller}) => {
         <div class="flex flex-wrap items-center gap-2 px-0 py-[5px] relative flex-1 grow">
             {shipTo && shipTo == "Domestic" ? seller.country_id : ''}
             {shipToCountryArr && shipTo != "Domestic" ? shipToCountryArr.map((value, index) => <>
-            <div class="inline-flex items-center justify-center gap-[10px] px-[10px] py-0 relative flex-[0_0_auto] border-r [border-right-style:solid] border-[#e6e9ea]">
+            <div key={index} class={index == shipToCountryArr.length-1 ? "inline-flex items-center justify-center gap-[10px] px-[10px] py-0 relative flex-[0_0_auto]" : "inline-flex items-center justify-center gap-[10px] px-[10px] py-0 relative flex-[0_0_auto] border-r [border-right-style:solid] border-[#e6e9ea]"}>
                 <div class="relative w-fit mt-[-1.00px] font-normal text-[14px] tracking-[0] leading-[normal] whitespace-nowrap">{value}</div>
             </div>
             </>) : ''}
