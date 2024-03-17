@@ -40,7 +40,10 @@ const Adapter = props => {
     const match = location && location.pathname.split("/")[1];
     let websiteCodeInUrl = websiteCodes.find((str) => str === match);
 
-    const { getWebsiteByUserIp } = useWebsiteByIp(websiteCodeInUrl);
+    // const { getWebsiteByUserIp } = useWebsiteByIp(websiteCodeInUrl);
+    const getWebsiteByUserIp = {
+        countryCode: 'SG'
+    }
     
     useEffect(() => {
         if (websiteCodeInUrl) {
@@ -88,7 +91,7 @@ const Adapter = props => {
                 );
             }
         }
-    }, [websiteCodeInUrl, getWebsiteByUserIp])
+    }, [websiteCodeInUrl])
 
     // TODO: Replace with app skeleton. See PWA-547.
     if (!initialized) {

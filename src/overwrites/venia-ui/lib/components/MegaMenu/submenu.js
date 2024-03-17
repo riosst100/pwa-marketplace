@@ -6,6 +6,7 @@ import { useSubMenu } from '@magento/peregrine/lib/talons/MegaMenu/useSubMenu';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenu.module.css';
 import SubmenuColumn from './submenuColumn';
+import ShopByColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/shopByColumn';
 
 /**
  * The Submenu component displays submenu in mega menu
@@ -17,6 +18,7 @@ import SubmenuColumn from './submenuColumn';
 const Submenu = props => {
     const {
         items,
+        shopByItems,
         mainNavWidth,
         isFocused,
         subMenuState,
@@ -55,6 +57,34 @@ const Submenu = props => {
         );
     });
 
+    // const shopByItems = [
+    //     {
+    //         name: 'Shop By Franchise',
+    //         items: [
+    //             {
+    //                 name: 'Hasbro',
+    //                 url: '/'
+    //             }
+    //         ]
+    //     }
+    // ];
+
+    const shopBy = shopByItems.map((shopBy, index) => {
+        const keyboardProps =
+            index === shopByItems.length - 1 ? talonProps.keyboardProps : {};
+        return (
+            <ShopByColumn
+                index={index}
+                keyboardProps={keyboardProps}
+                // key={category.uid}
+                shopBy={shopBy}
+                // categoryUrlSuffix={categoryUrlSuffix}
+                onNavigate={onNavigate}
+                handleCloseSubMenu={handleCloseSubMenu}
+            />
+        );
+    });
+
     return (
         <div className={subMenuClassname}>
             <div
@@ -62,6 +92,7 @@ const Submenu = props => {
                 style={{ minWidth: mainNavWidth + PADDING_OFFSET }}
             >
                 {subMenus}
+                {shopBy}
             </div>
         </div>
     );

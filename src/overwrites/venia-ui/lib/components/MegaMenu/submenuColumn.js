@@ -20,6 +20,7 @@ const SubmenuColumn = props => {
         onNavigate,
         handleCloseSubMenu
     } = props;
+    
     const classes = useStyle(defaultClasses, props.classes);
 
     const categoryUrl = resourceUrl(

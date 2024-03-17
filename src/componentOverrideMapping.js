@@ -13,7 +13,11 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/SignIn/signIn.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/signIn.gql.js',
     [`@magento/peregrine/lib/talons/SignIn/useSignIn.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/useSignIn.js',
     [`@magento/peregrine/lib/talons/AccountMenu/useAccountMenuItems.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/AccountMenu/useAccountMenuItems.js',
+    [`@magento/peregrine/lib/talons/MegaMenu/megaMenu.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/MegaMenu/megaMenu.gql.js',
     [`@magento/peregrine/lib/util/deriveErrorMessage.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/util/deriveErrorMessage.js',
     [`@magento/venia-ui/lib/components/MegaMenu/megaMenu.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/megaMenu.js',
     [`@magento/venia-ui/lib/components/FilterModal/FilterList/filterDefault.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterModal/FilterList/filterDefault.js',
+    [`@magento/venia-ui/lib/RootComponents/Category/categoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/categoryContent.js',
+    [`@magento/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js',
+    [`@magento/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js',
 };
