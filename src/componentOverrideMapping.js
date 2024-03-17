@@ -20,4 +20,5 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/RootComponents/Category/categoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/categoryContent.js',
     [`@magento/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js',
     [`@magento/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js',
+    [`@magento/venia-ui/lib/components/FilterSidebar/filterSidebar.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterSidebar/filterSidebar.js',
 };

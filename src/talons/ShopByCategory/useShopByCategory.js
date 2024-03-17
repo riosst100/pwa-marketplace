@@ -24,9 +24,6 @@ export const useShopByCategory = props => {
         fetchPolicy: 'cache-and-network' 
     });
 
-    console.log(children)
-    console.log(parent)
-
     const categoryUrlSuffix = useMemo(() => {
         if (storeConfigData) {
             return storeConfigData.storeConfig.category_url_suffix;
