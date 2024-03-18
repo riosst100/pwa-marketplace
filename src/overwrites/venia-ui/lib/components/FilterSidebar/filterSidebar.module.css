@@ -1,0 +1,57 @@
+.root {
+    composes: bg-white from global;
+    composes: bottom-0 from global;
+    composes: hidden from global;
+    composes: max-w-modal from global;
+    composes: w-full from global;
+    composes: z-foreground from global;
+    grid-template-rows: 1fr 7rem;
+
+    composes: lg_grid from global;
+    composes: border from global;
+    composes: border-gray-100 from global;
+    composes: shadow-type-1 from global;
+    composes: rounded-[6px] from global;
+    composes: py-2.5 from global;
+
+}
+
+.body {
+    composes: overflow-auto from global;
+}
+
+.header {
+    composes: flex from global;
+    composes: justify-between from global;
+}
+
+.headerTitle {
+    composes: flex from global;
+    composes: items-center from global;
+    composes: leading-normal from global;
+    composes: text-[16px] from global;
+    composes: font-semibold from global;
+    composes: px-2.5 from global;
+    composes: mb-2.5 from global;
+}
+
+.action {
+    composes: px-2.5 from global;
+    composes: py-[5px] from global;
+}
+
+/* TODO @TW: cannot compose */
+.action button {
+    /* composes: text-sm from global; */
+    font-size: 13px;
+    /* composes: no-underline from global; */
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.blocks {
+    composes: px-2.5 from global;
+    composes: flex from global;
+    composes: flex-col from global;
+    composes: gap-2.5 from global;
+}

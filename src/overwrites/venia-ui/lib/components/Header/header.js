@@ -2,8 +2,9 @@ import React, { Fragment, Suspense } from 'react';
 import { shape, string } from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 
-import AccountTrigger from '@magento/venia-ui/lib/components/Header/accountTrigger';
-import CartTrigger from '@magento/venia-ui/lib/components/Header/cartTrigger';
+import AccountTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/accountTrigger';
+import CartTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/cartTrigger';
+import WishlistTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/wishlistTrigger';
 import NavTrigger from '@magento/venia-ui/lib/components/Header/navTrigger';
 import SearchTrigger from '@magento/venia-ui/lib/components/Header/searchTrigger';
 import OnlineIndicator from '@magento/venia-ui/lib/components/Header/onlineIndicator';
@@ -14,7 +15,8 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from '@magento/venia-ui/lib/components/Header/header.module.css';
 import StoreSwitcher from '@magento/venia-ui/lib/components/Header/storeSwitcher';
 import WebsiteSwitcher from '@riosst100/pwa-marketplace/src/components/WebsiteSwitcher/websiteSwitcher';
-import CurrencySwitcher from '@magento/venia-ui/lib/components/Header/currencySwitcher';
+// import CurrencySwitcher from '@magento/venia-ui/lib/components/Header/currencySwitcher';
+import CurrencySwitcher from '@riosst100/pwa-marketplace/src/components/CurrencySwitcher';
 import BecomeSellerLink from '@riosst100/pwa-marketplace/src/components/BecomeSellerLink/becomeSellerLink';
 import MegaMenu from '@magento/venia-ui/lib/components/MegaMenu';
 import PageLoadingIndicator from '@magento/venia-ui/lib/components/PageLoadingIndicator';
@@ -60,8 +62,8 @@ const Header = props => {
     return (
         <Fragment>
             <PageLoadingIndicator absolute />
-            <div className={classes.switchersContainer}>
-                <div className={classes.switchers} data-cy="Header-switchers">
+            <div className={cn(classes.switchersContainer, '!bg-white border-b border-gray-100')}>
+                <div className={cn(classes.switchers, 'flex flex-row gap-x-[25px] !py-2')} data-cy="Header-switchers">
                     <BecomeSellerLink />
                     <WebsiteSwitcher />
                     <StoreSwitcher />
@@ -83,27 +85,28 @@ const Header = props => {
                                 <small>Toys | Card | Games</small>
                             </Link>
                         </div>
-                        <div className='flex'>
+                        <div className='flex flex-auto max-w-[700px]'>
                             <Suspense fallback={searchBarFallback}>
                                 <Route>
                                     <SearchBar isOpen={true} ref={searchRef} />
                                 </Route>
                             </Suspense>
                         </div>
-                        <div className={classes.secondaryActions}>
+                        <div className={cn(classes.secondaryActions, 'lg_gap-x-5 pl-5 border-l-[1px] border-gray-100')}>
                             {/* <SearchTrigger
                                 onClick={handleSearchTriggerClick}
                                 ref={searchTriggerRef}
                             /> */}
-                            <AccountTrigger />
+                            <WishlistTrigger />
                             <CartTrigger />
+                            <AccountTrigger />
                         </div>
                     </div>
                 </div>
                 <MegaMenu
                     rootClassName={cn('nav-menu w-full max-w-[1210px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
                     megaMenuItemClassname={cn('px-0 py-[15px] leading-[20px]')}
-                    titleClassName={cn('font-medium leading-[20px]')}
+                    titleClassName={cn('font-medium leading-[20px] text-darkblue-900')}
                 />
             </header>
             <OnlineIndicator
