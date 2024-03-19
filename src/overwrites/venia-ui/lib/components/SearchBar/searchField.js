@@ -27,7 +27,9 @@ const SearchField = props => {
             onFocus={onFocus}
             onValueChange={onChange}
             forwardedRef={inputRef}
-            // classes={cn('search input')}
+            className={{
+                inputClassName: cn('rounded-full border-[1px] border-gray-100')
+            }}
         />
     );
 };

@@ -1,0 +1,65 @@
+.root {
+    composes: relative from global;
+    composes: ml-2xs from global;
+}
+
+.menu {
+    composes: absolute from global;
+    composes: bg-clip-padding from global;
+    composes: bg-white from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: border-gray-100 from global;
+    composes: list-none from global;
+    composes: mb-0 from global;
+    composes: min-w-[10rem] from global;
+    composes: mt-0.5 from global;
+    composes: mx-0 from global;
+    composes: right-0 from global;
+    composes: rounded from global;
+    composes: shadow-menu from global;
+    composes: text-colorDefault from global;
+    composes: text-left from global;
+    composes: top-[110%] from global;
+    composes: z-menu from global;
+    composes: p-2.5 from global;
+}
+
+.menuItem {
+    composes: hover_bg-gray-100 from global;
+    composes: rounded-[5px] from global;
+    composes: relative from global;
+}
+
+.sortButton {
+    composes: rounded-[5px] from global;
+    composes: p-2.5 from global;
+
+    composes: min-w-[154px] from global;
+}
+
+.desktopText {
+    composes: hidden from global;
+
+    composes: lg_inline-flex from global;
+}
+
+.sortText {
+    composes: leading-normal from global;
+    composes: text-colorDefault from global;
+    composes: text-[14px] from global;
+}
+
+.desktopIconWrapper {
+    transform: translateX(10px);
+}
+
+.desktopIcon {
+    /* composes: icon from '../Icon/icon.module.css'; */
+
+    composes: stroke-gray-500 from global;
+}
+
+.mobileText {
+    composes: lg_hidden from global;
+}

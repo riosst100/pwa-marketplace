@@ -4,7 +4,7 @@ import { bool, shape, string } from 'prop-types';
 
 import Checkbox from '@magento/venia-ui/lib/components/Checkbox';
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import defaultClasses from '@magento/venia-ui/lib/components/FilterModal/FilterList/filterDefault.module.css';
+import defaultClasses from './filterDefault.module.css';
 import { useCurrencySwitcher } from '@magento/peregrine/lib/talons/Header/useCurrencySwitcher';
 
 const FilterDefault = props => {
@@ -33,23 +33,23 @@ const FilterDefault = props => {
 
     const ariaLabel = !isSelected
         ? formatMessage(
-              {
-                  id: 'filterModal.item.applyFilter',
-                  defaultMessage: 'Apply filter "{optionName}".'
-              },
-              {
-                  optionName: label
-              }
-          )
+            {
+                id: 'filterModal.item.applyFilter',
+                defaultMessage: 'Apply filter "{optionName}".'
+            },
+            {
+                optionName: label
+            }
+        )
         : formatMessage(
-              {
-                  id: 'filterModal.item.clearFilter',
-                  defaultMessage: 'Remove filter "{optionName}".'
-              },
-              {
-                  optionName: label
-              }
-          );
+            {
+                id: 'filterModal.item.clearFilter',
+                defaultMessage: 'Remove filter "{optionName}".'
+            },
+            {
+                optionName: label
+            }
+        );
 
     return (
         <Checkbox

@@ -5,9 +5,12 @@ import { useStoreSwitcher } from '@magento/peregrine/lib/talons/Header/useStoreS
 import { availableRoutes } from '@magento/venia-ui/lib/components/Routes/routes';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import defaultClasses from '@magento/venia-ui/lib/components/Header/storeSwitcher.module.css';
+import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/storeSwitcher.module.css';
 import SwitcherItem from '@magento/venia-ui/lib/components/Header/switcherItem';
 import Shimmer from '@magento/venia-ui/lib/components/Header/storeSwitcher.shimmer';
+import cn from 'classnames';
+import { ArrowUp2 } from 'iconsax-react';
+import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
 
 const StoreSwitcher = props => {
     const {
@@ -29,11 +32,13 @@ const StoreSwitcher = props => {
 
     const groups = [];
 
+    const hasOnlyOneStore = availableStores.size === 1;
+
     storeGroups.forEach((group, key) => {
         const stores = [];
         group.forEach(({ storeName, isCurrent, storeCode, websiteCode }) => {
             let label = `${storeName}`;
-            
+
             stores.push(
                 <li
                     aria-selected={currentStoreName}
@@ -57,7 +62,7 @@ const StoreSwitcher = props => {
         groups.push(
             <ul
                 role="listbox"
-                className={classes.groupList}
+                className={cn(classes.groupList, 'text-[13px]')}
                 key={key}
                 data-cy="StoreSwitcher-group"
             >
@@ -67,24 +72,33 @@ const StoreSwitcher = props => {
     });
 
     return (
-        <div className={classes.root} data-cy="StoreSwitcher-root">
+        <div className={cn(classes.root, 'leading-[16px]')} data-cy="StoreSwitcher-root">
             <button
                 data-cy="StoreSwitcher-triggerButton"
-                className={classes.trigger}
+                className={cn(classes.trigger, 'text-[13px]')}
                 aria-label={currentStoreName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
-                data-cy="StoreSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
-                {currentStoreName || ''}
+                <span className='flex flex-row gap-[5px] items-center leading-[16px] text-darkblue-900'>
+                    {currentStoreName || ''}
+                    {!hasOnlyOneStore ? (
+                        <ArrowUp2 size="12" color={darkBlue} className={cn(storeMenuIsOpen ? 'rotate-0 ' : 'rotate-180', 'transition-all stroke-current')} variant="Outline" />
+                    ) : null}
+                </span>
             </button>
             <div
                 ref={storeMenuRef}
                 className={menuClassName}
                 data-cy="StoreSwitcher-menu"
             >
-                <div className={classes.groups}>{groups}</div>
+                <div className={cn(classes.groups, 'text-darkblue-900')}>
+                    <span className='flex font-medium px-4 py-1 w-full text-[14px]'>
+                        Language
+                    </span>
+                    {groups}
+                </div>
             </div>
         </div>
     );

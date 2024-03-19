@@ -6,23 +6,23 @@ import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
 import { useCategoryContent } from '@magento/peregrine/lib/talons/RootComponents/Category';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
+import Breadcrumbs from '../../components/Breadcrumbs';
 import FilterModalOpenButton, {
     FilterModalOpenButtonShimmer
 } from '@magento/venia-ui/lib/components/FilterModalOpenButton';
 import { FilterSidebarShimmer } from '@magento/venia-ui/lib/components/FilterSidebar';
 import Gallery, { GalleryShimmer } from '@magento/venia-ui/lib/components/Gallery';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
-import Pagination from '@magento/venia-ui/lib/components/Pagination';
-import ProductSort, { ProductSortShimmer } from '@magento/venia-ui/lib/components/ProductSort';
+import Pagination from '../../components/Pagination';
+import ProductSort, { ProductSortShimmer } from '../../components/ProductSort';
 import RichContent from '@magento/venia-ui/lib/components/RichContent';
 import Shimmer from '@magento/venia-ui/lib/components/Shimmer';
 import SortedByContainer, {
     SortedByContainerShimmer
 } from '@magento/venia-ui/lib/components/SortedByContainer';
-import defaultClasses from '@magento/venia-ui/lib/RootComponents/Category/category.module.css';
-import NoProductsFound from '@magento/venia-ui/lib/RootComponents/Category/NoProductsFound';
-import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
+import defaultClasses from './category.module.css';
+import NoProductsFound from './NoProductsFound';
+import cn from 'classnames';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -53,9 +53,7 @@ const CategoryContent = props => {
         filters,
         items,
         totalCount,
-        totalPagesFromData,
-        children,
-        parent
+        totalPagesFromData
     } = talonProps;
 
     const sidebarRef = useRef(null);
@@ -82,7 +80,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar filters={filters} categoryName={categoryName} children={children} parent={parent} />
+        <FilterSidebar filters={filters} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -155,17 +153,17 @@ const CategoryContent = props => {
     return (
         <Fragment>
             <Breadcrumbs categoryId={categoryId} />
-            <SubCategory children={children} />
+            {/* <SubCategory children={children} /> */}
             <StoreTitle>{categoryName}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
                     <h1 aria-live="polite" className={classes.title}>
-                        <div
+                        <span
                             className={classes.categoryTitle}
                             data-cy="CategoryContent-categoryTitle"
                         >
                             {categoryTitle}
-                        </div>
+                        </span>
                     </h1>
                     {categoryDescriptionElement}
                 </div>
@@ -176,7 +174,7 @@ const CategoryContent = props => {
                         </Suspense>
                     </div>
                     <div className={classes.categoryContent}>
-                        <div className={classes.heading}>
+                        <div className={cn(classes.heading)}>
                             <div
                                 data-cy="CategoryContent-categoryInfo"
                                 className={classes.categoryInfo}

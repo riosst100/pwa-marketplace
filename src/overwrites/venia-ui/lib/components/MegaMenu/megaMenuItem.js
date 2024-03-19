@@ -85,7 +85,7 @@ const MegaMenuItem = props => {
     ]);
 
     const maybeDownArrowIcon = category.children.length ? (
-        <ArrowDown2 className='ml-2' size="16" color={textPrimary} variant="Outline" />
+        <ArrowDown2 className='ml-2 stroke-current' size="16" color={textPrimary} variant="Outline" />
     ) : null;
 
     const linkAttributes = category.children.length

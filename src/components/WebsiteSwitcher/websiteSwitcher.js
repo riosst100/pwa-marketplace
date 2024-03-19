@@ -8,6 +8,9 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './websiteSwitcher.module.css';
 import WebsiteSwitcherItem from './websiteSwitcherItem';
 import Shimmer from './websiteSwitcher.shimmer';
+import cn from 'classnames';
+import { ArrowUp2 } from 'iconsax-react';
+import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
 
 const WebsiteSwitcher = props => {
     const {
@@ -59,7 +62,7 @@ const WebsiteSwitcher = props => {
         groups.push(
             <ul
                 role="listbox"
-                className={classes.groupList}
+                className={'text-[13px]'}
                 key={key}
                 data-cy="WebsiteSwitcher-group"
             >
@@ -71,24 +74,33 @@ const WebsiteSwitcher = props => {
     let triggerLabel = currentWebsiteName ? `${currentWebsiteName}` : '';
 
     return (
-        <div className={classes.root} data-cy="WebsiteSwitcher-root">
+        <div className={cn(classes.root, 'leading-[16px]')} data-cy="WebsiteSwitcher-root">
             <button
                 data-cy="WebsiteSwitcher-triggerButton"
-                className={classes.trigger}
+                className={cn(classes.trigger, 'text-[13px]')}
                 aria-label={currentWebsiteName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
-                data-cy="WebsiteSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
-                {triggerLabel || ''}
+                <span className='flex flex-row gap-[5px] items-center leading-[16px] text-darkblue-900'>
+                    {triggerLabel || ''}
+                    {!hasOnlyOneGroup ? (
+                        <ArrowUp2 size="12" color={darkBlue} className={cn(storeMenuIsOpen ? 'rotate-0 ' : 'rotate-180', 'transition-all stroke-current')} variant="Outline" />
+                    ) : null}
+                </span>
             </button>
             <div
                 ref={storeMenuRef}
                 className={menuClassName}
                 data-cy="WebsiteSwitcher-menu"
             >
-                <div className={classes.groups}>{groups}</div>
+                <div className={cn(classes.groups, 'text-darkblue-900')}>
+                    <span className='flex font-medium px-4 py-1 w-full text-[14px] mb-2'>
+                        Country
+                    </span>
+                    {groups}
+                </div>
             </div>
         </div>
     );

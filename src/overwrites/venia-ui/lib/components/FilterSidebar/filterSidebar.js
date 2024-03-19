@@ -3,12 +3,13 @@ import { FormattedMessage } from 'react-intl';
 import { array, arrayOf, shape, string, number } from 'prop-types';
 import { useFilterSidebar } from '@magento/peregrine/lib/talons/FilterSidebar';
 
-import { useStyle } from '../../classify';
-import LinkButton from '../LinkButton';
-import CurrentFilters from '../FilterModal/CurrentFilters';
-import FilterBlock from '../FilterModal/filterBlock';
+import { useStyle } from '@magento/venia-ui/lib/classify';
+import LinkButton from '@magento/venia-ui/lib/components/LinkButton';
+import CurrentFilters from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterModal/CurrentFilters';
+import FilterBlock from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterModal/filterBlock';
 import defaultClasses from './filterSidebar.module.css';
-import ShopByCategory from '@riosst100/pwa-marketplace/src/components/ShopByCategory';
+import { Filter } from 'iconsax-react';
+import cn from 'classnames';
 
 const SCROLL_OFFSET = 150;
 
@@ -18,8 +19,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { categoryName, children, parent, filters, filterCountToOpen } = props;
-
+    const { filters, filterCountToOpen } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -106,15 +106,16 @@ const FilterSidebar = props => {
             aria-busy="false"
         >
             <div className={classes.body}>
-                <div className={classes.header}>
+                <div className={cn(classes.header)}>
                     <h2
                         data-cy="FilterSidebar-headerTitle"
-                        className={classes.headerTitle}
+                        className={cn(classes.headerTitle, 'flex w-full justify-between items-center')}
                     >
                         <FormattedMessage
                             id={'filterModal.headerTitle'}
                             defaultMessage={'Filters'}
                         />
+                        <Filter size={15} className='text-gray-900' />
                     </h2>
                 </div>
                 <CurrentFilters
@@ -125,7 +126,6 @@ const FilterSidebar = props => {
                 />
                 {clearAll}
                 <ul className={classes.blocks}>{filtersList}</ul>
-                <ul className={classes.blocks}><ShopByCategory categoryName={categoryName} children={children} parent={parent} /></ul>
             </div>
         </aside>
     );
