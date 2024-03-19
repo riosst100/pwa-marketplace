@@ -78,7 +78,6 @@ const WebsiteSwitcher = props => {
                 aria-label={currentWebsiteName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
-                data-cy="WebsiteSwitcher-trigger"
                 aria-expanded={storeMenuIsOpen}
             >
                 {triggerLabel}

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import { useBecomeSellerLink } from '@riosst100/pwa-marketplace/src/talons/BecomeSellerLink/useBecomeSellerLink';
-
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
 const storage = new BrowserPersistence();
@@ -35,6 +34,7 @@ const BecomeSellerLink = props => {
         <div className={classes.root} data-cy="BecomeSellerLink-root">
             <Link
                 to={resourceUrl('/become-seller')}
+                className='text-[13px] leading-[16px] text-darkblue-900'
             >{formatMessage({
                 id: 'becomeSellerPage.title',
                 defaultMessage: 'Become a Seller'

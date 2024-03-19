@@ -37,7 +37,6 @@
     composes: flex from global;
     composes: flex-wrap from global;
     composes: justify-between from global;
-    composes: max-w-site from global;
     composes: ml-auto from global;
     composes: mr-auto from global;
 }
