@@ -46,20 +46,14 @@ const FilterList = props => {
     let items2 = Object.values(data)
 
     items2 = items2.sort((a, b) => a.grouping.localeCompare(b.grouping));
-    
-    // console.log(items2)
 
     const groupingItemElements = useMemo(() => {
         return items2.map((data, index) => {
             const { grouping, children } = data;
 
-            // console.log(grouping)
-            // console.log(children)
-
             const elements1 = [];
 
             children.map((item, index) => {
-                // console.log(item)
                 const { title, value } = item;
 
                 const key = `item-${group}-${value}`;
@@ -85,8 +79,6 @@ const FilterList = props => {
                 // titles are not unique, so use the element as the key
                 // labels2.set(element1, title.toUpperCase());
 
-                // console.log(element2)
-
                 // return element2;
             });
 
@@ -106,7 +98,6 @@ const FilterList = props => {
         itemCountToShow,
         onApply
     ]);
-    // console.log(groupingItemElements)
 
     // memoize item creation
     // search value is not referenced, so this array is stable

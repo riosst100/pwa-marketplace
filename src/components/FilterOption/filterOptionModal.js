@@ -6,7 +6,6 @@ import { X as CloseIcon } from 'react-feather';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Icon from '@magento/venia-ui/lib/components/Icon';
 import { Portal } from '@magento/venia-ui/lib/components/Portal';
-// import AddressForm from './AddressForm';
 import defaultClasses from './FilterOptionModal.module.css';
 import { useFilterOptionModal } from '@riosst100/pwa-marketplace/src/talons/FilterOption/useFilterOptionModal';
 
@@ -18,16 +17,8 @@ const FilterOptionModal = props => {
     const classes = useStyle(defaultClasses, propClasses);
     const rootClass = isOpen ? classes.root_open : classes.root;
 
-    console.log('isOpen: '+isOpen);
-
     // Unmount the form to force a reset back to original values on close
     const bodyElement = isOpen ? (
-        // <AddressForm
-        //     onSuccess={onSuccess}
-        //     afterSubmit={handleClose}
-        //     onCancel={handleClose}
-        //     shippingData={shippingData}
-        // />
         groupingItemElements
     ) : null;
 

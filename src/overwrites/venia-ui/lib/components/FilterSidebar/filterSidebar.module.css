@@ -2,8 +2,9 @@
     composes: bg-white from global;
     composes: bottom-0 from global;
     composes: hidden from global;
-    composes: max-w-modal from global;
-    composes: w-full from global;
+    /* composes: max-w-modal from global; */
+    width: 220px;
+    /* composes: w-full from global; */
     composes: z-foreground from global;
     grid-template-rows: 1fr 7rem;
 
