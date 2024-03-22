@@ -90,6 +90,10 @@
     min-height: 1rem;
 }
 
+.price {
+    padding-top: 2.5;
+}
+
 .unavailableContainer {
     composes: bg-subtle from global;
     composes: gap-x-2xs from global;

@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, Suspense, useMemo } from 'react';
 import { array, func, number, shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import setValidator from '@magento/peregrine/lib/validators/set';
@@ -10,6 +10,9 @@ import defaultClasses from './filterList.module.css';
 import FilterItemRadioGroup from './filterItemRadioGroup';
 
 const labels = new WeakMap();
+const labels2 = new WeakMap();
+
+const FilterOptionModal = React.lazy(() => import('@riosst100/pwa-marketplace/src/components/FilterOption/filterOptionModal'));
 
 const FilterList = props => {
     const {
@@ -24,8 +27,86 @@ const FilterList = props => {
     } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const talonProps = useFilterList({ filterState, items, itemCountToShow });
-    const { isListExpanded, handleListToggle } = talonProps;
+    const { isListExpanded, handleListToggle, handleShowMore, activeFilter, setActiveFilter } = talonProps;
     const { formatMessage } = useIntl();
+
+    let data = items.reduce((r, e) => {
+        // get first letter of name of current element
+        let grouping = e.title[0];
+        // if there is no property in accumulator with this letter create it
+        if(!r[grouping]) r[grouping] = {grouping, children: [e]}
+        // if there is push current element to children array for that letter
+        else r[grouping].children.push(e);
+        // return accumulator
+        return r;
+    }, {})
+    
+    // since data at this point is an object, to get array of values
+    // we use Object.values method
+    let items2 = Object.values(data)
+
+    items2 = items2.sort((a, b) => a.grouping.localeCompare(b.grouping));
+    
+    // console.log(items2)
+
+    const groupingItemElements = useMemo(() => {
+        return items2.map((data, index) => {
+            const { grouping, children } = data;
+
+            // console.log(grouping)
+            // console.log(children)
+
+            const elements1 = [];
+
+            children.map((item, index) => {
+                // console.log(item)
+                const { title, value } = item;
+
+                const key = `item-${group}-${value}`;
+
+                // create an element for each item
+                elements1.push(
+                    <li
+                        key={key}
+                        className={classes.item}
+                        data-cy="FilterList-item"
+                    >
+                        <FilterItem
+                            filterApi={filterApi}
+                            filterState={filterState}
+                            group={group}
+                            item={item}
+                            onApply={onApply}
+                        />
+                    </li>
+                );
+
+                // associate each element with its normalized title
+                // titles are not unique, so use the element as the key
+                // labels2.set(element1, title.toUpperCase());
+
+                // console.log(element2)
+
+                // return element2;
+            });
+
+            const element2 = <ul><div><b>{grouping}</b></div>{elements1}</ul>;
+
+            return element2;
+        });
+    }, [
+        classes,
+        filterApi,
+        filterState,
+        filterFrontendInput,
+        name,
+        group,
+        items,
+        isListExpanded,
+        itemCountToShow,
+        onApply
+    ]);
+    // console.log(groupingItemElements)
 
     // memoize item creation
     // search value is not referenced, so this array is stable
@@ -129,19 +210,51 @@ const FilterList = props => {
         classes
     ]);
 
+    const showMoreItem = useMemo(() => {
+        if (items.length <= itemCountToShow) {
+            return null;
+        }
+
+        const label = formatMessage({
+            id: 'filterList.showMore',
+            defaultMessage: 'Show More'
+        });
+
+        return (
+            <li className={classes.showMoreLessItem}>
+                <button
+                    onClick={handleShowMore}
+                    className={classes.showMoreLessButton}
+                    data-cy="FilterList-showMoreLessButton"
+                >
+                    {label}
+                </button>
+            </li>
+        );
+    }, [
+        handleShowMore,
+        items,
+        itemCountToShow,
+        formatMessage,
+        classes
+    ]);
+
     return (
         <Fragment>
             <ul className={classes.items}>
                 {itemElements}
-                {showMoreLessItem}
+                {showMoreItem}
             </ul>
+            <Suspense fallback={null}>
+                {activeFilter && <FilterOptionModal groupingItemElements={groupingItemElements} setActiveFilter={setActiveFilter} />}
+            </Suspense>
         </Fragment>
     );
 };
 
 FilterList.defaultProps = {
     onApply: null,
-    itemCountToShow: 5
+    itemCountToShow: 2
 };
 
 FilterList.propTypes = {

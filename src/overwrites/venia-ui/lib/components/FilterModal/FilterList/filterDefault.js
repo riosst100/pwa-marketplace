@@ -27,7 +27,7 @@ const FilterDefault = props => {
     const currencySymbol = currencySymbolMap[currentCurrencyCode] != undefined ? currencySymbolMap[currentCurrencyCode] : currentCurrencyCode;
     const title =
         group === 'price'
-            ? currencySymbol + label.replace('-', ' - ' + currencySymbol) 
+            ? label.replace('-', ' - ') 
             : label;
     const { formatMessage } = useIntl();
 

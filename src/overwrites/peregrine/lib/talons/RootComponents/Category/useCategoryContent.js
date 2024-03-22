@@ -59,8 +59,6 @@ export const useCategoryContent = props => {
         }
     );
 
-    console.log(categoryData)
-
     const [, { dispatch }] = useEventingContext();
 
     useEffect(() => {

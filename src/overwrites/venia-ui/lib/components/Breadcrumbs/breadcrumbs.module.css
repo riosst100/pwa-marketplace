@@ -5,6 +5,7 @@
     composes: items-center from global;
     composes: gap-[6px] from global;
     composes: my-[30px] from global;
+    padding-top: 20px;
 }
 
 .text {

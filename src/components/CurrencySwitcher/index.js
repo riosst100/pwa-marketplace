@@ -25,13 +25,15 @@ const CurrencySwitcher = props => {
 
     const classes = useStyle(defaultClasses, props.classes);
     const menuClassName = currencyMenuIsOpen ? classes.menu_open : classes.menu;
-    const hasOnlyOneCurrency = availableCurrencies.size === 1;
+    
 
     const currencySymbol = {
         currency: classes.symbol
     };
 
     if (!availableCurrencies) return <Shimmer />;
+
+    const hasOnlyOneCurrency = availableCurrencies.length === 1;
 
     if (availableCurrencies.length === 1) return null;
 

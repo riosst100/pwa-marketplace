@@ -6,6 +6,7 @@
     composes: font-semibold from global;
     composes: text-[24px] from global;
     composes: leading-[24px] from global;
+    padding: 20px 0px 20px;
 }
 
 .pagination {
@@ -72,6 +73,5 @@
 
     composes: lg_flex from global;
     composes: lg_self-start from global;
-    composes: lg_w-filterSidebarWidth from global;
-    composes: max-w-[240px] from global;
+    width: 500px;
 }
