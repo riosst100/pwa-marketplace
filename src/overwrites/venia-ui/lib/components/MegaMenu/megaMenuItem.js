@@ -67,6 +67,7 @@ const MegaMenuItem = props => {
                 isFocused={isFocused}
                 subMenuState={subMenuState}
                 items={category.children}
+                parentCategory={category}
                 shopByItems={category.shop_by}
                 mainNavWidth={mainNavWidth}
                 handleCloseSubMenu={handleCloseSubMenu}

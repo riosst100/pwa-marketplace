@@ -92,12 +92,12 @@ const SellerReviewItem = ({ review }) => {
                     <div class="inline-flex flex-col items-start gap-[10px] relative flex-[0_0_auto]">
                         <div class="inline-flex items-center gap-[15px] relative flex-[0_0_auto]">
                             <div class="flex w-[40px] h-[40px] items-center justify-around gap-[10px] p-[10px] relative bg-[#4e31db] rounded-[30px]">
-                                <div class="relative w-fit font-semibold text-white text-[16px] text-center tracking-[0] leading-[18px] whitespace-nowrap">
+                                <div class="relative w-fit font-semibold text-white text-[14px] text-center tracking-[0] leading-[18px] whitespace-nowrap">
                                     {review ? getInitialName(review.nickname) : ''}
                                 </div>
                             </div>
                             <div class="inline-flex flex-col items-start gap-[10px] relative flex-[0_0_auto]">
-                                <div class="relative w-fit mt-[-1.00px] font-medium text-[14px] text-center tracking-[0] leading-[18px] whitespace-nowrap">
+                                <div class="relative w-fit mt-[-1.00px] font-medium text-base text-center tracking-[0] leading-[18px] whitespace-nowrap">
                                     {review ? review.nickname : ''}
                                 </div>
                                 <div class="relative w-fit font-medium text-[#999999] text-[12px] text-center tracking-[0] leading-[18px] whitespace-nowrap">       
@@ -107,26 +107,26 @@ const SellerReviewItem = ({ review }) => {
                         </div>
                         <div class="flex xs_flex-col sm_flex-row items-start xs_gap-1 sm_gap-[20px] relative flex-[0_0_auto]">
                             <div class="inline-flex items-center gap-[10px] relative flex-[0_0_auto]">
-                                <div class="relative w-fit font-normal text-[14px] tracking-[0] leading-[18px] whitespace-nowrap">Price</div>
+                                <div class="relative w-fit font-normal text-base tracking-[0] leading-[18px] whitespace-nowrap">Price</div>
                                 <div class="inline-flex items-start gap-[6px] relative flex-[0_0_auto]">
                                     <ReviewRating rate={rate1} />
                                 </div>
                             </div>
                             <div class="inline-flex items-center gap-[10px] relative flex-[0_0_auto]">
-                                <div class="relative w-[37px] font-normal text-[14px] tracking-[0] leading-[18px]">Value</div>
+                                <div class="relative w-[37px] font-normal text-base tracking-[0] leading-[18px]">Value</div>
                                 <div class="inline-flex items-start gap-[6px] relative flex-[0_0_auto]">
                                     <ReviewRating rate={rate2} />
                                 </div>
                             </div>
                             <div class="inline-flex items-center gap-[10px] relative flex-[0_0_auto]">
-                                <div class="relative w-fit font-normal text-[14px] tracking-[0] leading-[18px] whitespace-nowrap">Quality</div>
+                                <div class="relative w-fit font-normal text-base tracking-[0] leading-[18px] whitespace-nowrap">Quality</div>
                                 <div class="inline-flex items-start gap-[6px] relative flex-[0_0_auto]">
                                     <ReviewRating rate={rate3} />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p class="relative self-stretch font-normal text-[14px] tracking-[0] leading-[18px]">
+                    <p class="relative self-stretch font-normal text-base tracking-[0] leading-[18px]">
                         {review ? review.detail : ''}
                     </p>
                 </div>

@@ -48,7 +48,10 @@ const SubmenuColumn = props => {
                         className={isActive ? classes.linkActive : classes.link}
                         data-cy="MegaMenu-SubmenuColumn-link"
                         to={categoryUrl}
-                        onClick={onNavigate}
+                        onClick={() => {
+                            handleCloseSubMenu();
+                            onNavigate();
+                        }}
                     >
                         {name}
                     </Link>

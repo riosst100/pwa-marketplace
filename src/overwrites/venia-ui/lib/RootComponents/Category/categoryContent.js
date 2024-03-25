@@ -23,6 +23,9 @@ import SortedByContainer, {
 import defaultClasses from './category.module.css';
 import NoProductsFound from './NoProductsFound';
 import cn from 'classnames';
+import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
+import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
+import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -52,8 +55,11 @@ const CategoryContent = props => {
         categoryDescription,
         filters,
         items,
+        children,
         totalCount,
-        totalPagesFromData
+        totalPagesFromData,
+        attributesBlock,
+        category
     } = talonProps;
 
     const sidebarRef = useRef(null);
@@ -94,10 +100,19 @@ const CategoryContent = props => {
         <ProductSortShimmer />
     ) : null;
 
+    const shouldShowProductListTab = totalPagesFromData;
+    const shouldShowProductListTabShimmer = !totalPagesFromData && isLoading;
+
     const maybeSortContainer = shouldShowSortButtons ? (
         <SortedByContainer currentSort={currentSort} />
     ) : shouldShowSortShimmer ? (
         <SortedByContainerShimmer />
+    ) : null;
+
+    const maybeProductsTabContainer = shouldShowProductListTab ? (
+        <ProductListTab />
+    ) : shouldShowProductListTabShimmer ? (
+        <ProductListTabShimmer />
     ) : null;
 
     const categoryResultsHeading =
@@ -153,7 +168,6 @@ const CategoryContent = props => {
     return (
         <Fragment>
             <Breadcrumbs categoryId={categoryId} />
-            {/* <SubCategory children={children} /> */}
             <StoreTitle>{categoryName}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
@@ -167,6 +181,8 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
+                <SubCategory children={children} />
+                <AttributesBlock category={category} attributesBlock={attributesBlock} />
                 <div className={classes.contentWrapper}>
                     <div ref={sidebarRef} className={classes.sidebar}>
                         <Suspense fallback={<FilterSidebarShimmer />}>
@@ -175,17 +191,20 @@ const CategoryContent = props => {
                     </div>
                     <div className={classes.categoryContent}>
                         <div className={cn(classes.heading)}>
+                            {maybeProductsTabContainer}
+                            <div className={classes.headerButtons}>
+                                {maybeFilterButtons}
+                                {maybeSortButton}
+                            </div>
+                            {maybeSortContainer}
+                        </div>
+                        <div className={cn(classes.heading)}>
                             <div
                                 data-cy="CategoryContent-categoryInfo"
                                 className={classes.categoryInfo}
                             >
                                 {categoryResultsHeading}
                             </div>
-                            <div className={classes.headerButtons}>
-                                {maybeFilterButtons}
-                                {maybeSortButton}
-                            </div>
-                            {maybeSortContainer}
                         </div>
                         {content}
                         <Suspense fallback={null}>{filtersModal}</Suspense>

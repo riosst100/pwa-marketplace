@@ -2,11 +2,15 @@ import { useSubCategory } from '@riosst100/pwa-marketplace/src/talons/SubCategor
 import React from 'react';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
+import defaultClasses from './subCategory.module.css';
+import { useStyle } from '@magento/venia-ui/lib/classify';
 
 const SubCategory = props => {
     const { children } = props;
 
     const talonProps = useSubCategory({ children });
+
+    const classes = useStyle(defaultClasses, props.classes);
 
     const {
         normalizedData
@@ -20,12 +24,12 @@ const SubCategory = props => {
                 key={index}
                 to={resourceUrl(path)}
             >
-                <span className="filterModalOpenButton-filterButton-qRo button-root_lowPriority-Qoh button-root-MFn border-2 border-solid cursor-pointer font-bold inline-flex items-center justify-center leading-tight max-w-full min-w-[10rem] outline-none pointer-events-auto px-sm rounded-full text-center text-sm uppercase disabled_bg-gray-400 disabled_border-gray-400 disabled_opacity-50 disabled_pointer-events-none disabled_text-white focus_shadow-inputFocus bg-transparent border-gray-700 text-gray-700 active_border-gray-800 active_text-gray-800 hover_border-gray-800 hover_text-gray-800 min-w-[6.25rem]" style={{"margin":"10px"}}>{text}</span>
+                <li className={classes.item}>{text}</li>
             </Link>
         )
     });
 
-    return subCategory;
+    return subCategory.length ? <ul className={classes.root}>{subCategory}</ul> : '';
 };
 
 export default SubCategory;

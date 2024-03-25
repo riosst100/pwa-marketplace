@@ -11,7 +11,7 @@
     composes: py-2 from global;
     composes: rounded-md from global;
     /* composes: text-white from global; */
-    composes: text-[13px] from global;
+    composes: text-base from global;
 }
 
 /* TODO @TW: cannot compose */

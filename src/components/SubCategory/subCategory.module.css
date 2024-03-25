@@ -1,0 +1,22 @@
+.root {
+    composes: flex from global;
+    composes: flex-wrap from global;
+    composes: mt-3 from global;
+    composes: gap-[15px] from global;
+    margin-bottom: 30px;
+}
+
+.item {
+    composes: px-4 from global;
+    composes: py-2 from global;
+    composes: transition-colors from global;
+    composes: duration-150 from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: leading-normal from global;
+    composes: text-base from global;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-gray-100 from global;
+    border-radius: 5px;
+}

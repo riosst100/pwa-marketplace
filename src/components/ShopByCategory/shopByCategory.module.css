@@ -37,7 +37,7 @@
 
 /* TODO @TW: cannot compose */
 .action button {
-    /* composes: text-sm from global; */
+    /* composes: text-base from global; */
     font-size: 0.875rem;
     /* composes: no-underline from global; */
     text-decoration: none;

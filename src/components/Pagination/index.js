@@ -15,14 +15,14 @@ const Pagination = ({ totalPages, currentPage, pageSize }) => {
     const activeClass = "inline-flex flex-col items-center justify-center gap-[10px] px-[15px] py-[10px] relative flex-[0_0_auto] bg-[#6243fa] rounded-[5px] border border-solid border-[#6243fa]";
     const bgClass = "inline-flex flex-col items-center justify-center gap-[10px] px-[15px] py-[10px] relative flex-[0_0_auto] rounded-[5px] border border-solid border-[#e6e9ea]";
 
-    const activeTextClass = "relative w-fit font-normal text-white text-[16px] tracking-[0] leading-none whitespace-nowrap";
-    const textClass = "relative w-fit font-normal text-[#6243fa] text-[16px] tracking-[0] leading-none whitespace-nowrap";
+    const activeTextClass = "relative w-fit font-normal text-white text-[14px] tracking-[0] leading-none whitespace-nowrap";
+    const textClass = "relative w-fit font-normal text-[#6243fa] text-[14px] tracking-[0] leading-none whitespace-nowrap";
 
     return (
         <>
             <div className={'inline-flex items-start gap-[10px] relative'}>
                 <button className="inline-flex flex-col items-center justify-center gap-[10px] px-3 py-[10px] relative flex-[0_0_auto] rounded-[5px] border border-solid border-[#e6e9ea]">
-                    <div className="relative w-fit font-normal text-[#6243fa] text-[16px] tracking-[0] leading-none whitespace-nowrap">
+                    <div className="relative w-fit font-normal text-[#6243fa] text-[14px] tracking-[0] leading-none whitespace-nowrap">
                         <ArrowLeft2 size="16" color="#6243fa" variant="Outline" />
                     </div>
                 </button>
@@ -36,7 +36,7 @@ const Pagination = ({ totalPages, currentPage, pageSize }) => {
                     </span>
                 )) : ''}
                 <button className="inline-flex flex-col items-center justify-center gap-[10px] px-3 py-[10px] relative flex-[0_0_auto] rounded-[5px] border border-solid border-[#e6e9ea]">
-                    <div className="relative w-fit font-normal text-[#6243fa] text-[16px] tracking-[0] leading-none whitespace-nowrap">
+                    <div className="relative w-fit font-normal text-[#6243fa] text-[14px] tracking-[0] leading-none whitespace-nowrap">
                         <ArrowRight2 size="16" color="#6243fa" variant="Outline" />
                     </div>
                 </button>

@@ -35,7 +35,7 @@ const SellerReview = ({ seller }) => {
                                     <Star1 color='#D9D9D9' size={14} className='fill-[#D9D9D9]' />
                                 </div>
                             </div>
-                            <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">({reviews ? reviews.items.length : 0} Reviews)</div>
+                            <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">({reviews ? reviews.items.length : 0} Reviews)</div>
                         </div>
                     </div>
                     <div className="w-full flex-col items-start gap-2 flex">
@@ -46,7 +46,7 @@ const SellerReview = ({ seller }) => {
                                         <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
                                     </div>
                                     <div className="gap-2.5 flex">
-                                        <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">5</div>
+                                        <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">5</div>
                                     </div>
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
@@ -54,7 +54,7 @@ const SellerReview = ({ seller }) => {
                                     <div className="w-full h-[6px] absolute bg-[#4E31DB] rounded" />
                                 </div>
                             </div>
-                            <div className="w-10 text-zinc-900 text-sm font-normal leading-[18px]">12</div>
+                            <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">12</div>
                         </div>
                         <div className="flex xs_w-full lg_w-fit gap-3 items-center">
                             <div className="gap-2.5 flex items-center xs_w-full lg_w-fit">
@@ -63,7 +63,7 @@ const SellerReview = ({ seller }) => {
                                         <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
                                     </div>
                                     <div className="gap-2.5 flex">
-                                        <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">4</div>
+                                        <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">4</div>
                                     </div>
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
@@ -71,7 +71,7 @@ const SellerReview = ({ seller }) => {
                                     <div className="w-[80%] h-[6px] absolute bg-[#4E31DB] rounded" />
                                 </div>
                             </div>
-                            <div className="w-10 text-zinc-900 text-sm font-normal leading-[18px]">8</div>
+                            <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">8</div>
                         </div>
                         <div className="flex xs_w-full lg_w-fit gap-3 items-center">
                             <div className="gap-2.5 flex items-center xs_w-full lg_w-fit">
@@ -80,7 +80,7 @@ const SellerReview = ({ seller }) => {
                                         <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
                                     </div>
                                     <div className="gap-2.5 flex">
-                                        <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">3</div>
+                                        <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">3</div>
                                     </div>
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
@@ -88,7 +88,7 @@ const SellerReview = ({ seller }) => {
                                     <div className="w-[45%] h-[6px] absolute bg-[#4E31DB] rounded" />
                                 </div>
                             </div>
-                            <div className="w-10 text-zinc-900 text-sm font-normal leading-[18px]">5</div>
+                            <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">5</div>
                         </div>
                         <div className="flex xs_w-full lg_w-fit gap-3 items-center">
                             <div className="gap-2.5 flex items-center xs_w-full lg_w-fit">
@@ -97,7 +97,7 @@ const SellerReview = ({ seller }) => {
                                         <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
                                     </div>
                                     <div className="gap-2.5 flex">
-                                        <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">2</div>
+                                        <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">2</div>
                                     </div>
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
@@ -105,7 +105,7 @@ const SellerReview = ({ seller }) => {
                                     <div className="w-[1%] h-[6px] absolute bg-[#4E31DB] rounded" />
                                 </div>
                             </div>
-                            <div className="w-10 text-zinc-900 text-sm font-normal leading-[18px]">1</div>
+                            <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">1</div>
                         </div>
                         <div className="flex xs_w-full lg_w-fit gap-3 items-center">
                             <div className="gap-2.5 flex items-center xs_w-full lg_w-fit">
@@ -114,7 +114,7 @@ const SellerReview = ({ seller }) => {
                                         <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
                                     </div>
                                     <div className="gap-2.5 flex">
-                                        <div className="text-center text-zinc-900 text-sm font-normal leading-[18px]">1</div>
+                                        <div className="text-center text-zinc-900 text-base font-normal leading-[18px]">1</div>
                                     </div>
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
@@ -122,7 +122,7 @@ const SellerReview = ({ seller }) => {
                                     <div className="w-[0%] h-[6px] absolute bg-[#4E31DB] rounded" />
                                 </div>
                             </div>
-                            <div className="w-10 text-zinc-900 text-sm font-normal leading-[18px]">0</div>
+                            <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">0</div>
                         </div>
                     </div>
                     <div className="xs_self-end lg_self-stretch px-[30px] py-2.5 bg-white rounded-[30px] border border-indigo-600 justify-center items-center gap-2.5 inline-flex">

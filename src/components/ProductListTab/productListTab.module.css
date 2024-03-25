@@ -1,0 +1,65 @@
+.root {
+    composes: bg-white from global;
+    composes: flex from global;
+    composes: items-center from global;
+    composes: flex-wrap from global;   
+    width: inherit; 
+}
+
+.buttonContainer {
+    composes: inline-flex from global;
+    align-items: center;
+}
+
+.button {
+    composes: flex from global;
+    composes: px-4 from global;
+    composes: py-2 from global;
+    composes: transition-colors from global;
+    composes: duration-150 from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: leading-normal from global;
+    composes: text-base from global;
+}
+
+.activeButton {
+    composes: button;
+    color: white;
+    background-color: #4E31DB;
+}
+
+.activeFirstButton {
+    composes: activeButton;
+    composes: border-r-0 from global;
+    composes: rounded-l-lg from global;
+    border-radius: 6px 0px 0px 6px;
+}
+
+.middleButton {
+    composes: button;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-l-0 from global;
+    composes: border-gray-100 from global;
+}
+
+.lastButton {
+    composes: button;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-l-0 from global;
+    composes: border-gray-100 from global;
+    composes: rounded-r-lg from global;
+    border-radius: 0px 6px 6px 0px;
+}
+
+.firstButton {
+    composes: button;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-r-0 from global;
+    composes: border-gray-100 from global;
+    composes: rounded-l-lg from global;
+    border-radius: 6px 0px 0px 6px;
+}

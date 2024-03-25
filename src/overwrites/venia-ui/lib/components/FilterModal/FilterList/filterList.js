@@ -62,7 +62,7 @@ const FilterList = props => {
                 elements1.push(
                     <li
                         key={key}
-                        className={classes.item}
+                        className={classes.popupFilterItem}
                         data-cy="FilterList-item"
                     >
                         <FilterItem
@@ -82,7 +82,7 @@ const FilterList = props => {
                 // return element2;
             });
 
-            const element2 = <ul><div><b>{grouping}</b></div>{elements1}</ul>;
+            const element2 = <><ul><div><b>{grouping}</b></div>{elements1}</ul><br /></>;
 
             return element2;
         });
@@ -102,7 +102,7 @@ const FilterList = props => {
     // memoize item creation
     // search value is not referenced, so this array is stable
     const itemElements = useMemo(() => {
-        if (filterFrontendInput === 'boolean') {
+        // if (filterFrontendInput === 'boolean') {
             const key = `item-${group}`;
             return (
                 <li
@@ -121,7 +121,7 @@ const FilterList = props => {
                     />
                 </li>
             );
-        }
+        // }
 
         return items.map((item, index) => {
             const { title, value } = item;
@@ -177,8 +177,8 @@ const FilterList = props => {
                 defaultMessage: 'Show Less'
             })
             : formatMessage({
-                id: 'filterList.showMore',
-                defaultMessage: 'Show More'
+                id: 'filterList.showAll',
+                defaultMessage: 'Show All'
             });
 
         return (
@@ -207,8 +207,8 @@ const FilterList = props => {
         }
 
         const label = formatMessage({
-            id: 'filterList.showMore',
-            defaultMessage: 'Show More'
+            id: 'filterList.viewAll',
+            defaultMessage: 'View All'
         });
 
         return (

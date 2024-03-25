@@ -172,6 +172,7 @@
     "field.optional": "Optional",
     "filterFooter.results": "See Results",
     "filterList.showMore": "Show More",
+    "filterList.viewAll": "Lihat Selengkapnya",
     "filterList.showLess": "Show Less",
     "filterModal.action": "Clear all",
     "filterModal.action.clearAll.ariaLabel": "Clear all applied filters",

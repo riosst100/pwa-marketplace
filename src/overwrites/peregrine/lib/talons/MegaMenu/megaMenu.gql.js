@@ -24,8 +24,10 @@ export const GET_MEGA_MENU = gql`
                 url_path
                 shop_by {
                     name
+                    code
                     items {
                         name
+                        option_id
                         url_path
                     }
                 }

@@ -29,6 +29,14 @@ export const GET_CATEGORY_CONTENT = gql`
                 description
                 url_key
                 url_path
+                attributes_block {
+                    label
+                    code
+                    items {
+                      label
+                      value
+                    }
+                }
                 parent {
                     uid
                     name

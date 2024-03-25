@@ -100,7 +100,7 @@ const SellerDetail = props => {
                             <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
                                     <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Message
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ const SellerDetail = props => {
                             <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
                                     <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Chat With Seller
                                     </div>
                                 </div>

@@ -13,8 +13,16 @@
 }
 
 .showMoreLessButton {
-    composes: text-sm from global;
+    composes: text-base from global;
     composes: underline from global;
 
     composes: hover_no-underline from global;
+}
+
+.popupFilterItem {
+    border: 1px solid #e1e1e1;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 10px;
 }

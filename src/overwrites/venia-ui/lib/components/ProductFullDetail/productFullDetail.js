@@ -266,12 +266,12 @@ const ProductFullDetail = props => {
                         </h1>
                         <div className='product_review-container flex items-center gap-x-2'>
                             <div className='product_rating leading-[14px]'>
-                                <span className='text-gray-200 text-sm'>
+                                <span className='text-gray-200 text-base'>
                                     {rating_value}
                                 </span>
                             </div>
                             <div className='before_block before_w-[1px] before_bg-gray-200 before_h-full before_relative w-[1px] h-[14px]'></div>
-                            <span className='review_count text-gray-200 text-sm leading-[14px]'>
+                            <span className='review_count text-gray-200 text-base leading-[14px]'>
                                 {review_count} Reviews
                             </span>
                         </div>

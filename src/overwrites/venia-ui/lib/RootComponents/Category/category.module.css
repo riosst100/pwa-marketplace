@@ -20,6 +20,7 @@
 
 .categoryTitle {
     composes: font-semibold from global;
+    composes: text-[20px] from global;
 }
 
 .heading {
@@ -46,9 +47,10 @@
     composes: mx-0 from global;
     composes: my-xs from global;
     composes: text-center from global;
-    composes: text-[14px] from global;
+    composes: text-base from global;
     composes: lg_m-0 from global;
     composes: lg_text-left from global;
+    composes: py-4 from global;
 }
 
 .headerButtons {

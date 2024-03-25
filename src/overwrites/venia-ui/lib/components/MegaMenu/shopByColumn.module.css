@@ -1,4 +1,4 @@
-.shopByColumn {
+.submenuColumn {
     composes: max-w-[235px] from global;
     composes: p-5 from global;
 }
@@ -9,9 +9,7 @@
 
 .link {
     composes: whitespace-nowrap from global;
-
     composes: focus_underline from global;
-
     composes: hover_underline from global;
 }
 
@@ -20,7 +18,7 @@
 }
 
 .submenuChild {
-    composes: mt-5 from global;
+    composes: mt-0 from global;
 }
 
 .submenuChildItem {

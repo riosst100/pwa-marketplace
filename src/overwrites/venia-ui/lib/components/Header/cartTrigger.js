@@ -7,7 +7,7 @@ import { useCartTrigger } from '@magento/peregrine/lib/talons/Header/useCartTrig
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Icon from '@magento/venia-ui/lib/components/Icon';
-import defaultClasses from '@magento/venia-ui/lib/components/Header/cartTrigger.module.css';
+import defaultClasses from './cartTrigger.module.css';
 import { GET_ITEM_COUNT_QUERY } from '@magento/venia-ui/lib/components/Header/cartTrigger.gql';
 import cn from 'classnames';
 import { ShoppingCart } from 'iconsax-react';
@@ -50,7 +50,7 @@ const CartTrigger = props => {
         <span
             className={cn(
                 classes.counter,
-                'bg-yellow-300 min-w-[18px] min-h-[18px] text-[13px] font-regular leading-[18px] text-darkblue-900 top-[-5px]',
+                'bg-yellow-300 min-w-[18px] min-h-[18px] text-base font-regular leading-[18px] top-[-5px]',
                 '!left-auto right-[0px]'
             )}
             data-cy="CartTrigger-counter"
@@ -76,7 +76,7 @@ const CartTrigger = props => {
                     data-cy="CartTrigger-trigger"
                 >
                     {/* <Icon src={ShoppingCartIcon} /> */}
-                    <ShoppingCart size="30" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                    <ShoppingCart size="25" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
                     {maybeItemCounter}
                 </button>
             </div>

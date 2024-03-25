@@ -71,7 +71,7 @@ const CurrencySwitcher = props => {
                 ref={currencyMenuTriggerRef}
                 aria-expanded={currencyMenuIsOpen}
             >
-                <span className={cn(classes.label, 'flex flex-row items-center text-[13px] leading-[16px] text-darkblue-900')}>
+                <span className={cn(classes.label, 'flex flex-row items-center text-base leading-[16px]')}>
                     <CurrencySymbol
                         classes={currencySymbol}
                         currencyCode={currentCurrencyCode}

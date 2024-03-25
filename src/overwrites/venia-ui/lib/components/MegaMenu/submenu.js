@@ -24,6 +24,7 @@ const Submenu = props => {
         subMenuState,
         handleCloseSubMenu,
         categoryUrlSuffix,
+        parentCategory,
         onNavigate
     } = props;
     const PADDING_OFFSET = 20;
@@ -76,9 +77,10 @@ const Submenu = props => {
             <ShopByColumn
                 index={index}
                 keyboardProps={keyboardProps}
-                // key={category.uid}
+                key={shopBy.code}
+                category={parentCategory}
                 shopBy={shopBy}
-                // categoryUrlSuffix={categoryUrlSuffix}
+                categoryUrlSuffix={categoryUrlSuffix}
                 onNavigate={onNavigate}
                 handleCloseSubMenu={handleCloseSubMenu}
             />
@@ -87,11 +89,12 @@ const Submenu = props => {
 
     return (
         <div className={subMenuClassname}>
-            <div
-                className={classes.submenuItems}
-                style={{ minWidth: mainNavWidth + PADDING_OFFSET }}
-            >
-                {subMenus}
+            <div className={classes.submenuContainer}>
+                <div
+                    className={classes.submenuItems}
+                >
+                    {subMenus}
+                </div>
                 {shopBy}
             </div>
         </div>

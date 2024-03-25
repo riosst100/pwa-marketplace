@@ -19,6 +19,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/FilterModal/FilterList/filterDefault.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterModal/FilterList/filterDefault.js',
     [`@magento/venia-ui/lib/RootComponents/Category/categoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/categoryContent.js',
     [`@magento/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/RootComponents/Category/useCategoryContent.js',
+    [`@magento/peregrine/lib/talons/RootComponents/Category/useCategory.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/RootComponents/Category/useCategory.js',
     [`@magento/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Breadcrumbs/useBreadcrumbs.js',
     [`@magento/peregrine/lib/talons/FilterModal/useFilterList.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/FilterModal/useFilterList.js',
     [`@magento/venia-ui/lib/components/FilterSidebar/filterSidebar.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterSidebar/filterSidebar.js',
@@ -35,4 +36,5 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/ProductImageCarousel/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ProductImageCarousel/index.js',
     [`@magento/venia-ui/lib/components/QuantityStepper/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/QuantityStepper/index.js',
     [`@magento/venia-ui/lib/components/RichContent/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RichContent/index.js',
+    [`@magento/venia-ui/lib/components/RadioGroup/radio.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RadioGroup/radio.js',
 };

@@ -91,6 +91,9 @@ export const useCategoryContent = props => {
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].children
             : null;
+    const attributesBlock = categoryData && categoryData.categories.items.length
+    ? categoryData.categories.items[0].attributes_block
+    : null;
     const parent =
     categoryData && categoryData.categories.items.length
         ? categoryData.categories.items[0].parent
@@ -99,6 +102,10 @@ export const useCategoryContent = props => {
         ? data.products.page_info.total_pages
         : null;
     const totalCount = data ? data.products.total_count : null;
+    const category =
+        categoryData && categoryData.categories.items.length
+            ? categoryData.categories.items[0]
+            : null;
     const categoryName =
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].name
@@ -134,6 +141,8 @@ export const useCategoryContent = props => {
         totalCount,
         totalPagesFromData,
         children,
-        parent
+        parent,
+        attributesBlock,
+        category
     };
 };

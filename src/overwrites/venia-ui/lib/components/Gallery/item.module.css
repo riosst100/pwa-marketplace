@@ -73,7 +73,7 @@
 
 .name {
     composes: font-medium from global;
-    composes: text-[14px] from global;
+    composes: text-base from global;
     composes: mb-[18px] from global;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -85,7 +85,7 @@
 .name,
 .price {
     composes: text-colorDefault from global;
-    composes: text-[16px] from global;
+    composes: text-[14px] from global;
     composes: font-semibold from global;
     min-height: 1rem;
 }
@@ -103,7 +103,7 @@
     composes: items-center from global;
     composes: justify-start from global;
     composes: p-3 from global;
-    composes: text-sm from global;
+    composes: text-base from global;
     composes: text-subtle from global;
     composes: w-full from global;
 }
