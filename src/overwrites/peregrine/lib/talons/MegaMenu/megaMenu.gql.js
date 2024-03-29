@@ -22,6 +22,14 @@ export const GET_MEGA_MENU = gql`
                 name
                 position
                 url_path
+                custom_submenu {
+                    name
+                    attribute {
+                        code
+                        value
+                    }
+                    path
+                }
                 shop_by {
                     name
                     code
@@ -38,6 +46,14 @@ export const GET_MEGA_MENU = gql`
                     name
                     position
                     url_path
+                    custom_submenu {
+                        name
+                        attribute {
+                            code
+                            value
+                        }
+                        path
+                    }
                     shop_by {
                         name
                         items {
@@ -52,6 +68,14 @@ export const GET_MEGA_MENU = gql`
                         name
                         position
                         url_path
+                        custom_submenu {
+                            name
+                            attribute {
+                                code
+                                value
+                            }
+                            path
+                        }
                         shop_by {
                             name
                             items {

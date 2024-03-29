@@ -61,6 +61,8 @@ const MegaMenuItem = props => {
         ? classes.megaMenuItem_active
         : classes.megaMenuItem;
 
+    const arrow = <ArrowDown2 className='ml-2 stroke-current' size="14" color={textPrimary} variant="Outline" />;
+
     const children = useMemo(() => {
         return category.children.length ? (
             <Submenu
@@ -73,6 +75,7 @@ const MegaMenuItem = props => {
                 handleCloseSubMenu={handleCloseSubMenu}
                 categoryUrlSuffix={categoryUrlSuffix}
                 onNavigate={onNavigate}
+                arrow={arrow}
             />
         ) : null;
     }, [
@@ -86,7 +89,7 @@ const MegaMenuItem = props => {
     ]);
 
     const maybeDownArrowIcon = category.children.length ? (
-        <ArrowDown2 className='ml-2 stroke-current' size="16" color={textPrimary} variant="Outline" />
+        <ArrowDown2 className='ml-2 stroke-current' size="14" color={textPrimary} variant="Outline" />
     ) : null;
 
     const linkAttributes = category.children.length
@@ -113,8 +116,8 @@ const MegaMenuItem = props => {
                 handleMenuItemFocus();
             }}
             onMouseLeave={e => {
-                handleClickOutside(e);
-                handleCloseSubMenu();
+                // handleClickOutside(e);
+                // handleCloseSubMenu();
             }}
         >
             <Link

@@ -25,7 +25,7 @@ const ShopByColumn = props => {
 
     let items = null;
 
-    const itemCountToShow = 4;
+    const itemCountToShow = 9999;
 
     if (shopBy.items.length) {
         const childrenItems = shopBy.items.map((shopByItem, index) => {

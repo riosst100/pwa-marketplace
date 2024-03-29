@@ -35,6 +35,6 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/ProductFullDetail/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ProductFullDetail/index.js',
     [`@magento/venia-ui/lib/components/ProductImageCarousel/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ProductImageCarousel/index.js',
     [`@magento/venia-ui/lib/components/QuantityStepper/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/QuantityStepper/index.js',
-    [`@magento/venia-ui/lib/components/RichContent/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RichContent/index.js',
+    // [`@magento/venia-ui/lib/components/RichContent/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RichContent/index.js',
     [`@magento/venia-ui/lib/components/RadioGroup/radio.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RadioGroup/radio.js',
 };

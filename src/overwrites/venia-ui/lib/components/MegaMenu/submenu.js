@@ -25,7 +25,8 @@ const Submenu = props => {
         handleCloseSubMenu,
         categoryUrlSuffix,
         parentCategory,
-        onNavigate
+        onNavigate,
+        arrow
     } = props;
     const PADDING_OFFSET = 20;
     const classes = useStyle(defaultClasses, props.classes);
@@ -53,6 +54,7 @@ const Submenu = props => {
                 category={category}
                 categoryUrlSuffix={categoryUrlSuffix}
                 onNavigate={onNavigate}
+                arrow={arrow}
                 handleCloseSubMenu={handleCloseSubMenu}
             />
         );
@@ -102,22 +104,3 @@ const Submenu = props => {
 };
 
 export default Submenu;
-
-Submenu.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            children: PropTypes.array.isRequired,
-            uid: PropTypes.string.isRequired,
-            include_in_menu: PropTypes.number.isRequired,
-            isActive: PropTypes.bool.isRequired,
-            name: PropTypes.string.isRequired,
-            path: PropTypes.array.isRequired,
-            position: PropTypes.number.isRequired,
-            url_path: PropTypes.string.isRequired
-        })
-    ).isRequired,
-    mainNavWidth: PropTypes.number.isRequired,
-    categoryUrlSuffix: PropTypes.string,
-    onNavigate: PropTypes.func.isRequired,
-    handleCloseSubMenu: PropTypes.func.isRequired
-};

@@ -9,12 +9,12 @@ import { useProductFullDetail } from '@magento/peregrine/lib/talons/ProductFullD
 import { isProductConfigurable } from '@magento/peregrine/lib/util/isProductConfigurable';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import Breadcrumbs from '../Breadcrumbs';
+import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 import Button from '@magento/venia-ui/lib/components/Button';
-import Carousel from '../ProductImageCarousel';
+import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
-import QuantityStepper from '../QuantityStepper';
-import RichContent from '../RichContent/richContent';
+import QuantityStepper from '@magento/venia-ui/lib/components/QuantityStepper';
+import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
 import defaultClasses from './productFullDetail.module.css';

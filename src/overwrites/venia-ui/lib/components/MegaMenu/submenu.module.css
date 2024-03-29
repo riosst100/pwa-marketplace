@@ -43,8 +43,9 @@
 .submenuItems {
     composes: flex from global;
     composes: flex-wrap from global;
+    composes: gap-[30px] from global;
     /* composes: justify-between from global; */
     /* composes: ml-auto from global; */
     /* composes: mr-auto from global; */
-    composes: flex-col from global;
+    /* composes: flex-col from global; */
 }
