@@ -8,11 +8,6 @@ import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import SellerProducts from '../SellerProducts';
 import SellerInformation from '../SellerInformation';
 import Reviews from '../SellerReview';
-import Slider from '@riosst100/pwa-marketplace/src/components/commons/Slider';
-import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
-import SellerProducts from '../SellerProducts';
-import SellerInformation from '../SellerInformation';
-import Reviews from '../SellerReview';
 import {
     Verify,
     Sms,
@@ -34,7 +29,7 @@ const SellerDetail = props => {
 
     if (loading && !seller)
         return '';
-        // return <SellerShimmer />;
+    // return <SellerShimmer />;
     if (error && !seller) return <ErrorView />;
     if (!seller) {
         return (

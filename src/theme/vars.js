@@ -6,6 +6,7 @@ export const orange = '#F7C317';
 export const gray100 = '#B9AEC5';
 export const gray600 = '#1BA387';
 export const gray700 = '#999999';
+export const primary900 = "#292D32";
 
 export default {
     textPrimary,
@@ -16,4 +17,5 @@ export default {
     gray100,
     gray600,
     gray700,
+    primary900,
 }

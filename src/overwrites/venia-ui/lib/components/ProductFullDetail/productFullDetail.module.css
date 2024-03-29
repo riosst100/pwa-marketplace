@@ -2,7 +2,7 @@
     composes: lg_grid from global;
     composes: lg_grid-flow-row from global;
     composes: lg_items-start from global;
-    composes: gap-x-5 from global;
+    composes: gap-x-10 from global;
 }
 
 @media (min-width: 1024px) {
@@ -25,10 +25,6 @@
     composes: border-r-0 from global;
     composes: border-b from global;
     composes: border-l-0 from global;
-    composes: my-0 from global;
-    composes: mx-sm from global;
-    composes: px-0 from global;
-    composes: py-xs from global;
 }
 
 .sectionTitle {

@@ -24,6 +24,8 @@ import defaultClasses from './category.module.css';
 import NoProductsFound from './NoProductsFound';
 import cn from 'classnames';
 
+import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
+
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
     import('@magento/venia-ui/lib/components/FilterSidebar')
@@ -166,6 +168,9 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
+                <section className='category_brand-slider my-5'>
+                    <BrandSlider />
+                </section>
                 <div className={classes.contentWrapper}>
                     <div ref={sidebarRef} className={classes.sidebar}>
                         <Suspense fallback={<FilterSidebarShimmer />}>
