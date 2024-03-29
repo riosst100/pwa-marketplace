@@ -8,6 +8,7 @@ import Icon from '@magento/venia-ui/lib/components/Icon';
 import TextInput from '../TextInput';
 import { Message } from '@magento/venia-ui/lib/components/Field';
 import defaultClasses from './quantityStepper.module.css';
+import cn from 'classnames';
 
 const QuantityStepper = props => {
     const { initialValue, itemId, label, min, onChange, message } = props;
@@ -34,7 +35,13 @@ const QuantityStepper = props => {
 
     return (
         <Fragment>
-            <div className={classes.root}>
+            <div
+                className={cn(
+                    classes.root,
+                    'flex w-fit border border-gray-100 rounded-md',
+                    ''
+                )}
+            >
                 <label className={classes.label} htmlFor={itemId}>
                     {label}
                 </label>
@@ -43,7 +50,10 @@ const QuantityStepper = props => {
                         id: 'quantity.buttonDecrement',
                         defaultMessage: 'Decrease Quantity'
                     })}
-                    className={classes.button_decrement}
+                    className={cn(
+                        classes.button_decrement,
+                        '!h-full min-w-[40px] min-h-[40px]'
+                    )}
                     disabled={isDecrementDisabled}
                     onClick={handleDecrement}
                     type="button"
@@ -57,7 +67,13 @@ const QuantityStepper = props => {
                         defaultMessage: 'Item Quantity'
                     })}
                     data-cy="QuantityStepper-input"
-                    classes={{ input: classes.input }}
+                    classes={{
+                        input: cn(
+                            classes.input,
+                            '!border max-w-[60px] focus_shadow-none focus_outline-[1px]',
+                            '!border-t-0 !border-b-0 !rounded-none !border-gray-100'
+                        )
+                    }}
                     field="quantity"
                     id={itemId}
                     inputMode="numeric"
@@ -71,7 +87,10 @@ const QuantityStepper = props => {
                         id: 'quantity.buttonIncrement',
                         defaultMessage: 'Increase Quantity'
                     })}
-                    className={classes.button_increment}
+                    className={cn(
+                        classes.button_increment,
+                        '!h-full min-w-[40px] min-h-[40px]'
+                    )}
                     disabled={isIncrementDisabled}
                     onClick={handleIncrement}
                     type="button"

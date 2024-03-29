@@ -29,7 +29,7 @@ const SellerDetail = props => {
 
     if (loading && !seller)
         return '';
-        // return <SellerShimmer />;
+    // return <SellerShimmer />;
     if (error && !seller) return <ErrorView />;
     if (!seller) {
         return (

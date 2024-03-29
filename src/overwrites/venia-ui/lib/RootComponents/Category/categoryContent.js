@@ -27,6 +27,8 @@ import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplac
 import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
 import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
+import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
+
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
     import('@magento/venia-ui/lib/components/FilterSidebar')
@@ -183,6 +185,9 @@ const CategoryContent = props => {
                 </div>
                 <SubCategory children={children} />
                 <AttributesBlock category={category} attributesBlock={attributesBlock} />
+                <section className='category_brand-slider my-5'>
+                    <BrandSlider />
+                </section>
                 <div className={classes.contentWrapper}>
                     <div ref={sidebarRef} className={classes.sidebar}>
                         <Suspense fallback={<FilterSidebarShimmer />}>
