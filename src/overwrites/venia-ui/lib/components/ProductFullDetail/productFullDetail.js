@@ -24,7 +24,8 @@ import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import ProductReviews from './components/productReview';
 import RichText from '@magento/venia-ui/lib/components/RichText';
 import { Star1, Verify, Sms, Message, Shop } from 'iconsax-react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
@@ -62,7 +63,8 @@ const ProductFullDetail = props => {
         mediaGalleryEntries,
         productDetails,
         customAttributes,
-        wishlistButtonProps
+        wishlistButtonProps,
+        sellerDetails
     } = talonProps;
 
     const { formatMessage } = useIntl();
@@ -144,22 +146,22 @@ const ProductFullDetail = props => {
     const customAttributesDetails = useMemo(() => {
         const list = [];
         const pagebuilder = [];
-        const skuAttribute = {
-            attribute_metadata: {
-                uid: 'attribute_sku',
-                used_in_components: ['PRODUCT_DETAILS_PAGE'],
-                ui_input: {
-                    ui_input_type: 'TEXT'
-                },
-                label: formatMessage({
-                    id: 'global.sku',
-                    defaultMessage: 'SKU'
-                })
-            },
-            entered_attribute_value: {
-                value: productDetails.sku
-            }
-        };
+        // const skuAttribute = {
+        //     attribute_metadata: {
+        //         uid: 'attribute_sku',
+        //         used_in_components: ['PRODUCT_DETAILS_PAGE'],
+        //         ui_input: {
+        //             ui_input_type: 'TEXT'
+        //         },
+        //         label: formatMessage({
+        //             id: 'global.sku',
+        //             defaultMessage: 'SKU'
+        //         })
+        //     },
+        //     entered_attribute_value: {
+        //         value: productDetails.sku
+        //     }
+        // };
         if (Array.isArray(customAttributes)) {
             customAttributes.forEach(customAttribute => {
                 if (
@@ -172,7 +174,7 @@ const ProductFullDetail = props => {
                 }
             });
         }
-        list.unshift(skuAttribute);
+        // list.unshift(skuAttribute);
         return {
             list: list,
             pagebuilder: pagebuilder
@@ -275,15 +277,6 @@ const ProductFullDetail = props => {
     const ProductMoreInfo = () => (
         <>
             <div className={cn(contentContainerClass)}>
-                <span
-                    data-cy="ProductFullDetail-detailsTitle"
-                    className={classes.detailsTitle}
-                >
-                    <FormattedMessage
-                        id={'productFullDetail.details'}
-                        defaultMessage={'Details'}
-                    />
-                </span>
                 <CustomAttributes
                     customAttributes={customAttributesDetails.list}
                 />
@@ -292,11 +285,50 @@ const ProductFullDetail = props => {
         </>
     );
 
+    const customAttributesList = useMemo(
+        () =>
+            customAttributesDetails.list.reduce((customAttributesData, currentAttribute) => {
+                const attrCode = currentAttribute.attribute_metadata?.code || null;
+                const value = currentAttribute.entered_attribute_value?.value || "";
+                if (attrCode) {
+                    customAttributesData.push({
+                        'code': attrCode,
+                        'value': value
+                    });
+                }
+
+                return customAttributesData;
+            }, []),
+        [customAttributesDetails.list]
+    );
+
     const ProductTNC = () => (
         <div className={cn(contentContainerClass)}>
-            <p>
-                Terms and Conditions
-            </p>
+            <p>{customAttributesList.map((data, index) => {
+                if (data.code == "term_and_conditions") {
+                    return data.value;
+                }
+            })}</p>
+        </div>
+    )
+
+    const ShippingPolicy = () => (
+        <div className={cn(contentContainerClass)}>
+            <p>{customAttributesList.map((data, index) => {
+                if (data.code == "shipping_policy") {
+                    return data.value;
+                }
+            })}</p>
+        </div>
+    )
+
+    const ReturnPolicy = () => (
+        <div className={cn(contentContainerClass)}>
+            <p>{customAttributesList.map((data, index) => {
+                if (data.code == "return_policy") {
+                    return data.value;
+                }
+            })}</p>
         </div>
     )
 
@@ -313,18 +345,28 @@ const ProductFullDetail = props => {
         [
             {
                 id: 'product-detail',
-                title: 'Details',
+                title: 'Description',
                 content: <ProductDescription />
             },
             {
                 id: 'product-more-info',
-                title: 'More Info',
+                title: 'Details',
                 content: <ProductMoreInfo />
             },
             {
                 id: 'product-tnc',
-                title: 'Terms & Conditions',
+                title: 'Term & Conditions',
                 content: <ProductTNC />
+            },
+            {
+                id: 'product-shipping-policy',
+                title: 'Shipping Policy',
+                content: <ShippingPolicy />
+            },
+            {
+                id: 'product-return-policy',
+                title: 'Return Policy',
+                content: <ReturnPolicy />
             },
             {
                 id: 'product-faq',
@@ -394,11 +436,11 @@ const ProductFullDetail = props => {
                     >
                         {shortDescription}
                     </div>
-                    <div className='product_brand-container mb-[30px] leading-[18px]'>
+                    {/* <div className='product_brand-container mb-[30px] leading-[18px]'>
                         <div className='text-sm'>
                             Brand : <span className='text-blue-700'><Link to="">Bandai Namco</Link></span>
                         </div>
-                    </div>
+                    </div> */}
                     <Divider />
                     <div
                         className={cn(
@@ -446,11 +488,12 @@ const ProductFullDetail = props => {
                         />
 
                         <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
+                            {sellerDetails &&
                             <div className='text-xs'>
-                                Shiping From <span className='font-semibold'>Singapore</span>
-                            </div>
+                                Ship From <span className='font-semibold'>{sellerDetails.country}</span>
+                            </div>}
                             <div className='text-xs'>
-                                Shiping To <span className='font-semibold'>Yishun</span>
+                                Ship To <span className='font-semibold'>Yishun</span>
                             </div>
                             <div className='text-xs'>
                                 Shiping Method <span className='font-semibold'>Store Pick Up | Meet Up</span>
@@ -498,14 +541,14 @@ const ProductFullDetail = props => {
                                 <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
                                     <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
                                         <div className="text-sm">
-                                            Good Smile
+                                            {sellerDetails ? sellerDetails.name : ''}
                                         </div>
                                         <div className="flex items-center relative">
                                             <Verify variant='Bold' color='#4E31DB' size={20} />
                                         </div>
                                     </div>
                                     <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
-                                        Jurong West
+                                        {sellerDetails ? sellerDetails.city + ', ' + sellerDetails.country : ''}
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap items-start gap-4 relative'>
@@ -525,14 +568,14 @@ const ProductFullDetail = props => {
                                             </div>
                                         </div>
                                     </button>
-                                    <button class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to={`/seller/${sellerDetails.url_key}`} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Visit Store
                                             </div>
                                         </div>
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

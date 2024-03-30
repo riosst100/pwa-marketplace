@@ -185,9 +185,9 @@ const CategoryContent = props => {
                 </div>
                 <SubCategory children={children} />
                 <AttributesBlock category={category} attributesBlock={attributesBlock} />
-                <section className='category_brand-slider my-5'>
+                {/* <section className='category_brand-slider my-5'>
                     <BrandSlider />
-                </section>
+                </section> */}
                 <div className={classes.contentWrapper}>
                     <div ref={sidebarRef} className={classes.sidebar}>
                         <Suspense fallback={<FilterSidebarShimmer />}>
