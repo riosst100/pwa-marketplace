@@ -81,8 +81,8 @@ const Header = props => {
                                 className={''}
                                 data-cy="Header-logoContainer"
                             >
-                                <div><b>TCG Collective</b></div>
-                                <small>Toys | Card | Games</small>
+                                <div className='text-[14px]'><b>TCG Collective</b></div>
+                                <small>Bringing Collectors Together</small>
                             </Link>
                         </div>
                         <div className='flex flex-auto max-w-[700px]'>
@@ -106,7 +106,7 @@ const Header = props => {
                 <MegaMenu
                     rootClassName={cn('nav-menu w-full max-w-[1210px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
                     megaMenuItemClassname={cn('px-0 py-[15px] leading-[20px]')}
-                    titleClassName={cn('font-medium leading-[20px] text-darkblue-900')}
+                    titleClassName={cn('font-medium leading-[20px]')}
                 />
             </header>
             <OnlineIndicator

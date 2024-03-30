@@ -96,6 +96,13 @@ module.exports = targets => {
       path: require.resolve("./components/SellerPage/index.js"),
       authed: false,
     },
+    {
+      exact: true,
+      name: "CollectibleGameSetsPage",
+      pattern: "/games/collectible-game/:urlKey/sets",
+      path: require.resolve("./components/CollectibleGameSetsPage/index.js"),
+      authed: false,
+    },
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation

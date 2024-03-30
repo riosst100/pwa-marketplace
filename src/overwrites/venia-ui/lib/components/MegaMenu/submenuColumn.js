@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
@@ -6,6 +6,9 @@ import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenuColumn.module.css';
 import PropTypes from 'prop-types';
+import { ArrowDown2 } from 'iconsax-react';
+import { textPrimary } from '@riosst100/pwa-marketplace/src/theme/vars';
+import CustomSubmenuColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/customSubmenuColumn';
 
 /**
  * The SubmenuColumn component displays columns with categories in submenu
@@ -18,14 +21,20 @@ const SubmenuColumn = props => {
         category,
         categoryUrlSuffix,
         onNavigate,
-        handleCloseSubMenu
+        handleCloseSubMenu,
+        arrow
     } = props;
+    
     const classes = useStyle(defaultClasses, props.classes);
 
     const categoryUrl = resourceUrl(
         `/${category.url_path}${categoryUrlSuffix || ''}`
     );
     let children = null;
+
+    // let maybeDownArrowIcon = () => {
+    //     return ;
+    // };
 
     if (category.children.length) {
         const childrenItems = category.children.map((subCategory, index) => {
@@ -40,17 +49,60 @@ const SubmenuColumn = props => {
                     ? props.keyboardProps
                     : {};
 
+            const customMenuItems = subCategory.custom_submenu;
+
+            const [showCustomMenu, setShowCustomMenu] = useState(false);
+
+            const toggleCustomMenu = () => {
+                if (!showCustomMenu) {
+                    setShowCustomMenu(true);
+                } else {
+                    setShowCustomMenu(false);
+                }
+            }
+
+            const customSubMenus = customMenuItems.length ? (
+                <CustomSubmenuColumn 
+                categoryUrlSuffix={categoryUrlSuffix}
+                onNavigate={onNavigate}
+                handleCloseSubMenu={handleCloseSubMenu}
+                category={subCategory} 
+                customMenuItems={customMenuItems}
+                toggleCustomMenu={toggleCustomMenu}
+                />
+            ) : '';
+
             return (
                 <li key={index} className={classes.submenuChildItem}>
-                    <Link
-                        {...keyboardProps}
-                        className={isActive ? classes.linkActive : classes.link}
-                        data-cy="MegaMenu-SubmenuColumn-link"
-                        to={categoryUrl}
-                        onClick={onNavigate}
-                    >
-                        {name}
-                    </Link>
+                    {customMenuItems.length ? (
+                        <>
+                            <div
+                                // {...keyboardProps}
+                                className={isActive ? classes.linkActive : classes.link}
+                                data-cy="MegaMenu-SubmenuColumn-link"
+                                onClick={() => {
+                                    toggleCustomMenu();
+                                }}
+                            >
+                                {name}
+                                {arrow}
+                            </div>
+                            {showCustomMenu ? customSubMenus : ''}
+                        </>
+                    ) : (
+                        <Link
+                            {...keyboardProps}
+                            className={isActive ? classes.linkActive : classes.link}
+                            data-cy="MegaMenu-SubmenuColumn-link"
+                            to={categoryUrl}
+                            onClick={() => {
+                                handleCloseSubMenu();
+                                onNavigate();
+                            }}
+                        >
+                            {name}
+                        </Link>
+                    )}
                 </li>
             );
         });

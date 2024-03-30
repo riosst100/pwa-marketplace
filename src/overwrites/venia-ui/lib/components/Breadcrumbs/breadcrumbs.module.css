@@ -5,27 +5,28 @@
     composes: items-center from global;
     composes: gap-[6px] from global;
     composes: my-[30px] from global;
+    padding-top: 20px;
 }
 
 .text {
-    composes: text-[13px] from global;
+    composes: text-base from global;
     composes: leading-[13px] from global;
     composes: text-blue-700 from global;
     composes: font-medium from global;
 }
 
 .divider {
-    composes: text-[13px] from global;
+    composes: text-base from global;
     composes: leading-[13px] from global;
 }
 
 .link {
-    composes: text-[13px] from global;
+    composes: text-base from global;
     composes: leading-[13px] from global;
     composes: text-gray-200 from global;
 }
 
 .currentCategory {
-    composes: text-[13px] from global;
+    composes: text-base from global;
     composes: leading-[13px] from global;
 }

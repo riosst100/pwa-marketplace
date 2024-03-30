@@ -4,7 +4,8 @@
     composes: grid from global;
     composes: h-full from global;
     composes: left-0 from global;
-    composes: max-w-modal from global;
+    /* composes: max-w-modal from global;
+     */
     composes: opacity-0 from global;
     composes: overflow-hidden from global;
     composes: fixed from global;
@@ -66,7 +67,7 @@
 
 /* TODO @TW: cannot compose */
 .action button {
-    /* composes: text-sm from global; */
+    /* composes: text-base from global; */
     font-size: 0.875rem;
     /* composes: no-underline from global; */
     text-decoration: none;

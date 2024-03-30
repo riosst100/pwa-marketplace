@@ -24,10 +24,10 @@ const FilterDefault = props => {
         USD: '$',
         EUR: '€'
     };
+    const currencySymbol = currencySymbolMap[currentCurrencyCode] != undefined ? currencySymbolMap[currentCurrencyCode] : currentCurrencyCode;
     const title =
         group === 'price'
-            ? currencySymbolMap[currentCurrencyCode] +
-            label.replace('-', ' - ' + currencySymbolMap[currentCurrencyCode])
+            ? label.replace('-', ' - ') 
             : label;
     const { formatMessage } = useIntl();
 

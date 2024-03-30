@@ -13,7 +13,7 @@
     composes: rounded-b-md from global;
     composes: rounded-t-none from global;
     composes: shadow-inputFocus from global;
-    composes: text-sm from global;
+    composes: text-base from global;
     composes: top-9 from global;
     composes: z-menu from global;
     transition-property: opacity, transform, visibility;

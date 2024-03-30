@@ -13,7 +13,7 @@
 .name {
     composes: leading-[14px] from global;
     composes: text-left from global;
-    composes: text-[14px] from global;
+    composes: text-base from global;
     composes: font-semibold from global;
 }
 

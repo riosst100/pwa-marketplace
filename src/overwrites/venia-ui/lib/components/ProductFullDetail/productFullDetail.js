@@ -9,10 +9,11 @@ import { useProductFullDetail } from '@magento/peregrine/lib/talons/ProductFullD
 import { isProductConfigurable } from '@magento/peregrine/lib/util/isProductConfigurable';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import Breadcrumbs from '../Breadcrumbs';
+import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 import Button from '@magento/venia-ui/lib/components/Button';
-import Carousel from '../ProductImageCarousel';
+import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
+import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import QuantityStepper from '../QuantityStepper';
 // import RichContent from '../RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
@@ -380,7 +381,7 @@ const ProductFullDetail = props => {
                                 </span>
                             </div>
                             <div className='before_block before_w-[1px] before_bg-gray-200 before_h-full before_relative w-[1px] h-[14px]'></div>
-                            <span className='review_count text-gray-200 text-sm leading-[14px]'>
+                            <span className='review_count text-gray-200 text-base leading-[14px]'>
                                 {review_count} Reviews
                             </span>
                         </div>

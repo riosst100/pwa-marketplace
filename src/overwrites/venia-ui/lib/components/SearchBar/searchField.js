@@ -11,7 +11,6 @@ const SearchField = props => {
     const { inputRef, resetForm, value } = useSearchField({ isSearchOpen });
 
     const handleSearch = () => {
-        console.log('search');
     }
     const searchButton =
         <Trigger action={handleSearch} addLabel={addLabel}>

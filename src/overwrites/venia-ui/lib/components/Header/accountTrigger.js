@@ -66,8 +66,8 @@ const AccountTrigger = props => {
                         })}
                         shouldIndicateLoading={true}
                     /> */}
-                    <User size="30" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
-                    <span className='text-sm text-darkblue-900 font-semibold'>
+                    <User size="25" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                    <span className='text-base font-semibold'>
                         {formatMessage({
                             id: 'accountTrigger.buttonFallback',
                             defaultMessage: 'Sign In'

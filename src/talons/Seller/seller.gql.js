@@ -147,42 +147,6 @@ export const GET_SELLER_DETAIL_QUERY = gql`
             response_ratio
             response_time
             store_id
-            seller_rates {
-                total_count
-                page_info {
-                    page_size
-                    current_page
-                }
-                items {
-                    rating_id
-                    seller_id
-                    customer_id
-                    rate1
-                    rate2
-                    rate3
-                    rate4
-                    rate5
-                    rating
-                    email
-                    title
-                    status
-                    detail
-                    nickname
-                    created_at
-                    verified_buyer
-                    is_recommended
-                    is_hidden
-                    answer
-                    admin_note
-                    like_about
-                    not_like_about
-                    guest_email
-                    plus_review
-                    minus_review
-                    report_abuse
-                    country
-                }
-            }
             products {
                 total_count
                 page_info {

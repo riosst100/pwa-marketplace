@@ -44,7 +44,7 @@
     composes: justify-self-start from global;
     composes: text-colorDefault from global;
     grid-area: label;
-    composes: text-[13px] from global;
+    composes: text-base from global;
 }
 
 /* When the input is disabled, update the cursor on the sibling label element. */

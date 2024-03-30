@@ -49,7 +49,7 @@ const SellerDetail = props => {
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <SellerProducts />
+                content: <SellerProducts seller={seller} />
             },
             {
                 id: 'store-information',
@@ -59,7 +59,7 @@ const SellerDetail = props => {
             {
                 id: 'reviews',
                 title: 'Reviews',
-                content: <Reviews />
+                content: <Reviews seller={seller} />
             }
         ];
 
@@ -100,7 +100,7 @@ const SellerDetail = props => {
                             <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
                                     <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Message
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ const SellerDetail = props => {
                             <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
                                     <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Chat With Seller
                                     </div>
                                 </div>
@@ -123,17 +123,6 @@ const SellerDetail = props => {
                     </div>
                 </div>
                 <div class="flex items-center gap-[20px] px-[10px] py-[30px] relative">
-                    <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
-                        <div class="flex items-center gap-[6px] relative">
-                            <BoxTick color="#B9AEC5" variant="Outline" size={18} className='stroke-[#B9AEC5] stroke-[.5px]' />
-                            <div class="[font-family:'Noto_Sans',Helvetica] font-semibold text-[#005947] text-[18px] relative w-fit tracking-[0] leading-[normal] whitespace-nowrap">
-                                {seller ? seller.sale : 0}
-                            </div>
-                        </div>
-                        <div class="relative w-fit [font-family:'Frederik-Regular',Helvetica] font-normal text-[#009a7b] text-[10px] tracking-[0] leading-[normal] whitespace-nowrap">
-                            Total Sales
-                        </div>
-                    </div>
                     <img class="relative self-stretch w-px object-cover" alt="Line" src="https://c.animaapp.com/2pP7niVX/img/line-16.svg" />
                     <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
                         <div class="flex items-center gap-[5px] relative">

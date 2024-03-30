@@ -62,7 +62,7 @@ const StoreSwitcher = props => {
         groups.push(
             <ul
                 role="listbox"
-                className={cn(classes.groupList, 'text-[13px]')}
+                className={cn(classes.groupList, 'text-base')}
                 key={key}
                 data-cy="StoreSwitcher-group"
             >
@@ -75,13 +75,13 @@ const StoreSwitcher = props => {
         <div className={cn(classes.root, 'leading-[16px]')} data-cy="StoreSwitcher-root">
             <button
                 data-cy="StoreSwitcher-triggerButton"
-                className={cn(classes.trigger, 'text-[13px]')}
+                className={cn(classes.trigger, 'text-base')}
                 aria-label={currentStoreName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
                 aria-expanded={storeMenuIsOpen}
             >
-                <span className='flex flex-row gap-[5px] items-center leading-[16px] text-darkblue-900'>
+                <span className='flex flex-row gap-[5px] items-center leading-[16px]'>
                     {currentStoreName || ''}
                     {!hasOnlyOneStore ? (
                         <ArrowUp2 size="12" color={darkBlue} className={cn(storeMenuIsOpen ? 'rotate-0 ' : 'rotate-180', 'transition-all stroke-current')} variant="Outline" />
@@ -93,8 +93,8 @@ const StoreSwitcher = props => {
                 className={menuClassName}
                 data-cy="StoreSwitcher-menu"
             >
-                <div className={cn(classes.groups, 'text-darkblue-900')}>
-                    <span className='flex font-medium px-4 py-1 w-full text-[14px]'>
+                <div className={classes.groups}>
+                    <span className='flex font-medium px-4 py-1 w-full text-base'>
                         Language
                     </span>
                     {groups}

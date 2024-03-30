@@ -40,7 +40,7 @@ const GalleryItem = props => {
         isSupportedProductType
     } = useGalleryItem(props);
 
-    const seller = 'Good Smile'
+    const seller = item.seller ? item.seller.name : '';
 
     const { storeConfig } = props;
 
@@ -54,7 +54,6 @@ const GalleryItem = props => {
 
     // eslint-disable-next-line no-unused-vars
     const { name, price_range, small_image, url_key, rating_summary } = item;
-    console.log("🚀 ~ GalleryItem ~ item:", item)
 
     const { url: smallImageURL } = small_image;
     const productLink = resourceUrl(`/${url_key}${productUrlSuffix || ''}`);
@@ -126,7 +125,7 @@ const GalleryItem = props => {
                     >
                         <span>{name}</span>
                     </Link>
-                    <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5')}>
+                    <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
                         <Price
                             value={priceSource.value}
                             currencyCode={priceSource.currency}

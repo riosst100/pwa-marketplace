@@ -23,6 +23,9 @@ import SortedByContainer, {
 import defaultClasses from './category.module.css';
 import NoProductsFound from './NoProductsFound';
 import cn from 'classnames';
+import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
+import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
+import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
 
@@ -54,8 +57,11 @@ const CategoryContent = props => {
         categoryDescription,
         filters,
         items,
+        children,
         totalCount,
-        totalPagesFromData
+        totalPagesFromData,
+        attributesBlock,
+        category
     } = talonProps;
 
     const sidebarRef = useRef(null);
@@ -96,10 +102,19 @@ const CategoryContent = props => {
         <ProductSortShimmer />
     ) : null;
 
+    const shouldShowProductListTab = totalPagesFromData;
+    const shouldShowProductListTabShimmer = !totalPagesFromData && isLoading;
+
     const maybeSortContainer = shouldShowSortButtons ? (
         <SortedByContainer currentSort={currentSort} />
     ) : shouldShowSortShimmer ? (
         <SortedByContainerShimmer />
+    ) : null;
+
+    const maybeProductsTabContainer = shouldShowProductListTab ? (
+        <ProductListTab />
+    ) : shouldShowProductListTabShimmer ? (
+        <ProductListTabShimmer />
     ) : null;
 
     const categoryResultsHeading =
@@ -168,6 +183,8 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
+                <SubCategory children={children} />
+                <AttributesBlock category={category} attributesBlock={attributesBlock} />
                 <section className='category_brand-slider my-5'>
                     <BrandSlider />
                 </section>
@@ -179,17 +196,20 @@ const CategoryContent = props => {
                     </div>
                     <div className={classes.categoryContent}>
                         <div className={cn(classes.heading)}>
+                            {maybeProductsTabContainer}
+                            <div className={classes.headerButtons}>
+                                {maybeFilterButtons}
+                                {maybeSortButton}
+                            </div>
+                            {maybeSortContainer}
+                        </div>
+                        <div className={cn(classes.heading)}>
                             <div
                                 data-cy="CategoryContent-categoryInfo"
                                 className={classes.categoryInfo}
                             >
                                 {categoryResultsHeading}
                             </div>
-                            <div className={classes.headerButtons}>
-                                {maybeFilterButtons}
-                                {maybeSortButton}
-                            </div>
-                            {maybeSortContainer}
                         </div>
                         {content}
                         <Suspense fallback={null}>{filtersModal}</Suspense>

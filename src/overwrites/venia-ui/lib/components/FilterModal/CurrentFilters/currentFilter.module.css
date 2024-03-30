@@ -10,12 +10,12 @@
     composes: px-2 from global;
     composes: py-2 from global;
     composes: rounded-md from global;
-    composes: text-white from global;
-    composes: text-[13px] from global;
+    /* composes: text-white from global; */
+    composes: text-base from global;
 }
 
 /* TODO @TW: cannot compose */
 .root svg {
     /* composes: stroke-white from global; */
-    stroke: rgb(var(--venia-global-color-gray-50));
+    stroke: rgb(var(--venia-global-color-gray-600));
 }

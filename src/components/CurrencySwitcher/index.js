@@ -25,13 +25,15 @@ const CurrencySwitcher = props => {
 
     const classes = useStyle(defaultClasses, props.classes);
     const menuClassName = currencyMenuIsOpen ? classes.menu_open : classes.menu;
-    const hasOnlyOneCurrency = availableCurrencies.size === 1;
+    
 
     const currencySymbol = {
         currency: classes.symbol
     };
 
     if (!availableCurrencies) return <Shimmer />;
+
+    const hasOnlyOneCurrency = availableCurrencies.length === 1;
 
     if (availableCurrencies.length === 1) return null;
 
@@ -69,7 +71,7 @@ const CurrencySwitcher = props => {
                 ref={currencyMenuTriggerRef}
                 aria-expanded={currencyMenuIsOpen}
             >
-                <span className={cn(classes.label, 'flex flex-row items-center text-[13px] leading-[16px] text-darkblue-900')}>
+                <span className={cn(classes.label, 'flex flex-row items-center text-base leading-[16px]')}>
                     <CurrencySymbol
                         classes={currencySymbol}
                         currencyCode={currentCurrencyCode}

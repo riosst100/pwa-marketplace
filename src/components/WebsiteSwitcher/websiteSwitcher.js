@@ -62,7 +62,7 @@ const WebsiteSwitcher = props => {
         groups.push(
             <ul
                 role="listbox"
-                className={'text-[13px]'}
+                className={'text-base'}
                 key={key}
                 data-cy="WebsiteSwitcher-group"
             >
@@ -77,13 +77,13 @@ const WebsiteSwitcher = props => {
         <div className={cn(classes.root, 'leading-[16px]')} data-cy="WebsiteSwitcher-root">
             <button
                 data-cy="WebsiteSwitcher-triggerButton"
-                className={cn(classes.trigger, 'text-[13px]')}
+                className={cn(classes.trigger, 'text-base')}
                 aria-label={currentWebsiteName || ''}
                 onClick={handleTriggerClick}
                 ref={storeMenuTriggerRef}
                 aria-expanded={storeMenuIsOpen}
             >
-                <span className='flex flex-row gap-[5px] items-center leading-[16px] text-darkblue-900'>
+                <span className='flex flex-row gap-[5px] items-center leading-[16px]'>
                     {triggerLabel || ''}
                     {!hasOnlyOneGroup ? (
                         <ArrowUp2 size="12" color={darkBlue} className={cn(storeMenuIsOpen ? 'rotate-0 ' : 'rotate-180', 'transition-all stroke-current')} variant="Outline" />
@@ -95,8 +95,8 @@ const WebsiteSwitcher = props => {
                 className={menuClassName}
                 data-cy="WebsiteSwitcher-menu"
             >
-                <div className={cn(classes.groups, 'text-darkblue-900')}>
-                    <span className='flex font-medium px-4 py-1 w-full text-[14px] mb-2'>
+                <div className={classes.groups}>
+                    <span className='flex font-medium px-4 py-1 w-full text-base mb-2'>
                         Country
                     </span>
                     {groups}

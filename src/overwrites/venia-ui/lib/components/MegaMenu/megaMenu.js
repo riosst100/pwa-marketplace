@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
 import { useMegaMenu } from '@magento/peregrine/lib/talons/MegaMenu/useMegaMenu';
+// import { useMegaMenu } from '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/MegaMenu/useMegaMenu';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 
 import MegaMenuItem from './megaMenuItem';
@@ -51,7 +52,7 @@ const MegaMenu = (props) => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    });
+    }, [setMainNavWidth]);
 
     const items = megaMenuData.children
         ? megaMenuData.children.map(category => {

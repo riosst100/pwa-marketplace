@@ -1,6 +1,6 @@
 .submenuColumn {
     composes: max-w-[235px] from global;
-    composes: p-5 from global;
+    composes: p-2 from global;
 }
 
 .heading {
@@ -13,16 +13,21 @@
     composes: focus_underline from global;
 
     composes: hover_underline from global;
+
+    align-items: center;
+    composes: flex from global;
 }
 
 .linkActive {
     composes: underline from global;
+    align-items: center;
+    composes: flex from global;
 }
 
 .submenuChild {
-    composes: mt-5 from global;
+    composes: mt-0 from global;
 }
 
 .submenuChildItem {
-    composes: mb-3 from global;
+    composes: mb-0 from global;
 }

@@ -34,7 +34,7 @@ const BecomeSellerLink = props => {
         <div className={classes.root} data-cy="BecomeSellerLink-root">
             <Link
                 to={resourceUrl('/become-seller')}
-                className='text-[13px] leading-[16px] text-darkblue-900'
+                className='text-base leading-[16px]'
             >{formatMessage({
                 id: 'becomeSellerPage.title',
                 defaultMessage: 'Become a Seller'

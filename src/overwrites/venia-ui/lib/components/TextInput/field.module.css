@@ -45,6 +45,6 @@
 
 .optional {
     composes: font-normal from global;
-    composes: text-sm from global;
+    composes: text-base from global;
     composes: text-subtle from global;
 }

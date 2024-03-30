@@ -6,6 +6,7 @@ import { useSubMenu } from '@magento/peregrine/lib/talons/MegaMenu/useSubMenu';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenu.module.css';
 import SubmenuColumn from './submenuColumn';
+import ShopByColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/shopByColumn';
 
 /**
  * The Submenu component displays submenu in mega menu
@@ -17,12 +18,15 @@ import SubmenuColumn from './submenuColumn';
 const Submenu = props => {
     const {
         items,
+        shopByItems,
         mainNavWidth,
         isFocused,
         subMenuState,
         handleCloseSubMenu,
         categoryUrlSuffix,
-        onNavigate
+        parentCategory,
+        onNavigate,
+        arrow
     } = props;
     const PADDING_OFFSET = 20;
     const classes = useStyle(defaultClasses, props.classes);
@@ -50,6 +54,36 @@ const Submenu = props => {
                 category={category}
                 categoryUrlSuffix={categoryUrlSuffix}
                 onNavigate={onNavigate}
+                arrow={arrow}
+                handleCloseSubMenu={handleCloseSubMenu}
+            />
+        );
+    });
+
+    // const shopByItems = [
+    //     {
+    //         name: 'Shop By Franchise',
+    //         items: [
+    //             {
+    //                 name: 'Hasbro',
+    //                 url: '/'
+    //             }
+    //         ]
+    //     }
+    // ];
+
+    const shopBy = shopByItems.map((shopBy, index) => {
+        const keyboardProps =
+            index === shopByItems.length - 1 ? talonProps.keyboardProps : {};
+        return (
+            <ShopByColumn
+                index={index}
+                keyboardProps={keyboardProps}
+                key={shopBy.code}
+                category={parentCategory}
+                shopBy={shopBy}
+                categoryUrlSuffix={categoryUrlSuffix}
+                onNavigate={onNavigate}
                 handleCloseSubMenu={handleCloseSubMenu}
             />
         );
@@ -57,33 +91,16 @@ const Submenu = props => {
 
     return (
         <div className={subMenuClassname}>
-            <div
-                className={classes.submenuItems}
-                style={{ minWidth: mainNavWidth + PADDING_OFFSET }}
-            >
-                {subMenus}
+            <div className={classes.submenuContainer}>
+                <div
+                    className={classes.submenuItems}
+                >
+                    {subMenus}
+                </div>
+                {shopBy}
             </div>
         </div>
     );
 };
 
 export default Submenu;
-
-Submenu.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            children: PropTypes.array.isRequired,
-            uid: PropTypes.string.isRequired,
-            include_in_menu: PropTypes.number.isRequired,
-            isActive: PropTypes.bool.isRequired,
-            name: PropTypes.string.isRequired,
-            path: PropTypes.array.isRequired,
-            position: PropTypes.number.isRequired,
-            url_path: PropTypes.string.isRequired
-        })
-    ).isRequired,
-    mainNavWidth: PropTypes.number.isRequired,
-    categoryUrlSuffix: PropTypes.string,
-    onNavigate: PropTypes.func.isRequired,
-    handleCloseSubMenu: PropTypes.func.isRequired
-};

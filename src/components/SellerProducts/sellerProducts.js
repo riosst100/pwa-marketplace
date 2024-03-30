@@ -12,10 +12,10 @@ const SellerProducts = () => {
             <div className='w-full mb-[30px]'>
                 <div class='flex items-end gap-[40px] px-[30px] py-0 rounded-[6px] border border-solid border-gray-100'>
                     <Link to='#' class='px-0 py-[12px] inline-flex items-center gap-[5px] relative flex-[0_0_auto]'>
-                        <span class='relative w-fit font-medium text-[16px] tracking-[0] leading-[20px] whitespace-nowrap'>Action Figures</span>
+                        <span class='relative w-fit font-medium text-[14px] tracking-[0] leading-[20px] whitespace-nowrap'>Action Figures</span>
                     </Link>
                     <Link to='#' class='px-0 py-[12px] inline-flex items-center gap-[5px] relative flex-[0_0_auto]'>
-                        <span class='relative w-fit font-medium text-[16px] tracking-[0] leading-[20px] whitespace-nowrap'>Anime</span>
+                        <span class='relative w-fit font-medium text-[14px] tracking-[0] leading-[20px] whitespace-nowrap'>Anime</span>
                     </Link>
                 </div>
             </div>
