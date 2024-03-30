@@ -3,61 +3,61 @@ import { Star1 } from 'iconsax-react';
 
 const SellerReviewItem = ({ review }) => {
     const rate1 = [];
-    if (review.rate1) {
-        for (let i = 1; i < review.rate1+1; i++) {
-            rate1.push({
-                'num': i,
-                'star': true
-            });
-        }
+    // if (review.rate1) {
+    //     for (let i = 1; i < review.rate1+1; i++) {
+    //         rate1.push({
+    //             'num': i,
+    //             'star': true
+    //         });
+    //     }
 
-        if (review.rate1 < 5) {
-            for (let i = review.rate1+1; i < 5+1; i++) {
-                rate1.push({
-                    'num': i,
-                    'star': false
-                });
-            }
-        }
-    }
+    //     if (review.rate1 < 5) {
+    //         for (let i = review.rate1+1; i < 5+1; i++) {
+    //             rate1.push({
+    //                 'num': i,
+    //                 'star': false
+    //             });
+    //         }
+    //     }
+    // }
 
     const rate2 = [];
-    if (review.rate2) {
-        for (let i = 1; i < review.rate2+1; i++) {
-            rate2.push({
-                'num': i,
-                'star': true
-            });
-        }
+    // if (review.rate2) {
+    //     for (let i = 1; i < review.rate2+1; i++) {
+    //         rate2.push({
+    //             'num': i,
+    //             'star': true
+    //         });
+    //     }
 
-        if (review.rate2 < 5) {
-            for (let i = review.rate2+1; i < 5+1; i++) {
-                rate2.push({
-                    'num': i,
-                    'star': false
-                });
-            }
-        }
-    }
+    //     if (review.rate2 < 5) {
+    //         for (let i = review.rate2+1; i < 5+1; i++) {
+    //             rate2.push({
+    //                 'num': i,
+    //                 'star': false
+    //             });
+    //         }
+    //     }
+    // }
 
     const rate3 = [];
-    if (review.rate3) {
-        for (let i = 1; i < review.rate3+1; i++) {
-            rate3.push({
-                'num': i,
-                'star': true
-            });
-        }
+    // if (review.rate3) {
+    //     for (let i = 1; i < review.rate3+1; i++) {
+    //         rate3.push({
+    //             'num': i,
+    //             'star': true
+    //         });
+    //     }
 
-        if (review.rate3 < 5) {
-            for (let i = review.rate3+1; i < 5+1; i++) {
-                rate3.push({
-                    'num': i,
-                    'star': false
-                });
-            }
-        }
-    }
+    //     if (review.rate3 < 5) {
+    //         for (let i = review.rate3+1; i < 5+1; i++) {
+    //             rate3.push({
+    //                 'num': i,
+    //                 'star': false
+    //             });
+    //         }
+    //     }
+    // }
 
     const formatDate = (date) => {
         const isoFormattedDate = date.replace(' ', 'T');
