@@ -4,7 +4,7 @@
     composes: flex from global;
     composes: items-center from global;
     composes: gap-[6px] from global;
-    composes: my-[30px] from global;
+    composes: my-[20px] from global;
     padding-top: 20px;
 }
 
