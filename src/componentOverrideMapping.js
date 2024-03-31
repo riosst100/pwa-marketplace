@@ -42,4 +42,6 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/Button/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Button/index.js',
     [`@magento/venia-ui/lib/components/RichText/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RichText/index.js',
     [`@magento/venia-ui/lib/components/Main/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Main/index.js',
+    [`@magento/venia-ui/lib/components/Footer/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Footer/index.js',
+    [`@magento/venia-ui/lib/components/Newsletter/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Newsletter/index.js',
 };
