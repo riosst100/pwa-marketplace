@@ -3,7 +3,7 @@
     composes: flex-wrap from global;
     composes: mt-3 from global;
     composes: gap-[15px] from global;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .item {
