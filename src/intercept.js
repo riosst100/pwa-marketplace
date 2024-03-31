@@ -23,38 +23,38 @@ module.exports = targets => {
 
   // Tap into webpackCompiler
   targets.of('@magento/pwa-buildpack').webpackCompiler.tap(compiler => {
-      // Check if the LocalizationPlugin is present
-      if (compiler.options.plugins) {
-        const localizationPlugin = compiler.options.plugins.find(
-            plugin => plugin instanceof LocalizationPlugin
-        );
+    // Check if the LocalizationPlugin is present
+    if (compiler.options.plugins) {
+      const localizationPlugin = compiler.options.plugins.find(
+        plugin => plugin instanceof LocalizationPlugin
+      );
 
-        // Check if LocalizationPlugin is found
-        if (localizationPlugin) {
-            // Store the original mergeLocales function
-            const originalMergeLocales = localizationPlugin.mergeLocales;
+      // Check if LocalizationPlugin is found
+      if (localizationPlugin) {
+        // Store the original mergeLocales function
+        const originalMergeLocales = localizationPlugin.mergeLocales;
 
-            // Define your custom hook
-            function myCustomMergeLocalesHook(current, update) {
-                // Modify the mergedLocales data here
-                Object.keys(update).forEach(key => {
-                  if (typeof current[key] === 'undefined') {
-                      current[key] = [];
-                  }
-                  if (Array.isArray(current[key]) && Array.isArray(update[key])) {
-                    if (update[key].toString().includes("venia-ui")) {
-                      delete update[key];
-                    }
-                  }
-              });
-
-                // Return the modified mergedLocales
-                return originalMergeLocales.call(localizationPlugin, current, update);
+        // Define your custom hook
+        function myCustomMergeLocalesHook(current, update) {
+          // Modify the mergedLocales data here
+          Object.keys(update).forEach(key => {
+            if (typeof current[key] === 'undefined') {
+              current[key] = [];
             }
+            if (Array.isArray(current[key]) && Array.isArray(update[key])) {
+              if (update[key].toString().includes("venia-ui")) {
+                delete update[key];
+              }
+            }
+          });
 
-            // Override mergeLocales with your custom hook
-            localizationPlugin.mergeLocales = myCustomMergeLocalesHook;
+          // Return the modified mergedLocales
+          return originalMergeLocales.call(localizationPlugin, current, update);
         }
+
+        // Override mergeLocales with your custom hook
+        localizationPlugin.mergeLocales = myCustomMergeLocalesHook;
+      }
     }
   });
 
@@ -101,6 +101,20 @@ module.exports = targets => {
       name: "CollectibleGameSetsPage",
       pattern: "/games/collectible-game/:urlKey/sets",
       path: require.resolve("./components/CollectibleGameSetsPage/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
+      name: "BrandListPage",
+      pattern: "/brands",
+      path: require.resolve("./components/BrandListPage/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
+      name: "BrandLandingPage",
+      pattern: "/brand",
+      path: require.resolve("./components/BrandLandingPage/index.js"),
       authed: false,
     },
   ];

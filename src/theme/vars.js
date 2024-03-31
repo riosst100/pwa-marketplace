@@ -7,6 +7,7 @@ export const gray100 = '#B9AEC5';
 export const gray600 = '#1BA387';
 export const gray700 = '#999999';
 export const primary900 = "#292D32";
+export const blackTransparent = "#11182780";
 
 export default {
     textPrimary,
@@ -18,4 +19,5 @@ export default {
     gray600,
     gray700,
     primary900,
+    blackTransparent,
 }

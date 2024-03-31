@@ -41,4 +41,5 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/RadioGroup/radio.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RadioGroup/radio.js',
     [`@magento/venia-ui/lib/components/Button/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Button/index.js',
     [`@magento/venia-ui/lib/components/RichText/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/RichText/index.js',
+    [`@magento/venia-ui/lib/components/Main/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Main/index.js',
 };

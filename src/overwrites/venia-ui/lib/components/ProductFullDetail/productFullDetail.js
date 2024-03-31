@@ -24,12 +24,12 @@ import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import ProductReviews from './components/productReview';
 import RichText from '@magento/venia-ui/lib/components/RichText';
 import { Star1, Verify, Sms, Message, Shop } from 'iconsax-react';
-import { Link } from 'react-router-dom';
-import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
+import { Link } from "react-router-dom";
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
 const Options = React.lazy(() => import('@magento/venia-ui/lib/components/ProductOptions'));
+import Share from '@riosst100/pwa-marketplace/src/components/SocialMediaShare';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -390,10 +390,21 @@ const ProductFullDetail = props => {
             >
                 <section className={classes.leftContainer}>
                     <Carousel images={mediaGalleryEntries} />
-                    <div className='product_group-actions'>
+                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center'>
                         <Suspense fallback={null}>
-                            <WishlistButton {...wishlistButtonProps} />
+                            <WishlistButton
+                                classes={{
+                                    root: cn(
+                                        'button_share border border-solid border-gray-100 p-2.5',
+                                        'rounded-full flex justify-center items-center h-fitContent min-w-min'
+                                    )
+                                }}
+                                {...wishlistButtonProps}
+                                buttonText={''}
+                            />
                         </Suspense>
+                        <Divider className="w-[1px] !h-[40px]" />
+                        <Share />
                     </div>
                 </section>
                 <section className={classes.rightContainer}>
@@ -489,9 +500,9 @@ const ProductFullDetail = props => {
 
                         <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
                             {sellerDetails &&
-                            <div className='text-xs'>
-                                Ship From <span className='font-semibold'>{sellerDetails.country}</span>
-                            </div>}
+                                <div className='text-xs'>
+                                    Ship From <span className='font-semibold'>{sellerDetails.country}</span>
+                                </div>}
                             <div className='text-xs'>
                                 Ship To <span className='font-semibold'>Yishun</span>
                             </div>
@@ -552,23 +563,23 @@ const ProductFullDetail = props => {
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap items-start gap-4 relative'>
-                                    <button class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Message
                                             </div>
                                         </div>
-                                    </button>
-                                    <button class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
+                                    </Link>
+                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Chat With Seller
                                             </div>
                                         </div>
-                                    </button>
-                                    <Link to={`/seller/${sellerDetails.url_key}`} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    </Link>
+                                    <Link class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
