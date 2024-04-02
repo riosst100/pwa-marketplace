@@ -1,0 +1,21 @@
+.shimmerItem {
+    min-height: 1rem;
+    composes: bg-gray-100 from global;
+    composes: inline-block from global;
+    composes: overflow-hidden from global;
+    composes: pointer-events-none from global;
+    composes: relative from global;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.shimmerParagraphLine {
+    min-height: 1rem;
+    composes: bg-gray-100 from global;
+    composes: inline-block from global;
+    composes: overflow-hidden from global;
+    composes: pointer-events-none from global;
+    composes: relative from global;
+    display: block;
+    margin-bottom: 0.5rem;
+}

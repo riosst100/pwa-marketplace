@@ -28,7 +28,15 @@ const TextInput = props => {
     return (
         <Fragment>
             <FieldIcons after={after} before={before} >
-                <InformedText {...rest} className={cn(inputClass, inputClassName)} field={field} />
+                <InformedText
+                    {...rest}
+                    className={cn(
+                        inputClass,
+                        'focus_shadow-none',
+                        inputClassName
+                    )}
+                    field={field}
+                />
             </FieldIcons>
             <Message fieldState={fieldState}>{message}</Message>
         </Fragment>

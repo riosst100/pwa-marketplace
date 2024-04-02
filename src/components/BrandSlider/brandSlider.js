@@ -40,7 +40,7 @@ const brandSlider = (props) => {
             {
                 breakpoint: 1023,
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow: 3,
                     slidesToScroll: 1,
                 }
             },
@@ -68,7 +68,7 @@ const brandSlider = (props) => {
             <Slider {...settings}>
                 {[...Array(9)].map(() => {
                     return (
-                        <Item />
+                        <Item {...props} />
                     )
                 })}
             </Slider>
