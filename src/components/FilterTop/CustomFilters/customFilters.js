@@ -30,7 +30,7 @@ const CustomFilters = props => {
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {
         const elements = [];
-        customFiltersData.map((filter, index) => {
+        customFiltersData && customFiltersData.map((filter, index) => {
             const { label, attribute_code, options } = filter || {};
 
             if (options.length) {
@@ -43,17 +43,19 @@ const CustomFilters = props => {
                     // );
                     // const keyAttr = `${attribute_code}[filter]`;
 
-                    Object.keys(params).forEach(function(key, index) {
-                        if (index > 1) {
-                            delete params[key];
-                        }
-                    });
+                    if (params) {
+                        Object.keys(params).forEach(function(key, index) {
+                            if (index > 1) {
+                                delete params[key];
+                            }
+                        });
+                    }
 
                     if (value != "all") {
                         params[`${attribute_code}[filter]`] = `${label},${value}`;
                     }
 
-                    const finalParams = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+                    const finalParams = params ? Object.keys(params).map(key => `${key}=${params[key]}`).join('&') : '';
 
                     // console.log(params)
 
