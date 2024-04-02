@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import defaultClasses from './subCategory.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
+import { useFilterSidebar } from '@magento/peregrine/lib/talons/FilterSidebar';
 
 const SubCategory = props => {
     const { children } = props;

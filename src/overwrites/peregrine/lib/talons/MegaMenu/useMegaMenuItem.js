@@ -33,7 +33,7 @@ export const useMegaMenuItem = props => {
             // checking down arrow and spacebar
             if (pressedKey === 'ArrowDown' || pressedKey === ' ') {
                 event.preventDefault();
-                if (category.children.length) {
+                if (category.children.length || category.name == "Lego") {
                     setIsFocused(true);
                 } else {
                     setIsFocused(false);
@@ -52,7 +52,7 @@ export const useMegaMenuItem = props => {
                 setIsFocused(false);
             }
         },
-        [category.children.length]
+        [category.children.length, category.name]
     );
 
     return {

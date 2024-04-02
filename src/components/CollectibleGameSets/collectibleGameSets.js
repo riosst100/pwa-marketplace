@@ -28,9 +28,6 @@ const CollectibleGameSets = props => {
         );
     }
 
-    // console.log('SIPPPPPPPPPPPPPPPPPPP')
-    // console.log(collectibleGameSets)
-
     const sets = collectibleGameSets.map((set, index) => {
         const { card_set } = set;
         return (

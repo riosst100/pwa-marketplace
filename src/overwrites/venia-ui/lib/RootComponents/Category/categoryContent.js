@@ -33,6 +33,9 @@ const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/Fi
 const FilterSidebar = React.lazy(() =>
     import('@magento/venia-ui/lib/components/FilterSidebar')
 );
+const FilterTop = React.lazy(() =>
+    import('@riosst100/pwa-marketplace/src/components/FilterTop')
+);
 
 const CategoryContent = props => {
     const {
@@ -183,8 +186,9 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                <SubCategory children={children} />
-                <AttributesBlock category={category} attributesBlock={attributesBlock} />
+                <SubCategory filters={filters} children={children} />
+                <FilterTop filters={filters} category={category} />
+                {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
                 {/* <section className='category_brand-slider my-5'>
                     <BrandSlider />
                 </section> */}

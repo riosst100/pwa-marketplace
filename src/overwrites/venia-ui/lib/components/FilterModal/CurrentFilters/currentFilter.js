@@ -34,10 +34,10 @@ const CurrentFilter = props => {
         <span className={classes.root} data-cy="CurrentFilter-root">
             <Trigger
                 action={handleClick}
-                ariaLabel={ariaLabel}
+                aria-label={ariaLabel}
                 data-cy="CurrentFilter-trigger"
             >
-                <Icon size={20} src={Remove} />
+                <Icon size={15} src={Remove} />
             </Trigger>
             <span className={classes.text}>
                 {item.label ? item.label : item.title}

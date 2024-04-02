@@ -1,7 +1,7 @@
 .root {
     min-height: 24px;
     composes: bg-blue-700 from global;
-    composes: font-semibold from global;
+    /* composes: font-semibold from global; */
     composes: gap-2xs from global;
     composes: grid-flow-col from global;
     composes: inline-grid from global;
@@ -17,5 +17,5 @@
 /* TODO @TW: cannot compose */
 .root svg {
     /* composes: stroke-white from global; */
-    stroke: rgb(var(--venia-global-color-gray-600));
+    stroke: white;
 }
