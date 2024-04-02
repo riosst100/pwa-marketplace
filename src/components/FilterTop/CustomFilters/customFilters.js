@@ -49,7 +49,7 @@ const CustomFilters = props => {
                         }
                     });
 
-                    if (value == "all") {
+                    if (value != "all") {
                         params[`${attribute_code}[filter]`] = `${label},${value}`;
                     }
 
