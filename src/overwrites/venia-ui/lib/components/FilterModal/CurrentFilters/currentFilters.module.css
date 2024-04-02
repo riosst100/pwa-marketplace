@@ -3,6 +3,9 @@
     composes: py-2 from global;
     composes: overflow-auto from global;
     composes: text-white from global;
+    composes: flex from global;
+    composes: flex-wrap from global;
+    composes: gap-2 from global;
 }
 
 /* TODO @TW: cannot compose */

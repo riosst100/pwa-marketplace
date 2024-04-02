@@ -15,13 +15,13 @@
     composes: hover_underline from global;
 
     align-items: center;
-    composes: flex from global;
+    composes: inline-flex from global;
 }
 
 .linkActive {
     composes: underline from global;
     align-items: center;
-    composes: flex from global;
+    composes: inline-flex from global;
 }
 
 .submenuChild {

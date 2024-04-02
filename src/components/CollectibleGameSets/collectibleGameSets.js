@@ -40,7 +40,8 @@ const CollectibleGameSets = props => {
 
     return (
         <Fragment>
-            <StoreTitle>Magic: The Gathering | All Sets</StoreTitle>
+            <StoreTitle>Magic: The Gathering | Sets & Expansions</StoreTitle>
+            <h3>Sets & Expansions</h3>
             <div>{sets}</div>
         </Fragment>
     );
