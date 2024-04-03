@@ -89,7 +89,7 @@ const MegaMenuItem = props => {
     ]);
 
     const maybeDownArrowIcon = category.children.length ? (
-        <ArrowDown2 className='ml-2 stroke-current' size="14" color={textPrimary} variant="Outline" />
+        <ArrowDown2 className='ml-2' size={12} color={textPrimary} variant="Outline" />
     ) : null;
 
     const linkAttributes = category.children.length
@@ -125,7 +125,8 @@ const MegaMenuItem = props => {
                 onKeyDown={handleKeyDown}
                 className={cn(
                     isActive ? classes.megaMenuLinkActive : classes.megaMenuLink,
-                    titleClassName
+                    titleClassName,
+                    'flex items-center'
                 )}
                 data-cy="MegaMenu-MegaMenuItem-link"
                 to={categoryUrl}

@@ -13,7 +13,13 @@ const SearchField = props => {
     const handleSearch = () => {
     }
     const searchButton =
-        <Trigger action={handleSearch} addLabel={addLabel}>
+        <Trigger
+            action={handleSearch}
+            addLabel={addLabel}
+            classes={{
+                root: 'bg-transparent'
+            }}
+        >
             <SearchNormal size="18" color="#280135" variant="Outline" />
         </Trigger>
 
@@ -27,8 +33,9 @@ const SearchField = props => {
             onValueChange={onChange}
             forwardedRef={inputRef}
             className={{
-                inputClassName: cn('rounded-full border-[1px] border-gray-100')
+                inputClassName: cn('border-none bg-transparent rounded-r-full')
             }}
+            placeholder="Search..."
         />
     );
 };

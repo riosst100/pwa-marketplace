@@ -30,6 +30,8 @@ import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
 const Options = React.lazy(() => import('@magento/venia-ui/lib/components/ProductOptions'));
 import Share from '@riosst100/pwa-marketplace/src/components/SocialMediaShare';
+import PreorderDetail from './components/preOrderDetail';
+import AuctionDetail from './components/auctionDetail';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -195,7 +197,8 @@ const ProductFullDetail = props => {
         );
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
-        <section className={classes.actButton}>
+        <section className={cn(classes.actButton, 'flex gap-x-[30px]')}>
+
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -210,7 +213,51 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-normal text-base'
+                    content: 'normal-case font-semibold text-[16px]'
+                }}
+                priority="low"
+                type="submit"
+            >
+                Buy Now
+            </Button>
+
+            <Button
+                data-cy="ProductFullDetail-addToCartButton"
+                disabled={isAddToCartDisabled}
+                aria-disabled={isAddToCartDisabled}
+                aria-label={
+                    isEverythingOutOfStock
+                        ? formatMessage({
+                            id: 'productFullDetail.outOfStockProduct',
+                            defaultMessage:
+                                'This item is currently out of stock'
+                        })
+                        : ''
+                }
+                classes={{
+                    content: 'normal-case font-semibold text-[16px]'
+                }}
+                priority="low"
+                type="submit"
+            >
+                Make An Offer
+            </Button>
+
+            <Button
+                data-cy="ProductFullDetail-addToCartButton"
+                disabled={isAddToCartDisabled}
+                aria-disabled={isAddToCartDisabled}
+                aria-label={
+                    isEverythingOutOfStock
+                        ? formatMessage({
+                            id: 'productFullDetail.outOfStockProduct',
+                            defaultMessage:
+                                'This item is currently out of stock'
+                        })
+                        : ''
+                }
+                classes={{
+                    content: 'normal-case font-semibold text-[16px]'
                 }}
                 priority="high"
                 type="submit"
@@ -334,9 +381,17 @@ const ProductFullDetail = props => {
 
     const ProductFAQ = () => (
         <div className={cn(contentContainerClass)}>
-            <p>
-                Frequently Ask Question
-            </p>
+            {customAttributesList.map((data, index) => {
+                if (data.code == "faq") {
+                    return (
+                        <RichText
+                            rootClassName="px-0"
+                            content={data.value}
+                        />
+                    );
+                }
+            })}
+
         </div>
     )
 
@@ -390,7 +445,7 @@ const ProductFullDetail = props => {
             >
                 <section className={classes.leftContainer}>
                     <Carousel images={mediaGalleryEntries} />
-                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center'>
+                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
                         <Suspense fallback={null}>
                             <WishlistButton
                                 classes={{
@@ -456,24 +511,33 @@ const ProductFullDetail = props => {
                     <div
                         className={cn(
                             'product_price_container',
-                            'py-[30px]'
+                            'py-[30px] flex justify-between flex-wrap gap-y-5'
                         )}
                     >
-                        <p
-                            data-cy="ProductFullDetail-productPrice"
-                            className={cn(
-                                classes.productPrice,
-                                'text-[32px] font-semibold leading-[32px] mb-[15px]',
-                            )}
-                        >
-                            <Price
-                                currencyCode={productDetails.price.currency}
-                                value={productDetails.price.value}
-                            />
-                        </p>
-                        <small className='shipping-calculation-notes text-gray-200 text-xs'>
-                            Shipping method is calculated on checkout
-                        </small>
+                        <div className='flex flex-col gap-y-5 max-w-[448px]'>
+                            <p
+                                data-cy="ProductFullDetail-productPrice"
+                                className={cn(
+                                    classes.productPrice,
+                                    'text-[32px] font-semibold leading-[32px] mb-0',
+                                )}
+                            >
+                                <Price
+                                    currencyCode={productDetails.price.currency}
+                                    value={productDetails.price.value}
+                                />
+                            </p>
+                            <AuctionDetail className="auction_detail-container" />
+                            <PreorderDetail className={'preorder_detail-container'} />
+                            <small className='shipping-calculation-notes text-gray-200 text-xs'>
+                                Shipping method is calculated on checkout
+                            </small>
+                        </div>
+                        <div>
+                            <p className='text-gray-200 text-[14px]'>
+                                SKU : {productDetails.sku}
+                            </p>
+                        </div>
                     </div>
                     <Divider />
                     <FormError

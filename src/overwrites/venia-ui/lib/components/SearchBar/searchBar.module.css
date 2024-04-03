@@ -38,7 +38,6 @@
 }
 
 .search {
-    composes: grid from global;
     composes: relative from global;
 }
 
