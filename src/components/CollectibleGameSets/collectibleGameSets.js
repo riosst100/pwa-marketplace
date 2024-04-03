@@ -4,11 +4,13 @@ import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSelle
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { useCollectibleGameSets } from '@riosst100/pwa-marketplace/src/talons/CollectibleGameSets/useCollectibleGameSets';
+import { Link } from 'react-router-dom';
+import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 
 const CollectibleGameSets = props => {
     const talonProps = useCollectibleGameSets();
 
-    const { error, loading, collectibleGameSets } = talonProps;
+    const { error, loading, collectibleGameSets, categoryUrlSuffix, categoryUrlKey, productType } = talonProps;
 
     if (loading && !collectibleGameSets)
         return '';
@@ -28,21 +30,60 @@ const CollectibleGameSets = props => {
         );
     }
 
-    const sets = collectibleGameSets.map((set, index) => {
-        const { card_set } = set;
+    const setsLengthArr = [];
+
+    const setRelases = collectibleGameSets.map((setRelease, index) => {
+        const { release_type, sets } = setRelease;
+
+        const setsResult = [];
+
+        setsLengthArr[release_type] = sets.length
+
+        if (sets.length) {
+            sets.map((set, index) => {
+                const { set_name, option_id, set_abbreviation } = set;
+
+                const categoryUrl = resourceUrl(
+                    `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
+                );
+
+                setsResult.push(
+                    <li>
+                        <Link to={categoryUrl}>{set_name} <small style={{"color":"grey"}}>{set_abbreviation}</small></Link>
+                    </li>
+                );
+            });
+        }
+
         return (
             <>
-                <div><b>{card_set}</b></div>
+                <div id={"#tab_list_"+release_type.toLowerCase()}>
+                    <div className='text-[16px] pb-2'><b>{release_type}</b></div>
+                    <hr />
+                    <ul className='pt-2'>{setsResult}</ul>
+                </div>
             </>
         );
     });
 
+    const alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
     return (
         <Fragment>
-            <StoreTitle>Magic: The Gathering | Sets & Expansions</StoreTitle>
-            <h3>Sets & Expansions</h3>
-            <div>{sets}</div>
+            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Sets & Expansions" : "Singles Sets")}</StoreTitle>
+            <div className='text-[20px] pb-4 pt-5'><b>{productType == "sealed-products" ? "Sets & Expansions" : "Singles Sets"}</b></div>
+            {productType != "sealed-products" ? (
+                <>
+                    <div className='flex flex-wrap mb-3'>
+                        {alpha.map((val, index) => 
+                            setsLengthArr[val] > 0 ? (
+                            <a className="py-2 px-3 font-bold mr-1 border" href={"#tab_list_"+val.toLowerCase()}>{val}</a>
+                            ) : (<span className="py-2 px-3 font-bold mr-1 border" style={{"color":"grey"}}>{val}</span>)
+                        )}
+                    </div>
+                </>
+            ) : ''}
+            <div className='flex flex-wrap gap-[30px]'>{setRelases}</div>
         </Fragment>
     );
 };

@@ -18,14 +18,7 @@ const CustomFilters = props => {
 
     const { customFiltersData, categoryUrlSuffix, search, pathname } = talonProps;
 
-    // console.log(category.url_path)
-    // console.log(categoryUrlSuffix)
-
     const params = search ? JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}') : {};
-
-    
-
-    // console.log(params)
 
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {
@@ -56,11 +49,6 @@ const CustomFilters = props => {
                     }
 
                     const finalParams = params ? Object.keys(params).map(key => `${key}=${params[key]}`).join('&') : '';
-
-                    // console.log(params)
-
-                    // console.log(finalParams);
-
                     const path = pathname + finalParams;
 
                     items.push(

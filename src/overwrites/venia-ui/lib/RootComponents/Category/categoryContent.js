@@ -186,7 +186,7 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                <SubCategory filters={filters} children={children} />
+                {/* <SubCategory filters={filters} children={children} /> */}
                 <FilterTop filters={filters} category={category} />
                 {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
                 {/* <section className='category_brand-slider my-5'>
