@@ -70,8 +70,8 @@ const CollectibleGameSets = props => {
 
     return (
         <Fragment>
-            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Sets & Expansions" : "Singles Sets")}</StoreTitle>
-            <div className='text-[20px] pb-4 pt-5'><b>{productType == "sealed-products" ? "Sets & Expansions" : "Singles Sets"}</b></div>
+            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle>
+            <div className='text-[20px] pb-4 pt-5'><b>{productType == "sealed-products" ? "Expansion Sets" : "All Sets"}</b></div>
             {productType != "sealed-products" ? (
                 <>
                     <div className='flex flex-wrap mb-3'>

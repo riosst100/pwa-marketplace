@@ -132,7 +132,7 @@ const MegaMenuItem = props => {
                 onClick={onNavigate}
             >
                 {category.name}
-                {maybeDownArrowIcon}
+                {/* {maybeDownArrowIcon} */}
             </Link>
             {children}
         </div>
