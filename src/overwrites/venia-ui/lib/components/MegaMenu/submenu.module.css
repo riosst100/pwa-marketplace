@@ -12,11 +12,10 @@
 .submenuContainer {
     composes: w-full from global;
     composes: max-w-[1210px] from global;
-    composes: flex-wrap from global;
-    composes: justify-start from global;
     composes: mx-[auto] from global;
-    composes: flex from global;
     composes: gap-[15px] from global;
+    composes: max-h-[50vh] from global;
+    composes: overflow-y-auto from global;
 }
 
 /* TODO @TW: cannot compose */
@@ -41,9 +40,8 @@
 }
 
 .submenuItems {
-    composes: flex from global;
-    composes: flex-wrap from global;
-    composes: gap-[30px] from global;
+    composes: grid from global;
+    composes: grid-cols-4 from global;
     /* composes: justify-between from global; */
     /* composes: ml-auto from global; */
     /* composes: mr-auto from global; */

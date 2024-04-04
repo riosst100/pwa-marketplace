@@ -32,13 +32,21 @@ const TextInput = props => {
                     {...rest}
                     className={cn(
                         inputClass,
-                        'focus_shadow-none',
+                        'focus_shadow-none !border rounded-md',
                         inputClassName
                     )}
                     field={field}
                 />
             </FieldIcons>
-            <Message fieldState={fieldState}>{message}</Message>
+            <Message
+                classes={{
+                    root: 'text-[12px] font-normal',
+                    root_error: 'text-[12px] font-normal mt-1 text-red-400'
+                }}
+                fieldState={fieldState}
+            >
+                {message}
+            </Message>
         </Fragment>
     );
 };
