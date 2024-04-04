@@ -7,6 +7,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenu.module.css';
 import SubmenuColumn from './submenuColumn';
 import ShopByColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/shopByColumn';
+import cn from 'classnames';
 
 /**
  * The Submenu component displays submenu in mega menu
@@ -91,9 +92,17 @@ const Submenu = props => {
 
     return (
         <div className={subMenuClassname}>
-            <div className={classes.submenuContainer}>
+            <div
+                className={cn(
+                    classes.submenuContainer,
+                    // 'grid grid-cols-4'
+                )}
+            >
                 <div
-                    className={classes.submenuItems}
+                    className={cn(
+                        classes.submenuItems,
+                        'grid grid-cols-4',
+                    )}
                 >
                     {subMenus}
                 </div>

@@ -47,14 +47,16 @@
     composes: root;
 
     composes: bg-transparent from global;
-    composes: border-gray-700 from global;
-    composes: text-gray-700 from global;
+    composes: border-blue-600 from global;
+    composes: text-blue-600 from global;
 
-    composes: active_border-gray-800 from global;
-    composes: active_text-gray-800 from global;
+    /* composes: active_border-blue-600 from global;
+    composes: active_text-gray-800 from global; */
 
-    composes: hover_border-gray-800 from global;
-    composes: hover_text-gray-800 from global;
+    /* composes: hover_border-blue-600 from global; */
+    composes: hover_bg-blue-600 from global;
+    composes: hover_text-white from global;
+    composes: focus_shadow-none from global;
 }
 
 .root_normalPriority {
@@ -69,6 +71,7 @@
 
     composes: hover_border-brand-darkest from global;
     composes: hover_text-brand-darkest from global;
+    composes: focus_shadow-none from global;
 }
 
 .root_highPriority {
@@ -85,6 +88,7 @@
     composes: hover_bg-brand-darkest from global;
     composes: hover_border-brand-darkest from global;
     composes: hover_text-white from global;
+    composes: focus_shadow-none from global;
 }
 
 .root_lowPriorityNegative,

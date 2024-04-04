@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl';
 import defaultClasses from './autocomplete.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Suggestions from './suggestions';
+import cn from 'classnames';
 
 const GET_AUTOCOMPLETE_RESULTS = gql`
     query getAutocompleteResults($inputText: String!) {
@@ -136,7 +137,10 @@ const Autocomplete = props => {
             : messageTpl;
 
     return (
-        <div data-cy="Autocomplete-root" className={rootClassName}>
+        <div
+            data-cy="Autocomplete-root"
+            className={cn(rootClassName)}
+        >
             <label
                 id="search_query"
                 data-cy="Autocomplete-message"

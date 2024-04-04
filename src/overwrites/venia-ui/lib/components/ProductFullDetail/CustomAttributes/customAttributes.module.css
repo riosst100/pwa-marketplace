@@ -1,9 +1,8 @@
-.root {
-}
+.root {}
 
 .list {
-    composes: list-disc from global;
-    composes: mb-4 from global;
-    composes: mt-4 from global;
-    composes: pl-6 from global;
+    composes: list-none from global;
+    composes: mb-2 from global;
+    composes: mt-2 from global;
+    composes: pl-2 from global;
 }

@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { ArrowDown2 } from 'iconsax-react';
 import { textPrimary } from '@riosst100/pwa-marketplace/src/theme/vars';
 import CustomSubmenuColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/customSubmenuColumn';
+import cn from 'classnames';
 
 /**
  * The SubmenuColumn component displays columns with categories in submenu
@@ -24,7 +25,7 @@ const SubmenuColumn = props => {
         handleCloseSubMenu,
         arrow
     } = props;
-    
+
     const classes = useStyle(defaultClasses, props.classes);
 
     const categoryUrl = resourceUrl(
@@ -62,18 +63,18 @@ const SubmenuColumn = props => {
             }
 
             const customSubMenus = customMenuItems.length ? (
-                <CustomSubmenuColumn 
-                categoryUrlSuffix={categoryUrlSuffix}
-                onNavigate={onNavigate}
-                handleCloseSubMenu={handleCloseSubMenu}
-                category={subCategory} 
-                customMenuItems={customMenuItems}
-                toggleCustomMenu={toggleCustomMenu}
+                <CustomSubmenuColumn
+                    categoryUrlSuffix={categoryUrlSuffix}
+                    onNavigate={onNavigate}
+                    handleCloseSubMenu={handleCloseSubMenu}
+                    category={subCategory}
+                    customMenuItems={customMenuItems}
+                    toggleCustomMenu={toggleCustomMenu}
                 />
             ) : '';
 
             return (
-                <li key={index} className={classes.submenuChildItem}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
                     {customMenuItems.length ? (
                         <>
                             <Link
@@ -88,16 +89,6 @@ const SubmenuColumn = props => {
                             >
                                 {name}
                             </Link>
-                            <span
-                                className={isActive ? classes.linkActive : classes.link}
-                                data-cy="MegaMenu-SubmenuColumn-link"
-                                onClick={() => {
-                                    toggleCustomMenu();
-                                }}
-                            >
-                                {arrow}
-                            </span>
-                            {showCustomMenu ? customSubMenus : ''}
                         </>
                     ) : (
                         <Link

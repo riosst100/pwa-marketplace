@@ -1,5 +1,5 @@
 .customSubmenuColumn {
-    composes: max-w-[235px] from global;
+    /* composes: max-w-[235px] from global; */
     composes: p-2 from global;
 }
 

@@ -8,6 +8,8 @@ import DEFAULT_OPERATIONS from './collectibleGameSets.gql';
 
 export const useCollectibleGameSets = props => {
 
+    const { product_type } = props
+
     const operations = mergeOperations(DEFAULT_OPERATIONS, null);
     const { getStoreConfigData, getCollectibleGameQuery } = operations;
     const { pathname } = useLocation();
@@ -25,8 +27,8 @@ export const useCollectibleGameSets = props => {
 
     const pathnameArr = pathname.split('/');
 
-    const categoryUrlKey = pathnameArr[pathnameArr.length - 2];
-    const productType = pathnameArr[pathnameArr.length - 1];
+    const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
+    const productType = product_type ? product_type : 'singles';
     
     const categoryUrlSuffix = storeConfigData?.storeConfig?.category_url_suffix;
 

@@ -29,6 +29,7 @@ export const GET_CATEGORY_CONTENT = gql`
                 description
                 url_key
                 url_path
+                custom_landing_page
                 attributes_block {
                     label
                     code

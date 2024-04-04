@@ -6,9 +6,14 @@ import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { useCollectibleGameSets } from '@riosst100/pwa-marketplace/src/talons/CollectibleGameSets/useCollectibleGameSets';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
+import defaultClasses from './collectibleGameSets.module.css';
+import { useStyle } from '@magento/venia-ui/lib/classify';
 
 const CollectibleGameSets = props => {
-    const talonProps = useCollectibleGameSets();
+
+    const { product_type } = props;
+
+    const talonProps = useCollectibleGameSets({ product_type });
 
     const { error, loading, collectibleGameSets, categoryUrlSuffix, categoryUrlKey, productType } = talonProps;
 
@@ -69,9 +74,9 @@ const CollectibleGameSets = props => {
     const alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
     return (
-        <Fragment>
-            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle>
-            <div className='text-[20px] pb-4 pt-5'><b>{productType == "sealed-products" ? "Expansion Sets" : "All Sets"}</b></div>
+        <>
+            {/* <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle> */}
+            <div className='text-[20px] pb-4 pt-5' id={productType == "sealed-products" ? 'expansion-sets' : 'all-sets'}><b>{productType == "sealed-products" ? "Expansion Sets" : "All Sets"}</b></div>
             {productType != "sealed-products" ? (
                 <>
                     <div className='flex flex-wrap mb-3'>
@@ -84,7 +89,7 @@ const CollectibleGameSets = props => {
                 </>
             ) : ''}
             <div className='flex flex-wrap gap-[30px]'>{setRelases}</div>
-        </Fragment>
+        </>
     );
 };
 

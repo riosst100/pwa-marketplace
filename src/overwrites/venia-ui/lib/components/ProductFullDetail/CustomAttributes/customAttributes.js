@@ -5,6 +5,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 
 import AttributeType from './AttributeType';
 import defaultClasses from './customAttributes.module.css';
+import cn from 'classnames';
 
 export const IS_VISIBLE_ON_FRONT = 'PRODUCT_DETAILS_PAGE';
 
@@ -23,7 +24,7 @@ const CustomAttributes = props => {
                     const attributeContent = (
                         <li
                             key={currentAttribute.attribute_metadata.uid}
-                            className={classes.listItem}
+                            className={cn(classes.listItem, '!text-[14px]')}
                         >
                             <AttributeType
                                 showLabels={showLabels}

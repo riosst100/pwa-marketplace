@@ -28,6 +28,7 @@ import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/s
 import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
+import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -186,39 +187,47 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                {/* <SubCategory filters={filters} children={children} /> */}
-                <FilterTop filters={filters} category={category} />
-                {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
-                {/* <section className='category_brand-slider my-5'>
-                    <BrandSlider />
-                </section> */}
-                <div className={classes.contentWrapper}>
-                    <div ref={sidebarRef} className={classes.sidebar}>
-                        <Suspense fallback={<FilterSidebarShimmer />}>
-                            {shouldRenderSidebarContent ? sidebar : null}
-                        </Suspense>
-                    </div>
-                    <div className={classes.categoryContent}>
-                        <div className={cn(classes.heading)}>
-                            {maybeProductsTabContainer}
-                            <div className={classes.headerButtons}>
-                                {maybeFilterButtons}
-                                {maybeSortButton}
+                {category.customLandingPage ? (
+                    <>
+                        <SubCategory customLandingPage={customLandingPage} />
+                    </>
+                ) : (
+                    <>
+                        {/* <SubCategory filters={filters} children={children} /> */}
+                        <FilterTop filters={filters} category={category} />
+                        {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
+                        {/* <section className='category_brand-slider my-5'>
+                            <BrandSlider />
+                        </section> */}
+                        <div className={classes.contentWrapper}>
+                            <div ref={sidebarRef} className={classes.sidebar}>
+                                <Suspense fallback={<FilterSidebarShimmer />}>
+                                    {shouldRenderSidebarContent ? sidebar : null}
+                                </Suspense>
                             </div>
-                            {maybeSortContainer}
-                        </div>
-                        <div className={cn(classes.heading)}>
-                            <div
-                                data-cy="CategoryContent-categoryInfo"
-                                className={classes.categoryInfo}
-                            >
-                                {categoryResultsHeading}
+                            <div className={classes.categoryContent}>
+                                <div className={cn(classes.heading)}>
+                                    {maybeProductsTabContainer}
+                                    <div className={classes.headerButtons}>
+                                        {maybeFilterButtons}
+                                        {maybeSortButton}
+                                    </div>
+                                    {maybeSortContainer}
+                                </div>
+                                <div className={cn(classes.heading)}>
+                                    <div
+                                        data-cy="CategoryContent-categoryInfo"
+                                        className={classes.categoryInfo}
+                                    >
+                                        {categoryResultsHeading}
+                                    </div>
+                                </div>
+                                {content}
+                                <Suspense fallback={null}>{filtersModal}</Suspense>
                             </div>
                         </div>
-                        {content}
-                        <Suspense fallback={null}>{filtersModal}</Suspense>
-                    </div>
-                </div>
+                    </>
+                )}
             </article>
         </Fragment>
     );
