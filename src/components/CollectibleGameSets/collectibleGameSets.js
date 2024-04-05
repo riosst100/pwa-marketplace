@@ -15,6 +15,8 @@ const CollectibleGameSets = props => {
 
     const { product_type } = props;
 
+    const [active, setActive] = useState('all');
+
     const classes = useStyle(defaultClasses);
 
     const talonProps = useCollectibleGameSets({ product_type });
@@ -39,14 +41,30 @@ const CollectibleGameSets = props => {
         );
     }
 
-    const [active, setActive] = useState('all')
-
     const setsLengthArr = [];
 
     const setRelases = collectibleGameSets.map((setRelease, index) => {
         const { release_type, sets } = setRelease;
 
         setsLengthArr[release_type] = sets.length
+
+        const setsResult = [];
+
+        if (sets.length) {
+            sets.map((set, index) => {
+                const { set_name, option_id, set_abbreviation } = set;
+
+                const categoryUrl = resourceUrl(
+                    `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
+                );
+
+                setsResult.push(<li className='list-none'>
+                    <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
+                        {set_name} <small style={{"color":"grey"}}>{set_abbreviation}</small>
+                    </Link>
+                </li>)
+            })
+        }
         
         return (
             <>
@@ -55,52 +73,17 @@ const CollectibleGameSets = props => {
                     <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
                         {release_type}
                     </div>
-                    <div className={cn('singles_item-list flex flex-col')}>{sets.length ? 
-                        sets.map((set, index) => {
-                            const { set_name, option_id, set_abbreviation } = set;
-            
-                            const categoryUrl = resourceUrl(
-                                `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
-                            );
-            
-                            return <li className='list-none'>
-                                <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
-                                    {set_name} <small style={{"color":"grey"}}>{set_abbreviation}</small>
-                                </Link>
-                            </li>
-                        })
-                    : ''}</div>
+                    <div className={cn('singles_item-list flex flex-col')}>{setsResult}</div>
                 </div> : ''}
             </>
         );
     });
-
-    
 
     const handleActive = (val) => {
         setActive(val);
     }
 
     const alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
-    const singles = [
-        { id: 1, name: "Amonkhet" },
-        { id: 2, name: "ApocalypseAPC" },
-        { id: 3, name: "AmonkhetAKH" },
-        { id: 4, name: "Rivals of IxalanRIX" }
-    ];
-
-    const groupSinglesFirstLetter = (items) => {
-        return items.reduce((acc, item) => {
-            const firstLetter = item.name.charAt(0).toUpperCase();
-            acc[firstLetter] = acc[firstLetter] || [];
-            acc[firstLetter].push(item);
-            return acc;
-        }, {});
-    }
-
-    const groupedSingles = groupSinglesFirstLetter(singles);
-    const availableLetter = Object.keys(groupedSingles).sort();
 
     return (
         <>
@@ -149,42 +132,10 @@ const CollectibleGameSets = props => {
                 <Divider className="mb-5 px-4" />
                 <section className='singles-container'>
                     <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>
-                        {availableLetter.map((initialLetter, index) => (
-                            <>
-                                {/* {active === 'all' || active === initialLetter ? (
-                                    <div className='singles_group-wrapper mb-4 px-4 inline-block w-full' key={index}>
-                                        <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
-                                            {initialLetter}
-                                        </div>
-                                        <div
-                                            className={cn(
-                                                'singles_item-list flex flex-col'
-                                            )}
-                                        >
-                                            {groupedSingles[initialLetter].map((item, index) => (
-                                                <li key={index} className='list-none'>
-                                                    <Link
-                                                        to="/"
-                                                        className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2"
-                                                    >
-                                                        {item.name}
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </div>
-                                        
-                                    </div>
-                                ) : null} */}
-                            </>
-                        ))}
                         {setRelases}
                     </div>
                 </section>
             </div>
-            {/* <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle> */}
-            {/* <div className='text-[20px] pb-4 pt-5' id={productType == "sealed-products" ? 'expansion-sets' : 'all-sets'}><b></b></div>
-            
-            <div className='flex flex-wrap gap-[30px]'>{setRelases}</div> */}
         </>
     );
 };
