@@ -20,3 +20,19 @@
     composes: border-gray-100 from global;
     border-radius: 5px;
 }
+
+.singlesWrapper {
+    column-count: 1;
+}
+
+@media screen and (min-width: 768px) {
+    .singlesWrapper {
+        column-count: 2;
+    }
+}
+
+@media screen and (min-width: 1023px) {
+    .singlesWrapper {
+        column-count: 3;
+    }
+}

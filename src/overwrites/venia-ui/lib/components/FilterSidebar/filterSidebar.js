@@ -124,7 +124,7 @@ const FilterSidebar = props => {
                     filterState={filterState}
                     onRemove={handleApplyFilter}
                 />
-                {clearAll}
+                {/* {clearAll} */}
                 <ul className={classes.blocks}>{filtersList}</ul>
             </div>
         </aside>

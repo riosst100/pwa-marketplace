@@ -29,6 +29,8 @@ import AttributesBlock from '@riosst100/pwa-marketplace/src/components/Attribute
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
 import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
+import { useLocation } from 'react-router-dom';
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -171,6 +173,9 @@ const CategoryContent = props => {
 
     const categoryTitle = categoryName ? categoryName : <Shimmer width={5} />;
 
+    const { search } = useLocation();
+    const activeFilters = getFiltersFromSearch(search);
+
     return (
         <Fragment>
             <Breadcrumbs categoryId={categoryId} />
@@ -187,9 +192,9 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                {category.customLandingPage ? (
+                {activeFilters.size <= 0 && category && category.custom_landing_page ? (
                     <>
-                        <SubCategory customLandingPage={customLandingPage} />
+                        <SubCategory customLandingPage={category.custom_landing_page} />
                     </>
                 ) : (
                     <>

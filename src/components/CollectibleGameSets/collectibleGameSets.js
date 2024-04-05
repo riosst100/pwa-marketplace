@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSeller';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
@@ -8,10 +8,14 @@ import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import defaultClasses from './collectibleGameSets.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
+import cn from 'classnames';
+import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 
 const CollectibleGameSets = props => {
 
     const { product_type } = props;
+
+    const classes = useStyle(defaultClasses);
 
     const talonProps = useCollectibleGameSets({ product_type });
 
@@ -35,60 +39,152 @@ const CollectibleGameSets = props => {
         );
     }
 
+    const [active, setActive] = useState('all')
+
     const setsLengthArr = [];
 
     const setRelases = collectibleGameSets.map((setRelease, index) => {
         const { release_type, sets } = setRelease;
 
-        const setsResult = [];
-
         setsLengthArr[release_type] = sets.length
-
-        if (sets.length) {
-            sets.map((set, index) => {
-                const { set_name, option_id, set_abbreviation } = set;
-
-                const categoryUrl = resourceUrl(
-                    `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
-                );
-
-                setsResult.push(
-                    <li>
-                        <Link to={categoryUrl}>{set_name} <small style={{"color":"grey"}}>{set_abbreviation}</small></Link>
-                    </li>
-                );
-            });
-        }
-
+        
         return (
             <>
-                <div id={"#tab_list_"+release_type.toLowerCase()}>
-                    <div className='text-[16px] pb-2'><b>{release_type}</b></div>
-                    <hr />
-                    <ul className='pt-2'>{setsResult}</ul>
-                </div>
+                {active == "all" || active == release_type ?
+                <div id={"#tab_list_"+release_type.toLowerCase()} className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
+                    <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                        {release_type}
+                    </div>
+                    <div className={cn('singles_item-list flex flex-col')}>{sets.length ? 
+                        sets.map((set, index) => {
+                            const { set_name, option_id, set_abbreviation } = set;
+            
+                            const categoryUrl = resourceUrl(
+                                `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
+                            );
+            
+                            return <li className='list-none'>
+                                <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
+                                    {set_name} <small style={{"color":"grey"}}>{set_abbreviation}</small>
+                                </Link>
+                            </li>
+                        })
+                    : ''}</div>
+                </div> : ''}
             </>
         );
     });
 
+    
+
+    const handleActive = (val) => {
+        setActive(val);
+    }
+
     const alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+    const singles = [
+        { id: 1, name: "Amonkhet" },
+        { id: 2, name: "ApocalypseAPC" },
+        { id: 3, name: "AmonkhetAKH" },
+        { id: 4, name: "Rivals of IxalanRIX" }
+    ];
+
+    const groupSinglesFirstLetter = (items) => {
+        return items.reduce((acc, item) => {
+            const firstLetter = item.name.charAt(0).toUpperCase();
+            acc[firstLetter] = acc[firstLetter] || [];
+            acc[firstLetter].push(item);
+            return acc;
+        }, {});
+    }
+
+    const groupedSingles = groupSinglesFirstLetter(singles);
+    const availableLetter = Object.keys(groupedSingles).sort();
 
     return (
         <>
-            {/* <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle> */}
-            <div className='text-[20px] pb-4 pt-5' id={productType == "sealed-products" ? 'expansion-sets' : 'all-sets'}><b>{productType == "sealed-products" ? "Expansion Sets" : "All Sets"}</b></div>
-            {productType != "sealed-products" ? (
-                <>
-                    <div className='flex flex-wrap mb-3'>
-                        {alpha.map((val, index) => 
-                            setsLengthArr[val] > 0 ? (
-                            <a className="py-2 px-3 font-bold mr-1 border" href={"#tab_list_"+val.toLowerCase()}>{val}</a>
-                            ) : (<span className="py-2 px-3 font-bold mr-1 border" style={{"color":"grey"}}>{val}</span>)
-                        )}
+            <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
+                {productType == "sealed-products" ? "Expansion Sets" : "All Sets"}
+            </h1>
+            <div className='border border-gray-100 px-6'>
+                {productType != "sealed-products" ? (
+                    <>
+                        <section className='single_list-indexing-container relative m-auto py-10'>
+                            <ul className='flex gap-2 justify-center flex-wrap'>
+                                <li>
+                                    <button
+                                        className={cn(
+                                            'rounded-md border border-solid border-gray-100 p-2 min-w-[28px]',
+                                            'leading-4 font-medium text-base hover_bg-gray-50'
+                                        )}
+                                        onClick={() => {
+                                            handleActive('all')
+                                        }}
+                                    >
+                                        All
+                                    </button>
+                                </li>
+                                {alpha.map((letter, index) => (
+                                    <li key={index}>
+                                        <button
+                                            className={cn(
+                                                'rounded-md border border-solid border-gray-100 p-2 min-w-[28px]',
+                                                'leading-4 font-medium text-base ',
+                                                setsLengthArr[letter] > 0 ? 'hover_bg-gray-50' : 'bg-gray-100 text-gray-400',
+                                            )}
+                                            onClick={() => {
+                                                handleActive(letter)
+                                            }}
+                                            disabled={setsLengthArr[letter] > 0 ? false : true}
+                                        >
+                                            {letter}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    </>
+                ) : ''}
+                <Divider className="mb-5 px-4" />
+                <section className='singles-container'>
+                    <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>
+                        {availableLetter.map((initialLetter, index) => (
+                            <>
+                                {/* {active === 'all' || active === initialLetter ? (
+                                    <div className='singles_group-wrapper mb-4 px-4 inline-block w-full' key={index}>
+                                        <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                                            {initialLetter}
+                                        </div>
+                                        <div
+                                            className={cn(
+                                                'singles_item-list flex flex-col'
+                                            )}
+                                        >
+                                            {groupedSingles[initialLetter].map((item, index) => (
+                                                <li key={index} className='list-none'>
+                                                    <Link
+                                                        to="/"
+                                                        className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2"
+                                                    >
+                                                        {item.name}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </div>
+                                        
+                                    </div>
+                                ) : null} */}
+                            </>
+                        ))}
+                        {setRelases}
                     </div>
-                </>
-            ) : ''}
-            <div className='flex flex-wrap gap-[30px]'>{setRelases}</div>
+                </section>
+            </div>
+            {/* <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "sealed-products" ? "Expansion Sets" : "All Sets")}</StoreTitle> */}
+            {/* <div className='text-[20px] pb-4 pt-5' id={productType == "sealed-products" ? 'expansion-sets' : 'all-sets'}><b></b></div>
+            
+            <div className='flex flex-wrap gap-[30px]'>{setRelases}</div> */}
         </>
     );
 };
