@@ -10,38 +10,34 @@ import defaultClasses from './collectibleGameSets.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import cn from 'classnames';
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
+import { CollectibleGameSetsShimmer } from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets';
+import ProductSort from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ProductSort';
+import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy';
 
 const CollectibleGameSets = props => {
-
-    const { product_type } = props;
-
     const [active, setActive] = useState('all');
+
+    const [sortBy, setSortBy] = useState({
+        sortText: 'All (A-Z)',
+        value: 'all'
+    });
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useCollectibleGameSets({ product_type });
+    const talonProps = useCollectibleGameSets();
 
     const { error, loading, collectibleGameSets, categoryUrlSuffix, categoryUrlKey, productType } = talonProps;
 
     if (loading && !collectibleGameSets)
-        return '';
-    // return <SellerShimmer />;
+        return <CollectibleGameSetsShimmer />;
     if (error && !collectibleGameSets) return <ErrorView />;
 
-    if (!collectibleGameSets) {
-        return (
-            <h1>
-                <FormattedMessage
-                    id={'seller.notFound'}
-                    defaultMessage={
-                        'Seller Not Found.'
-                    }
-                />
-            </h1>
-        );
+    if (!collectibleGameSets && !loading && !error) {
+        return <CollectibleGameSetsShimmer />;
     }
 
     const setsLengthArr = [];
+    const groupByYear = [];
 
     const setRelases = collectibleGameSets.map((setRelease, index) => {
         const { release_type, sets } = setRelease;
@@ -52,7 +48,9 @@ const CollectibleGameSets = props => {
 
         if (sets.length) {
             sets.map((set, index) => {
-                const { set_name, option_id, set_abbreviation } = set;
+                const { set_name, option_id, set_abbreviation, release_year } = set;
+
+                groupByYear[release_year] = set;
 
                 const categoryUrl = resourceUrl(
                     `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_set[filter]=${set_name},${option_id}`
@@ -79,20 +77,39 @@ const CollectibleGameSets = props => {
         );
     });
 
+    console.log(groupByYear)
+
     const handleActive = (val) => {
         setActive(val);
     }
 
     const alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
+    const availableSortBy = [
+        {
+            'label': 'All (A-Z)',
+            'value': 'all'
+        },
+        {
+            'label': 'Newest',
+            'value': 'newest'
+        },
+        {
+            'label': 'All (Date)',
+            'value': 'all-date'
+        }
+    ];
+
     return (
-        <>
+        <Fragment>
+            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "expansion-sets" ? "Expansion Sets" : "All Sets")}</StoreTitle>
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
-                {productType == "sealed-products" ? "Expansion Sets" : "All Sets"}
+                {productType == "expansion-sets" ? "Expansion Sets" : "All Sets"}
             </h1>
             <div className='border border-gray-100 px-6'>
-                {productType != "sealed-products" ? (
+                {productType != "expansion-sets" ? (
                     <>
+                        <CustomSortBy sortProps={[sortBy, setSortBy]} availableSortMethods={availableSortBy} />
                         <section className='single_list-indexing-container relative m-auto py-10'>
                             <ul className='flex gap-2 justify-center flex-wrap'>
                                 <li>
@@ -136,8 +153,8 @@ const CollectibleGameSets = props => {
                     </div>
                 </section>
             </div>
-        </>
+        </Fragment>
     );
-};
+}
 
 export default CollectibleGameSets;

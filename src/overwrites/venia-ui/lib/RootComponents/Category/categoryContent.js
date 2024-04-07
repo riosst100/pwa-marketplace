@@ -31,6 +31,7 @@ import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
 import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
+import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -94,7 +95,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar filters={filters} />
+        <FilterSidebar children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -174,12 +175,34 @@ const CategoryContent = props => {
     const categoryTitle = categoryName ? categoryName : <Shimmer width={5} />;
 
     const { search } = useLocation();
-    const activeFilters = getFiltersFromSearch(search);
+    const allActiveFilters = getFiltersFromSearch(search);
+
+    const activeFilters = [];
+
+    if (allActiveFilters && allActiveFilters.size > 0) {
+        allActiveFilters.forEach((value, key) => {
+            value.forEach((value) => {
+                const filterArr = value.split(',');
+                
+                const label = filterArr[0];
+                const optionId = filterArr[1];
+                if (key == "card_set") {
+                    activeFilters.push(
+                        {
+                            'label': label
+                        }
+                    )
+                }
+            })
+        });
+    }
+
+    const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
 
     return (
         <Fragment>
-            <Breadcrumbs categoryId={categoryId} />
-            <StoreTitle>{categoryName}</StoreTitle>
+            <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} />
+            <StoreTitle>{currentFilter ? currentFilter : categoryName}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
                     <h1 aria-live="polite" className={classes.title}>
@@ -187,16 +210,17 @@ const CategoryContent = props => {
                             className={classes.categoryTitle}
                             data-cy="CategoryContent-categoryTitle"
                         >
-                            {categoryTitle}
+                            {currentFilter ? currentFilter : categoryTitle}
                         </span>
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                {activeFilters.size <= 0 && category && category.custom_landing_page ? (
+                {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        <SubCategory customLandingPage={category.custom_landing_page} />
+                        <SubCategory children={children} />
+                        {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
-                ) : (
+                {/* ) : ( */}
                     <>
                         {/* <SubCategory filters={filters} children={children} /> */}
                         <FilterTop filters={filters} category={category} />
@@ -232,7 +256,7 @@ const CategoryContent = props => {
                             </div>
                         </div>
                     </>
-                )}
+                {/* )} */}
             </article>
         </Fragment>
     );

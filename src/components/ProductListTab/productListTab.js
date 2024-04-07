@@ -29,7 +29,7 @@ const ProductListTab = props => {
             </span> */}
             <nav>
                 <ul className={classes.buttonContainer}>
-                    <li><button className={allProductClass}>All Products</button></li>
+                    <li><button className={classes.activeFirstButton}>All Products</button></li>
                     <li><button className={classes.middleButton}>Pre Order</button></li>
                     <li><button className={classes.lastButton}>Auctions</button></li>
                 </ul>

@@ -20,6 +20,7 @@ export const GET_COLLECTIBLE_GAME_QUERY = gql`
                 option_id
                 set_abbreviation
                 release_date
+                release_year
                 release_number
             }
         }

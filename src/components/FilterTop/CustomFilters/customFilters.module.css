@@ -20,5 +20,4 @@
     composes: bg-white from global;
     composes: border-gray-100 from global;
     border-radius: 5px;
-    composes: shadow-type-1 from global;
 }

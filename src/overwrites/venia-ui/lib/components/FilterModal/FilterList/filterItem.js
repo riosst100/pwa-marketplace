@@ -71,7 +71,8 @@ FilterItem.propTypes = {
     group: string.isRequired,
     item: shape({
         title: string.isRequired,
-        value: oneOfType([number, string]).isRequired
+        value: oneOfType([number, string]).isRequired,
+        path: string
     }).isRequired,
     onChange: func
 };

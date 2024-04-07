@@ -26,9 +26,11 @@ const FilterItemRadio = props => {
 
     const handleOnchange = useCallback(
         e => {
-            removeGroup({ group });
-            if (e.target.value === item.value) {
-                toggleItem({ group, item });
+            if (group != "category_uid") {
+                removeGroup({ group });
+                if (e.target.value === item.value) {
+                    toggleItem({ group, item });
+                }
             }
             if (typeof onApply === 'function') {
                 onApply(group, item);
@@ -67,7 +69,8 @@ FilterItemRadio.propTypes = {
     item: shape({
         title: string.isRequired,
         value: oneOfType([number, string]).isRequired,
-        label: string
+        label: string,
+        path: string
     }).isRequired,
     onApply: func,
     labels: instanceOf(Map).isRequired

@@ -8,21 +8,39 @@ import { useFilterSidebar } from '@magento/peregrine/lib/talons/FilterSidebar';
 import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 
 const SubCategory = props => {
-    // const { children } = props;
+    const { children } = props;
 
-    // const talonProps = useSubCategory({ children });
+    const talonProps = useSubCategory({ children });
 
     const classes = useStyle(defaultClasses, props.classes);
 
-    const [activeTab, setActiveTab] = useState('singles')
+    const {
+        normalizedData
+    } = talonProps;
+    
+    const subCategory = [];
+    
+    normalizedData && normalizedData.map(({ text, path }, index) => {
+        subCategory.push(
+            <Link
+                key={index}
+                to={resourceUrl(path)}
+            >
+                <li className={classes.item}>{text}</li>
+            </Link>
+        )
+    });
+
+    return subCategory.length ? <ul className={classes.root}>{subCategory}</ul> : '';
+
+    // const [activeTab, setActiveTab] = useState('singles')
 
     return (
         <>
             <ul className={classes.root}>
-                <li className={classes.item} onClick={() => setActiveTab('singles')}>All Sets</li>
-                <li className={classes.item} onClick={() => setActiveTab('sealed-products')}>Expansion Sets</li>
+                <li className={classes.item}>All Sets</li>
+                <li className={classes.item}>Expansion Sets</li>
             </ul>
-            {activeTab == "singles" ? <CollectibleGameSets product_type={"singles"} /> : <CollectibleGameSets product_type={"sealed-products"} />}
         </>
     )
 };

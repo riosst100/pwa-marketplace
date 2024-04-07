@@ -85,12 +85,46 @@ export const useCategoryContent = props => {
         }
     }, [categoryId, getSortMethods]);
 
-    const filters = filterData ? filterData.products.aggregations : null;
+    const rawFilters = filterData ? filterData.products.aggregations : null;
     const items = data ? data.products.items : placeholderItems;
+    const category =
+        categoryData && categoryData.categories.items.length
+            ? categoryData.categories.items[0]
+            : null;
     const children =
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].children
             : null;
+
+    const filters = [];
+
+    rawFilters && rawFilters.map((filter, index) => {
+
+        const filterOptions = [];
+        let label = filter.label;
+        if (filter.attribute_code == "category_uid") {
+            children && children.map((category, index) => {
+                filterOptions.push({
+                    'label': category.name,
+                    'value': category.uid,
+                    'path': category.url_path
+                });
+            });
+
+            label = category ? category.name : label;
+        }
+
+        const newFilter = {
+            attribute_code: filter.attribute_code,
+            count: filter.count,
+            label: label,
+            position: filter.position,
+            options: filterOptions.length ? filterOptions : filter.options
+        };
+
+        filters.push(newFilter);
+    });
+
     const attributesBlock = categoryData && categoryData.categories.items.length
     ? categoryData.categories.items[0].attributes_block
     : null;
@@ -102,10 +136,7 @@ export const useCategoryContent = props => {
         ? data.products.page_info.total_pages
         : null;
     const totalCount = data ? data.products.total_count : null;
-    const category =
-        categoryData && categoryData.categories.items.length
-            ? categoryData.categories.items[0]
-            : null;
+    
     const categoryName =
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].name

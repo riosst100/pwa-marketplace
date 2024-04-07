@@ -20,16 +20,18 @@ const CurrentFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                elements.push(
-                    <li key={key} className={classes.item}>
-                        <CurrentFilter
-                            group={group}
-                            item={item}
-                            removeItem={removeItem}
-                            onRemove={onRemove}
-                        />
-                    </li>
-                );
+                if (group != "card_set") {
+                    elements.push(
+                        <li key={key} className={classes.item}>
+                            <CurrentFilter
+                                group={group}
+                                item={item}
+                                removeItem={removeItem}
+                                onRemove={onRemove}
+                            />
+                        </li>
+                    );
+                }
             }
         }
 
