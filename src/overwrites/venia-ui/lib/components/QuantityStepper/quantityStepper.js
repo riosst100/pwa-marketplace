@@ -52,7 +52,7 @@ const QuantityStepper = props => {
                     })}
                     className={cn(
                         classes.button_decrement,
-                        '!h-full min-w-[40px] min-h-[40px]'
+                        '!h-full min-w-[40px] min-h-[40px] !rounded-l-md !rounded-r-none'
                     )}
                     disabled={isDecrementDisabled}
                     onClick={handleDecrement}
@@ -89,7 +89,7 @@ const QuantityStepper = props => {
                     })}
                     className={cn(
                         classes.button_increment,
-                        '!h-full min-w-[40px] min-h-[40px]'
+                        '!h-full min-w-[40px] min-h-[40px] !rounded-r-md !rounded-l-none'
                     )}
                     disabled={isIncrementDisabled}
                     onClick={handleIncrement}
