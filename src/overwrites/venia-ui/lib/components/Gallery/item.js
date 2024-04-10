@@ -37,7 +37,8 @@ const GalleryItem = props => {
         item,
         itemRef,
         wishlistButtonProps,
-        isSupportedProductType
+        isSupportedProductType,
+        rootClassName
     } = useGalleryItem(props);
 
     const seller = item.seller ? item.seller.name : '';
@@ -92,6 +93,7 @@ const GalleryItem = props => {
             aria-label={name}
             onClick={handleLinkClick}
             to={productLink}
+            className={rootClassName}
         >
             <div data-cy="GalleryItem-root" className={cn(classes.root, 'border border-gray-100 rounded-lg hover_shadow-type-1 ')} ref={itemRef}>
                 <div className={cn('item-product')}>
