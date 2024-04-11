@@ -32,6 +32,8 @@ const Options = React.lazy(() => import('@magento/venia-ui/lib/components/Produc
 import Share from '@riosst100/pwa-marketplace/src/components/SocialMediaShare';
 import PreorderDetail from './components/preOrderDetail';
 import AuctionDetail from './components/auctionDetail';
+import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
+import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -658,13 +660,23 @@ const ProductFullDetail = props => {
                     <Divider />
                 </section>
             </Form>
-            <section className='section_product-details-container my-8'>
+            <section className='section_product-details-container mt-8 mb-10'>
                 <Tabs
                     data={dataTabs}
                     tabContentWrapperClassName='!p-0'
                     hasContent
                     tabWrapperClassName='xl_gap-x-[60px] justify-center'
                 />
+            </section>
+
+            <section className='pt-8 lg_pt-10'>
+                <RelatedProduct />
+            </section>
+
+            <section className='w-[calc(100vw-9px)] relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-gray-50 py-[30px] px-0 mb-10'>
+                <div className='max-w-[1200px] px-2.5 mx-auto relative'>
+                    <CrossSeller />
+                </div>
             </section>
         </Fragment>
     );
