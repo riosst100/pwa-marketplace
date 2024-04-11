@@ -26,9 +26,6 @@ const CustomFilter = props => {
         }
     );
 
-    console.log(group)
-    console.log(item)
-
     const normalizedData = [
         {
             'label': 'Sealed Products',
@@ -46,7 +43,9 @@ const CustomFilter = props => {
 
     const subCategory = [];
 
-    if (group == "card_set") {
+    const customAttributeLandingPage = ['card_set', 'sc_baseball_release'];
+
+    if (customAttributeLandingPage.includes(group)) {
         normalizedData && normalizedData.map(({ label, path }, index) => {
             subCategory.push(
                 <Link

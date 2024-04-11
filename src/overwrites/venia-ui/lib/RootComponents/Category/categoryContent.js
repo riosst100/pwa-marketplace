@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef } from 'react';
+import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
@@ -32,6 +32,7 @@ import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/Colle
 import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
+import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -65,11 +66,33 @@ const CategoryContent = props => {
         filters,
         items,
         children,
+        parent,
         totalCount,
         totalPagesFromData,
         attributesBlock,
-        category
+        category,
+        virtualCategoryFilters
     } = talonProps;
+
+    const [activeLetter, setActiveLetter] = useState('all')
+
+    const handleActiveLetter = (val) => {
+        setActiveLetter(val);
+    }
+
+    const galleryItems = [];
+
+    useMemo(() => {
+            items && items.map((item, index) => {
+                if (item) {
+                    const firstLetter = item.name.charAt(0).toUpperCase();
+                    if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
+                        return galleryItems.push(item);
+                    }
+                }
+            }),
+        [items, activeLetter]
+    });
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
@@ -125,11 +148,11 @@ const CategoryContent = props => {
     ) : null;
 
     const categoryResultsHeading =
-        totalCount > 0 ? (
+    galleryItems.length > 0 ? (
             <FormattedMessage
                 id={'categoryContent.resultCount'}
                 values={{
-                    count: totalCount
+                    count: galleryItems.length
                 }}
                 defaultMessage={'{count} Results'}
             />
@@ -147,9 +170,9 @@ const CategoryContent = props => {
         }
 
         const gallery = totalPagesFromData ? (
-            <Gallery items={items} />
+            <Gallery items={galleryItems} activeLetter={activeLetter} />
         ) : (
-            <GalleryShimmer items={items} />
+            <GalleryShimmer items={galleryItems} />
         );
 
         const pagination = totalPagesFromData ? (
@@ -169,7 +192,8 @@ const CategoryContent = props => {
         isLoading,
         items,
         pageControl,
-        totalPagesFromData
+        totalPagesFromData,
+        activeLetter
     ]);
 
     const categoryTitle = categoryName ? categoryName : <Shimmer width={5} />;
@@ -186,7 +210,7 @@ const CategoryContent = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
-                if (key == "card_set") {
+                if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
                             'label': label
@@ -217,13 +241,14 @@ const CategoryContent = props => {
                 </div>
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        <SubCategory children={children} />
+                        {currentFilter && <AlphaFilter items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
+                        <SubCategory parent={parent} children={children} />
                         {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
                 {/* ) : ( */}
                     <>
                         {/* <SubCategory filters={filters} children={children} /> */}
-                        <FilterTop filters={filters} category={category} />
+                        <FilterTop filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
                         {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
                         {/* <section className='category_brand-slider my-5'>
                             <BrandSlider />

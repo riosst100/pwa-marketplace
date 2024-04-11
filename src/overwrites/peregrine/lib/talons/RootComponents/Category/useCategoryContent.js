@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLazyQuery, useQuery } from '@apollo/client';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
@@ -26,10 +26,22 @@ export const useCategoryContent = props => {
     const {
         getCategoryContentQuery,
         getProductFiltersByCategoryQuery,
-        getCategoryAvailableSortMethodsQuery
+        getCategoryAvailableSortMethodsQuery,
+        getStoreConfigQuery
     } = operations;
 
     const placeholderItems = Array.from({ length: pageSize }).fill(null);
+    
+    const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
+        fetchPolicy: 'cache-and-network'
+    });
+
+    const virtualCategoryFilters = useMemo(() => {
+        if (storeConfigData) {
+            const data = storeConfigData.storeConfig.custommarketplace_plp_filters_virtualcategory;
+            return data ? data.split(',') : [];
+        }
+    }, [storeConfigData]);
 
     const [getFilters, { data: filterData }] = useLazyQuery(
         getProductFiltersByCategoryQuery,
@@ -174,6 +186,7 @@ export const useCategoryContent = props => {
         children,
         parent,
         attributesBlock,
-        category
+        category,
+        virtualCategoryFilters
     };
 };

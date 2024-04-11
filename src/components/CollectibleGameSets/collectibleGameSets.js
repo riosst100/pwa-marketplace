@@ -77,7 +77,7 @@ const CollectibleGameSets = props => {
         );
     });
 
-    console.log(groupByYear)
+    // console.log(groupByYear)
 
     const handleActive = (val) => {
         setActive(val);
@@ -100,11 +100,18 @@ const CollectibleGameSets = props => {
         }
     ];
 
+    let title = "All Sets";
+    if (productType == "expansion-sets") {
+        title = "Expansion Sets";
+    } else if (productType == "artist") {
+        title = "Artist";
+    }
+
     return (
         <Fragment>
-            <StoreTitle>{"Magic: The Gathering" + " | " + (productType == "expansion-sets" ? "Expansion Sets" : "All Sets")}</StoreTitle>
+            <StoreTitle>{title}</StoreTitle>
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
-                {productType == "expansion-sets" ? "Expansion Sets" : "All Sets"}
+                {title}
             </h1>
             <div className='border border-gray-100 px-6'>
                 {productType != "expansion-sets" ? (

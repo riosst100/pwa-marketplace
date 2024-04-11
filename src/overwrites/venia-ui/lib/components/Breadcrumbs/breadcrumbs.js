@@ -76,6 +76,7 @@ const Breadcrumbs = props => {
         currentProduct ? (
             filterBreadcrumbsElement.push(
                 <Link
+                    key={index}
                     className={classes.link}
                     to={resourceUrl(currentCategoryPath)}
                     onClick={handleClick}
@@ -85,10 +86,10 @@ const Breadcrumbs = props => {
             )
         ) : (
             filterBreadcrumbsElement.push(
-                <>
+                <span key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                </>
+                </span>
             )
         );
     });

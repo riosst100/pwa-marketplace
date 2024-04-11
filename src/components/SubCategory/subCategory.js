@@ -1,14 +1,12 @@
 import { useSubCategory } from '@riosst100/pwa-marketplace/src/talons/SubCategory/useSubCategory';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import defaultClasses from './subCategory.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import { useFilterSidebar } from '@magento/peregrine/lib/talons/FilterSidebar';
-import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 
 const SubCategory = props => {
-    const { children } = props;
+    const { children, parent } = props;
 
     const talonProps = useSubCategory({ children });
 
@@ -17,32 +15,35 @@ const SubCategory = props => {
     const {
         normalizedData
     } = talonProps;
+
+    const maxSubCategory = 7;
     
     const subCategory = [];
     
     normalizedData && normalizedData.map(({ text, path }, index) => {
-        subCategory.push(
-            <Link
-                key={index}
-                to={resourceUrl(path)}
-            >
-                <li className={classes.item}>{text}</li>
-            </Link>
-        )
+        if (index < maxSubCategory) {
+            subCategory.push(
+                <Link
+                    key={index}
+                    to={resourceUrl(path)}
+                >
+                    <li className={classes.item}>{text}</li>
+                </Link>
+            )
+        }
     });
 
+    if (normalizedData.length > maxSubCategory) {
+        subCategory.push(
+            <Link
+                to={resourceUrl('/')}
+            >
+                <li className={classes.item}>{"More " + parent[0].name}</li>
+            </Link>
+        )
+    }
+
     return subCategory.length ? <ul className={classes.root}>{subCategory}</ul> : '';
-
-    // const [activeTab, setActiveTab] = useState('singles')
-
-    return (
-        <>
-            <ul className={classes.root}>
-                <li className={classes.item}>All Sets</li>
-                <li className={classes.item}>Expansion Sets</li>
-            </ul>
-        </>
-    )
 };
 
 export default SubCategory;

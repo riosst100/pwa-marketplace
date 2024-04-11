@@ -20,7 +20,9 @@ const CurrentFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                if (group != "card_set") {
+                const customAttributeLandingPage = ['card_set', 'sc_baseball_release'];
+
+                if (!customAttributeLandingPage.includes(group)) {
                     elements.push(
                         <li key={key} className={classes.item}>
                             <CurrentFilter
