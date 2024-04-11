@@ -64,7 +64,7 @@ const MegaMenuItem = props => {
     const arrow = <ArrowDown2 className='ml-2 stroke-current' size="14" color={textPrimary} variant="Outline" />;
 
     const children = useMemo(() => {
-        return category.children.length ? (
+        return category.children.length || category.name == "Lego" ? (
             <Submenu
                 isFocused={isFocused}
                 subMenuState={subMenuState}
@@ -87,7 +87,7 @@ const MegaMenuItem = props => {
         categoryUrlSuffix,
         onNavigate
     ]);
-
+    
     const maybeDownArrowIcon = category.children.length ? (
         <ArrowDown2 className='ml-2' size={12} color={textPrimary} variant="Outline" />
     ) : null;
@@ -133,7 +133,7 @@ const MegaMenuItem = props => {
                 onClick={onNavigate}
             >
                 {category.name}
-                {maybeDownArrowIcon}
+                {/* {maybeDownArrowIcon} */}
             </Link>
             {children}
         </div>

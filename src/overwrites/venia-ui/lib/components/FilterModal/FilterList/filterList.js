@@ -245,7 +245,7 @@ const FilterList = props => {
 
 FilterList.defaultProps = {
     onApply: null,
-    itemCountToShow: 2
+    itemCountToShow: 5
 };
 
 FilterList.propTypes = {

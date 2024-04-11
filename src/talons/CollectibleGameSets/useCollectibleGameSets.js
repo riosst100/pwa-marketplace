@@ -23,16 +23,20 @@ export const useCollectibleGameSets = props => {
         nextFetchPolicy: 'cache-first'
     });
 
-    const slug = pathname.split('/').pop();
-    const productUrlSuffix = storeConfigData?.storeConfig?.product_url_suffix;
-    const categoryUrlKey = productUrlSuffix ? slug.replace(productUrlSuffix, '') : slug;
+    const pathnameArr = pathname.split('/');
+
+    const categoryUrlKey = pathnameArr[pathnameArr.length - 2].replace('.html','');
+    const productType = pathnameArr[pathnameArr.length - 1].replace('.html','');
+    
+    const categoryUrlSuffix = storeConfigData?.storeConfig?.category_url_suffix;
 
     const { error, loading, data } = useQuery(getCollectibleGameQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first',
         skip: !storeConfigData,
         variables: {
-            categoryUrlKey
+            categoryUrlKey: categoryUrlKey,
+            productType: productType
         }
     });
 
@@ -44,7 +48,6 @@ export const useCollectibleGameSets = props => {
         }
         
         const collectibleGameSets = data.collectibleGameSets;
-
         if (!collectibleGameSets) {
             return null;
         }
@@ -52,7 +55,6 @@ export const useCollectibleGameSets = props => {
         return collectibleGameSets;
     }, [data, categoryUrlKey]);
 
-    // Update the page indicator if the GraphQL query is in flight.
     useEffect(() => {
         setPageLoading(isBackgroundLoading);
     }, [isBackgroundLoading, setPageLoading]);
@@ -60,6 +62,9 @@ export const useCollectibleGameSets = props => {
     return {
         error,
         loading,
-        collectibleGameSets
+        collectibleGameSets,
+        categoryUrlSuffix,
+        categoryUrlKey,
+        productType
     };
 };

@@ -99,7 +99,7 @@ module.exports = targets => {
     {
       exact: true,
       name: "CollectibleGameSetsPage",
-      pattern: "/games/collectible-game/:urlKey/sets",
+      pattern: "/games/collectible-game/:urlKey/:productType",
       path: require.resolve("./components/CollectibleGameSetsPage/index.js"),
       authed: false,
     },

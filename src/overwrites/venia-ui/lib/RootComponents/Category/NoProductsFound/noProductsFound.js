@@ -62,16 +62,3 @@ const NoProductsFound = props => {
 };
 
 export default NoProductsFound;
-
-NoProductsFound.propTypes = {
-    categoryId: number,
-    classes: shape({
-        root: string,
-        title: string,
-        list: string,
-        categories: string,
-        listItem: string,
-        image: string,
-        imageContainer: string
-    })
-};

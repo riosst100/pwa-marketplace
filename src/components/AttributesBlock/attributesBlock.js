@@ -41,10 +41,10 @@ const AttributesBlock = props => {
         });
 
         result.push(
-            <>
+            <span key={index}>
                 <div className={classes.title}>{label}</div>
                 <ul className={classes.root}>{itemsResult}</ul>
-            </>
+            </span>
         )
     });
 

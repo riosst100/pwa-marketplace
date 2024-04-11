@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef } from 'react';
+import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
@@ -28,10 +28,18 @@ import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/s
 import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
+import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
+import { useLocation } from 'react-router-dom';
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
+import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
+import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
     import('@magento/venia-ui/lib/components/FilterSidebar')
+);
+const FilterTop = React.lazy(() =>
+    import('@riosst100/pwa-marketplace/src/components/FilterTop')
 );
 
 const CategoryContent = props => {
@@ -58,11 +66,33 @@ const CategoryContent = props => {
         filters,
         items,
         children,
+        parent,
         totalCount,
         totalPagesFromData,
         attributesBlock,
-        category
+        category,
+        virtualCategoryFilters
     } = talonProps;
+
+    const [activeLetter, setActiveLetter] = useState('all')
+
+    const handleActiveLetter = (val) => {
+        setActiveLetter(val);
+    }
+
+    const galleryItems = [];
+
+    useMemo(() => {
+            items && items.map((item, index) => {
+                if (item) {
+                    const firstLetter = item.name.charAt(0).toUpperCase();
+                    if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
+                        return galleryItems.push(item);
+                    }
+                }
+            }),
+        [items, activeLetter]
+    });
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
@@ -88,7 +118,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar filters={filters} />
+        <FilterSidebar children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -118,11 +148,11 @@ const CategoryContent = props => {
     ) : null;
 
     const categoryResultsHeading =
-        totalCount > 0 ? (
+    galleryItems.length > 0 ? (
             <FormattedMessage
                 id={'categoryContent.resultCount'}
                 values={{
-                    count: totalCount
+                    count: galleryItems.length
                 }}
                 defaultMessage={'{count} Results'}
             />
@@ -140,9 +170,9 @@ const CategoryContent = props => {
         }
 
         const gallery = totalPagesFromData ? (
-            <Gallery items={items} />
+            <Gallery items={galleryItems} activeLetter={activeLetter} />
         ) : (
-            <GalleryShimmer items={items} />
+            <GalleryShimmer items={galleryItems} />
         );
 
         const pagination = totalPagesFromData ? (
@@ -162,15 +192,41 @@ const CategoryContent = props => {
         isLoading,
         items,
         pageControl,
-        totalPagesFromData
+        totalPagesFromData,
+        activeLetter
     ]);
 
     const categoryTitle = categoryName ? categoryName : <Shimmer width={5} />;
 
+    const { search } = useLocation();
+    const allActiveFilters = getFiltersFromSearch(search);
+
+    const activeFilters = [];
+
+    if (allActiveFilters && allActiveFilters.size > 0) {
+        allActiveFilters.forEach((value, key) => {
+            value.forEach((value) => {
+                const filterArr = value.split(',');
+                
+                const label = filterArr[0];
+                const optionId = filterArr[1];
+                if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
+                    activeFilters.push(
+                        {
+                            'label': label
+                        }
+                    )
+                }
+            })
+        });
+    }
+
+    const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
+
     return (
         <Fragment>
-            <Breadcrumbs categoryId={categoryId} />
-            <StoreTitle>{categoryName}</StoreTitle>
+            <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} />
+            <StoreTitle>{currentFilter ? currentFilter : categoryName}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
                     <h1 aria-live="polite" className={classes.title}>
@@ -178,43 +234,54 @@ const CategoryContent = props => {
                             className={classes.categoryTitle}
                             data-cy="CategoryContent-categoryTitle"
                         >
-                            {categoryTitle}
+                            {currentFilter ? currentFilter : categoryTitle}
                         </span>
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                <SubCategory children={children} />
-                <AttributesBlock category={category} attributesBlock={attributesBlock} />
-                {/* <section className='category_brand-slider my-5'>
-                    <BrandSlider />
-                </section> */}
-                <div className={classes.contentWrapper}>
-                    <div ref={sidebarRef} className={classes.sidebar}>
-                        <Suspense fallback={<FilterSidebarShimmer />}>
-                            {shouldRenderSidebarContent ? sidebar : null}
-                        </Suspense>
-                    </div>
-                    <div className={classes.categoryContent}>
-                        <div className={cn(classes.heading)}>
-                            {maybeProductsTabContainer}
-                            <div className={classes.headerButtons}>
-                                {maybeFilterButtons}
-                                {maybeSortButton}
+                {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
+                    <>
+                        {currentFilter && <AlphaFilter items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
+                        <SubCategory parent={parent} children={children} />
+                        {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
+                    </>
+                {/* ) : ( */}
+                    <>
+                        {/* <SubCategory filters={filters} children={children} /> */}
+                        <FilterTop filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
+                        {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
+                        {/* <section className='category_brand-slider my-5'>
+                            <BrandSlider />
+                        </section> */}
+                        <div className={classes.contentWrapper}>
+                            <div ref={sidebarRef} className={classes.sidebar}>
+                                <Suspense fallback={<FilterSidebarShimmer />}>
+                                    {shouldRenderSidebarContent ? sidebar : null}
+                                </Suspense>
                             </div>
-                            {maybeSortContainer}
-                        </div>
-                        <div className={cn(classes.heading)}>
-                            <div
-                                data-cy="CategoryContent-categoryInfo"
-                                className={classes.categoryInfo}
-                            >
-                                {categoryResultsHeading}
+                            <div className={classes.categoryContent}>
+                                <div className={cn(classes.heading)}>
+                                    {maybeProductsTabContainer}
+                                    <div className={classes.headerButtons}>
+                                        {maybeFilterButtons}
+                                        {maybeSortButton}
+                                    </div>
+                                    {maybeSortContainer}
+                                </div>
+                                <div className={cn(classes.heading)}>
+                                    <div
+                                        data-cy="CategoryContent-categoryInfo"
+                                        className={classes.categoryInfo}
+                                    >
+                                        {categoryResultsHeading}
+                                    </div>
+                                </div>
+                                {content}
+                                <Suspense fallback={null}>{filtersModal}</Suspense>
                             </div>
                         </div>
-                        {content}
-                        <Suspense fallback={null}>{filtersModal}</Suspense>
-                    </div>
-                </div>
+                    </>
+                {/* )} */}
             </article>
         </Fragment>
     );

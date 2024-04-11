@@ -34,7 +34,7 @@ const CurrentFilter = props => {
         <span className={classes.root} data-cy="CurrentFilter-root">
             <Trigger
                 action={handleClick}
-                ariaLabel={ariaLabel}
+                aria-label={ariaLabel}
                 data-cy="CurrentFilter-trigger"
             >
                 <Icon size={14} src={Remove} />

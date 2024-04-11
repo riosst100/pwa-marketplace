@@ -77,19 +77,18 @@ const SubmenuColumn = props => {
                 <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
                     {customMenuItems.length ? (
                         <>
-                            <div
-                                // {...keyboardProps}
+                            <Link
+                                {...keyboardProps}
                                 className={isActive ? classes.linkActive : classes.link}
                                 data-cy="MegaMenu-SubmenuColumn-link"
+                                to={categoryUrl}
                                 onClick={() => {
-                                    toggleCustomMenu();
+                                    handleCloseSubMenu();
+                                    onNavigate();
                                 }}
                             >
                                 {name}
-                                {/* {arrow} */}
-                            </div>
-                            {/* {showCustomMenu ? customSubMenus : ''} */}
-                            {customSubMenus}
+                            </Link>
                         </>
                     ) : (
                         <Link

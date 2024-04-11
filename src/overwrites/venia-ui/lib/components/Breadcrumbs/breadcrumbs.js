@@ -10,7 +10,8 @@ import Shimmer from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/comp
 import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Breadcrumbs/breadcrumbs.module.css';
 import { ArrowRight2 } from 'iconsax-react';
 import cn from 'classnames';
-
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Breadcrumbs! Generates a sorted display of category links.
@@ -21,7 +22,7 @@ import cn from 'classnames';
 const Breadcrumbs = props => {
     const classes = useStyle(defaultClasses, props.classes);
 
-    const { categoryId, currentProduct } = props;
+    const { categoryId, currentProduct, currentFilter } = props;
 
     const talonProps = useBreadcrumbs({ categoryId });
 
@@ -69,13 +70,37 @@ const Breadcrumbs = props => {
         );
     }
 
+    const filterBreadcrumbsElement = [];
+    
+    currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
+        currentProduct ? (
+            filterBreadcrumbsElement.push(
+                <Link
+                    key={index}
+                    className={classes.link}
+                    to={resourceUrl(currentCategoryPath)}
+                    onClick={handleClick}
+                >
+                    {filter.label}
+                </Link>
+            )
+        ) : (
+            filterBreadcrumbsElement.push(
+                <span key={index}>
+                    <span className={classes.divider}>{DELIMITER}</span>
+                    <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
+                </span>
+            )
+        );
+    });
+
     // If we have a "currentProduct" it means we're on a PDP so we want the last
     // category text to be a link. If we don't have a "currentProduct" we're on
     // a category page so it should be regular text.
-    const currentCategoryLink = currentProduct ? (
+    const currentCategoryLink = currentProduct || currentFilter && currentFilter.length ? (
         <Link
             className={classes.link}
-            to={resourceUrl(currentCategoryPath)}
+            to={'/'+resourceUrl(currentCategoryPath)}
             onClick={handleClick}
         >
             {currentCategory}
@@ -90,7 +115,7 @@ const Breadcrumbs = props => {
             <span className={classes.text}>{currentProduct}</span>
         </Fragment>
     ) : null;
-
+    
     return (
         <div className={classes.root} aria-live="polite" aria-busy="false">
             <Link className={classes.link} to="/">
@@ -99,6 +124,7 @@ const Breadcrumbs = props => {
             {links}
             <span className={classes.divider}>{DELIMITER}</span>
             {currentCategoryLink}
+            {filterBreadcrumbsElement}
             {currentProductNode}
         </div>
     );

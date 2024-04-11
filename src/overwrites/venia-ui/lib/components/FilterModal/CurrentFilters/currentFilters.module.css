@@ -16,4 +16,6 @@
     composes: float-left from global;
     composes: pb-0 from global;
     composes: pl-0 from global;
+    composes: pr-2 from global;
+    composes: pt-2 from global;
 }

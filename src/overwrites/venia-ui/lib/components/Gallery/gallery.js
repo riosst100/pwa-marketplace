@@ -14,7 +14,7 @@ import { useGallery } from '@magento/peregrine/lib/talons/Gallery/useGallery';
  * @params {Array} props.items an array of items to render
  */
 const Gallery = props => {
-    const { items } = props;
+    const { items, activeLetter } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const talonProps = useGallery();
     const { storeConfig } = talonProps;
@@ -25,6 +25,10 @@ const Gallery = props => {
                 if (item === null) {
                     return <GalleryItemShimmer key={index} />;
                 }
+
+                const firstLetter = item.name.charAt(0).toUpperCase();
+
+                if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
                 return (
                     <GalleryItem
                         key={item.id}
@@ -32,8 +36,9 @@ const Gallery = props => {
                         storeConfig={storeConfig}
                     />
                 );
+                }
             }),
-        [items, storeConfig]
+        [items, storeConfig, activeLetter]
     );
 
     return (

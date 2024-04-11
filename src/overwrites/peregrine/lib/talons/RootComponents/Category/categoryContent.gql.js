@@ -29,6 +29,13 @@ export const GET_CATEGORY_CONTENT = gql`
                 description
                 url_key
                 url_path
+                allowed_filters {
+                    code
+                }
+                custom_subcategory {
+                    name
+                    path
+                }
                 attributes_block {
                     label
                     code
@@ -71,8 +78,20 @@ export const GET_CATEGORY_AVAILABLE_SORT_METHODS = gql`
     }
 `;
 
+export const GET_STORE_CONFIG_DATA = gql`
+    query GetStoreConfigForBreadcrumbs {
+        # eslint-disable-next-line @graphql-eslint/require-id-when-available
+        storeConfig {
+            store_code
+            custommarketplace_plp_filters_virtualcategory
+        }
+    }
+`;
+
+
 export default {
     getCategoryContentQuery: GET_CATEGORY_CONTENT,
     getProductFiltersByCategoryQuery: GET_PRODUCT_FILTERS_BY_CATEGORY,
-    getCategoryAvailableSortMethodsQuery: GET_CATEGORY_AVAILABLE_SORT_METHODS
+    getCategoryAvailableSortMethodsQuery: GET_CATEGORY_AVAILABLE_SORT_METHODS,
+    getStoreConfigQuery: GET_STORE_CONFIG_DATA
 };

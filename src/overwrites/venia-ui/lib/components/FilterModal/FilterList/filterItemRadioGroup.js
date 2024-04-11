@@ -76,7 +76,8 @@ FilterItemRadioGroup.propTypes = {
     items: arrayOf(
         shape({
             title: string.isRequired,
-            value: oneOfType([number, string]).isRequired
+            value: oneOfType([number, string]).isRequired,
+            path: string
         })
     ).isRequired,
     onApply: func,

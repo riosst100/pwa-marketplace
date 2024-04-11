@@ -10,6 +10,8 @@ import FilterBlock from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/
 import defaultClasses from './filterSidebar.module.css';
 import { Filter } from 'iconsax-react';
 import cn from 'classnames';
+import { useHistory } from 'react-router-dom';
+
 
 const SCROLL_OFFSET = 150;
 
@@ -19,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen } = props;
+    const { filters, filterCountToOpen, allowedFilters } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -52,25 +54,59 @@ const FilterSidebar = props => {
         [handleApply, filterRef]
     );
 
+    const history = useHistory();
+
+    const handleCategoryApplyFilter = useCallback(
+        (...args) => {
+            // const filterElement = filterRef.current;
+            // if (
+            //     filterElement &&
+            //     typeof filterElement.getBoundingClientRect === 'function'
+            // ) {
+                // const filterTop = filterElement.getBoundingClientRect().top;
+                // const windowScrollY =
+                //     window.scrollY + filterTop - SCROLL_OFFSET;
+                // window.scrollTo(0, windowScrollY);
+            // }
+
+            history.push('/'+args[1].path+'.html');
+
+            if (args[0] != "category_uid") {
+                handleApply(...args);
+            }
+        },
+        [handleApply, filterRef]
+    );
+
+    const allowedFiltersArr = [];
+
+    allowedFilters.length && allowedFilters.map((val, index) => {
+        allowedFiltersArr.push(val.code);
+    });
+
     const filtersList = useMemo(
         () =>
             Array.from(filterItems, ([group, items], iteration) => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-                return (
-                    <FilterBlock
-                        key={group}
-                        filterApi={filterApi}
-                        filterState={blockState}
-                        filterFrontendInput={frontendInput}
-                        group={group}
-                        items={items}
-                        name={groupName}
-                        onApply={handleApplyFilter}
-                        initialOpen={iteration < filterCountToOpen}
-                    />
-                );
+                if (!allowedFiltersArr.length && group != "category_uid" || allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
+                    
+
+                    return (
+                        <FilterBlock
+                            key={group}
+                            filterApi={filterApi}
+                            filterState={blockState}
+                            filterFrontendInput={frontendInput}
+                            group={group}
+                            items={items}
+                            name={groupName}
+                            onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
+                            initialOpen={iteration < filterCountToOpen}
+                        />
+                    );
+                }
             }),
         [
             filterApi,
@@ -124,7 +160,7 @@ const FilterSidebar = props => {
                     filterState={filterState}
                     onRemove={handleApplyFilter}
                 />
-                {clearAll}
+                {/* {clearAll} */}
                 <ul className={classes.blocks}>{filtersList}</ul>
             </div>
         </aside>
