@@ -14,12 +14,14 @@ import GalleryItemShimmer from './item.shimmer';
 import defaultClasses from './item.module.css';
 import WishlistGalleryButton from '@magento/venia-ui/lib/components/Wishlist/AddToListButton';
 
+import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 import AddToCartButton from './addToCartButton';
 // eslint-disable-next-line no-unused-vars
 import Rating from '@magento/venia-ui/lib/components/Rating';
 import cn from 'classnames';
 import { Verify } from 'iconsax-react';
 import Star from './star';
+
 
 // The placeholder image is 4:5, so we should make sure to size our product
 // images appropriately.
@@ -96,7 +98,8 @@ const GalleryItem = props => {
             className={rootClassName}
         >
             <div data-cy="GalleryItem-root" className={cn(classes.root, 'border border-gray-100 rounded-lg hover_shadow-type-1 ')} ref={itemRef}>
-                <div className={cn('item-product')}>
+                <div className={cn('item-product relative z-[1]')}>
+                    <ProductLabel />
                     <Link
                         aria-label={name}
                         onClick={handleLinkClick}

@@ -34,6 +34,7 @@ import PreorderDetail from './components/preOrderDetail';
 import AuctionDetail from './components/auctionDetail';
 import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
 import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
+import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -422,7 +423,8 @@ const ProductFullDetail = props => {
                 data-cy="ProductFullDetail-root"
                 onSubmit={handleAddToCart}
             >
-                <section className={classes.leftContainer}>
+                <section className={cn(classes.leftContainer, 'relative')}>
+                    <ProductLabel />
                     <Carousel images={mediaGalleryEntries} />
                     <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
                         <Suspense fallback={null}>
