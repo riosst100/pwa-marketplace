@@ -9,6 +9,9 @@ import { Meta } from '@magento/venia-ui/lib/components/Head';
 import { GET_PAGE_SIZE } from './category.gql';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { useIntl } from 'react-intl';
+import ShopBy from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy';
+import SubCategoryPage from '@riosst100/pwa-marketplace/src/components/CustomSubCategoryPage/subCategoryPage';
+import ShopBySets from '@riosst100/pwa-marketplace/src/components/ShopBySets/shopBySets';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -18,6 +21,12 @@ const MESSAGES = new Map().set(
 const Category = props => {
     const { uid } = props;
     const { formatMessage } = useIntl();
+
+    const { location } = globalThis;
+
+    const query = new URLSearchParams(location.search);
+    const shopby = query.get('shopby') || null;
+    const showSubcategory = query.get('show_subcategory') || null;
 
     const talonProps = useCategory({
         id: uid,
@@ -62,15 +71,31 @@ const Category = props => {
     return (
         <Fragment>
             <Meta name="description" content={metaDescription} />
-            <CategoryContent
+            {showSubcategory ? (
+                <SubCategoryPage
                 categoryId={uid}
-                classes={classes}
-                data={categoryData}
-                isLoading={loading}
-                pageControl={pageControl}
-                sortProps={sortProps}
-                pageSize={pageSize}
-            />
+                isLoading={loading} />
+            ) : (
+                shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : (shopby ? (
+                    <ShopBy
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} />
+                ) : (
+                    <CategoryContent
+                    categoryId={uid}
+                    classes={classes}
+                    data={categoryData}
+                    isLoading={loading}
+                    pageControl={pageControl}
+                    sortProps={sortProps}
+                    pageSize={pageSize}
+                    />
+                ))
+            )}
         </Fragment>
     );
 };

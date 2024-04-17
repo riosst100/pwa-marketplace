@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom';
 const Breadcrumbs = props => {
     const classes = useStyle(defaultClasses, props.classes);
 
-    const { categoryId, currentProduct, currentFilter } = props;
+    const { categoryId, currentProduct, customPage, currentFilter } = props;
 
     const talonProps = useBreadcrumbs({ categoryId });
 
@@ -85,7 +85,18 @@ const Breadcrumbs = props => {
                 </Link>
             )
         ) : (
-            filterBreadcrumbsElement.push(
+            customPage ? (
+                filterBreadcrumbsElement.push(
+                    <Link
+                        key={index}
+                        className={classes.link}
+                        to={resourceUrl(currentCategoryPath)}
+                        onClick={handleClick}
+                    >
+                        {filter.label}
+                    </Link>
+                )
+            ) : filterBreadcrumbsElement.push(
                 <span key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
@@ -97,7 +108,7 @@ const Breadcrumbs = props => {
     // If we have a "currentProduct" it means we're on a PDP so we want the last
     // category text to be a link. If we don't have a "currentProduct" we're on
     // a category page so it should be regular text.
-    const currentCategoryLink = currentProduct || currentFilter && currentFilter.length ? (
+    const currentCategoryLink = customPage || currentProduct || currentFilter && currentFilter.length ? (
         <Link
             className={classes.link}
             to={'/'+resourceUrl(currentCategoryPath)}
@@ -115,6 +126,13 @@ const Breadcrumbs = props => {
             <span className={classes.text}>{currentProduct}</span>
         </Fragment>
     ) : null;
+
+    const customPageNode = customPage ? (
+        <Fragment>
+            <span className={classes.divider}>{DELIMITER}</span>
+            <span className={classes.text}>{customPage}</span>
+        </Fragment>
+    ) : null;
     
     return (
         <div className={classes.root} aria-live="polite" aria-busy="false">
@@ -126,6 +144,7 @@ const Breadcrumbs = props => {
             {currentCategoryLink}
             {filterBreadcrumbsElement}
             {currentProductNode}
+            {customPageNode}
         </div>
     );
 };

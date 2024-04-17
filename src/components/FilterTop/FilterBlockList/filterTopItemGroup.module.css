@@ -2,7 +2,7 @@
     composes: flex from global;
     composes: flex-wrap from global;
     composes: mt-3 from global;
-    composes: gap-[15px] from global;
+    composes: gap-[10px] from global;
     margin-bottom: 10px;
     justify-content: center;
 }

@@ -116,14 +116,7 @@ module.exports = targets => {
       pattern: "/brand",
       path: require.resolve("./components/BrandLandingPage/index.js"),
       authed: false,
-    },
-    {
-      exact: true,
-      name: "MtgSinglesPage",
-      pattern: "/mtg-singles",
-      path: require.resolve("./components/MtgSinglesPage/index.js"),
-      authed: false,
-    },
+    }
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation

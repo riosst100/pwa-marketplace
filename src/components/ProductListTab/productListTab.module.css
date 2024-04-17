@@ -24,7 +24,6 @@
 }
 
 .activeButton {
-    composes: button;
     color: white;
     background-color: #4E31DB;
 }

@@ -75,6 +75,7 @@ const CategoryContent = props => {
     } = talonProps;
 
     const [activeLetter, setActiveLetter] = useState('all')
+    const [activeTab, setActiveTab] = useState('all');
 
     const handleActiveLetter = (val) => {
         setActiveLetter(val);
@@ -85,14 +86,46 @@ const CategoryContent = props => {
     useMemo(() => {
             items && items.map((item, index) => {
                 if (item) {
-                    const firstLetter = item.name.charAt(0).toUpperCase();
+                    let firstLetter = null;
+
+                    const { custom_attributes } = item;
+                    if (custom_attributes) {
+                        let cardName = '';
+                        custom_attributes.some((attribute, index) => {
+                            const { attribute_metadata, entered_attribute_value, selected_attribute_options } = attribute
+                            if (attribute_metadata.code == "card_name") {
+                                cardName = selected_attribute_options.attribute_option[0].label;
+
+                                return true;
+                            }
+
+                            return false;
+                        });
+
+                        if (cardName) {
+                            firstLetter = cardName.charAt(0).toUpperCase();
+                        }
+                    }
+
                     if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
-                        return galleryItems.push(item);
+                        if (activeTab == "preorder") {
+                            const preorderData = item.preorder;
+                            if (preorderData) {
+                                const isPreOrder = preorderData && preorderData.is_preorder ? true : false;
+                                if (isPreOrder) {
+                                    return galleryItems.push(item);
+                                }
+                            }
+                        } else {
+                            return galleryItems.push(item);
+                        }
                     }
                 }
             }),
-        [items, activeLetter]
+        [items, activeLetter, activeTab]
     });
+
+    console.log(galleryItems)
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
@@ -118,7 +151,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
+        <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -142,7 +175,7 @@ const CategoryContent = props => {
     ) : null;
 
     const maybeProductsTabContainer = shouldShowProductListTab ? (
-        <ProductListTab />
+        <ProductListTab filters={filters} activeTab={activeTab} setActiveTab={setActiveTab} />
     ) : shouldShowProductListTabShimmer ? (
         <ProductListTabShimmer />
     ) : null;
@@ -203,6 +236,8 @@ const CategoryContent = props => {
 
     const activeFilters = [];
 
+    let isSingles = false;
+
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
             value.forEach((value) => {
@@ -210,6 +245,9 @@ const CategoryContent = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
+                if (label == "Singles") {
+                    isSingles = true;
+                }
                 if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
@@ -241,7 +279,7 @@ const CategoryContent = props => {
                 </div>
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        {currentFilter && <AlphaFilter items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
+                        {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
                         <SubCategory parent={parent} children={children} />
                         {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
@@ -256,7 +294,7 @@ const CategoryContent = props => {
                         <div className={classes.contentWrapper}>
                             <div ref={sidebarRef} className={classes.sidebar}>
                                 <Suspense fallback={<FilterSidebarShimmer />}>
-                                    {shouldRenderSidebarContent ? sidebar : null}
+                                    {shouldRenderSidebarContent && category ? sidebar : null}
                                 </Suspense>
                             </div>
                             <div className={classes.categoryContent}>

@@ -156,12 +156,13 @@ const CustomSortBy = props => {
         });
 
     return (
-        <div
-            ref={elementRef}
-            className={classes.root}
-            data-cy="CustomSortBy-root"
-            aria-busy="false"
-        >
+        // <div
+        //     ref={elementRef}
+        //     className={classes.root}
+        //     data-cy="CustomSortBy-root"
+        //     aria-busy="false"
+        // >
+        <>
             <Button
                 priority={'low'}
                 classes={{
@@ -181,17 +182,14 @@ const CustomSortBy = props => {
                 </span>
                 <span className={cn(classes.desktopText, 'flex items-center gap-[15px]')}>
                     <span className={classes.sortText}>
-                        <FormattedMessage
-                            id={'productSort.sortByButton'}
-                            defaultMessage={'Sort by'}
-                        />
                         &nbsp;{currentSort.sortText}
                     </span>
                     <ArrowUp2 size={15} className={cn('text-gray-900 transition-all stroke-[#292D32]', expanded ? 'rotate-0' : 'rotate-180')} />
                 </span>
             </Button>
             {sortElements}
-        </div>
+        </>
+        // </div>
     );
 };
 

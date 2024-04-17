@@ -200,29 +200,6 @@ const ProductFullDetail = props => {
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
         <section className={cn(classes.actButton, 'flex gap-x-[30px]')}>
-
-            <Button
-                data-cy="ProductFullDetail-addToCartButton"
-                disabled={isAddToCartDisabled}
-                aria-disabled={isAddToCartDisabled}
-                aria-label={
-                    isEverythingOutOfStock
-                        ? formatMessage({
-                            id: 'productFullDetail.outOfStockProduct',
-                            defaultMessage:
-                                'This item is currently out of stock'
-                        })
-                        : ''
-                }
-                classes={{
-                    content: 'normal-case font-semibold text-[16px]'
-                }}
-                priority="low"
-                type="submit"
-            >
-                Buy Now
-            </Button>
-
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -529,8 +506,8 @@ const ProductFullDetail = props => {
                                     value={productDetails.price.value}
                                 />
                             </p>
-                            <AuctionDetail className="auction_detail-container" />
-                            <PreorderDetail className={'preorder_detail-container'} />
+                            {/* <AuctionDetail className="auction_detail-container" /> */}
+                            <PreorderDetail productDetails={productDetails} className={'preorder_detail-container'} />
                             <small className='shipping-calculation-notes text-gray-200 text-xs'>
                                 Shipping method is calculated on checkout
                             </small>

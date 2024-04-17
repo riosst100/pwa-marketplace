@@ -54,6 +54,11 @@ export const ProductDetailsFragment = gql`
             }
         }
         sku
+        preorder {
+            is_preorder
+            preorder_notes
+            preorder_availability
+        }
         term_and_conditions
         shipping_policy
         return_policy

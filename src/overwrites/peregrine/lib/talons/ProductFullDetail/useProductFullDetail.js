@@ -555,7 +555,8 @@ export const useProductFullDetail = props => {
         sku: product.sku,
         term_and_conditions: product.term_and_conditions,
         shipping_policy: product.shipping_policy,
-        return_policy: product.return_policy
+        return_policy: product.return_policy,
+        preorder: product.preorder
     };
 
     const sellerDetails = {

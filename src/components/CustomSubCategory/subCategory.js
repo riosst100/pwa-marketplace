@@ -24,7 +24,7 @@ const SubCategory = props => {
         subCategory.push(
             <Link
                 key={index}
-                to={resourceUrl(path)}
+                to={path}
             >
                 <li className={classes.item}>{text}</li>
             </Link>

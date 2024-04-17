@@ -21,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen, allowedFilters } = props;
+    const { filters, filterCountToOpen, allowedFilters, hideFilters } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -80,9 +80,9 @@ const FilterSidebar = props => {
 
     const allowedFiltersArr = [];
 
-    allowedFilters.length && allowedFilters.map((val, index) => {
-        allowedFiltersArr.push(val.code);
-    });
+    // allowedFilters && allowedFilters.length && allowedFilters.map((val, index) => {
+    //     allowedFiltersArr.push(val.code);
+    // });
 
     const filtersList = useMemo(
         () =>
@@ -90,7 +90,7 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-                if (!allowedFiltersArr.length && group != "category_uid" || allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
+                // if (!allowedFilters && !allowedFiltersArr.length && group != "category_uid" || allowedFilters && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     
 
                     return (
@@ -106,7 +106,7 @@ const FilterSidebar = props => {
                             initialOpen={iteration < filterCountToOpen}
                         />
                     );
-                }
+                // }
             }),
         [
             filterApi,
@@ -154,14 +154,14 @@ const FilterSidebar = props => {
                         <Filter size={15} className='text-gray-900' />
                     </h2>
                 </div>
+                {hideFilters ? <ul className={classes.blocks}>No filters available.</ul> : <>
                 <CurrentFilters
                     filterApi={filterApi}
                     filterNames={filterNames}
                     filterState={filterState}
                     onRemove={handleApplyFilter}
                 />
-                {/* {clearAll} */}
-                <ul className={classes.blocks}>{filtersList}</ul>
+                <ul className={classes.blocks}>{filtersList}</ul></>}
             </div>
         </aside>
     );

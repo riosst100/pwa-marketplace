@@ -36,7 +36,7 @@ const SubCategory = props => {
     if (normalizedData.length > maxSubCategory) {
         subCategory.push(
             <Link
-                to={resourceUrl('/')}
+                to={resourceUrl('?show_subcategory=1')}
             >
                 <li className={classes.item}>{"More " + parent[0].name}</li>
             </Link>
