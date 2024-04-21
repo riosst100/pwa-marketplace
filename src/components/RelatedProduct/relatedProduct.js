@@ -86,7 +86,7 @@ const relatedProduct = (props) => {
                                 key={item.id}
                                 item={item}
                                 storeConfig={storeConfig}
-                                rootClassName="px-4 block"
+                                rootClassName="px-2 block"
                             />
                         )
                     })}

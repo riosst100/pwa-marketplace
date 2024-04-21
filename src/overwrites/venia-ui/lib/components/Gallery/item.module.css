@@ -1,7 +1,7 @@
 .root {
     composes: content-start from global;
     composes: grid from global;
-    composes: gap-y-2xs from global;
+    /* composes: gap-y-2xs from global; */
     composes: max-w-[315px] from global;
 }
 
