@@ -66,8 +66,8 @@
     line-height: 1.5;
 }
 
-.root p + ol,
-.root p + ul {
+.root p+ol,
+.root p+ul {
     margin-top: 0;
 }
 
