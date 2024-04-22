@@ -98,8 +98,6 @@ export const useFilterTop = props => {
         return disabled;
     }, [pathname]);
 
-    // console.log(introspectionData)
-
     // Get "allowed" filters by intersection of filter attribute codes and
     // schema input field types. This restricts the displayed filters to those
     // that the api will understand.

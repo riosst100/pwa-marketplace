@@ -57,7 +57,7 @@
     composes: button;
     composes: text-colorDefault from global;
     composes: bg-white from global;
-    composes: border-r-0 from global;
+    /* composes: border-l-0 from global; */
     composes: border-gray-100 from global;
     composes: rounded-l-lg from global;
     border-radius: 6px 0px 0px 6px;

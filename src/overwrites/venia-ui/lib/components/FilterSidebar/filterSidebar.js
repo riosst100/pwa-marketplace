@@ -90,6 +90,9 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
+
+                const hideFilters = ['lof_preorder','auction','special_price'];
+                if (!hideFilters.includes(group)) {
                 // if (!allowedFilters && !allowedFiltersArr.length && group != "category_uid" || allowedFilters && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     
 
@@ -106,7 +109,7 @@ const FilterSidebar = props => {
                             initialOpen={iteration < filterCountToOpen}
                         />
                     );
-                // }
+                }
             }),
         [
             filterApi,

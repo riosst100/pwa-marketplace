@@ -552,11 +552,13 @@ export const useProductFullDetail = props => {
         shortDescription: product.short_description,
         name: product.name,
         price: productPrice?.final_price,
+        price_range: product?.price_range,
         sku: product.sku,
         term_and_conditions: product.term_and_conditions,
         shipping_policy: product.shipping_policy,
         return_policy: product.return_policy,
-        preorder: product.preorder
+        preorder: product.preorder,
+        auction_data: product.auction_data
     };
 
     const sellerDetails = {

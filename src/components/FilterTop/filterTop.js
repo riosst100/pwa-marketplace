@@ -84,8 +84,6 @@ const FilterTop = props => {
     // });
     // const allowedFiltersArr = ['card_rarity','card_print_version','card_set', 'card_product_type'];
 
-    // console.log(customFilters)
-
     const filtersList = useMemo(
         () =>
             Array.from(filterItems, ([group, items], iteration) => {

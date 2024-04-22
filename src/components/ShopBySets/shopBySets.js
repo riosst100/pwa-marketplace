@@ -54,7 +54,6 @@ const ShopBySets = props => {
     //     value: 'all'
     // });
 
-    // console.log(currentSort)
 
     const classes = useStyle(defaultClasses);
 
@@ -113,7 +112,6 @@ const ShopBySets = props => {
             })
         }
 
-        // console.log('setsResult: '+setsResult.length);
         let setsResultSplitted = [];
         if (active == release_type || newCollectibleGameSets.length == 1) {
             setsResultSplitted = splitToNChunks(setsResult, 3);
@@ -201,7 +199,6 @@ const ShopBySets = props => {
         title = "By Year";
     }
 
-    console.log(availableGroups)
 
     return (
         <Fragment>

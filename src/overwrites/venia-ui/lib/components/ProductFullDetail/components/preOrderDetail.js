@@ -6,14 +6,11 @@ const preOrderInfo = (props) => {
     const { className, productDetails } = props
 
     const preorderData = productDetails ? productDetails.preorder : null;
-
-    console.log(preorderData)
+    
     const isPreOrder = preorderData && preorderData.is_preorder ? true : false;
     const preOrderNotes = preorderData ? preorderData.preorder_notes : null;
     const preOrderAvailableDate = preorderData ? new Date(preorderData.preorder_availability) : null;
 
-    // console.log(preOrderNotes)
-    // console.log(productDetails)
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
     return isPreOrder ? (

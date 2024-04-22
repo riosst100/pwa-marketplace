@@ -99,7 +99,7 @@ const GalleryItem = props => {
         >
             <div data-cy="GalleryItem-root" className={cn(classes.root, 'border border-gray-100 rounded-lg hover_shadow-type-1 ')} ref={itemRef}>
                 <div className={cn('item-product relative z-[1]')}>
-                    <ProductLabel />
+                    <ProductLabel item={item} />
                     <Link
                         aria-label={name}
                         onClick={handleLinkClick}

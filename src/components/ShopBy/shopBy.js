@@ -102,7 +102,6 @@ const ShopBy = props => {
     //     value: 'all'
     // });
 
-    // console.log(currentSort)
 
     const classes = useStyle(defaultClasses);
 

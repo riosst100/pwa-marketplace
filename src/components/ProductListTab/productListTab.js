@@ -1,9 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './productListTab.module.css';
 import { useFilterSidebar } from '@magento/peregrine/lib/talons/FilterSidebar';
+import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTop/CurrentTopFilters/currentTopFilter';
 
 const ProductListTab = props => {
 
@@ -12,30 +13,11 @@ const ProductListTab = props => {
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
+        filterState,
         handleApply
     } = talonProps;
 
-    const { toggleItem, removeGroup, removeItem } = filterApi;
-
-    const filterRef = useRef();
-
-    const handleApplyFilter = useCallback(
-        (...args) => {
-            const filterElement = filterRef.current;
-            if (
-                filterElement &&
-                typeof filterElement.getBoundingClientRect === 'function'
-            ) {
-                const filterTop = filterElement.getBoundingClientRect().top;
-                const windowScrollY =
-                    window.scrollY + filterTop - SCROLL_OFFSET;
-                window.scrollTo(0, windowScrollY);
-            }
-
-            handleApply(...args);
-        },
-        [handleApply, filterRef]
-    );
+    const { toggleItem, removeItem } = filterApi;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -51,7 +33,7 @@ const ProductListTab = props => {
         },
         {
             'label': 'Sale',
-            'value': 'sale'
+            'value': 'special_price'
         },
         {
             'label': 'Pre Order',
@@ -63,24 +45,40 @@ const ProductListTab = props => {
         }
     ];
 
-    const handleClick = useCallback(
-        group => {
-            setActiveTab(group);
+    const handleClickremove = useCallback((group, item) => {
+        removeItem({ group, item });
+        if (typeof handleApply === 'function') {
+            handleApply(group, item);
+        }
+    }, [removeItem, handleApply]);
+
+    const handleToggleItem = useCallback((group, item) => {
+        toggleItem({ group, item });
+        if (typeof handleApply === 'function') {
+            handleApply(group, item);
+        }
+    }, [toggleItem, handleApply]);
+
+    const handleClick = (targetGroup) => {
+            setActiveTab(targetGroup);
 
             const item = { value: "1", label: 'Yes', title: 'Yes' };
 
-            productTabs.map(({ value: toRemoveGroup }, index) => {
-                removeItem({ toRemoveGroup, item });
-            })
+            for (const [group, items] of filterState) {
+                for (const item of items) {
+                    const { title, value } = item || {};
+                    const key = `${group}::${title}_${value}`;
 
-            toggleItem({group, item});
-
-            if (typeof handleApplyFilter === 'function') {
-                handleApplyFilter(group, item);
+                    if (productTabs.some(e => e.value === group)) {
+                        handleClickremove(group, item)
+                    }
+                }
             }
-        },
-        [handleApplyFilter, removeGroup, toggleItem]
-    );
+
+            if (targetGroup != "all") {
+                handleToggleItem(targetGroup, item)
+            }
+        }
 
     return (
         <div className={classes.root} aria-busy="true">

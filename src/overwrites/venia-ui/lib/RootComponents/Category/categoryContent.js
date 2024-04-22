@@ -108,24 +108,12 @@ const CategoryContent = props => {
                     }
 
                     if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
-                        if (activeTab == "preorder") {
-                            const preorderData = item.preorder;
-                            if (preorderData) {
-                                const isPreOrder = preorderData && preorderData.is_preorder ? true : false;
-                                if (isPreOrder) {
-                                    return galleryItems.push(item);
-                                }
-                            }
-                        } else {
-                            return galleryItems.push(item);
-                        }
+                        return galleryItems.push(item);
                     }
                 }
             }),
         [items, activeLetter, activeTab]
     });
-
-    console.log(galleryItems)
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
@@ -174,7 +162,7 @@ const CategoryContent = props => {
         <SortedByContainerShimmer />
     ) : null;
 
-    const maybeProductsTabContainer = shouldShowProductListTab ? (
+    const maybeProductsTabContainer = !isLoading ? (
         <ProductListTab filters={filters} activeTab={activeTab} setActiveTab={setActiveTab} />
     ) : shouldShowProductListTabShimmer ? (
         <ProductListTabShimmer />

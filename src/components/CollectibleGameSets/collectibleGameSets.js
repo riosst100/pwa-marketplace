@@ -51,15 +51,11 @@ const CollectibleGameSets = props => {
     //     value: 'all'
     // });
 
-    // console.log(currentSort)
-
     const classes = useStyle(defaultClasses);
 
     const talonProps = useCollectibleGameSets({ searchQuery, setActive, currentSort });
 
     const { error, loading, collectibleGameSets, categoryUrlSuffix, categoryUrlKey, productType, filteredCollectibleGameSets, availableGroups } = talonProps;
-
-    console.log(availableGroups)
 
     if (loading && !collectibleGameSets)
         return <CollectibleGameSetsShimmer />;

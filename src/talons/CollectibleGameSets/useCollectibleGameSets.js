@@ -27,8 +27,6 @@ export const useCollectibleGameSets = props => {
         nextFetchPolicy: 'cache-first'
     });
 
-    // console.log(sortby)
-
     const pathnameArr = pathname.split('/');
 
     const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
@@ -58,8 +56,6 @@ export const useCollectibleGameSets = props => {
             return null;
         }
 
-        // console.log(sortby)
-
         const sortbyData = [];
         if (sortby != 'all') {
             collectibleGameSets.map((setRelease, index) => {
@@ -71,7 +67,6 @@ export const useCollectibleGameSets = props => {
                             // groupingSetsByYear.splice(release_year, 0, set);
                             const result = sortbyData.find(item => item.release_type === release_year);
 
-                            // console.log(result)
                             // groupingSetsByYear[release_year] = set;
                             if (result) {
                                 result.sets.push(set)
@@ -94,8 +89,6 @@ export const useCollectibleGameSets = props => {
 
     const availableGroups = collectibleGameSets && collectibleGameSets.length ? collectibleGameSets.map(({ release_type }) => release_type) : [];
 
-    // console.log(collectibleGameSets)
-
     const filteredCollectibleGameSets = useMemo(() => {
         if (!collectibleGameSets) {
             return null;
@@ -108,8 +101,6 @@ export const useCollectibleGameSets = props => {
             setActive('all')
 
             collectibleGameSets.map(({ release_type, sets }, index) => {
-
-                // console.log(sets)
                 const newSets = sets.filter(function(set) {
                     return set.set_name.search(new RegExp(searchQuery, "i")) != -1 || set.set_abbreviation.search(new RegExp(searchQuery, "i")) != -1 || release_type.search(new RegExp(searchQuery, "i")) != -1;
                     // return set.set_name.includes(searchQuery);
@@ -122,8 +113,6 @@ export const useCollectibleGameSets = props => {
                     })
                 }
             })
-
-            // console.log(filteredSets)
         }
 
         return searchQuery ? filteredSets : collectibleGameSets;

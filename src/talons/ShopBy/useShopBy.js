@@ -27,10 +27,6 @@ export const useShopBy = props => {
         nextFetchPolicy: 'cache-first'
     });
 
-    
-
-    // // console.log(sortby)
-
     const pathnameArr = pathname.split('/');
     
     const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
@@ -55,20 +51,15 @@ export const useShopBy = props => {
         if (!data) {
             return null;
         }
-
-        // console.log(data)
         
         const rawData = data.shopByData;
         if (!rawData) {
             return null;
         }
-
-        // console.log(rawData)
         
         let options = rawData[0].options;
 
         const mappingData = options.reduce((acc, item) => {
-            // console.log(item)
             let firstLetter = item.label.charAt(0).toUpperCase();
             if (!alpha.includes(firstLetter)) {
                 firstLetter = '#';
@@ -77,10 +68,6 @@ export const useShopBy = props => {
             acc[firstLetter].push(item);
             return acc;
         }, {});
-
-        
-
-        // console.log(mappingData)
 
         const sortbyData = [];
 
@@ -91,15 +78,11 @@ export const useShopBy = props => {
         if (!data) {
             return null;
         }
-
-        // console.log(data)
         
         const rawData = data.shopByData;
         if (!rawData) {
             return null;
         }
-
-        // console.log(rawData)
         
         let options = rawData[0].options;
 
@@ -111,7 +94,6 @@ export const useShopBy = props => {
         }
 
         const mappingData = options.reduce((acc, item) => {
-            // console.log(item)
             let firstLetter = item.label.charAt(0).toUpperCase();
             if (!alpha.includes(firstLetter)) {
                 firstLetter = '#';
@@ -120,10 +102,6 @@ export const useShopBy = props => {
             acc[firstLetter].push(item);
             return acc;
         }, {});
-
-        
-
-        // console.log(mappingData)
 
         const sortbyData = [];
 

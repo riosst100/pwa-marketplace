@@ -21,6 +21,9 @@ export const ProductsFragment = gql`
                 preorder_notes
                 preorder_availability
             }
+            auction_data {
+                is_auction
+            }
             seller {
                 name
             }

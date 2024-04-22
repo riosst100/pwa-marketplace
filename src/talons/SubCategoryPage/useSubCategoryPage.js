@@ -80,7 +80,6 @@ export const useSubCategoryPage = props => {
         }
 
         const mappingData = options.reduce((acc, item) => {
-            console.log(item)
             let firstLetter = item.name.charAt(0).toUpperCase();
             if (!alpha.includes(firstLetter)) {
                 firstLetter = '#';
@@ -92,8 +91,6 @@ export const useSubCategoryPage = props => {
 
         return mappingData;
     }, [children, searchQuery]);
-
-    console.log(dataResult)
 
     const availableGroups = originalDataResult ? Object.keys(originalDataResult).sort() : [];
     const filteredAvailableGroups = dataResult ? Object.keys(dataResult).sort() : [];

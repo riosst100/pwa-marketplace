@@ -12,6 +12,8 @@ import { useIntl } from 'react-intl';
 import ShopBy from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy';
 import SubCategoryPage from '@riosst100/pwa-marketplace/src/components/CustomSubCategoryPage/subCategoryPage';
 import ShopBySets from '@riosst100/pwa-marketplace/src/components/ShopBySets/shopBySets';
+import { useLocation } from 'react-router-dom';
+import SportCardsSets from '@riosst100/pwa-marketplace/src/components/SportCardsSets/sportCardsSets';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -23,6 +25,12 @@ const Category = props => {
     const { formatMessage } = useIntl();
 
     const { location } = globalThis;
+
+    const { pathname } = useLocation();
+
+    const pathnameArr = pathname.split('/');
+
+    const parentCategoryUrlKey = pathnameArr[pathnameArr.length - 2].replace('.html','');
 
     const query = new URLSearchParams(location.search);
     const shopby = query.get('shopby') || null;
@@ -76,7 +84,10 @@ const Category = props => {
                 categoryId={uid}
                 isLoading={loading} />
             ) : (
-                shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets
+                shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : (shopby ? (

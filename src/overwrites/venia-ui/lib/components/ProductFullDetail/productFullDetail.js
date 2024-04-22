@@ -424,7 +424,7 @@ const ProductFullDetail = props => {
                 onSubmit={handleAddToCart}
             >
                 <section className={cn(classes.leftContainer, 'relative')}>
-                    <ProductLabel />
+                    <ProductLabel item={productDetails} />
                     <Carousel images={mediaGalleryEntries} />
                     <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
                         <Suspense fallback={null}>
@@ -508,7 +508,7 @@ const ProductFullDetail = props => {
                                     value={productDetails.price.value}
                                 />
                             </p>
-                            {/* <AuctionDetail className="auction_detail-container" /> */}
+                            <AuctionDetail productDetails={productDetails} className="auction_detail-container" />
                             <PreorderDetail productDetails={productDetails} className={'preorder_detail-container'} />
                             <small className='shipping-calculation-notes text-gray-200 text-xs'>
                                 Shipping method is calculated on checkout

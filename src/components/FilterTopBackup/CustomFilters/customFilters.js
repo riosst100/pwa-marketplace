@@ -49,7 +49,6 @@ const CustomFilters = props => {
         return elements;
     }, [filterState, removeItem]);
 
-    // console.log(activeFilters)\\
 
     // const handleClick = useCallback(() => {
     //     removeItem({ group, item });
