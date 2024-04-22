@@ -97,7 +97,14 @@ const GalleryItem = props => {
             to={productLink}
             className={rootClassName}
         >
-            <div data-cy="GalleryItem-root" className={cn(classes.root, 'border border-gray-100 rounded-lg hover_shadow-type-1 ')} ref={itemRef}>
+            <div
+                data-cy="GalleryItem-root"
+                className={cn(
+                    classes.root,
+                    'border border-gray-100 rounded-lg hover_shadow-type-1 bg-white min-h-[388px]'
+                )}
+                ref={itemRef}
+            >
                 <div className={cn('item-product relative z-[1]')}>
                     <ProductLabel item={item} />
                     <Link
@@ -125,7 +132,7 @@ const GalleryItem = props => {
                     <Link
                         onClick={handleLinkClick}
                         to={productLink}
-                        className={classes.name}
+                        className={cn(classes.name, 'xs_!no-underline')}
                         data-cy="GalleryItem-name"
                     >
                         <span>{name}</span>
