@@ -71,6 +71,7 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
+    console.log("🚀 ~ ProductFullDetail ~ talonProps:", talonProps)
 
     const { formatMessage } = useIntl();
 
@@ -519,18 +520,32 @@ const ProductFullDetail = props => {
                         )}
                     >
                         <div className='flex flex-col gap-y-5 max-w-[448px]'>
-                            <p
-                                data-cy="ProductFullDetail-productPrice"
-                                className={cn(
-                                    classes.productPrice,
-                                    'text-[32px] font-semibold leading-[32px] mb-0',
-                                )}
-                            >
-                                <Price
-                                    currencyCode={productDetails.price.currency}
-                                    value={productDetails.price.value}
-                                />
-                            </p>
+                            <div className='flex flex-col gap-y-3'>
+                                <p
+                                    data-cy="ProductFullDetail-productPrice"
+                                    className={cn(
+                                        classes.productPrice,
+                                        'text-[32px] font-semibold leading-[32px] mb-0',
+                                    )}
+                                >
+                                    <Price
+                                        currencyCode={productDetails.price.currency}
+                                        value={productDetails.price.value}
+                                    />
+                                </p>
+                                <p
+                                    data-cy="ProductFullDetail-productOldPrice"
+                                    className={cn(
+                                        classes.productPrice,
+                                        'text-lg font-normal leading-none text-gray-400 mb-0 line-through',
+                                    )}
+                                >
+                                    <Price
+                                        currencyCode={productDetails.price.currency}
+                                        value={productDetails.price.value}
+                                    />
+                                </p>
+                            </div>
                             <AuctionDetail className="auction_detail-container" />
                             <PreorderDetail className={'preorder_detail-container'} />
                             <small className='shipping-calculation-notes text-gray-200 text-xs'>
