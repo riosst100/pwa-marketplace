@@ -20,7 +20,7 @@ const SubCategory = props => {
     
     const subCategory = [];
     
-    normalizedData && normalizedData.map(({ text, path }, index) => {
+    normalizedData && normalizedData.length && normalizedData.map(({ text, path }, index) => {
         if (index < maxSubCategory) {
             subCategory.push(
                 <Link

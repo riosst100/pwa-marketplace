@@ -70,37 +70,60 @@ const Breadcrumbs = props => {
         );
     }
 
+    // console.log(currentFilter)
+
     const filterBreadcrumbsElement = [];
+
+    const lastIndex = currentFilter ? currentFilter.length - 1 : 0;
+    // const filterpath = ;
     
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
+        console.log(filter)
         currentProduct ? (
             filterBreadcrumbsElement.push(
+                <>
+                <span className={classes.divider}>{DELIMITER}</span>
                 <Link
                     key={index}
                     className={classes.link}
-                    to={resourceUrl(currentCategoryPath)}
+                    to={resourceUrl('/'+currentCategoryPath)}
                     onClick={handleClick}
                 >
                     {filter.label}
                 </Link>
+                </>
             )
         ) : (
             customPage ? (
                 filterBreadcrumbsElement.push(
+                    <>
+                    <span className={classes.divider}>{DELIMITER}</span>
                     <Link
                         key={index}
                         className={classes.link}
-                        to={resourceUrl(currentCategoryPath)}
+                        to={resourceUrl('/'+currentCategoryPath)}
                         onClick={handleClick}
                     >
                         {filter.label}
                     </Link>
+                    </>
                 )
             ) : filterBreadcrumbsElement.push(
+                index == lastIndex ?
                 <span key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                </span>
+                </span> : <>
+                    <span className={classes.divider}>{DELIMITER}</span>
+                    <Link
+                        key={index}
+                        className={classes.link}
+                        to={resourceUrl('/'+currentCategoryPath+'?' + filter.code + '[filter]=' + filter.label + ',' + filter.option_id)}
+                        onClick={handleClick}
+                    >
+                        {filter.label}
+                    </Link>
+                    </>
             )
         );
     });

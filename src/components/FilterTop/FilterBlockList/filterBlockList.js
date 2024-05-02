@@ -12,7 +12,8 @@ const FilterBlockList = props => {
         items,
         onApply,
         filterNames,
-        originalFilterState
+        originalFilterState,
+        search
     } = props;
 
     const itemElements = useMemo(() => {
@@ -27,6 +28,7 @@ const FilterBlockList = props => {
                 items={items}
                 onApply={onApply}
                 labels={labels}
+                search={search}
                 filterNames={filterNames}
                 key={key}
             />

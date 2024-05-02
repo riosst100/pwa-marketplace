@@ -36,7 +36,7 @@ export const useSubCategory = props => {
                 children.length &&
                 children
                     .map(category => ({
-                        text: category.name,
+                        text: category?.name || '',
                         path: getPath(
                             category.url_path,
                             categoryUrlSuffix

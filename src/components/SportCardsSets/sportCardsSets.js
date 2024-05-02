@@ -19,7 +19,7 @@ const SportCardsSets = props => {
 
     const [active, setActive] = useState('all');
     const [activeTab, setActiveTab] = useState('leagues');
-    const [activeFilter, setActiveFilter] = useState('all');
+    const [activeFilter, setActiveFilter] = useState('Major Baseball League');
 
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -62,7 +62,7 @@ const SportCardsSets = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useSportCardsSets({ searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab });
+    const talonProps = useSportCardsSets({ searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab, activeFilter });
 
     const { error, loading, sportCardsSets, categoryUrlSuffix, categoryUrlKey, productType, filteredSportCardsSets, availableGroups, category } = talonProps;
 
@@ -76,13 +76,33 @@ const SportCardsSets = props => {
 
     const setsLengthArr = [];
 
-    const newSportCardsSets = searchQuery ? filteredSportCardsSets : sportCardsSets;
+    const newSportCardsSets = searchQuery || activeFilter != "all" ? filteredSportCardsSets : sportCardsSets;
 
     // useEffect(() => {
         if (sportCardsSets && sportCardsSets.length) {
             sportCardsSets.map((setRelease, index) => {
                 const { group, sets } = setRelease;
 
+                // if (sets.length) {
+                //     sets.map((set, index) => {
+                //         // console.log(set)
+                //         if (set.sc_league) {
+                //             if (!availableLeagues.includes(set.sc_league)) {
+                //                 availableLeagues.push(set.sc_league)
+                //             }
+                //         }
+                //     })
+                // }
+
+                setsLengthArr[group] = sets.length
+            })
+        }
+    // }, [sportCardsSets])
+
+    if (sportCardsSets && sportCardsSets.length) {
+        sportCardsSets.map((setRelease, index) => {
+            const { group, sets } = setRelease;
+            if (active == 'all' || active != "all" && active == group) {
                 if (sets.length) {
                     sets.map((set, index) => {
                         // console.log(set)
@@ -93,11 +113,9 @@ const SportCardsSets = props => {
                         }
                     })
                 }
-
-                setsLengthArr[group] = sets.length
-            })
-        }
-    // }, [sportCardsSets])
+            }
+        })
+    }
 
     const splitToNChunks = (array, n) => {
         let result = [];
@@ -109,7 +127,7 @@ const SportCardsSets = props => {
 
     // console.log(category)
 
-    const setRelases = newSportCardsSets.length && newSportCardsSets.map((setRelease, index) => {
+    const setRelases = newSportCardsSets && newSportCardsSets.length && newSportCardsSets.map((setRelease, index) => {
         const { group, sets } = setRelease;
 
         const setsResult = [];
@@ -160,7 +178,8 @@ const SportCardsSets = props => {
         setActive(val);
 
         availableLeagues = [];
-        // 
+
+        setActiveFilter('Major Baseball League')
 
 
         setSearchQuery('')
@@ -171,6 +190,20 @@ const SportCardsSets = props => {
 
         setSearchQuery('')
     }
+
+    useEffect(() => {
+        if (query) {
+            const activeParam = query.get('active') || null;
+            if (activeParam && active == "all") {
+                return handleActive(activeParam)
+            }
+
+            const activeTabParam = query.get('active_tab') || null;
+            if (activeTabParam && activeTab == "leagues") {
+                return handleActiveTab(activeTabParam)
+            }
+        }
+    }, [query]);
 
     const handleActiveFilter = (val) => {
         setActiveFilter(val);
@@ -232,11 +265,13 @@ const SportCardsSets = props => {
 
     // console.log(availableLeagues)
 
+    availableLeagues.sort();
+
 
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "expansion_sets" ? "Expansion Sets" : (shopby == "release_year" ? "By Year" : "By Release/Set")} />
+            <Breadcrumbs categoryId={categoryId} customPage={shopby == "release_year" ? "By Year" : "By Release/Set"} />
             {shopby == "release" ? <ul className={classes.nav}>
                 <li className={classes.nav_item}>
                     <button
@@ -291,7 +326,7 @@ const SportCardsSets = props => {
                 </button>
             </li>
             </ul> : ''}
-            {availableLeagues ? <ul className={classes.nav}>
+            {activeTab == "leagues" && availableLeagues ? <ul className={classes.nav}>
                 {availableLeagues.map((group, index) => (
                 <li key={index} className={classes.nav_item}>
                     <button
@@ -303,15 +338,6 @@ const SportCardsSets = props => {
                     </button>
                 </li>
             ))}
-            <li className={classes.nav_item}>
-                <button
-                    onClick={() => {
-                        handleActiveFilter('all')
-                    }}
-                >
-                    {activeFilter == 'all' ? <b>All</b> : 'All'}
-                </button>
-            </li>
             </ul> : ''}
             <div className='border border-gray-100 px-6'>
                 {sportCardsSets ? (

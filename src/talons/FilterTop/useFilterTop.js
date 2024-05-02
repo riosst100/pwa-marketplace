@@ -173,33 +173,7 @@ export const useFilterTop = props => {
         const frontendInput = new Map();
         const itemsByGroup = new Map();
         const customFiltersMap = [];
-
-        const sortedFilters = sortFiltersArray([...filters]);
-
-        for (const filter of sortedFilters) {
-            const { options, label: name, attribute_code: group } = filter;
-
-            // If this aggregation is not a possible filter, just back out.
-            if (possibleFilters.has(group)) {
-                const items = [];
-
-                // add filter name
-                names.set(group, name);
-
-                // add filter key permutations
-                keys.add(`${group}[filter]`);
-
-                // Add frontend input type
-                frontendInput.set(group, null);
-                // add items
-                for (const { label, value, path } of options) {
-                    items.push({ title: stripHtml(label), value, path });
-                }
-
-                itemsByGroup.set(group, items);
-            }
-        }
-
+        
         if (customFiltersData) {
             customFiltersData.map(({ attribute_code, options }, index) => {
 

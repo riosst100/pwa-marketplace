@@ -20,16 +20,18 @@ const SubCategory = props => {
     
     const subCategory = [];
     
-    normalizedData && normalizedData.map(({ text, path }, index) => {
-        subCategory.push(
-            <Link
-                key={index}
-                to={path}
-            >
-                <li className={classes.item}>{text}</li>
-            </Link>
-        )
-    });
+    if (normalizedData && normalizedData.length) {
+        normalizedData.map(({ text, path }, index) => {
+            subCategory.push(
+                <Link
+                    key={index}
+                    to={path}
+                >
+                    <li className={classes.item}>{text}</li>
+                </Link>
+            )
+        });
+    }
 
     return subCategory.length ? <ul className={classes.root}>{subCategory}</ul> : '';
 

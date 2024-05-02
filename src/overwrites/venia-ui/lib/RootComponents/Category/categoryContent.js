@@ -226,6 +226,8 @@ const CategoryContent = props => {
 
     let isSingles = false;
 
+    // console.log(allActiveFilters)
+
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
             value.forEach((value) => {
@@ -239,7 +241,9 @@ const CategoryContent = props => {
                 if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
-                            'label': label
+                            'label': label,
+                            'code': key,
+                            'option_id': optionId
                         }
                     )
                 }
@@ -249,10 +253,19 @@ const CategoryContent = props => {
 
     const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
 
+    // console.log(activeFilters.length)
+    // console.log(activeFilters.map(u => u.label).join(' - '))
+
+    const title = activeFilters && activeFilters.length ? (
+        activeFilters.length > 1 ? 
+            activeFilters.map(u => u.label).join(': ')
+         : currentFilter
+    ) : categoryName;
+
     return (
         <Fragment>
             <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} />
-            <StoreTitle>{currentFilter ? currentFilter : categoryName}</StoreTitle>
+            <StoreTitle>{title}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
                     <h1 aria-live="polite" className={classes.title}>
@@ -260,7 +273,7 @@ const CategoryContent = props => {
                             className={classes.categoryTitle}
                             data-cy="CategoryContent-categoryTitle"
                         >
-                            {currentFilter ? currentFilter : categoryTitle}
+                            {title}
                         </span>
                     </h1>
                     {categoryDescriptionElement}

@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SHOP_BY_DATA_QUERY = gql`
-    query getShopByData($categoryUrlKey: String!, $attributeCode: String) {
-        shopByData(categoryUrlKey: $categoryUrlKey, attributeCode: $attributeCode) {
+    query getShopByData($categoryUrlKey: String!, $attributeCode: String, $filters: ProductAttributeFilterInput!) {
+        shopByData(categoryUrlKey: $categoryUrlKey, attributeCode: $attributeCode, filters: $filters) {
             label
             count
             attribute_code
@@ -40,8 +40,22 @@ export const GET_CATEGORY_CONTENT = gql`
     }
 `;
 
+export const GET_FILTER_INPUTS = gql`
+    query GetFilterInputsForCategory {
+        __type(name: "ProductAttributeFilterInput") {
+            inputFields {
+                name
+                type {
+                    name
+                }
+            }
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
     getShopByDataQuery: GET_SHOP_BY_DATA_QUERY,
-    getCategoryContentQuery: GET_CATEGORY_CONTENT
+    getCategoryContentQuery: GET_CATEGORY_CONTENT,
+    getFilterInputsQuery: GET_FILTER_INPUTS,
 };

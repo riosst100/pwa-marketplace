@@ -91,7 +91,7 @@ const FilterSidebar = props => {
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
 
-                const hideFilters = ['lof_preorder','auction','special_price'];
+                const hideFilters = ['lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
                 if (!hideFilters.includes(group)) {
                 // if (!allowedFilters && !allowedFiltersArr.length && group != "category_uid" || allowedFilters && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     

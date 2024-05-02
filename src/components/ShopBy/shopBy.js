@@ -89,6 +89,7 @@ const ShopBy = props => {
 
     const [searchQuery, setSearchQuery] = useState('');
 
+    const { search } = useLocation();
     
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: {
         sortText: 'All (A-Z)',
@@ -105,9 +106,9 @@ const ShopBy = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useShopBy({ searchQuery, setActive, currentSort, categoryId, shopby });
+    const talonProps = useShopBy({ searchQuery, active, setActive, currentSort, categoryId, shopby });
 
-    const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category } = talonProps;
+    const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, activeFilters } = talonProps;
 
     if (loading && !dataResult)
         return <ShopByShimmer />;
@@ -127,15 +128,33 @@ const ShopBy = props => {
         return result;
     }
 
-    const setRelases = newAvailableGroups.map((group, index) => {
+    let filterSearchArr = search ? search.split('&') : [];
+    filterSearchArr = filterSearchArr.filter(function(data) {
+        return !data.includes('shopby');
+    })
+    let filterSearch = filterSearchArr.join('&')
+
+    if (!filterSearch.includes('?')) {
+        filterSearch = '?'+filterSearch;
+    }
+
+    let additionalFilter = '';
+    if (shopby == 'sc_brands') {
+        additionalFilter = '&shopby=release&active_tab=brand';
+    }
+
+    const setRelases = newAvailableGroups && newAvailableGroups.length && newAvailableGroups.map((group, index) => {
         const optionsResult = [];
 
         if (active === 'all' || active === group) {
-            dataResult[group].map((option, index) => {
+            dataResult[group] && dataResult[group].length && dataResult[group].map((option, index) => {
                 const { label, value } = option;
 
+                const filter = attributeData.attribute_code + '[filter]=' + label + ',' + value;
+                const params = filterSearch ? filterSearch + '&' + filter + additionalFilter : '?' + filter + additionalFilter;
+
                 const categoryUrl = resourceUrl(
-                    `/${category.url_path}${categoryUrlSuffix || ''}?${attributeData.attribute_code}[filter]=${label},${value}`
+                    `/${category.url_path}${categoryUrlSuffix || ''}${params}`
                 );
 
                 optionsResult.push(<li className='list-none'>
@@ -143,22 +162,38 @@ const ShopBy = props => {
                         {label}
                     </Link>
                 </li>)
-            })
+            });
 
             let optionsResultSplitted = [];
-            if (active == group) {
+            if (newAvailableGroups.length == 1 || active == group) {
                 optionsResultSplitted = splitToNChunks(optionsResult, 3);
             }
 
-            return (
-                <>
-                    {optionsResult && active == "all" ?
+            // console.log(dataResult)
+
+            const all = active == "all" ? (
+                newAvailableGroups.length == 1 ? (
+                    optionsResultSplitted && optionsResultSplitted.length && optionsResultSplitted.map((data, index) => (
+                        <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
+                            {searchQuery && availableGroups.length > 1 && (index == 0 ? <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
+                            <div className='singles_item_group_letter text-xl font-semibold pb-1 mb-2' style={{"marginTop":"35px"}}></div>)}
+                            <div className={cn('singles_item-list flex flex-col')}>{data}</div>
+                        </div>
+                        )
+                    )
+                ) : (
                     <div className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
                         <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
                             {group}
                         </div>
                         <div className={cn('singles_item-list flex flex-col')}>{optionsResult}</div>
-                    </div> : ''}
+                    </div>
+                )
+            ) : '';
+
+            return (
+                <>
+                    {all}
                     {active == group ? optionsResultSplitted && optionsResultSplitted.length && optionsResultSplitted.map((optionsResult, index) =>
                         <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
                             {index == 0 ? <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
@@ -176,10 +211,6 @@ const ShopBy = props => {
 
     const handleActive = (val) => {
         setActive(val);
-
-        // 
-
-
         setSearchQuery('')
     }
 
@@ -189,13 +220,15 @@ const ShopBy = props => {
             'value': 'all'
         }
     ];
+    
+    const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
 
     return (
         <Fragment>
-            <StoreTitle>{attributeData ? 'By ' + attributeData.label : 'Shop By'}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={'By ' + attributeData.label} />
+            <StoreTitle>{title}</StoreTitle>
+            <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
-                {attributeData ? 'By ' + attributeData.label : 'Shop By'}
+                {title}
             </h1>
             <div className='border border-gray-100 px-6'>
                 {dataResult ? (
@@ -206,7 +239,7 @@ const ShopBy = props => {
                         <CustomSortBy sortProps={sortProps} availableSortMethods={availableSortBy} />
                     </div>
                 ) : ''}
-                {productType != "expansion-sets" ? (
+                {shopby != "lego_theme" && shopby != "lego_age_level" && productType != "expansion-sets" ? (
                     <>
                         <section className='single_list-indexing-container relative m-auto pt-5'>
                             <ul className='flex gap-2 justify-center flex-wrap'>
@@ -223,7 +256,7 @@ const ShopBy = props => {
                                         {active == 'all' ? <b>All</b> : 'All'}
                                     </button>
                                 </li>
-                                {alpha.map((letter, index) => (
+                                {alpha && alpha.length && alpha.map((letter, index) => (
                                     <li key={index}>
                                         <button
                                             className={cn(

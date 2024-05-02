@@ -103,7 +103,6 @@ export const useCollectibleGameSets = props => {
             collectibleGameSets.map(({ release_type, sets }, index) => {
                 const newSets = sets.filter(function(set) {
                     return set.set_name.search(new RegExp(searchQuery, "i")) != -1 || set.set_abbreviation.search(new RegExp(searchQuery, "i")) != -1 || release_type.search(new RegExp(searchQuery, "i")) != -1;
-                    // return set.set_name.includes(searchQuery);
                 });
 
                 if (newSets && newSets.length) {

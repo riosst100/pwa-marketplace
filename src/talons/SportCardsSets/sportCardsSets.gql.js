@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SPORT_CARDS_SETS_QUERY = gql`
-    query getSportCardsSets($categoryUrlKey: String!, $setType: String) {
-        sportCardsSets(categoryUrlKey: $categoryUrlKey, setType: $setType) {
+    query getSportCardsSets($categoryUrlKey: String!, $setType: String, $filters: ProductAttributeFilterInput!) {
+        sportCardsSets(categoryUrlKey: $categoryUrlKey, setType: $setType, filters: $filters) {
             group
             sets {
                 set_name
@@ -39,8 +39,22 @@ export const GET_CATEGORY_CONTENT = gql`
     }
 `;
 
+export const GET_FILTER_INPUTS = gql`
+    query GetFilterInputsForCategory {
+        __type(name: "ProductAttributeFilterInput") {
+            inputFields {
+                name
+                type {
+                    name
+                }
+            }
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
     getSportCardsSetsQuery: GET_SPORT_CARDS_SETS_QUERY,
-    getCategoryContentQuery: GET_CATEGORY_CONTENT
+    getCategoryContentQuery: GET_CATEGORY_CONTENT,
+    getFilterInputsQuery: GET_FILTER_INPUTS,
 };

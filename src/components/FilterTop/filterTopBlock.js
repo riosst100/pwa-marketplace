@@ -24,7 +24,8 @@ const FilterTopBlock = props => {
         onApply,
         filterNames,
         initialOpen,
-        originalFilterState
+        originalFilterState,
+        search
     } = props;
 
     const { formatMessage } = useIntl();
@@ -42,6 +43,7 @@ const FilterTopBlock = props => {
             name={name}
             filterFrontendInput={filterFrontendInput}
             group={group}
+            search={search}
             items={items}
             filterNames={filterNames}
             onApply={onApply}
