@@ -17,19 +17,24 @@ import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 const SportCardsSets = props => {
     const { categoryId } = props
 
+    const { location } = globalThis;
+
+    const query = new URLSearchParams(location.search);
+    const activeParam = query.get('active_tab') || null;
+
     const [active, setActive] = useState('all');
-    const [activeTab, setActiveTab] = useState('leagues');
+    const [activeTab, setActiveTab] = useState(activeParam ? activeParam : 'leagues');
     const [activeFilter, setActiveFilter] = useState('Major Baseball League');
+    const [activeBrand, setActiveBrand] = useState('all');
 
     const [searchQuery, setSearchQuery] = useState('');
 
     let availableLeagues = [];
-
-    const { location } = globalThis;
-
-    const query = new URLSearchParams(location.search);
+    let availableBrands = [];
+    
     const shopby = query.get('shopby') || null;
     const setType = query.get('set_type') || null;
+    const brandsFilter = query.get('sc_brands[filter]') || null;
 
     let defaultSort = {
         sortText: 'All (A-Z)',
@@ -54,10 +59,10 @@ const SportCardsSets = props => {
 
     const [currentSort] = sortProps;
 
-    // const [sortBy, setSortBy] = useState({
-    //     sortText: 'All (A-Z)',
-    //     value: 'all'
-    // });
+    const [sortBy, setSortBy] = useState({
+        sortText: 'All (A-Z)',
+        value: 'all'
+    });
 
 
     const classes = useStyle(defaultClasses);
@@ -111,6 +116,14 @@ const SportCardsSets = props => {
                                 availableLeagues.push(set.sc_league)
                             }
                         }
+
+                        if (set.sc_brands) {
+                            if (!availableBrands.includes(set.sc_brands)) {
+                                availableBrands.push(set.sc_brands)
+                            }
+                        }
+
+                        // availableBrands
                     })
                 }
             }
@@ -124,8 +137,6 @@ const SportCardsSets = props => {
         }
         return result;
     }
-
-    // console.log(category)
 
     const setRelases = newSportCardsSets && newSportCardsSets.length && newSportCardsSets.map((setRelease, index) => {
         const { group, sets } = setRelease;
@@ -191,19 +202,32 @@ const SportCardsSets = props => {
         setSearchQuery('')
     }
 
-    useEffect(() => {
-        if (query) {
-            const activeParam = query.get('active') || null;
-            if (activeParam && active == "all") {
-                return handleActive(activeParam)
-            }
+    const activeTabParam = query.get('active_tab') || null;
 
-            const activeTabParam = query.get('active_tab') || null;
-            if (activeTabParam && activeTab == "leagues") {
-                return handleActiveTab(activeTabParam)
-            }
-        }
-    }, [query]);
+    // useEffect(() => {
+        // if (query) {
+            // 
+            // if (activeTabParam) {
+                // if (activeTabParam && activeTab == "leagues") {
+                    
+                    // handleActiveTab(activeTabParam)
+                // }
+            // }
+
+            // const activeParam = query.get('active') || null;
+            // if (activeParam) {
+            //     return handleActive(activeTabParam)
+            // }
+    //         // const activeParam = query.get('active') || null;
+    //         // if (activeParam && activeParam != activeFilter) {
+    //         //     if (activeParam && active == "all") {
+    //                 // return handleActive(activeParam)
+    //         //     }
+    //         // }
+            
+        // }
+    //     return true;
+    // }, [activeTabParam]);
 
     const handleActiveFilter = (val) => {
         setActiveFilter(val);
@@ -224,35 +248,37 @@ const SportCardsSets = props => {
         }
     ];
 
-    if (shopby == "release_year") {
-        availableSortBy = [
-            {
-                'label': 'All (By Year)',
-                'value': 'date'
-            },
-            {
-                'label': 'Latest Sets',
-                'value': 'newest'
-            }
-        ];
+    // if (shopby == "release_year") {
+    //     availableSortBy = [
+    //         {
+    //             'label': 'All (By Year)',
+    //             'value': 'date'
+    //         },
+    //         {
+    //             'label': 'Latest Sets',
+    //             'value': 'newest'
+    //         }
+    //     ];
 
-        // alpha = availableGroups;
-    }
+    //     // alpha = availableGroups;
+    // }
 
-    if (productType == "expansion_sets") {
-        // availableSortBy = [
-        //     {
-        //         'label': 'All (Expansion Sets)',
-        //         'value': 'all'
-        //     },
-        //     {
-        //         'label': 'Latest Sets',
-        //         'value': 'newest'
-        //     }
-        // ];
+    // if (productType == "expansion_sets") {
+    //     // availableSortBy = [
+    //     //     {
+    //     //         'label': 'All (Expansion Sets)',
+    //     //         'value': 'all'
+    //     //     },
+    //     //     {
+    //     //         'label': 'Latest Sets',
+    //     //         'value': 'newest'
+    //     //     }
+    //     // ];
 
-        // alpha = availableGroups
-    }
+    //     // alpha = availableGroups
+    // }
+
+    let brandName = brandsFilter ? brandsFilter.split(',')[0] : '';
 
     let title = "By Release/Set";
     if (activeTab == "year") {
@@ -260,13 +286,10 @@ const SportCardsSets = props => {
     } else if (activeTab == "leagues") {
         title = "By Leagues";
     } else if (activeTab == "brand") {
-        title = "By Brand";
+        title = brandName;
     }
 
-    // console.log(availableLeagues)
-
-    availableLeagues.sort();
-
+    // availableLeagues.sort();
 
     return (
         <Fragment>
@@ -282,7 +305,7 @@ const SportCardsSets = props => {
                         {activeTab == 'year' ? <b>By Year</b> : 'By Year'}
                     </button>
                 </li>
-                <li className={classes.nav_item}>
+                {/* <li className={classes.nav_item}>
                     <button
                         onClick={() => {
                             handleActiveTab('brand')
@@ -290,7 +313,7 @@ const SportCardsSets = props => {
                     >
                         {activeTab == 'brand' ? <b>By Brand</b> : 'By Brand'}
                     </button>
-                </li>
+                </li> */}
                 <li className={classes.nav_item}>
                     <button
                         onClick={() => {
@@ -337,8 +360,32 @@ const SportCardsSets = props => {
                         {activeFilter == group ? <b>{group}</b> : group}
                     </button>
                 </li>
-            ))}
-            </ul> : ''}
+            ))}</ul> : ''}
+            {/* {activeTab == "brand" && availableBrands && availableBrands.length ? <ul className={classes.nav}>
+                {availableBrands.map((group, index) => (
+                <li key={index} className={classes.nav_item}>
+                    <button
+                        onClick={() => {
+                            handleActiveFilter(group)
+                        }}
+                    >
+                        {activeFilter == group ? <b>{group}</b> : group}
+                    </button>
+                </li>
+            ))} */}
+            {/* <li>
+                <button
+                    className={cn(
+                        'rounded-md border border-solid border-gray-100 p-2 min-w-[28px]',
+                        'leading-4 font-medium text-base hover_bg-gray-50'
+                    )}
+                    onClick={() => {
+                        setActiveBrand('all')
+                    }}
+                >
+                    {active == 'all' ? <b>All</b> : 'All'}
+                </button>
+            </li></ul> : ''} */}
             <div className='border border-gray-100 px-6'>
                 {sportCardsSets ? (
                     <div
@@ -393,6 +440,7 @@ const SportCardsSets = props => {
             </div>
         </Fragment>
     );
+    return '';
 }
 
 export default SportCardsSets;

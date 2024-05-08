@@ -20,6 +20,7 @@ export const GET_SPORT_CARDS_SETS_QUERY = gql`
                 option_id
                 release_year
                 sc_league
+                sc_brands
             }
         }
     }

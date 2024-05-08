@@ -40,6 +40,10 @@ export const useFilterTop = props => {
     const history = useHistory();
     const { pathname, search } = useLocation();
 
+    const pathnameArr = pathname.split('/');
+
+    const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
+
     const { data: introspectionData } = useQuery(getFilterInputsQuery);
 
     const filterTypeMap = useMemo(() => {
@@ -72,7 +76,8 @@ export const useFilterTop = props => {
 
         runQuery({
             variables: {
-                filters: newFilters
+                filters: newFilters,
+                categoryUrlKey: categoryUrlKey
             }
         });
     }, [
