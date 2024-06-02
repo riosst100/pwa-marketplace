@@ -41,7 +41,7 @@ const TextInput = props => {
             <Message
                 classes={{
                     root: 'text-[12px] font-normal',
-                    root_error: 'text-[12px] font-normal mt-1 text-red-400'
+                    root_error: 'text-[12px] font-normal mt-1 text-red-400 text-left'
                 }}
                 fieldState={fieldState}
             >

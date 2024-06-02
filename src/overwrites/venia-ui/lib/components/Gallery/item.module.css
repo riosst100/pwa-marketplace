@@ -19,7 +19,7 @@
 .image {
     composes: block from global;
     composes: h-full from global;
-    composes: object-cover from global;
+    composes: object-contain from global;
     composes: w-full from global;
     transition: opacity 512ms ease-out;
 }
