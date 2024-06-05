@@ -106,7 +106,7 @@ const GalleryItem = props => {
                 ref={itemRef}
             >
                 <div className={cn('item-product relative z-[1]')}>
-                    <ProductLabel />
+                    <ProductLabel item={item} />
                     <Link
                         aria-label={name}
                         onClick={handleLinkClick}

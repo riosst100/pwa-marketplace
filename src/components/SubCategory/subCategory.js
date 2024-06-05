@@ -16,11 +16,11 @@ const SubCategory = props => {
         normalizedData
     } = talonProps;
 
-    const maxSubCategory = 7;
+    const maxSubCategory = 10;
     
     const subCategory = [];
     
-    normalizedData && normalizedData.map(({ text, path }, index) => {
+    normalizedData && normalizedData.length && normalizedData.map(({ text, path }, index) => {
         if (index < maxSubCategory) {
             subCategory.push(
                 <Link
@@ -36,7 +36,7 @@ const SubCategory = props => {
     if (normalizedData.length > maxSubCategory) {
         subCategory.push(
             <Link
-                to={resourceUrl('/')}
+                to={resourceUrl('?show_subcategory=1')}
             >
                 <li className={classes.item}>{"More " + parent[0].name}</li>
             </Link>

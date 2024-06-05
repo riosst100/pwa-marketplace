@@ -34,6 +34,9 @@ export const ProductDetailsFragment = gql`
         }
         meta_description
         name
+        special_price
+        special_from_date
+        special_to_date
         price {
             regularPrice {
                 amount {
@@ -48,12 +51,53 @@ export const ProductDetailsFragment = gql`
                     currency
                     value
                 }
+                regular_price {
+                    currency
+                    value
+                }
                 discount {
                     amount_off
                 }
             }
         }
         sku
+        auction_data {
+            is_auction
+            status
+            customer_id
+            starting_price
+            reserve_price
+            days
+            min_qty
+            max_qty
+            start_auction_time
+            stop_auction_time
+            auction_status
+            increment_opt
+            increment_price
+            auto_auction_opt
+            featured_auction
+            buy_it_now
+            max_amount
+            min_amount
+            current_time_stamp
+            continue_time
+            limit_bids
+            time_zone
+            stop_auction_utc_time
+            start_auction_utc_time
+            today_time
+            start_auction_time_stamp
+            stop_auction_time_stamp
+            new_auction_start
+            customer_name
+            max_bids
+        }
+        preorder {
+            is_preorder
+            preorder_notes
+            preorder_availability
+        }
         term_and_conditions
         shipping_policy
         return_policy

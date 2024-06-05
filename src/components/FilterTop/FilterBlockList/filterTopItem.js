@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import defaultClasses from './filterTopItem.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
+import { Link } from 'react-router-dom';
 
 const FilterTopItem = props => {
-    const { filterApi, group, item, onApply, labels, activeFilters } = props;
+    const { filterApi, group, item, onApply, labels, activeFilters, search } = props;
     const { removeGroup, toggleItem } = filterApi;
     const { title, value } = item;
 
@@ -26,10 +27,14 @@ const FilterTopItem = props => {
         [group, item, onApply, removeGroup, toggleItem]
     );
 
-    const element = activeFilters.includes(value) ? (
-        <span className={classes.item}><b>{title}</b></span>
+    const element = group == "shopby" || group == "shopby_with_all" ? (
+        <Link className={classes.item} to={search ? search + '&shopby=' + value : '?shopby=' + value}>{title}</Link>
     ) : (
-        <span className={classes.item} onClick={() =>handleOnchange(value)}>{title}</span>
+        activeFilters.includes(value) ? (
+            <span className={classes.item}><b>{title}</b></span>
+        ) : (
+            <span className={classes.item} onClick={() =>handleOnchange(value)}>{title}</span>
+        )
     )
 
     labels.set(element, label);

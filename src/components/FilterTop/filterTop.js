@@ -1,8 +1,8 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, arrayOf, shape, string, number } from 'prop-types';
 import { useFilterTop } from '@riosst100/pwa-marketplace/src/talons/FilterTop';
-
+import { useLocation } from 'react-router-dom';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import LinkButton from '@magento/venia-ui/lib/components/LinkButton';
 import FilterTopBlock from './filterTopBlock';
@@ -10,6 +10,8 @@ import defaultClasses from './filterTop.module.css';
 import { Filter } from 'iconsax-react';
 import cn from 'classnames';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 
 const SCROLL_OFFSET = 150;
@@ -20,8 +22,8 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterTop = props => {
-    const { filters, filterCountToOpen, allowedFilters } = props;
-    const talonProps = useFilterTop({ filters });
+    const { filters, filterCountToOpen, allowedFilters, category } = props;
+    const talonProps = useFilterTop({ filters, category });
     const {
         filterApi,
         filterItems,
@@ -32,6 +34,21 @@ const FilterTop = props => {
         handleReset,
         customFilters
     } = talonProps;
+
+    const classes = useStyle(defaultClasses, props.classes);
+
+    const [activeSportCardsSetsFilter, setActiveSportCardsSetsFilter] = useState('all');
+    const [activeBaseSetFilter, setActiveBaseSetFilter] = useState('all');
+
+    const { search } = useLocation();
+
+    // const filtersSearch = getFiltersFromSearch(search);
+
+    // console.log(search)
+
+    // filters.forEach((values, key) => {
+    //     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+    // });
 
     const filterRef = useRef();
 
@@ -84,7 +101,9 @@ const FilterTop = props => {
     // });
     // const allowedFiltersArr = ['card_rarity','card_print_version','card_set', 'card_product_type'];
 
-    console.log(customFilters)
+    // console.log(customFilters)
+
+    // console.log(filterItems)
 
     const filtersList = useMemo(
         () =>
@@ -103,6 +122,7 @@ const FilterTop = props => {
                             originalFilterState={filterState}
                             filterFrontendInput={frontendInput}
                             group={group}
+                            search={search}
                             items={items}
                             name={groupName}
                             onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
@@ -124,7 +144,27 @@ const FilterTop = props => {
     );
 
     return (
-        <div>{filtersList}</div>
+        <div>
+            {/* <div className={classes.root}>
+            {sportCardsSetsFilter.map(({label, value}, index) => 
+                activeSportCardsSetsFilter == value ? <span className={classes.item}><b>{label}</b></span> : <span onClick={() => setActiveSportCardsSetsFilter(value)} className={classes.item}>{label}</span>
+            )}
+            </div>
+            <div className={classes.root}>
+            {activeSportCardsSetsFilter == "base_set" && baseSetFilter.map(({label, value}, index) => 
+                activeBaseSetFilter == value ? <span className={classes.item}><b>{label}</b></span> : <span onClick={() => setActiveBaseSetFilter(value)} className={classes.item}>{label}</span>
+            )}
+            </div> */}
+            {filtersList}
+            {/* {activeSportCardsSetsFilter == "inserts_parallel" && (
+                <>
+                    <div className={classes.root}>
+                        <Link to={'?shopby=inserts'} className={classes.item}>Inserts</Link>
+                        <Link to={'?shopby=parallel'} className={classes.item}>Parallel</Link>
+                    </div>
+                </>
+            )} */}
+        </div>
     );
 };
 

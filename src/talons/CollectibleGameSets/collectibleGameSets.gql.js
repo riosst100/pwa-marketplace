@@ -27,7 +27,21 @@ export const GET_COLLECTIBLE_GAME_QUERY = gql`
     }
 `;
 
+export const GET_SPORT_CARDS_SETS_QUERY = gql`
+    query getSportCardsSets($categoryUrlKey: String!, $setType: String) {
+        sportCardsSets(categoryUrlKey: $categoryUrlKey, setType: $setType) {
+            group
+            sets {
+                set_name
+                option_id
+                release_year
+            }
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
-    getCollectibleGameQuery: GET_COLLECTIBLE_GAME_QUERY
+    getCollectibleGameQuery: GET_COLLECTIBLE_GAME_QUERY,
+    getSportCardsSetsQuery: GET_SPORT_CARDS_SETS_QUERY
 };

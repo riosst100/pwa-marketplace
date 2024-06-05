@@ -35,7 +35,6 @@ const SearchBar = React.forwardRef((props, ref) => {
     ];
 
     const handleSelect = (option) => {
-        // console.log('Selected:', option);
     };
 
     return (

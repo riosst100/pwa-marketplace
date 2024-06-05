@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { useEffect, Fragment, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
@@ -29,7 +29,7 @@ import AttributesBlock from '@riosst100/pwa-marketplace/src/components/Attribute
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
 import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
 import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
@@ -49,9 +49,12 @@ const CategoryContent = props => {
         isLoading,
         pageControl,
         sortProps,
-        pageSize
+        pageSize,
+        showSubcategory
     } = props;
     const [currentSort] = sortProps;
+
+    const history = useHistory();
 
     const talonProps = useCategoryContent({
         categoryId,
@@ -74,7 +77,29 @@ const CategoryContent = props => {
         virtualCategoryFilters
     } = talonProps;
 
+    useEffect(() => {
+        if (category) {
+            const urlKey = category.url_key;
+            if (urlKey == "collectible-game") {
+                history.replace('/games/collectible-game/magic-the-gathering.html')
+            }
+
+            if (urlKey == "sport-cards") {
+                history.replace('/cards/sport-cards/baseball.html')
+            }
+
+            if (urlKey == "non-sports-cards") {
+                history.replace('/cards/non-sports-cards/comics.html')
+            }
+
+            if (urlKey == "age-level" || urlKey == "lego" || urlKey == "minifigures" || urlKey == "sub-theme" || urlKey == "theme" || urlKey == "interest") {
+                history.replace('/lego-toys/lego/sets.html')
+            }
+        }
+    }, [category]);
+
     const [activeLetter, setActiveLetter] = useState('all')
+    const [activeTab, setActiveTab] = useState('all');
 
     const handleActiveLetter = (val) => {
         setActiveLetter(val);
@@ -85,13 +110,33 @@ const CategoryContent = props => {
     useMemo(() => {
             items && items.map((item, index) => {
                 if (item) {
-                    const firstLetter = item.name.charAt(0).toUpperCase();
+                    let firstLetter = null;
+
+                    const { custom_attributes } = item;
+                    if (custom_attributes) {
+                        let cardName = '';
+                        custom_attributes.some((attribute, index) => {
+                            const { attribute_metadata, entered_attribute_value, selected_attribute_options } = attribute
+                            if (attribute_metadata.code == "card_name") {
+                                cardName = selected_attribute_options.attribute_option[0].label;
+
+                                return true;
+                            }
+
+                            return false;
+                        });
+
+                        if (cardName) {
+                            firstLetter = cardName.charAt(0).toUpperCase();
+                        }
+                    }
+
                     if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
                         return galleryItems.push(item);
                     }
                 }
             }),
-        [items, activeLetter]
+        [items, activeLetter, activeTab]
     });
 
     const sidebarRef = useRef(null);
@@ -118,7 +163,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
+        <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -141,8 +186,8 @@ const CategoryContent = props => {
         <SortedByContainerShimmer />
     ) : null;
 
-    const maybeProductsTabContainer = shouldShowProductListTab ? (
-        <ProductListTab />
+    const maybeProductsTabContainer = !isLoading ? (
+        <ProductListTab filters={filters} activeTab={activeTab} setActiveTab={setActiveTab} />
     ) : shouldShowProductListTabShimmer ? (
         <ProductListTabShimmer />
     ) : null;
@@ -203,6 +248,12 @@ const CategoryContent = props => {
 
     const activeFilters = [];
 
+    let isSingles = false;
+
+    // console.log(allActiveFilters)
+
+    // console.log(virtualCategoryFilters)
+
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
             value.forEach((value) => {
@@ -210,10 +261,15 @@ const CategoryContent = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
+                if (label == "Singles") {
+                    isSingles = true;
+                }
                 if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
-                            'label': label
+                            'label': label,
+                            'code': key,
+                            'option_id': optionId
                         }
                     )
                 }
@@ -223,10 +279,19 @@ const CategoryContent = props => {
 
     const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
 
+    // console.log(activeFilters.length)
+    // console.log(activeFilters.map(u => u.label).join(' - '))
+
+    let title = activeFilters && activeFilters.length ? (
+        activeFilters.length > 1 ? 
+            activeFilters.map(u => u.label).join(': ')
+         : currentFilter
+    ) : categoryName;
+
     return (
         <Fragment>
             <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} />
-            <StoreTitle>{currentFilter ? currentFilter : categoryName}</StoreTitle>
+            <StoreTitle>{title}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
                     <h1 aria-live="polite" className={classes.title}>
@@ -234,16 +299,16 @@ const CategoryContent = props => {
                             className={classes.categoryTitle}
                             data-cy="CategoryContent-categoryTitle"
                         >
-                            {currentFilter ? currentFilter : categoryTitle}
+                            {title}
                         </span>
                     </h1>
                     {categoryDescriptionElement}
                 </div>
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        {currentFilter && <AlphaFilter items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
+                        {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
                         <SubCategory parent={parent} children={children} />
-                        {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
+                        {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
                 {/* ) : ( */}
                     <>
@@ -256,7 +321,7 @@ const CategoryContent = props => {
                         <div className={classes.contentWrapper}>
                             <div ref={sidebarRef} className={classes.sidebar}>
                                 <Suspense fallback={<FilterSidebarShimmer />}>
-                                    {shouldRenderSidebarContent ? sidebar : null}
+                                    {shouldRenderSidebarContent && category ? sidebar : null}
                                 </Suspense>
                             </div>
                             <div className={classes.categoryContent}>

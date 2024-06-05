@@ -26,9 +26,6 @@ const Gallery = props => {
                     return <GalleryItemShimmer key={index} />;
                 }
 
-                const firstLetter = item.name.charAt(0).toUpperCase();
-
-                if (activeLetter == "all" || activeLetter != "all" && firstLetter == activeLetter) {
                 return (
                     <GalleryItem
                         key={item.id}
@@ -36,7 +33,6 @@ const Gallery = props => {
                         storeConfig={storeConfig}
                     />
                 );
-                }
             }),
         [items, storeConfig, activeLetter]
     );
