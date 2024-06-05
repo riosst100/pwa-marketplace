@@ -63,13 +63,13 @@ const FilterSidebar = props => {
             //     filterElement &&
             //     typeof filterElement.getBoundingClientRect === 'function'
             // ) {
-                // const filterTop = filterElement.getBoundingClientRect().top;
-                // const windowScrollY =
-                //     window.scrollY + filterTop - SCROLL_OFFSET;
-                // window.scrollTo(0, windowScrollY);
+            // const filterTop = filterElement.getBoundingClientRect().top;
+            // const windowScrollY =
+            //     window.scrollY + filterTop - SCROLL_OFFSET;
+            // window.scrollTo(0, windowScrollY);
             // }
 
-            history.push('/'+args[1].path+'.html');
+            history.push('/' + args[1].path + '.html');
 
             if (args[0] != "category_uid") {
                 handleApply(...args);
@@ -80,7 +80,7 @@ const FilterSidebar = props => {
 
     const allowedFiltersArr = [];
 
-    // allowedFilters && allowedFilters.length && allowedFilters.map((val, index) => {
+    // allowedFilters?.length && allowedFilters.map((val, index) => {
     //     allowedFiltersArr.push(val.code);
     // });
 
@@ -93,8 +93,9 @@ const FilterSidebar = props => {
 
                 const hideFilters = ['trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
                 if (!hideFilters.includes(group) && groupName) {
-                // if (!allowedFilters && !allowedFiltersArr.length && group != "category_uid" || allowedFilters && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     
+                // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
+
 
                     return (
                         <FilterBlock

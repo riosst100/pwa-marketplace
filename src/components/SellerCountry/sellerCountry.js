@@ -44,7 +44,7 @@ const SellerCountry = props => {
         <Field
             id={classes.root}
             label={formatMessage({ id: translationId, defaultMessage: label })}
-            classes={{ root: classes.root }}
+        // classes={{ root: classes.root }}
         >
             <Select {...selectProps} id={classes.root} />
         </Field>

@@ -138,10 +138,18 @@ const GalleryItem = props => {
                         <span>{name}</span>
                     </Link>
                     <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
-                        <Price
-                            value={priceSource.value}
-                            currencyCode={priceSource.currency}
-                        />
+                        <p className='font-semibold text-colorDefault !mb-1 !leading-[14px]'>
+                            <Price
+                                value={priceSource.value}
+                                currencyCode={priceSource.currency}
+                            />
+                        </p>
+                        <p className='old-price text-gray-400 text-xs line-through font-normal !mb-0'>
+                            <Price
+                                value={priceSource.value}
+                                currencyCode={priceSource.currency}
+                            />
+                        </p>
                     </div>
 
                     <div data-cy="GalleryItem-Rating" className={cn('flex gap-[5px] items-center mb-2')}>

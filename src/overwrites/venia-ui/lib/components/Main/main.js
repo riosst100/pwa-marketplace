@@ -20,7 +20,7 @@ const Main = props => {
     return (
         <main className={rootClass}>
             <Header />
-            <div className={cn(pageClass, 'main-content-container pb-16')}>{children}</div>
+            <div className={cn(pageClass, 'main-content-container pb-16 !min-h-[50vh]')}>{children}</div>
             <Footer />
         </main>
     );

@@ -1,0 +1,52 @@
+.root {
+    composes: gap-6 from global;
+    composes: grid from global;
+    composes: justify-items-stretch from global;
+    composes: p-[30px] from global;
+}
+
+.message {
+    composes: bg-subtle from global;
+    composes: leading-tight from global;
+    composes: p-xs from global;
+    composes: rounded from global;
+    composes: text-sm from global;
+}
+
+/* TODO @TW: cannot compose */
+.message:empty {
+    display: none;
+}
+
+.actions {
+    composes: gap-xs from global;
+    composes: grid from global;
+    composes: grid-flow-row from global;
+    composes: justify-center from global;
+    composes: mt-xs from global;
+    composes: text-center from global;
+
+    composes: lg_grid-flow-col from global;
+}
+
+.cancelButton {
+    composes: root_lowPriority from '@magento/venia-ui/lib/components/Button/button.module.css';
+}
+
+.submitButton {
+    composes: root_highPriority from '@magento/venia-ui/lib/components/Button/button.module.css';
+
+    composes: col-start-auto from global;
+
+    composes: lg_col-start-2 from global;
+}
+
+.subscribe {
+    composes: -ml-1.5 from global;
+}
+
+.title {
+    composes: capitalize from global;
+    composes: text-lg from global;
+    composes: font-semibold from global;
+}
