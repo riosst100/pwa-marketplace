@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSeller';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
@@ -19,6 +19,9 @@ import {
     Shop,
 } from 'iconsax-react';
 import Image from '@magento/venia-ui/lib/components/Image';
+import LiveChat from '@riosst100/pwa-marketplace/src/components/LiveChat';
+import Button from '@magento/venia-ui/lib/components/Button';
+import cn from 'classnames';
 
 const SellerDetail = props => {
     const talonProps = useSeller({
@@ -63,6 +66,11 @@ const SellerDetail = props => {
             }
         ];
 
+    const [openChat, setOpenChat] = useState(false);
+    const toggleChat = () => {
+        setOpenChat(!openChat);
+    }
+
     return (
         <div className=' py-8'>
             <Slider seller={seller} rootClassname='mb-[30px]' />
@@ -105,14 +113,33 @@ const SellerDetail = props => {
                                     </div>
                                 </div>
                             </button>
-                            <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
+                            {/* <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
                                     <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
                                     <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Chat With Seller
                                     </div>
                                 </div>
-                            </button>
+                            </button> */}
+                            <Button
+                                priority='high'
+                                classes={{
+                                    content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
+                                }}
+                                className={cn(
+                                    "bg-darkblue-900 px-6 py-2 rounded-full text-white border",
+                                    "border-darkblue-900 hover_bg-blue-900 hover_border-blue-900 focus-visible_outline-none"
+                                )}
+                                onClick={toggleChat}
+                            >
+                                <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
+                                <span>
+                                    <FormattedMessage
+                                        id={'seller.chatWithSeller'}
+                                        defaultMessage={'Chat With Seller'}
+                                    />
+                                </span>
+                            </Button>
                             <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#6243fa]">
                                 <Heart color='#6243FA' size={14} variant="Outline" className='stroke-[#6243FA]' />
                             </button>
@@ -142,6 +169,10 @@ const SellerDetail = props => {
                 tabContentWrapperClassName='!p-0'
                 hasContent
                 tabWrapperClassName='xl_gap-x-[60px]'
+            />
+            <LiveChat
+                open={openChat}
+                setOpen={setOpenChat}
             />
         </div>
     )
