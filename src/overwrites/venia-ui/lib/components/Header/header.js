@@ -25,6 +25,9 @@ import cn from 'classnames';
 // const SearchBar = React.lazy(() => import('@magento/venia-ui/lib/components/SearchBar'));
 const SearchBar = React.lazy(() => import('@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SearchBar'));
 
+import { useLogo } from '@riosst100/pwa-marketplace/src/talons/Header/useLogo';
+import Image from '@magento/venia-ui/lib/components/Image';
+
 const Header = props => {
     const {
         handleSearchTriggerClick,
@@ -34,6 +37,15 @@ const Header = props => {
         searchRef,
         searchTriggerRef
     } = useHeader();
+
+    const talonPropsLogo = useLogo();
+    const { data } = talonPropsLogo
+    const baseUrl = data?.storeConfig?.base_media_url;
+    const imageSource = data?.storeConfig?.header_logo_src;
+    const LogoImageSource = `${baseUrl}/logo/${imageSource}`;
+    const IMAGE_HEIGHT = data?.storeConfig?.logo_width || 33;
+    const IMAGE_WIDTH = data?.storeConfig?.logo_height || 170;
+    const IMAGE_ALT = data?.storeConfig?.logo_alt || 'TCG Collective';
 
     const classes = useStyle(defaultClasses, props.classes);
     const rootClass = isSearchOpen ? classes.open : classes.closed;
@@ -75,14 +87,30 @@ const Header = props => {
                     <div className={cn('w-full max-w-[1210px] px-[15px] py-[20px] mx-[auto] flex justify-between items-center')}>
                         <div className='flex'>
                             <NavTrigger />
+
                             <Link
                                 aria-label={title}
                                 to={resourceUrl('/')}
                                 className={''}
                                 data-cy="Header-logoContainer"
                             >
-                                <div className='text-[14px]'><b>TCG Collective</b></div>
-                                <small>Bringing Collectors Together</small>
+                                {imageSource ? (
+                                    <Image
+                                        alt={IMAGE_ALT}
+                                        height={IMAGE_HEIGHT}
+                                        src={LogoImageSource}
+                                        width={IMAGE_WIDTH}
+                                        classes={{
+                                            container: 'logo-wrapper relative'
+                                        }}
+                                    />
+                                ) : (
+                                    <>
+                                        <div className='text-[14px]'><b>TCG Collective</b></div>
+                                        <small>Bringing Collectors Together</small>
+                                    </>
+                                )}
+
                             </Link>
                         </div>
                         <div className='flex flex-auto max-w-[700px]'>
@@ -113,6 +141,13 @@ const Header = props => {
                 hasBeenOffline={hasBeenOffline}
                 isOnline={isOnline}
             />
+            <style jsx>
+                {`
+                    .logo-wrapper>img:first-child {
+                        height: ${IMAGE_HEIGHT}px;
+                    }
+                `}
+            </style>
         </Fragment>
     );
 };

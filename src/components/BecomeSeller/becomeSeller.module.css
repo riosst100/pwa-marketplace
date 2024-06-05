@@ -1,8 +1,8 @@
 .root {
     composes: gap-xs from global;
     composes: justify-items-stretch from global;
-    composes: px-sm from global;
-    composes: py-xs from global;
+    composes: px-[30px] from global;
+    composes: py-[30px] from global;
 }
 
 .message {
