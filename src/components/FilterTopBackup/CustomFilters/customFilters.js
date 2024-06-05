@@ -14,7 +14,7 @@ const CustomFilters = props => {
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
 
-    const talonProps = useCustomFilters({ filters });
+    const talonProps = useCustomFilters({ filters, category });
 
     const { 
         customFiltersData, 
@@ -53,6 +53,8 @@ const CustomFilters = props => {
     // const handleClick = useCallback(() => {
     //     removeItem({ group, item });
     // }, [group, item, removeItem]);
+
+    // console.log(customFiltersData)
 
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { useSportCardsSets } from '@riosst100/pwa-marketplace/src/talons/SportCardsSets/useSportCardsSets';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import defaultClasses from './sportCardsSets.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -47,13 +47,6 @@ const SportCardsSets = props => {
             value: 'date'
         };
     }
-
-    // if (productType == "expansion_sets") {
-    //     defaultSort = {
-    //         sortText: 'All (Expansion Sets)',
-    //         value: 'all'
-    //     };
-    // }
     
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});
 
@@ -84,20 +77,9 @@ const SportCardsSets = props => {
     const newSportCardsSets = searchQuery || activeFilter != "all" ? filteredSportCardsSets : sportCardsSets;
 
     // useEffect(() => {
-        if (sportCardsSets && sportCardsSets.length) {
-            sportCardsSets.map((setRelease, index) => {
+        if (newSportCardsSets && newSportCardsSets.length) {
+            newSportCardsSets.map((setRelease, index) => {
                 const { group, sets } = setRelease;
-
-                // if (sets.length) {
-                //     sets.map((set, index) => {
-                //         // console.log(set)
-                //         if (set.sc_league) {
-                //             if (!availableLeagues.includes(set.sc_league)) {
-                //                 availableLeagues.push(set.sc_league)
-                //             }
-                //         }
-                //     })
-                // }
 
                 setsLengthArr[group] = sets.length
             })
@@ -107,26 +89,17 @@ const SportCardsSets = props => {
     if (sportCardsSets && sportCardsSets.length) {
         sportCardsSets.map((setRelease, index) => {
             const { group, sets } = setRelease;
-            if (active == 'all' || active != "all" && active == group) {
+            // if (active == 'all' || active != "all" && active == group) {
                 if (sets.length) {
                     sets.map((set, index) => {
-                        // console.log(set)
                         if (set.sc_league) {
                             if (!availableLeagues.includes(set.sc_league)) {
                                 availableLeagues.push(set.sc_league)
                             }
                         }
-
-                        if (set.sc_brands) {
-                            if (!availableBrands.includes(set.sc_brands)) {
-                                availableBrands.push(set.sc_brands)
-                            }
-                        }
-
-                        // availableBrands
                     })
                 }
-            }
+            // }
         })
     }
 
@@ -138,6 +111,29 @@ const SportCardsSets = props => {
         return result;
     }
 
+    let shopbyUrl = "release";
+    if (shopby == "sc_baseball_players") {
+        shopbyUrl = "players";
+    }
+
+    if (shopby == "sc_baseball_teams") {
+        shopbyUrl = "teams";
+    }
+
+    const { search } = useLocation();
+
+    let filterSearchArr = search ? search.split('&') : [];
+    filterSearchArr = filterSearchArr.filter(function(data) {
+        return !data.includes('shopby');
+    })
+    let filterSearch = filterSearchArr.join('&')
+
+    if (!filterSearch.includes('?')) {
+        filterSearch = '?'+filterSearch;
+    }
+
+    let additionalFilter = '';
+
     const setRelases = newSportCardsSets && newSportCardsSets.length && newSportCardsSets.map((setRelease, index) => {
         const { group, sets } = setRelease;
 
@@ -147,8 +143,14 @@ const SportCardsSets = props => {
             sets.map((set, index) => {
                 const { set_name, option_id, release_year } = set;
 
+                // const categoryUrl = resourceUrl(
+                //     `/${category?.url_path}${categoryUrlSuffix || ''}?sc_${category?.url_key}_${shopbyUrl}[filter]=${set_name},${option_id}`
+                // );
+                const filter = 'sc_' + category?.url_key + '_' + shopbyUrl + '[filter]=' + set_name + ',' + option_id;
+                const params = filterSearch ? filterSearch + '&' + filter + additionalFilter : '?' + filter + additionalFilter;
+
                 const categoryUrl = resourceUrl(
-                    `/${category?.url_path}${categoryUrlSuffix || ''}?sc_${category?.url_key}_release[filter]=${set_name},${option_id}`
+                    `/${category.url_path}${categoryUrlSuffix || ''}${params}`
                 );
 
                 setsResult.push(<li className='list-none'>
@@ -188,113 +190,50 @@ const SportCardsSets = props => {
     const handleActive = (val) => {
         setActive(val);
 
-        availableLeagues = [];
-
-        setActiveFilter('Major Baseball League')
-
-
         setSearchQuery('')
     }
 
     const handleActiveTab = (val) => {
         setActiveTab(val);
-
         setSearchQuery('')
     }
-
-    const activeTabParam = query.get('active_tab') || null;
-
-    // useEffect(() => {
-        // if (query) {
-            // 
-            // if (activeTabParam) {
-                // if (activeTabParam && activeTab == "leagues") {
-                    
-                    // handleActiveTab(activeTabParam)
-                // }
-            // }
-
-            // const activeParam = query.get('active') || null;
-            // if (activeParam) {
-            //     return handleActive(activeTabParam)
-            // }
-    //         // const activeParam = query.get('active') || null;
-    //         // if (activeParam && activeParam != activeFilter) {
-    //         //     if (activeParam && active == "all") {
-    //                 // return handleActive(activeParam)
-    //         //     }
-    //         // }
-            
-        // }
-    //     return true;
-    // }, [activeTabParam]);
 
     const handleActiveFilter = (val) => {
         setActiveFilter(val);
 
+        setActive('all');
+
         setSearchQuery('')
     }
 
+    const handleSearchQuery = (val) => {
+        setSearchQuery(val)
+        setActive('all')
+    }
+
     let alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
-    let availableSortBy = [
-        {
-            'label': 'All (A-Z)',
-            'value': 'all'
-        },
-        {
-            'label': 'Latest Sets',
-            'value': 'newest'
-        }
-    ];
-
-    // if (shopby == "release_year") {
-    //     availableSortBy = [
-    //         {
-    //             'label': 'All (By Year)',
-    //             'value': 'date'
-    //         },
-    //         {
-    //             'label': 'Latest Sets',
-    //             'value': 'newest'
-    //         }
-    //     ];
-
-    //     // alpha = availableGroups;
-    // }
-
-    // if (productType == "expansion_sets") {
-    //     // availableSortBy = [
-    //     //     {
-    //     //         'label': 'All (Expansion Sets)',
-    //     //         'value': 'all'
-    //     //     },
-    //     //     {
-    //     //         'label': 'Latest Sets',
-    //     //         'value': 'newest'
-    //     //     }
-    //     // ];
-
-    //     // alpha = availableGroups
-    // }
-
+    
     let brandName = brandsFilter ? brandsFilter.split(',')[0] : '';
 
     let title = "By Release/Set";
-    if (activeTab == "year") {
-        title = "By Year";
-    } else if (activeTab == "leagues") {
-        title = "By Leagues";
-    } else if (activeTab == "brand") {
-        title = brandName;
+    if (shopby == "sc_baseball_players") {
+        title = "Player"
+    } else if (shopby == "sc_baseball_teams") {
+        title = "Team";
+    } else {
+        if (activeTab == "year") {
+            title = "By Year";
+        } else if (activeTab == "leagues") {
+            title = "By Leagues";
+        } else if (activeTab == "brand") {
+            title = brandName;
+        }
     }
-
-    // availableLeagues.sort();
 
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "release_year" ? "By Year" : "By Release/Set"} />
+            <Breadcrumbs categoryId={categoryId} customPage={title} />
             {shopby == "release" ? <ul className={classes.nav}>
                 <li className={classes.nav_item}>
                     <button
@@ -305,15 +244,6 @@ const SportCardsSets = props => {
                         {activeTab == 'year' ? <b>By Year</b> : 'By Year'}
                     </button>
                 </li>
-                {/* <li className={classes.nav_item}>
-                    <button
-                        onClick={() => {
-                            handleActiveTab('brand')
-                        }}
-                    >
-                        {activeTab == 'brand' ? <b>By Brand</b> : 'By Brand'}
-                    </button>
-                </li> */}
                 <li className={classes.nav_item}>
                     <button
                         onClick={() => {
@@ -324,6 +254,18 @@ const SportCardsSets = props => {
                     </button>
                 </li>
             </ul> : ''}
+            {shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" ? availableLeagues ? <ul className={classes.nav}>
+                {availableLeagues.map((group, index) => (
+                <li key={index} className={classes.nav_item}>
+                    <button
+                        onClick={() => {
+                            handleActiveFilter(group)
+                        }}
+                    >
+                        {activeFilter == group ? <b>{group}</b> : group}
+                    </button>
+                </li>
+            ))}</ul> : '' : ''}
             {shopby != "release_year" && productType != "expansion_sets" && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>}
@@ -349,7 +291,7 @@ const SportCardsSets = props => {
                 </button>
             </li>
             </ul> : ''}
-            {activeTab == "leagues" && availableLeagues ? <ul className={classes.nav}>
+            {shopby == "release" && activeTab == "leagues" && availableLeagues ? <ul className={classes.nav}>
                 {availableLeagues.map((group, index) => (
                 <li key={index} className={classes.nav_item}>
                     <button
@@ -361,41 +303,16 @@ const SportCardsSets = props => {
                     </button>
                 </li>
             ))}</ul> : ''}
-            {/* {activeTab == "brand" && availableBrands && availableBrands.length ? <ul className={classes.nav}>
-                {availableBrands.map((group, index) => (
-                <li key={index} className={classes.nav_item}>
-                    <button
-                        onClick={() => {
-                            handleActiveFilter(group)
-                        }}
-                    >
-                        {activeFilter == group ? <b>{group}</b> : group}
-                    </button>
-                </li>
-            ))} */}
-            {/* <li>
-                <button
-                    className={cn(
-                        'rounded-md border border-solid border-gray-100 p-2 min-w-[28px]',
-                        'leading-4 font-medium text-base hover_bg-gray-50'
-                    )}
-                    onClick={() => {
-                        setActiveBrand('all')
-                    }}
-                >
-                    {active == 'all' ? <b>All</b> : 'All'}
-                </button>
-            </li></ul> : ''} */}
             <div className='border border-gray-100 px-6'>
                 {sportCardsSets ? (
                     <div
                         className={classes.toolbar}
                     >
-                        <div style={{"width":"35%"}}><ArraySearchInput active={active} searchQuery={searchQuery} placeholder="Search sets..." isOpen={true} setSearchQuery={setSearchQuery} /></div>
+                        <div style={{"width":"35%"}}><ArraySearchInput active={active} searchQuery={searchQuery} placeholder="Search sets..." isOpen={true} setSearchQuery={handleSearchQuery} /></div>
                         {/* <CustomSortBy sortProps={sortProps} availableSortMethods={availableSortBy} /> */}
                     </div>
                 ) : ''}
-                {shopby == "sets" && <>
+                {shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" || shopby == "sets" ? <>
                     <section className='single_list-indexing-container relative m-auto pt-5'>
                         <ul className='flex gap-2 justify-center flex-wrap'>
                             <li>
@@ -430,7 +347,7 @@ const SportCardsSets = props => {
                             ))}
                         </ul>
                     </section>
-                </>}
+                </> : ''}
                 <Divider className="mb-5 px-4 mt-5" />
                 <section className='singles-container'>
                     <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>

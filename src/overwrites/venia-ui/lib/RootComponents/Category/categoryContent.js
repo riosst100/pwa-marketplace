@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { useEffect, Fragment, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
@@ -29,7 +29,7 @@ import AttributesBlock from '@riosst100/pwa-marketplace/src/components/Attribute
 
 import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
 import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
 import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
@@ -49,9 +49,12 @@ const CategoryContent = props => {
         isLoading,
         pageControl,
         sortProps,
-        pageSize
+        pageSize,
+        showSubcategory
     } = props;
     const [currentSort] = sortProps;
+
+    const history = useHistory();
 
     const talonProps = useCategoryContent({
         categoryId,
@@ -73,6 +76,27 @@ const CategoryContent = props => {
         category,
         virtualCategoryFilters
     } = talonProps;
+
+    useEffect(() => {
+        if (category) {
+            const urlKey = category.url_key;
+            if (urlKey == "collectible-game") {
+                history.replace('/games/collectible-game/magic-the-gathering.html')
+            }
+
+            if (urlKey == "sport-cards") {
+                history.replace('/cards/sport-cards/baseball.html')
+            }
+
+            if (urlKey == "non-sports-cards") {
+                history.replace('/cards/non-sports-cards/comics.html')
+            }
+
+            if (urlKey == "age-level" || urlKey == "lego" || urlKey == "minifigures" || urlKey == "sub-theme" || urlKey == "theme" || urlKey == "interest") {
+                history.replace('/lego-toys/lego/sets.html')
+            }
+        }
+    }, [category]);
 
     const [activeLetter, setActiveLetter] = useState('all')
     const [activeTab, setActiveTab] = useState('all');
@@ -228,6 +252,8 @@ const CategoryContent = props => {
 
     // console.log(allActiveFilters)
 
+    // console.log(virtualCategoryFilters)
+
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
             value.forEach((value) => {
@@ -256,7 +282,7 @@ const CategoryContent = props => {
     // console.log(activeFilters.length)
     // console.log(activeFilters.map(u => u.label).join(' - '))
 
-    const title = activeFilters && activeFilters.length ? (
+    let title = activeFilters && activeFilters.length ? (
         activeFilters.length > 1 ? 
             activeFilters.map(u => u.label).join(': ')
          : currentFilter
@@ -282,7 +308,7 @@ const CategoryContent = props => {
                     <>
                         {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
                         <SubCategory parent={parent} children={children} />
-                        {!currentFilter && <CustomSubCategory customSubCategory={category ? category.custom_subcategory : null} />}
+                        {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
                 {/* ) : ( */}
                     <>

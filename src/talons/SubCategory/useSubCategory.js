@@ -33,10 +33,10 @@ export const useSubCategory = props => {
     const normalizedData = useMemo(() => {
         if (children) {
             return (
-                children.length &&
+                children && children.length &&
                 children
-                    .map(category => ({
-                        text: category?.name || '',
+                    .map((category, index) => ({
+                        text: category && typeof category.name != "undefined" ? category.name : '',
                         path: getPath(
                             category.url_path,
                             categoryUrlSuffix

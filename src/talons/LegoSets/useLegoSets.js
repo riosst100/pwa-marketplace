@@ -92,13 +92,16 @@ export const useLegoSets = props => {
             variables: {
                 filters: newFilters,
                 categoryUrlKey: categoryUrlKey,
-                activeTab: activeTab
+                activeTab: activeTab,
+                shopby: shopby,
+                activeFilter: activeFilter
             }
         });
     // }
     }, [
         runQuery,
-        activeTab
+        activeTab,
+        activeFilter
         // queryResponse
         // filterTypeMap,
         // search,

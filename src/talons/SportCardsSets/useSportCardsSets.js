@@ -66,12 +66,12 @@ export const useSportCardsSets = props => {
                     // console.log(item.split(',')[0])
                     const data = search.split('&');
                     data.pop();
-                    activeFilters.push(
-                        {
-                            'label': item.split(',')[0],
-                            'path': data
-                        }
-                    )
+                    // activeFilters.push(
+                    //     {
+                    //         'label': item.split(',')[0],
+                    //         'path': data
+                    //     }
+                    // )
                 }   
             }
         }
@@ -92,7 +92,8 @@ export const useSportCardsSets = props => {
             variables: {
                 filters: newFilters,
                 categoryUrlKey: categoryUrlKey,
-                setType: setType
+                setType: setType,
+                shopby: shopby
             }
         });
     // }
@@ -173,7 +174,7 @@ export const useSportCardsSets = props => {
             })
         }
 
-        return sportCardsSets.slice().sort((a, b) => b.group.toLowerCase().localeCompare(a.group.toLowerCase()));
+        return sortby == "release" ? sportCardsSets.slice().sort((a, b) => b.group.toLowerCase().localeCompare(a.group.toLowerCase())) : sportCardsSets.slice().sort((a, b) => a.group.toLowerCase().localeCompare(b.group.toLowerCase()));
     }, [queryResponse, activeTab]);
 
     const availableGroups = sportCardsSets && sportCardsSets.length ? sportCardsSets.map(({ group }) => group) : [];
@@ -191,12 +192,11 @@ export const useSportCardsSets = props => {
 
         if (searchQuery) {
 
-            setActive('all')
+            // setActive('all')
 
             sportCardsSets.map(({ group, sets }, index) => {
                 const newSets = sets.filter(function(set) {
                     return set.set_name.search(new RegExp(searchQuery, "i")) != -1 || group.search(new RegExp(searchQuery, "i")) != -1;
-                    // return set.set_name.includes(searchQuery);
                 });
 
                 if (newSets && newSets.length) {

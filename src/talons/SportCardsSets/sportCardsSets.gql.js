@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SPORT_CARDS_SETS_QUERY = gql`
-    query getSportCardsSets($categoryUrlKey: String!, $setType: String, $filters: ProductAttributeFilterInput!) {
-        sportCardsSets(categoryUrlKey: $categoryUrlKey, setType: $setType, filters: $filters) {
+    query getSportCardsSets($categoryUrlKey: String!, $shopby: String, $setType: String, $filters: ProductAttributeFilterInput!) {
+        sportCardsSets(categoryUrlKey: $categoryUrlKey, shopby: $shopby, setType: $setType, filters: $filters) {
             group
             sets {
                 set_name

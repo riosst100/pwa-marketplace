@@ -1,7 +1,6 @@
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAppContext } from '@magento/peregrine/lib/context/app';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './shopBy.gql';
@@ -141,6 +140,9 @@ export const useShopBy = props => {
             if (!alpha.includes(firstLetter)) {
                 firstLetter = '#';
             }
+            if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+                firstLetter = '#';
+            }
             acc[firstLetter] = acc[firstLetter] || [];
             acc[firstLetter].push(item);
             return acc;
@@ -199,6 +201,9 @@ export const useShopBy = props => {
                 if (!alpha.includes(firstLetter)) {
                     firstLetter = '#';
                 }
+                if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+                    firstLetter = '#';
+                }
                 acc[firstLetter] = acc[firstLetter] || [];
                 acc[firstLetter].push(item);
                 return acc;
@@ -210,9 +215,14 @@ export const useShopBy = props => {
 
     // console.log(dataResult)
 
-    const availableGroups = originalDataResult ? Object.keys(originalDataResult).sort() : [];
+    let availableGroups = originalDataResult ? Object.keys(originalDataResult).sort() : [];
 
-    const filteredAvailableGroups = dataResult ? Object.keys(dataResult).sort() : [];
+    let filteredAvailableGroups = dataResult ? Object.keys(dataResult).sort() : [];
+    
+    if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+        availableGroups = ['#'];
+        filteredAvailableGroups = ['#'];
+    }
 
 
     const attributeData = queryResponse?.data?.shopByData && queryResponse?.data?.shopByData.length ? queryResponse.data.shopByData[0] : null

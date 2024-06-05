@@ -40,6 +40,10 @@ const Breadcrumbs = props => {
     // For all links generate a fragment like "/ Text"
     const links = useMemo(() => {
         return normalizedData.map(({ text, path }) => {
+            if (text == "dCollectible Card Games") {
+                return '';
+            }
+            
             return (
                 <Fragment key={text}>
                     <span className={classes.divider}>{DELIMITER}</span>
@@ -131,7 +135,9 @@ const Breadcrumbs = props => {
     // If we have a "currentProduct" it means we're on a PDP so we want the last
     // category text to be a link. If we don't have a "currentProduct" we're on
     // a category page so it should be regular text.
-    const currentCategoryLink = customPage || currentProduct || currentFilter && currentFilter.length ? (
+    const currentCategoryLink = currentCategory == "dCollectible Card Games" ? '' : (customPage || currentProduct || currentFilter && currentFilter.length ? (
+        <>
+        <span className={classes.divider}>{DELIMITER}</span>
         <Link
             className={classes.link}
             to={'/'+resourceUrl(currentCategoryPath)}
@@ -139,9 +145,13 @@ const Breadcrumbs = props => {
         >
             {currentCategory}
         </Link>
+        </>
     ) : (
+        <>
+        <span className={classes.divider}>{DELIMITER}</span>
         <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{currentCategory}</span>
-    );
+        </>
+    ));
 
     const currentProductNode = currentProduct ? (
         <Fragment>
@@ -163,7 +173,6 @@ const Breadcrumbs = props => {
                 <FormattedMessage id={'global.home'} defaultMessage={'Home'} />
             </Link>
             {links}
-            <span className={classes.divider}>{DELIMITER}</span>
             {currentCategoryLink}
             {filterBreadcrumbsElement}
             {currentProductNode}

@@ -91,8 +91,8 @@ const FilterSidebar = props => {
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
 
-                const hideFilters = ['lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
-                if (!hideFilters.includes(group)) {
+                const hideFilters = ['trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
+                if (!hideFilters.includes(group) && groupName) {
                 // if (!allowedFilters && !allowedFiltersArr.length && group != "category_uid" || allowedFilters && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     
 
@@ -106,7 +106,7 @@ const FilterSidebar = props => {
                             items={items}
                             name={groupName}
                             onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
-                            initialOpen={iteration < filterCountToOpen}
+                            initialOpen={true}
                         />
                     );
                 }

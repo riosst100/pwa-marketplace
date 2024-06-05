@@ -16,7 +16,7 @@ const SubCategory = props => {
         normalizedData
     } = talonProps;
 
-    const maxSubCategory = 7;
+    const maxSubCategory = 10;
     
     const subCategory = [];
     

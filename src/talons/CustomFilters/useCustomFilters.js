@@ -19,7 +19,7 @@ import {
 } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 export const useCustomFilters = props => {
-    const { filters } = props;
+    const { filters, category } = props;
 
     const [isApplying, setIsApplying] = useState(false);
     const [filterState, filterApi] = useFilterState();
@@ -68,6 +68,8 @@ export const useCustomFilters = props => {
         return typeMap;
     }, [introspectionData]);
 
+    console.log(category)
+
     useEffect(() => {
 
         if (!filterTypeMap.size) {
@@ -94,7 +96,8 @@ export const useCustomFilters = props => {
     }, [
         runQuery,
         filterTypeMap,
-        search
+        search,
+        category
     ]);
 
     const customFiltersData = customFiltersLoading && !data ? null : (data ? data.customSubFilters : null);

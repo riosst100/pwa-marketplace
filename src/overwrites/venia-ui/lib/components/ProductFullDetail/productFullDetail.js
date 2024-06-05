@@ -624,7 +624,7 @@ const ProductFullDetail = props => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <Link class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">

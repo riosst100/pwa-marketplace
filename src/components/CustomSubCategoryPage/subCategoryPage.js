@@ -69,12 +69,14 @@ const SubCategoryPage = props => {
         setSearchQuery('')
     }
 
+    const title = category ? 'All ' + category.parent[0].name : '';
+
     return (
         <Fragment>
-            <StoreTitle>{category ? category.name : 'Shop By'}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={category ? 'All ' + category.parent[0].name : ''} />
+            <StoreTitle>{title}</StoreTitle>
+            <Breadcrumbs categoryId={categoryId} customPage={title} />
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
-                {category ? 'All ' + category.parent[0].name : ''}
+                {title}
             </h1>
             <div className='border border-gray-100 px-6'>
                 {dataResult ? (

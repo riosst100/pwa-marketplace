@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_LEGO_SETS_QUERY = gql`
-    query getLegoSets($categoryUrlKey: String!, $activeTab: String, $filters: ProductAttributeFilterInput!) {
-        legoSets(categoryUrlKey: $categoryUrlKey, activeTab: $activeTab, filters: $filters) {
+    query getLegoSets($categoryUrlKey: String!, $activeTab: String, $filters: ProductAttributeFilterInput!, $shopby: String, $activeFilter: String) {
+        legoSets(categoryUrlKey: $categoryUrlKey, activeTab: $activeTab, filters: $filters, shopby: $shopby, activeFilter: $activeFilter) {
             group
             sets {
                 set_name

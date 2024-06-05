@@ -22,7 +22,7 @@ const CurrentFilters = props => {
 
                 const customAttributeLandingPage = ['card_set', 'sc_baseball_release','auction','special_price','lof_preorder','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
 
-                if (!customAttributeLandingPage.includes(group)) {
+                // if (!customAttributeLandingPage.includes(group)) {
                     elements.push(
                         <li key={key} className={classes.item}>
                             <CurrentFilter
@@ -33,7 +33,7 @@ const CurrentFilters = props => {
                             />
                         </li>
                     );
-                }
+                // }
             }
         }
 

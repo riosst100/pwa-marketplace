@@ -27,7 +27,7 @@ const ProductLabel = (props) => {
         >
             {salePrice > 0 && <div className='bg-yellow-400 rounded px-2.5 py-[6px] w-fit top-0 left-0'>
                 <span className='text-white text-xs font-medium'>
-                    {salePrice/regularPrice*100}% off
+                    {Math.round(salePrice/regularPrice*100)}% off
                 </span>
             </div>}
             {isPreOrder && <div className='bg-darkblue-900 rounded px-2.5 py-[6px] w-fit top-0 left-0'>

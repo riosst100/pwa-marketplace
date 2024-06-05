@@ -14,6 +14,7 @@ import SubCategoryPage from '@riosst100/pwa-marketplace/src/components/CustomSub
 import ShopBySets from '@riosst100/pwa-marketplace/src/components/ShopBySets/shopBySets';
 import { useLocation } from 'react-router-dom';
 import SportCardsSets from '@riosst100/pwa-marketplace/src/components/SportCardsSets/sportCardsSets';
+import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSportCardsSets/nonSportCardsSets';
 import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 
 const MESSAGES = new Map().set(
@@ -85,10 +86,13 @@ const Category = props => {
                 categoryId={uid}
                 isLoading={loading} />
             ) : (
-                shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
+                shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
                 categoryId={uid}
                 shopby={shopby}
-                isLoading={loading} /> : shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
+                isLoading={loading} /> : shopby && parentCategoryUrlKey == "non-sports-cards" ? <NonSportCardsSets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" || shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets

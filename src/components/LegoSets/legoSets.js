@@ -23,7 +23,7 @@ const LegoSets = props => {
 
     const [active, setActive] = useState('all');
     const [activeTab, setActiveTab] = useState('all');
-
+    const [activeFilter, setActiveFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     
     const shopby = query.get('shopby') || null;
@@ -69,7 +69,7 @@ const LegoSets = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useLegoSets({ searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab });
+    const talonProps = useLegoSets({ activeFilter, searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab });
 
     const { error, loading, legoSets, categoryUrlSuffix, categoryUrlKey, productType, filteredLegoSets, availableGroups, category } = talonProps;
 
@@ -103,6 +103,15 @@ const LegoSets = props => {
         return result;
     }
 
+    let allSetsTitle = "Sets";
+    let attributeCode = "lego_set_name";
+    let byYearTitle = "By Year";
+    // if (shopby == "singles") {
+    //     attributeCode = "lego_set_name";
+    //     // allSetsTitle = "Singles";
+    //     byYearTitle = "By Year";
+    // }
+
     const setRelases = newLegoSets && newLegoSets.length && newLegoSets.map((setRelease, index) => {
         const { group, sets } = setRelease;
 
@@ -113,12 +122,13 @@ const LegoSets = props => {
                 const { set_name, option_id, release_year } = set;
 
                 const categoryUrl = resourceUrl(
-                    `/${category?.url_path}${categoryUrlSuffix || ''}?lego_set_name[filter]=${set_name},${option_id}`
+                    `/${category?.url_path}${categoryUrlSuffix || ''}?${attributeCode}[filter]=${set_name},${option_id}`
                 );
 
                 setsResult.push(<li className='list-none'>
                     <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
-                        {set_name}
+                        <b>{set_name}</b>
+                        <div style={{"fontSize": "12px"}}>589 Parts, 2 Minifigures</div>
                     </Link>
                 </li>)
             })
@@ -158,6 +168,8 @@ const LegoSets = props => {
 
     const handleActiveTab = (val) => {
         setActiveTab(val);
+        setActive('all');
+        setActiveFilter('');
 
         setSearchQuery('')
     }
@@ -168,15 +180,30 @@ const LegoSets = props => {
 
     let alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-    let title = "All Sets";
+    let title = "Sets";
     if (activeTab == "year") {
-        title = "By Year";
+        title = "Sets | By Year";
+    }
+    
+    const availableFilters = [
+        'Theme',
+        'Sub-Theme',
+        'Interest',
+        'Age Level'
+    ];
+
+    const handleActiveFilter = (val) => {
+        setActiveFilter(val);
+
+        setActive('all');
+
+        setSearchQuery('')
     }
 
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "release_year" ? "By Year" : "By Release/Set"} />
+            <Breadcrumbs categoryId={categoryId} customPage={shopby == "singles" ? "Mini-Figures" : title} />
             <ul className={classes.nav}>
                 <li className={classes.nav_item}>
                     <button
@@ -184,7 +211,7 @@ const LegoSets = props => {
                             handleActiveTab('year')
                         }}
                     >
-                        {activeTab == 'year' ? <b>By Year</b> : 'By Year'}
+                        {activeTab == 'year' ? <b>{byYearTitle}</b> : byYearTitle}
                     </button>
                 </li>
                 <li className={classes.nav_item}>
@@ -193,14 +220,36 @@ const LegoSets = props => {
                             handleActiveTab('all')
                         }}
                     >
-                        {activeTab == 'all' ? <b>All Sets</b> : 'All Sets'}
+                        {activeTab == 'all' ? <b>{allSetsTitle}</b> : allSetsTitle}
                     </button>
                 </li>
             </ul>
+            {shopby == "lego_set_name" && activeTab == "all" ? <><ul className={classes.nav}>
+                {availableFilters.map((group, index) => (
+                <li key={index} className={classes.nav_item}>
+                    <button
+                        onClick={() => {
+                            handleActiveFilter(group)
+                        }}
+                    >
+                        {activeFilter == group ? <b>{group}</b> : group}
+                    </button>
+                </li>
+            ))}<li className={classes.nav_item}>
+            <button
+                onClick={() => {
+                    handleActiveFilter('')
+                }}
+            >
+                {!activeFilter ? <b>A-Z</b> : 'A-Z'}
+            </button>
+        </li></ul>
+            
+                </> : ''}
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>
-            {activeTab == "year" && <ul className={classes.nav}>
+            {activeTab == "year" && availableGroups ? <ul className={classes.nav}>
                 {availableGroups.map((group, index) => (
                 <li key={index} className={classes.nav_item}>
                     <button
@@ -221,7 +270,7 @@ const LegoSets = props => {
                     {active == 'all' ? <b>All</b> : 'All'}
                 </button>
             </li>
-            </ul>}
+            </ul> : ''}
             <div className='border border-gray-100 px-6'>
                 {legoSets ? (
                     <div
@@ -232,7 +281,7 @@ const LegoSets = props => {
                     </div>
                 ) : ''}
                 <section className='single_list-indexing-container relative m-auto pt-5'>
-                    {activeTab != "year" && <ul className='flex gap-2 justify-center flex-wrap'>
+                    {!activeFilter && activeTab != "year" && <ul className='flex gap-2 justify-center flex-wrap'>
                         <li>
                             <button
                                 className={cn(

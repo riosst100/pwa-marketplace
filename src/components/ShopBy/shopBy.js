@@ -214,6 +214,13 @@ const ShopBy = props => {
         setSearchQuery('')
     }
 
+    // let availableSortBy = [
+    //     {
+    //         'label': 'All (A-Z)',
+    //         'value': 'all'
+    //     }
+    // ];
+
     let availableSortBy = [
         {
             'label': 'All (A-Z)',
@@ -239,7 +246,7 @@ const ShopBy = props => {
                         <CustomSortBy sortProps={sortProps} availableSortMethods={availableSortBy} />
                     </div>
                 ) : ''}
-                {shopby != "lego_theme" && shopby != "lego_age_level" && productType != "expansion-sets" ? (
+                {shopby != "trains_gauge" && shopby != "vehicles_scale" && shopby != "lego_theme" && shopby != "lego_subtheme" && shopby != "lego_interest" && shopby != "lego_age_level" && productType != "expansion-sets" ? (
                     <>
                         <section className='single_list-indexing-container relative m-auto pt-5'>
                             <ul className='flex gap-2 justify-center flex-wrap'>
