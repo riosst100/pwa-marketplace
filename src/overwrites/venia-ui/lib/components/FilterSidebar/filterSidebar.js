@@ -63,13 +63,13 @@ const FilterSidebar = props => {
             //     filterElement &&
             //     typeof filterElement.getBoundingClientRect === 'function'
             // ) {
-                // const filterTop = filterElement.getBoundingClientRect().top;
-                // const windowScrollY =
-                //     window.scrollY + filterTop - SCROLL_OFFSET;
-                // window.scrollTo(0, windowScrollY);
+            // const filterTop = filterElement.getBoundingClientRect().top;
+            // const windowScrollY =
+            //     window.scrollY + filterTop - SCROLL_OFFSET;
+            // window.scrollTo(0, windowScrollY);
             // }
 
-            history.push('/'+args[1].path+'.html');
+            history.push('/' + args[1].path + '.html');
 
             if (args[0] != "category_uid") {
                 handleApply(...args);
@@ -80,7 +80,7 @@ const FilterSidebar = props => {
 
     const allowedFiltersArr = [];
 
-    allowedFilters.length && allowedFilters.map((val, index) => {
+    allowedFilters?.length && allowedFilters.map((val, index) => {
         allowedFiltersArr.push(val.code);
     });
 
@@ -90,8 +90,8 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-                if (!allowedFiltersArr.length && group != "category_uid" || allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
-                    
+                if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
+
 
                     return (
                         <FilterBlock
