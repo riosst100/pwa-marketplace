@@ -47,7 +47,7 @@ const AuctionDetail = (props) => {
 
                         <Form
                             data-cy="form_bid"
-                            className="flex flex-col gap-y-5"
+                            className="flex flex-col gap-y-4"
                             initialValues={{}}
                             onSubmit={() => { }}
                             onChange={() => { }}

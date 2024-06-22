@@ -35,6 +35,7 @@ import AuctionDetail from './components/auctionDetail';
 import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
 import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
+import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -597,6 +598,10 @@ const ProductFullDetail = props => {
                         <div className='product_actions-wrapper'>
                             {cartActionContent}
                         </div>
+                    </section>
+                    <Divider />
+                    <section className={cn(classes.quantity, 'py-[30px] !border-none')}>
+                        <RFQ />
                     </section>
                     <Divider />
                     <section className='product_from-other-platform py-[30px]'>
