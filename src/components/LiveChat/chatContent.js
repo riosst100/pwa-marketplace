@@ -6,19 +6,19 @@ const chatContent = (props) => {
 
     return (
         <>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 w-full'>
                 {chatData.map((chat) => {
                     return (
                         <div
                             className={cn(
-                                'w-full max-w-[70%] flex flex-col gap-1',
-                                chat.type === 'seller' ? 'self-start ' : 'self-end ',
+                                'w-fit max-w-[70%] flex flex-col gap-1',
+                                chat.type === 'seller' ? 'self-start ' : 'self-end items-end',
 
                             )}
                         >
                             <div
                                 className={cn(
-                                    'w-full py-2 px-3 rounded-md flex flex-col',
+                                    'w-fit py-2 px-3 rounded-md flex flex-col',
                                     chat.type === 'seller' ? 'bg-gray-150 rounded-tl-none' : ' bg-[#D9D9D9] rounded-tr-none',
 
                                 )}

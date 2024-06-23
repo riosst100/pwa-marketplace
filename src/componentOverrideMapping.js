@@ -63,4 +63,5 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/CheckoutPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/CheckoutPage/index.js',
     [`@magento/venia-ui/lib/components/Dialog/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Dialog/index.js',
     [`@magento/venia-ui/lib/components/OrderHistoryPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/OrderHistoryPage/index.js',
+    [`@magento/venia-ui/lib/components/TextArea/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/TextArea/index.js',
 };

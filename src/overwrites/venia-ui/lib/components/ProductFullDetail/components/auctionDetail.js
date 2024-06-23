@@ -101,7 +101,6 @@ const AuctionDetail = (props) => {
                     </div>
 
                     <BidList expanded />
-
                     <Form
                         data-cy="form_bid"
                         className="flex flex-col gap-y-5"
