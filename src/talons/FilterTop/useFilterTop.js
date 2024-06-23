@@ -21,7 +21,7 @@ import DEFAULT_OPERATIONS from './filterTop.gql';
 const DRAWER_NAME = 'filter';
 
 export const useFilterTop = props => {
-    const { filters } = props;
+    const { filters, category } = props;
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const { getFilterInputsQuery, getCustomFilters } = operations;
@@ -39,6 +39,10 @@ export const useFilterTop = props => {
 
     const history = useHistory();
     const { pathname, search } = useLocation();
+
+    const pathnameArr = pathname.split('/');
+
+    // const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
 
     const { data: introspectionData } = useQuery(getFilterInputsQuery);
 
@@ -72,13 +76,15 @@ export const useFilterTop = props => {
 
         runQuery({
             variables: {
-                filters: newFilters
+                filters: newFilters,
+                category: category?.url_path
             }
         });
     }, [
         runQuery,
         filterTypeMap,
-        search
+        search,
+        category
     ]);
 
     const attributeCodes = useMemo(
@@ -97,8 +103,6 @@ export const useFilterTop = props => {
 
         return disabled;
     }, [pathname]);
-
-    // console.log(introspectionData)
 
     // Get "allowed" filters by intersection of filter attribute codes and
     // schema input field types. This restricts the displayed filters to those
@@ -175,33 +179,7 @@ export const useFilterTop = props => {
         const frontendInput = new Map();
         const itemsByGroup = new Map();
         const customFiltersMap = [];
-
-        const sortedFilters = sortFiltersArray([...filters]);
-
-        for (const filter of sortedFilters) {
-            const { options, label: name, attribute_code: group } = filter;
-
-            // If this aggregation is not a possible filter, just back out.
-            if (possibleFilters.has(group)) {
-                const items = [];
-
-                // add filter name
-                names.set(group, name);
-
-                // add filter key permutations
-                keys.add(`${group}[filter]`);
-
-                // Add frontend input type
-                frontendInput.set(group, null);
-                // add items
-                for (const { label, value, path } of options) {
-                    items.push({ title: stripHtml(label), value, path });
-                }
-
-                itemsByGroup.set(group, items);
-            }
-        }
-
+        
         if (customFiltersData) {
             customFiltersData.map(({ attribute_code, options }, index) => {
 

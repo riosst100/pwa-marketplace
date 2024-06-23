@@ -15,14 +15,31 @@ import ProductSort from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/
 import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy';
 
 const AlphaFilter = props => {
-    const {items, handleActiveLetter, activeLetter} = props;
+    const {items, handleActiveLetter, activeLetter, isSingles } = props;
 
     const groupSinglesFirstLetter = (data) => {
         return data.reduce((acc, item) => {
-            if (item && item.name) {
-                const firstLetter = item.name.charAt(0).toUpperCase();
-                acc[firstLetter] = acc[firstLetter] || [];
-                acc[firstLetter].push(item);
+            if (item) {
+                const { custom_attributes } = item;
+                if (custom_attributes) {
+                    let cardName = '';
+                    custom_attributes.some((attribute, index) => {
+                        const { attribute_metadata, entered_attribute_value, selected_attribute_options } = attribute
+                        if (attribute_metadata.code == "card_name") {
+                            cardName = selected_attribute_options.attribute_option[0].label;
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+
+                    if (cardName) {
+                        const firstLetter = cardName.charAt(0).toUpperCase();
+                        acc[firstLetter] = acc[firstLetter] || [];
+                        acc[firstLetter].push(item);
+                    }
+                }
             }
 
             return acc;
@@ -34,7 +51,7 @@ const AlphaFilter = props => {
     
     const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-    return <>
+    return isSingles && <>
         <section className='single_list-indexing-container relative m-auto py-1'>
             <ul className='flex gap-2 justify-center flex-wrap'>
                 {alpha.map((letter, index) => (

@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom';
 const Breadcrumbs = props => {
     const classes = useStyle(defaultClasses, props.classes);
 
-    const { categoryId, currentProduct, currentFilter } = props;
+    const { categoryId, currentProduct, customPage, currentFilter } = props;
 
     const talonProps = useBreadcrumbs({ categoryId });
 
@@ -40,6 +40,10 @@ const Breadcrumbs = props => {
     // For all links generate a fragment like "/ Text"
     const links = useMemo(() => {
         return normalizedData.map(({ text, path }) => {
+            if (text == "dCollectible Card Games") {
+                return '';
+            }
+            
             return (
                 <Fragment key={text}>
                     <span className={classes.divider}>{DELIMITER}</span>
@@ -70,26 +74,60 @@ const Breadcrumbs = props => {
         );
     }
 
+    // console.log(currentFilter)
+
     const filterBreadcrumbsElement = [];
+
+    const lastIndex = currentFilter ? currentFilter.length - 1 : 0;
+    // const filterpath = ;
     
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
+        console.log(filter)
         currentProduct ? (
             filterBreadcrumbsElement.push(
+                <>
+                <span className={classes.divider}>{DELIMITER}</span>
                 <Link
                     key={index}
                     className={classes.link}
-                    to={resourceUrl(currentCategoryPath)}
+                    to={resourceUrl('/'+currentCategoryPath)}
                     onClick={handleClick}
                 >
                     {filter.label}
                 </Link>
+                </>
             )
         ) : (
-            filterBreadcrumbsElement.push(
+            customPage ? (
+                filterBreadcrumbsElement.push(
+                    <>
+                    <span className={classes.divider}>{DELIMITER}</span>
+                    <Link
+                        key={index}
+                        className={classes.link}
+                        to={resourceUrl('/'+currentCategoryPath)}
+                        onClick={handleClick}
+                    >
+                        {filter.label}
+                    </Link>
+                    </>
+                )
+            ) : filterBreadcrumbsElement.push(
+                index == lastIndex ?
                 <span key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                </span>
+                </span> : <>
+                    <span className={classes.divider}>{DELIMITER}</span>
+                    <Link
+                        key={index}
+                        className={classes.link}
+                        to={resourceUrl('/'+currentCategoryPath+'?' + filter.code + '[filter]=' + filter.label + ',' + filter.option_id)}
+                        onClick={handleClick}
+                    >
+                        {filter.label}
+                    </Link>
+                    </>
             )
         );
     });
@@ -97,7 +135,9 @@ const Breadcrumbs = props => {
     // If we have a "currentProduct" it means we're on a PDP so we want the last
     // category text to be a link. If we don't have a "currentProduct" we're on
     // a category page so it should be regular text.
-    const currentCategoryLink = currentProduct || currentFilter && currentFilter.length ? (
+    const currentCategoryLink = currentCategory == "dCollectible Card Games" ? '' : (customPage || currentProduct || currentFilter && currentFilter.length ? (
+        <>
+        <span className={classes.divider}>{DELIMITER}</span>
         <Link
             className={classes.link}
             to={'/'+resourceUrl(currentCategoryPath)}
@@ -105,14 +145,25 @@ const Breadcrumbs = props => {
         >
             {currentCategory}
         </Link>
+        </>
     ) : (
+        <>
+        <span className={classes.divider}>{DELIMITER}</span>
         <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{currentCategory}</span>
-    );
+        </>
+    ));
 
     const currentProductNode = currentProduct ? (
         <Fragment>
             <span className={classes.divider}>{DELIMITER}</span>
             <span className={classes.text}>{currentProduct}</span>
+        </Fragment>
+    ) : null;
+
+    const customPageNode = customPage ? (
+        <Fragment>
+            <span className={classes.divider}>{DELIMITER}</span>
+            <span className={classes.text}>{customPage}</span>
         </Fragment>
     ) : null;
     
@@ -122,10 +173,10 @@ const Breadcrumbs = props => {
                 <FormattedMessage id={'global.home'} defaultMessage={'Home'} />
             </Link>
             {links}
-            <span className={classes.divider}>{DELIMITER}</span>
             {currentCategoryLink}
             {filterBreadcrumbsElement}
             {currentProductNode}
+            {customPageNode}
         </div>
     );
 };

@@ -31,7 +31,7 @@ const CurrentTopFilter = props => {
         }
     );
 
-    return (
+    return group != "shopby" ? (
         <span className={classes.item} data-cy="CurrentTopFilter-root">
             <Trigger
                 action={handleClick}
@@ -41,7 +41,7 @@ const CurrentTopFilter = props => {
                 All
             </Trigger>
         </span>
-    );
+    ) : '';
 };
 
 export default CurrentTopFilter;

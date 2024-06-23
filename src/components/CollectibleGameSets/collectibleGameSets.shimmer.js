@@ -15,7 +15,7 @@ const CollectibleGameSets = props => {
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'><Shimmer width="25%" height="6vh" /></h1>
             <div className='border border-gray-100 px-6'>
                 <center>
-                    <section className='single_list-indexing-container relative m-auto py-10'>
+                    <section className='single_list-indexing-container relative m-auto pt-5'>
                         <Shimmer width="95%" height="6vh" />
                     </section>
                 </center>

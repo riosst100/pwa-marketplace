@@ -44,8 +44,8 @@ export const useFilterSidebar = props => {
         const disabled = new Set();
         // Disable category filtering when not on a search page.
         if (pathname !== '/search.html') {
-            // disabled.add('category_id');
-            // disabled.add('category_uid');
+            disabled.add('category_id');
+            disabled.add('category_uid');
         }
 
         return disabled;
@@ -146,6 +146,66 @@ export const useFilterSidebar = props => {
                 }
                 itemsByGroup.set(group, items);
             }
+        }
+
+        const productTabs = [
+            {
+                'label': 'All Products',
+                'value': 'all',
+                'path': '',
+                'options': [
+                    {'value':'0','label':'No','title':'No'},
+                    {'value':'1','label':'Yes','title':'Yes'}
+                ]
+            },
+            {
+                'label': 'Sale',
+                'value': 'special_price',
+                'path': '',
+                'options': [
+                    {'value':'0','label':'No','title':'No'},
+                    {'value':'1','label':'Yes','title':'Yes'}
+                ]
+            },
+            {
+                'label': 'Preorder',
+                'value': 'lof_preorder',
+                'path': '',
+                'options': [
+                    {'value':'0','label':'No','title':'No'},
+                    {'value':'1','label':'Yes','title':'Yes'}
+                ]
+            },
+            {
+                'label': 'Auction',
+                'value': 'auction',
+                'path': '',
+                'options': [
+                    {'value':'0','label':'No','title':'No'},
+                    {'value':'1','label':'Yes','title':'Yes'}
+                ]
+            }
+        ];
+
+        if (productTabs) {
+            productTabs.map(({ value, options }, index) => {
+                
+
+                const items = [];
+
+                names.set(value, '');
+                frontendInput.set(value, null);
+
+                // add filter key permutations
+                keys.add(`${value}[filter]`);
+
+                // add items
+                for (const { label, value, path } of options) {
+                    items.push({ title: stripHtml(label), value, path });
+                }
+
+                itemsByGroup.set(value, items);
+            })
         }
 
         return [names, keys, itemsByGroup, frontendInput];

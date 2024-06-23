@@ -9,6 +9,13 @@ import { Meta } from '@magento/venia-ui/lib/components/Head';
 import { GET_PAGE_SIZE } from './category.gql';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { useIntl } from 'react-intl';
+import ShopBy from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy';
+import SubCategoryPage from '@riosst100/pwa-marketplace/src/components/CustomSubCategoryPage/subCategoryPage';
+import ShopBySets from '@riosst100/pwa-marketplace/src/components/ShopBySets/shopBySets';
+import { useLocation } from 'react-router-dom';
+import SportCardsSets from '@riosst100/pwa-marketplace/src/components/SportCardsSets/sportCardsSets';
+import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSportCardsSets/nonSportCardsSets';
+import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -18,6 +25,18 @@ const MESSAGES = new Map().set(
 const Category = props => {
     const { uid } = props;
     const { formatMessage } = useIntl();
+
+    const { location } = globalThis;
+
+    const { pathname } = useLocation();
+
+    const pathnameArr = pathname.split('/');
+
+    const parentCategoryUrlKey = pathnameArr[pathnameArr.length - 2].replace('.html','');
+
+    const query = new URLSearchParams(location.search);
+    const shopby = query.get('shopby') || null;
+    const showSubcategory = query.get('show_subcategory') || null;
 
     const talonProps = useCategory({
         id: uid,
@@ -62,15 +81,40 @@ const Category = props => {
     return (
         <Fragment>
             <Meta name="description" content={metaDescription} />
-            <CategoryContent
+            {showSubcategory ? (
+                <SubCategoryPage
                 categoryId={uid}
-                classes={classes}
-                data={categoryData}
-                isLoading={loading}
-                pageControl={pageControl}
-                sortProps={sortProps}
-                pageSize={pageSize}
-            />
+                isLoading={loading} />
+            ) : (
+                shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby && parentCategoryUrlKey == "non-sports-cards" ? <NonSportCardsSets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" || shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : (shopby ? (
+                    <ShopBy
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} />
+                ) : (
+                    <CategoryContent
+                    categoryId={uid}
+                    classes={classes}
+                    data={categoryData}
+                    isLoading={loading}
+                    pageControl={pageControl}
+                    sortProps={sortProps}
+                    pageSize={pageSize}
+                    />
+                ))
+            )}
         </Fragment>
     );
 };

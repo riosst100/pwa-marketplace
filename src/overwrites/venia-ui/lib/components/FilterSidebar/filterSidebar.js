@@ -21,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen, allowedFilters } = props;
+    const { filters, filterCountToOpen, allowedFilters, hideFilters } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -80,9 +80,9 @@ const FilterSidebar = props => {
 
     const allowedFiltersArr = [];
 
-    allowedFilters?.length && allowedFilters.map((val, index) => {
-        allowedFiltersArr.push(val.code);
-    });
+    // allowedFilters?.length && allowedFilters.map((val, index) => {
+    //     allowedFiltersArr.push(val.code);
+    // });
 
     const filtersList = useMemo(
         () =>
@@ -90,7 +90,11 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-                if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
+
+                const hideFilters = ['trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
+                if (!hideFilters.includes(group) && groupName) {
+                    
+                // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
 
 
                     return (
@@ -103,7 +107,7 @@ const FilterSidebar = props => {
                             items={items}
                             name={groupName}
                             onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
-                            initialOpen={iteration < filterCountToOpen}
+                            initialOpen={true}
                         />
                     );
                 }
@@ -154,14 +158,14 @@ const FilterSidebar = props => {
                         <Filter size={15} className='text-gray-900' />
                     </h2>
                 </div>
+                {hideFilters ? <ul className={classes.blocks}>No filters available.</ul> : <>
                 <CurrentFilters
                     filterApi={filterApi}
                     filterNames={filterNames}
                     filterState={filterState}
                     onRemove={handleApplyFilter}
                 />
-                {/* {clearAll} */}
-                <ul className={classes.blocks}>{filtersList}</ul>
+                <ul className={classes.blocks}>{filtersList}</ul></>}
             </div>
         </aside>
     );

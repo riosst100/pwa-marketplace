@@ -144,7 +144,7 @@ module.exports = targets => {
       pattern: "/quotes/:urlKey",
       path: require.resolve("./components/RFQPage/quoteDetailPage.js"),
       authed: true,
-    },
+    }
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation

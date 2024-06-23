@@ -6,6 +6,7 @@
     composes: gap-[6px] from global;
     composes: my-[10px] from global;
     padding-top: 20px;
+    margin-bottom: 40px;
 }
 
 .text {

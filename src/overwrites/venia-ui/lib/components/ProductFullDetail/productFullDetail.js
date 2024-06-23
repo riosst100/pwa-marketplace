@@ -203,29 +203,6 @@ const ProductFullDetail = props => {
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
         <section className={cn(classes.actButton, 'flex gap-x-[30px]')}>
-
-            <Button
-                data-cy="ProductFullDetail-addToCartButton"
-                disabled={isAddToCartDisabled}
-                aria-disabled={isAddToCartDisabled}
-                aria-label={
-                    isEverythingOutOfStock
-                        ? formatMessage({
-                            id: 'productFullDetail.outOfStockProduct',
-                            defaultMessage:
-                                'This item is currently out of stock'
-                        })
-                        : ''
-                }
-                classes={{
-                    content: 'normal-case font-semibold text-[16px]'
-                }}
-                priority="low"
-                type="submit"
-            >
-                Buy Now
-            </Button>
-
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -449,7 +426,7 @@ const ProductFullDetail = props => {
                 onSubmit={handleAddToCart}
             >
                 <section className={cn(classes.leftContainer, 'relative')}>
-                    <ProductLabel />
+                    <ProductLabel item={productDetails} />
                     <Carousel images={mediaGalleryEntries} />
                     <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
                         <Suspense fallback={null}>
@@ -667,7 +644,7 @@ const ProductFullDetail = props => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <Link class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
                                             <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
                                             <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">

@@ -7,7 +7,7 @@ import defaultClasses from './filterTopItemGroup.module.css';
 import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTop/CurrentTopFilters/currentTopFilter';
 
 const FilterTopItemGroup = props => {
-    const { filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState } = props;
+    const { filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -50,6 +50,7 @@ const FilterTopItemGroup = props => {
                     filterState={filterState}
                     group={group}
                     activeFilters={activeFilters}
+                    search={search}
                     item={item}
                     onApply={onApply}
                     labels={labels}
@@ -83,7 +84,8 @@ const FilterTopItemGroup = props => {
     return (
         <div className={classes.root}>
             {radioItems}
-            {filterElements && filterElements.length ? filterElements : <span className={classes.item}><b>All</b></span>}
+            {filterElements && filterElements.length > 10 ? <span className={classes.item}><b>More Item</b></span> : ''}
+            {filterElements && filterElements.length ? filterElements : group != "shopby" ? (<span className={classes.item}><b>All</b></span>) : ''}
         </div>
     );
 };
