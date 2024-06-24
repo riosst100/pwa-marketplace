@@ -254,6 +254,7 @@ const CategoryContent = props => {
     // console.log(allActiveFilters)
 
     // console.log(virtualCategoryFilters)
+    const urlKey = category?.url_key;
 
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
@@ -265,7 +266,7 @@ const CategoryContent = props => {
                 if (label == "Singles") {
                     isSingles = true;
                 }
-                if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
+                if (key == "toys_franchise" && urlKey == "franchise" || key == "toys_brands" && urlKey == "brands" || virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
                             'label': label,
