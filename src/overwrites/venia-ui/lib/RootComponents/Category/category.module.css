@@ -1,0 +1,78 @@
+.root {
+    composes: p-0 from global;
+}
+
+.title {
+    composes: font-semibold from global;
+    composes: text-[24px] from global;
+    composes: leading-[24px] from global;
+    padding: 20px 0px 20px;
+}
+
+.pagination {
+    composes: relative from global;
+    composes: bottom-0 from global;
+}
+
+.placeholder {
+    composes: h-screen from global;
+}
+
+.categoryTitle {
+    composes: font-semibold from global;
+    composes: text-[20px] from global;
+}
+
+.heading {
+    composes: flex from global;
+    composes: flex-wrap from global;
+    composes: justify-center from global;
+    composes: pb-2xs from global;
+
+    composes: lg_flex-nowrap from global;
+    composes: lg_items-center from global;
+    composes: lg_justify-between from global;
+    composes: lg_pb-[30px] from global;
+    composes: lg_w-full from global;
+}
+
+.categoryContent {
+    composes: lg_flex-grow from global;
+}
+
+.categoryInfo {
+    flex-basis: 100%;
+    composes: leading-tight from global;
+    composes: max-w-[75vw] from global;
+    composes: mx-0 from global;
+    composes: my-xs from global;
+    composes: text-center from global;
+    composes: text-base from global;
+    composes: lg_m-0 from global;
+    composes: lg_text-left from global;
+    composes: py-4 from global;
+}
+
+.headerButtons {
+    composes: flex from global;
+    composes: justify-center from global;
+    composes: pb-sm from global;
+    flex-basis: 100%;
+
+    composes: lg_justify-end from global;
+    composes: lg_pb-0 from global;
+}
+
+.contentWrapper {
+    composes: w-full from global;
+    composes: lg_mt-[50px] from global;
+    composes: lg_flex from global;
+    composes: gap-[30px] from global;
+}
+
+.sidebar {
+    composes: hidden from global;
+
+    composes: lg_flex from global;
+    composes: lg_self-start from global;
+}

@@ -1,0 +1,109 @@
+.root {
+    composes: content-start from global;
+    composes: grid from global;
+    /* composes: gap-y-2xs from global; */
+    composes: max-w-[315px] from global;
+}
+
+.images {
+    composes: grid from global;
+    grid-template-areas: 'main';
+    position: relative;
+}
+
+.imageContainer {
+    grid-area: main;
+    composes: max-h-[215px] from global;
+}
+
+.image {
+    composes: block from global;
+    composes: h-full from global;
+    composes: object-contain from global;
+    composes: w-full from global;
+    transition: opacity 512ms ease-out;
+}
+
+.imageLoaded {
+    composes: absolute from global;
+    composes: left-0 from global;
+    composes: top-0 from global;
+
+    /* TODO @TW: review (B6) */
+    /* composes: visible from global; */
+    visibility: visible;
+    composes: opacity-100 from global;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.imageNotLoaded {
+    composes: absolute from global;
+    composes: left-0 from global;
+    composes: top-0 from global;
+
+    /* TODO @TW: review (B6) */
+    /* composes: visible from global; */
+    visibility: visible;
+
+    /* TODO @TW: review (B6) */
+    /* composes: invisible from global; */
+    visibility: hidden;
+
+    composes: opacity-0 from global;
+}
+
+.imagePlaceholder {
+    composes: image;
+
+    composes: bg-subtle from global;
+}
+
+.actionsContainer {
+    composes: gap-x-xs from global;
+    composes: grid from global;
+    composes: pl-2xs from global;
+    grid-template-columns: auto auto;
+}
+
+/* TODO @TW: cannot compose */
+.actionsContainer:empty {
+    display: none;
+}
+
+.name {
+    composes: font-medium from global;
+    composes: text-base from global;
+    composes: mb-1 from global;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: normal;
+}
+
+.name,
+.price {
+    composes: text-colorDefault from global;
+    composes: text-[14px] from global;
+    composes: font-semibold from global;
+    min-height: 1rem;
+}
+
+.price {
+    padding-top: 2.5;
+}
+
+.unavailableContainer {
+    composes: bg-subtle from global;
+    composes: gap-x-2xs from global;
+    composes: grid from global;
+    composes: grid-flow-col from global;
+    composes: italic from global;
+    composes: items-center from global;
+    composes: justify-start from global;
+    composes: p-3 from global;
+    composes: text-base from global;
+    composes: text-subtle from global;
+    composes: w-full from global;
+}

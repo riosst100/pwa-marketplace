@@ -1,0 +1,49 @@
+.submenu {
+    composes: absolute from global;
+    composes: bg-white from global;
+    composes: left-0 from global;
+    composes: px-3 from global;
+    composes: py-5 from global;
+    composes: right-0 from global;
+    top: 130px;
+    box-shadow: 0 3px rgb(var(--venia-global-color-gray-100));
+}
+
+.submenuContainer {
+    composes: w-full from global;
+    composes: max-w-[1210px] from global;
+    composes: mx-[auto] from global;
+    composes: gap-[15px] from global;
+    composes: max-h-[50vh] from global;
+    composes: overflow-y-auto from global;
+}
+
+/* TODO @TW: cannot compose */
+.submenu::before {
+    box-shadow: inset 0 2px rgb(var(--venia-global-color-gray-100));
+    content: '';
+    height: 1px;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.submenu_inactive {
+    composes: submenu;
+    composes: hidden from global;
+}
+
+.submenu_active {
+    composes: submenu;
+}
+
+.submenuItems {
+    composes: grid from global;
+    composes: grid-cols-4 from global;
+    /* composes: justify-between from global; */
+    /* composes: ml-auto from global; */
+    /* composes: mr-auto from global; */
+    /* composes: flex-col from global; */
+}

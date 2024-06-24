@@ -1,0 +1,17 @@
+.root {
+    composes: gap-y-md from global;
+    composes: grid from global;
+    composes: justify-center from global;
+    composes: px-0 from global;
+    composes: py-lg from global;
+    composes: text-center from global;
+    grid-template-columns: minmax(auto, 512px);
+}
+
+.header {
+    composes: font-serif from global;
+}
+
+.contentContainer {
+    composes: rounded-lg from global;
+}

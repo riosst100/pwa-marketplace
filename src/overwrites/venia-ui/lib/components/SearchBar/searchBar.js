@@ -1,0 +1,99 @@
+import React from 'react';
+import { bool, shape, string } from 'prop-types';
+import { Form } from 'informed';
+import { useIntl } from 'react-intl';
+import { useSearchBar } from '@magento/peregrine/lib/talons/SearchBar';
+
+import { useStyle } from '@magento/venia-ui/lib/classify';
+import Autocomplete from './autocomplete';
+import SearchField from './searchField';
+import defaultClasses from './searchBar.module.css';
+import Dropdown from '@riosst100/pwa-marketplace/src/components/Dropdown';
+import cn from 'classnames';
+
+const SearchBar = React.forwardRef((props, ref) => {
+    const { isOpen } = props;
+    const talonProps = useSearchBar();
+    const {
+        containerRef,
+        handleChange,
+        handleFocus,
+        handleSubmit,
+        initialValues,
+        isAutoCompleteOpen,
+        setIsAutoCompleteOpen,
+        valid
+    } = talonProps;
+
+    const classes = useStyle(defaultClasses, props.classes);
+    const rootClassName = isOpen ? classes.root_open : classes.root;
+    const { formatMessage } = useIntl();
+
+    const options = [
+        { value: '2', label: 'Action Figures' },
+        { value: '3', label: 'Anime' },
+    ];
+
+    const handleSelect = (option) => {
+    };
+
+    return (
+        <div className={rootClassName} data-cy="SearchBar-root" ref={ref}>
+            <div ref={containerRef} className={classes.container}>
+                <Form
+                    autoComplete="off"
+                    className={classes.form}
+                    initialValues={initialValues}
+                    onSubmit={handleSubmit}
+                >
+                    <div
+                        className={cn(
+                            classes.search,
+                            'flex flex-row relative border border-gray-100 rounded-full'
+                        )}
+                    >
+                        <Dropdown
+                            placeholder="All Category"
+                            options={options}
+                            onSelect={handleSelect}
+                            rootClassName="!static"
+                            optionsClassName="w-full grid grid-cols-4 !mt-2.5"
+                            optionItemClassName="hover_bg-white hover_text-blue-400 font-medium"
+                            className="border-none after_w-[1px] after_h-[18px] after_bg-gray-100 h-10"
+                        />
+                        <SearchField
+                            addLabel={formatMessage({
+                                id: 'global.clearText',
+                                defaultMessage: 'Clear Text'
+                            })}
+                            isSearchOpen={isAutoCompleteOpen}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                        />
+                        <div className={classes.autocomplete}>
+                            <Autocomplete
+                                setVisible={setIsAutoCompleteOpen}
+                                valid={valid}
+                                visible={isAutoCompleteOpen}
+                            />
+                        </div>
+                    </div>
+                </Form>
+            </div>
+        </div>
+    );
+});
+
+export default SearchBar;
+
+SearchBar.propTypes = {
+    classes: shape({
+        autocomplete: string,
+        container: string,
+        form: string,
+        root: string,
+        root_open: string,
+        search: string
+    }),
+    isOpen: bool
+};

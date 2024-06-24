@@ -1,0 +1,14 @@
+query getAvailableWebsitesConfigData {
+    availableStoresByUserIp {
+        store_code
+        id
+        secure_base_media_url
+        store_name
+        default_display_currency_code
+        website_code
+        is_default_store
+        website_code
+        website_name
+        is_suggested
+    }
+}

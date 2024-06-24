@@ -1,0 +1,20 @@
+{
+  "name": "@riosst100/pwa-marketplace",
+  "author": "riosst100@gmail.com",
+  "version": "1.9.2",
+  "main": "src/index.js",
+  "pwa-studio": {
+    "targets": {
+      "intercept": "src/intercept.js"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "iconsax-react": "^0.0.8",
+    "react-countdown": "^2.3.5",
+    "react-phone-number-input": "^3.3.9",
+    "react-slick": "^0.30.2"
+  },
+  "license": "MIT",
+  "private": false
+}
