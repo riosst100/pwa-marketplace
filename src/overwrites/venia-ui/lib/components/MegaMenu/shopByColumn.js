@@ -7,6 +7,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenuColumn.module.css';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
+import cn from 'classnames';
 
 const ShopByColumn = props => {
     const classes = useStyle(defaultClasses, props.classes);
@@ -45,12 +46,12 @@ const ShopByColumn = props => {
                     ? props.keyboardProps
                     : {};
 
-            const categoryUrl = resourceUrl(
-                `/${url_path}${categoryUrlSuffix || ''}?${shopBy.code}[filter]=${name},${option_id}`
-            );
+            const categoryUrl = 
+                `/${shopByItem.url_path}`
+            ;
 
             return (
-                <li key={index} className={classes.submenuChildItem}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
                     <Link
                         {...keyboardProps}
                         // className={isActive ? classes.linkActive : classes.link}

@@ -8,7 +8,7 @@ import { getFilterInput, getFiltersFromSearch } from '@magento/peregrine/lib/tal
 
 export const useShopBy = props => {
 
-    const { searchQuery, active, setActive, currentSort, categoryId, shopby } = props
+    const { searchQuery, activeFilter, active, setActive, currentSort, categoryId, shopby } = props
 
     const { value: sortby } = currentSort
 
@@ -58,14 +58,10 @@ export const useShopBy = props => {
 
     const filters = getFiltersFromSearch(search);
 
-    // console.log(search)
-
     // Construct the filter arg object.
     const newFilters = {};
     filters.forEach((values, key) => {
         newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
-// console.log(key)
-// console.log(values)
         
         if (key == "sc_baseball_release") {
             for(let item of values) {
@@ -96,11 +92,16 @@ export const useShopBy = props => {
             variables: {
                 filters: newFilters,
                 categoryUrlKey: categoryUrlKey,
-                attributeCode: shopby
+                attributeCode: shopby,
+                activeFilter: activeFilter
             }
         });
     }, [
         runQuery,
+        activeFilter,
+        shopby,
+        // categoryUrlKey,
+        // filters
         // filterTypeMap,
         // search
     ]);
@@ -140,7 +141,7 @@ export const useShopBy = props => {
             if (!alpha.includes(firstLetter)) {
                 firstLetter = '#';
             }
-            if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+            if (shopby == "vehicles_year" || shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
                 firstLetter = '#';
             }
             acc[firstLetter] = acc[firstLetter] || [];
@@ -201,7 +202,7 @@ export const useShopBy = props => {
                 if (!alpha.includes(firstLetter)) {
                     firstLetter = '#';
                 }
-                if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+                if (shopby == "vehicles_year" || shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
                     firstLetter = '#';
                 }
                 acc[firstLetter] = acc[firstLetter] || [];
@@ -219,7 +220,7 @@ export const useShopBy = props => {
 
     let filteredAvailableGroups = dataResult ? Object.keys(dataResult).sort() : [];
     
-    if (shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
+    if (shopby == "vehicles_year" || shopby == "trains_gauge" || shopby == "vehicles_scale" || shopby == "lego_theme" || shopby == "lego_subtheme" || shopby == "lego_interest") {
         availableGroups = ['#'];
         filteredAvailableGroups = ['#'];
     }

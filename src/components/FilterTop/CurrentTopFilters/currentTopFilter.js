@@ -31,7 +31,7 @@ const CurrentTopFilter = props => {
         }
     );
 
-    return group != "shopby" ? (
+    return group != "trains" && group != "trains_gauge" && group != "category" && group != "shopby" ? (
         <span className={classes.item} data-cy="CurrentTopFilter-root">
             <Trigger
                 action={handleClick}

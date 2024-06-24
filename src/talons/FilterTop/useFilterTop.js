@@ -21,7 +21,7 @@ import DEFAULT_OPERATIONS from './filterTop.gql';
 const DRAWER_NAME = 'filter';
 
 export const useFilterTop = props => {
-    const { filters, category } = props;
+    const { filters, category, shopby } = props;
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const { getFilterInputsQuery, getCustomFilters } = operations;
@@ -77,7 +77,8 @@ export const useFilterTop = props => {
         runQuery({
             variables: {
                 filters: newFilters,
-                category: category?.url_path
+                category: category?.url_path,
+                shopby: shopby
             }
         });
     }, [
