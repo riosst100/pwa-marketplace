@@ -46,6 +46,7 @@ const CategoryContent = props => {
     const {
         categoryId,
         data,
+        shopby,
         isLoading,
         pageControl,
         sortProps,
@@ -288,9 +289,13 @@ const CategoryContent = props => {
          : currentFilter
     ) : categoryName;
 
+    if (shopby == "gauge") {
+        title = "Trains By Gauge";
+    }
+
     return (
         <Fragment>
-            <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} />
+            <Breadcrumbs categoryId={categoryId} customPage={shopby == "gauge" ? title : ''} currentFilter={activeFilters} />
             <StoreTitle>{title}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
                 <div className={classes.categoryHeader}>
@@ -307,13 +312,13 @@ const CategoryContent = props => {
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
                         {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
-                        <SubCategory parent={parent} children={children} />
+                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
                         {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
                     </>
                 {/* ) : ( */}
                     <>
                         {/* <SubCategory filters={filters} children={children} /> */}
-                        <FilterTop filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
+                        <FilterTop shopby={shopby} filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
                         {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
                         {/* <section className='category_brand-slider my-5'>
                             <BrandSlider />

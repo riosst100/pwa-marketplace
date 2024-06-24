@@ -6,6 +6,28 @@
     margin-top: 20px;
 }
 
+.nav {
+    composes: flex from global;
+    composes: flex-wrap from global;
+    margin: 50px 0 30px 0;
+    composes: gap-[10px] from global;
+}
+
+.nav_item {
+    composes: px-4 from global;
+    composes: py-2 from global;
+    composes: transition-colors from global;
+    composes: duration-150 from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: leading-normal from global;
+    composes: text-base from global;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-gray-100 from global;
+    border-radius: 5px;
+}
+
 .tabs {
     composes: flex from global;
     composes: flex-wrap from global;

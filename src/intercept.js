@@ -116,34 +116,6 @@ module.exports = targets => {
       pattern: "/brand",
       path: require.resolve("./components/BrandLandingPage/index.js"),
       authed: false,
-    },
-    {
-      exact: true,
-      name: "MtgSinglesPage",
-      pattern: "/mtg-singles",
-      path: require.resolve("./components/MtgSinglesPage/index.js"),
-      authed: false,
-    },
-    {
-      exact: true,
-      name: "FavoriteSeller",
-      pattern: "/favorite-seller",
-      path: require.resolve("./components/FavoriteSeller/index.js"),
-      authed: true,
-    },
-    {
-      exact: true,
-      name: "Quote List",
-      pattern: "/quotes",
-      path: require.resolve("./components/RFQPage/index.js"),
-      authed: true,
-    },
-    {
-      exact: true,
-      name: "Quote Detail",
-      pattern: "/quotes/:urlKey",
-      path: require.resolve("./components/RFQPage/quoteDetailPage.js"),
-      authed: true,
     }
   ];
 

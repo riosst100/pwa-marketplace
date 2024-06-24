@@ -1,13 +1,3 @@
 .menu {
-    flex-basis: 23%;
-}
-
-.blockContent {
-    width: 100%;
-}
-
-@media only screen and (min-width: 1024px) {
-    .blockContent {
-        width: calc(100% - 260px);
-    }
+    flex-basis: 260px;
 }

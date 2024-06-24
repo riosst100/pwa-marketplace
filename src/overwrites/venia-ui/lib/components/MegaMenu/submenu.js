@@ -105,8 +105,8 @@ const Submenu = props => {
                     )}
                 >
                     {subMenus}
+                    {shopBy}
                 </div>
-                {shopBy}
             </div>
         </div>
     );

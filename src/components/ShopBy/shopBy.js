@@ -85,8 +85,9 @@ const ShopBy = props => {
     //     virtualCategoryFilters
     // } = talonProps;
     
-    const [active, setActive] = useState('all');
-
+    const [active, setActive] = useState('all')
+    const [activeTab, setActiveTab] = useState('all');
+    const [activeFilter, setActiveFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
     const { search } = useLocation();
@@ -106,7 +107,7 @@ const ShopBy = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useShopBy({ searchQuery, active, setActive, currentSort, categoryId, shopby });
+    const talonProps = useShopBy({ activeFilter, searchQuery, active, setActive, currentSort, categoryId, shopby });
 
     const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, activeFilters } = talonProps;
 
@@ -230,10 +231,138 @@ const ShopBy = props => {
     
     const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
 
+    let availableFilterOption = [];
+
+    if (shopby == "vehicles_make" || shopby == "vehicles_brands") {
+        availableFilterOption = [
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Cars',
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Formula Racing'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Motorsport'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Aircraft'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Bikes'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Military'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Transport'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Emergency Services'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'Heavy Machinery'
+            },
+            {
+                'code': 'vehicles_diecast',
+                'value': 'TV/Movies'
+            }
+        ];
+    }
+
+    // console.log(category)
+
+    if (shopby == "toys_brands" || shopby == "toys_product_line") {
+        if (category && category.url_path.includes('anime-figures')) {
+            availableFilterOption = [
+                {
+                    'code': 'anime_figures',
+                    'value': 'Complete Figures',
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Articulated Figures'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Statues'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Mini-Figures'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Capsule Toys (Gashapon)'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Candy Toys'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'R18+'
+                },
+                {
+                    'code': 'anime_figures',
+                    'value': 'Model Kits'
+                }
+            ];
+        }
+    }
+
+    const handleActiveTab = (val) => {
+        setActiveTab(val);
+        setActive('all');
+        setActiveFilter('');
+
+        setSearchQuery('')
+    }
+
+    const handleActiveFilter = (val) => {
+        setActiveFilter(val);
+
+        setActive('all');
+
+        setSearchQuery('')
+    }
+
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
+            {availableFilterOption.length ? 
+                <ul className={classes.nav}>
+                    {availableFilterOption.map((filter, index) => (
+                        <li className={classes.nav_item}>
+                            <button
+                                onClick={() => {
+                                    handleActiveFilter(filter.code + '|' + filter.value)
+                                }}
+                            >
+                                {activeFilter == filter.code + '|' + filter.value ? <b>{filter.value}</b> : filter.value}
+                            </button>
+                        </li>
+                    ))}
+                    <li className={classes.nav_item}>
+                        <button
+                            onClick={() => {
+                                handleActiveFilter('')
+                            }}
+                        >
+                            {activeFilter == '' ? <b>All</b> : 'All'}
+                        </button>
+                    </li>
+                </ul>
+            : ''}
             <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>
@@ -246,7 +375,7 @@ const ShopBy = props => {
                         <CustomSortBy sortProps={sortProps} availableSortMethods={availableSortBy} />
                     </div>
                 ) : ''}
-                {shopby != "trains_gauge" && shopby != "vehicles_scale" && shopby != "lego_theme" && shopby != "lego_subtheme" && shopby != "lego_interest" && shopby != "lego_age_level" && productType != "expansion-sets" ? (
+                {shopby != "vehicles_year" && shopby != "trains_gauge" && shopby != "vehicles_scale" && shopby != "lego_theme" && shopby != "lego_subtheme" && shopby != "lego_interest" && shopby != "lego_age_level" && productType != "expansion-sets" ? (
                     <>
                         <section className='single_list-indexing-container relative m-auto pt-5'>
                             <ul className='flex gap-2 justify-center flex-wrap'>

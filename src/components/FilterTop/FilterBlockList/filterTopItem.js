@@ -27,7 +27,9 @@ const FilterTopItem = props => {
         [group, item, onApply, removeGroup, toggleItem]
     );
 
-    const element = group == "shopby" || group == "shopby_with_all" ? (
+    const element = group == "category" ? (
+        <Link className={classes.item} to={'/'+value}>{title}</Link>
+    ) : group == "shopby" || group == "shopby_with_all" ? (
         <Link className={classes.item} to={search ? search + '&shopby=' + value : '?shopby=' + value}>{title}</Link>
     ) : (
         activeFilters.includes(value) ? (

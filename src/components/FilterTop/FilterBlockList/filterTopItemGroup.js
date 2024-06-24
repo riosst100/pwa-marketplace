@@ -85,7 +85,7 @@ const FilterTopItemGroup = props => {
         <div className={classes.root}>
             {radioItems}
             {filterElements && filterElements.length > 10 ? <span className={classes.item}><b>More Item</b></span> : ''}
-            {filterElements && filterElements.length ? filterElements : group != "shopby" ? (<span className={classes.item}><b>All</b></span>) : ''}
+            {filterElements && filterElements.length ? filterElements : group != "trains" && group != "trains_gauge" && group != "category" && group != "shopby" ? (<span className={classes.item}><b>All</b></span>) : ''}
         </div>
     );
 };

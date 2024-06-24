@@ -19,6 +19,7 @@ export const GET_SHOP_BY_DATA_QUERY = gql`
                 set_name
                 option_id
                 release_year
+                vehicles_diecast
             }
         }
     }
