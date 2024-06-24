@@ -22,8 +22,8 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterTop = props => {
-    const { filters, filterCountToOpen, allowedFilters, category } = props;
-    const talonProps = useFilterTop({ filters, category });
+    const { shopby, filters, filterCountToOpen, allowedFilters, category } = props;
+    const talonProps = useFilterTop({ shopby, filters, category });
     const {
         filterApi,
         filterItems,

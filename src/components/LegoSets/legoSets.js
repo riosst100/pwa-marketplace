@@ -127,8 +127,7 @@ const LegoSets = props => {
 
                 setsResult.push(<li className='list-none'>
                     <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
-                        <b>{set_name}</b>
-                        <div style={{"fontSize": "12px"}}>589 Parts, 2 Minifigures</div>
+                        {set_name}
                     </Link>
                 </li>)
             })

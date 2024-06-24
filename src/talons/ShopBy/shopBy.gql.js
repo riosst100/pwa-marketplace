@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SHOP_BY_DATA_QUERY = gql`
-    query getShopByData($categoryUrlKey: String!, $attributeCode: String, $filters: ProductAttributeFilterInput!) {
-        shopByData(categoryUrlKey: $categoryUrlKey, attributeCode: $attributeCode, filters: $filters) {
+    query getShopByData($activeFilter: String, $categoryUrlKey: String!, $attributeCode: String, $filters: ProductAttributeFilterInput!) {
+        shopByData(activeFilter: $activeFilter, categoryUrlKey: $categoryUrlKey, attributeCode: $attributeCode, filters: $filters) {
             label
             count
             attribute_code
