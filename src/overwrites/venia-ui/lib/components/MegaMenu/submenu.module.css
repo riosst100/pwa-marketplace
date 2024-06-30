@@ -41,7 +41,7 @@
 
 .submenuItems {
     composes: grid from global;
-    composes: grid-cols-4 from global;
+    composes: grid-cols-6 from global;
     /* composes: justify-between from global; */
     /* composes: ml-auto from global; */
     /* composes: mr-auto from global; */

@@ -56,6 +56,11 @@ export const useCategory = props => {
 
     const sortProps = useSort({ sortFromSearch: false });
     const [currentSort] = sortProps;
+    
+    const { pathname } = useLocation();
+
+    const pathnameArr = pathname.split('/');
+    const categoryUrlKey = pathnameArr[pathnameArr.length - 1].replace('.html','');
 
     // Keep track of the sort criteria so we can tell when they change.
     const previousSort = useRef(currentSort);
@@ -132,7 +137,9 @@ export const useCategory = props => {
 
         // Use the category uid for the current category page regardless of the
         // applied filters. Follow-up in PWA-404.
-        newFilters['category_uid'] = { eq: id };
+        if (categoryUrlKey != "brands" && categoryUrlKey != "franchise") {
+            newFilters['category_uid'] = { eq: id };
+        }
 
         runQuery({
             variables: {

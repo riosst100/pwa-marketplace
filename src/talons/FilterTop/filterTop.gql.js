@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_CUSTOM_FILTERS = gql`
-    query GetCustomFilters($shopby: String, $category: String!, $filters: ProductAttributeFilterInput!) {
-        customSubFilters(shopby: $shopby, category: $category, filters: $filters) {
+    query GetCustomFilters($filterBy: String, $shopby: String, $category: String!, $filters: ProductAttributeFilterInput!) {
+        customSubFilters(filterBy: $filterBy, shopby: $shopby, category: $category, filters: $filters) {
             label
             count
             attribute_code

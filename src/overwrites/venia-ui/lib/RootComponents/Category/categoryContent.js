@@ -93,8 +93,8 @@ const CategoryContent = props => {
                 history.replace('/cards/non-sports-cards/comics.html')
             }
 
-            if (urlKey == "age-level" || urlKey == "lego" || urlKey == "minifigures" || urlKey == "sub-theme" || urlKey == "theme" || urlKey == "interest") {
-                history.replace('/lego-toys/lego/sets.html')
+            if (urlKey == "lego") {
+                history.replace('/lego/lego-sets.html')
             }
         }
     }, [category]);
@@ -266,7 +266,7 @@ const CategoryContent = props => {
                 if (label == "Singles") {
                     isSingles = true;
                 }
-                if (key == "toys_franchise" && urlKey == "franchise" || key == "toys_brands" && urlKey == "brands" || virtualCategoryFilters.includes(key)) {
+                if (key == "toys_product_line" && urlKey == "brands" || key == "toys_product_line" && urlKey == "franchise" || key == "toys_franchise" && urlKey == "brands" || key == "toys_franchise" && urlKey == "franchise" || key == "toys_brands" && urlKey == "franchise" || key == "toys_brands" && urlKey == "brands" || virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
                             'label': label,
@@ -286,7 +286,7 @@ const CategoryContent = props => {
 
     let title = activeFilters && activeFilters.length ? (
         activeFilters.length > 1 ? 
-            activeFilters.map(u => u.label).join(': ')
+            activeFilters[activeFilters.length - 1].label
          : currentFilter
     ) : categoryName;
 
@@ -313,8 +313,9 @@ const CategoryContent = props => {
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
                         {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
-                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
                         {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
+                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
+                        
                     </>
                 {/* ) : ( */}
                     <>

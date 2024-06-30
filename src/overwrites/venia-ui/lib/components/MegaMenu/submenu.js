@@ -7,6 +7,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenu.module.css';
 import SubmenuColumn from './submenuColumn';
 import ShopByColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/shopByColumn';
+import CustomSubmenuColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/customSubmenuColumn';
 import cn from 'classnames';
 
 /**
@@ -44,6 +45,29 @@ const Submenu = props => {
         ? classes.submenu_active
         : classes.submenu_inactive;
 
+    // const subMenus = items.map((category, index) => {
+    //     const keyboardProps =
+    //         index === items.length - 1 ? talonProps.keyboardProps : {};
+    //     return (
+    //         <SubmenuColumn
+    //             index={index}
+    //             keyboardProps={keyboardProps}
+    //             key={category.uid}
+    //             category={category}
+    //             categoryUrlSuffix={categoryUrlSuffix}
+    //             onNavigate={onNavigate}
+    //             arrow={arrow}
+    //             handleCloseSubMenu={handleCloseSubMenu}
+    //         />
+    //     );
+    // });
+    // const subMenus = <CustomSubmenuColumn
+    //     categoryUrlSuffix={categoryUrlSuffix}
+    //     onNavigate={onNavigate}
+    //     arrow={arrow}
+    //     handleCloseSubMenu={handleCloseSubMenu}
+    //     customMenuItems={items}
+    // />;
     const subMenus = items.map((category, index) => {
         const keyboardProps =
             index === items.length - 1 ? talonProps.keyboardProps : {};
@@ -61,7 +85,16 @@ const Submenu = props => {
         );
     });
 
-    // const shopByItems = [
+    // const shopByItems2 = [
+    //     {
+    //         name: 'Shop By Franchise',
+    //         items: [
+    //             {
+    //                 name: 'Hasbro',
+    //                 url: '/'
+    //             }
+    //         ]
+    //     },
     //     {
     //         name: 'Shop By Franchise',
     //         items: [
@@ -101,10 +134,12 @@ const Submenu = props => {
                 <div
                     className={cn(
                         classes.submenuItems,
-                        'grid grid-cols-4',
+                        'grid grid-cols-6',
                     )}
                 >
-                    {subMenus}
+                    {shopByItems.length ? (<div className={classes.submenuColumn}>
+                        {subMenus}
+                    </div>) : subMenus}
                     {shopBy}
                 </div>
             </div>

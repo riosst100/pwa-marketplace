@@ -13,13 +13,17 @@ const FilterBlockList = props => {
         onApply,
         filterNames,
         originalFilterState,
-        search
+        search,
+        setFilterBy,
+        filterBy
     } = props;
 
     const itemElements = useMemo(() => {
         const key = `item-${group}`;
         return (
             <FilterTopItemGroup
+                setFilterBy={setFilterBy}
+                filterBy={filterBy}
                 filterApi={filterApi}
                 filterState={filterState}
                 group={group}
