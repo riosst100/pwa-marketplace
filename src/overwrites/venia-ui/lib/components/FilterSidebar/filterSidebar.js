@@ -92,7 +92,7 @@ const FilterSidebar = props => {
                 const frontendInput = filterFrontendInput.get(group);
 
                 const hideFilters = ['trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
-                // if (!hideFilters.includes(group) && groupName) {
+                if (!hideFilters.includes(group) && groupName) {
                     
                 // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
 
@@ -110,7 +110,7 @@ const FilterSidebar = props => {
                             initialOpen={true}
                         />
                     );
-                // }
+                }
             }),
         [
             filterApi,
