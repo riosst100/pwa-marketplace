@@ -17,7 +17,7 @@ import SportCardsSets from '@riosst100/pwa-marketplace/src/components/SportCards
 import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSportCardsSets/nonSportCardsSets';
 import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/trainsSets';
-import ShopByVehicles from '@riosst100/pwa-marketplace/src/components/ShopByVehicles/shopByVehicles';
+import ShopByBrands from '@riosst100/pwa-marketplace/src/components/ShopByBrands/shopByBrands';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -88,7 +88,10 @@ const Category = props => {
                 categoryId={uid}
                 isLoading={loading} />
             ) : (
-                shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
+                shopby == "all_brands" ? <ShopByBrands
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : shopby && parentCategoryUrlKey == "non-sports-cards" ? <NonSportCardsSets

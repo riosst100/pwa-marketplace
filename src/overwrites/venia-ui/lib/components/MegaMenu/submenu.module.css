@@ -3,7 +3,7 @@
     composes: bg-white from global;
     composes: left-0 from global;
     composes: px-3 from global;
-    composes: py-5 from global;
+    composes: py-1 from global;
     composes: right-0 from global;
     top: 130px;
     box-shadow: 0 3px rgb(var(--venia-global-color-gray-100));
@@ -41,7 +41,7 @@
 
 .submenuItems {
     composes: grid from global;
-    composes: grid-cols-6 from global;
+    composes: grid-cols-6 pb-2 from global;
     /* composes: justify-between from global; */
     /* composes: ml-auto from global; */
     /* composes: mr-auto from global; */

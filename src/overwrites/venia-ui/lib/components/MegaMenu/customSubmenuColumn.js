@@ -30,7 +30,7 @@ const CustomSubmenuColumn = props => {
             );
 
             return (
-                <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-1')}>
                     <Link
                         className={classes.link}
                         data-cy="MegaMenu-CustomSubmenuColumn-link"
