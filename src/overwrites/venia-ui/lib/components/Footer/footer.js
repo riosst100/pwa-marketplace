@@ -62,7 +62,7 @@ const Footer = props => {
             data-cy="Footer-root"
             className={cn(
                 classes.root,
-                '!pt-[50px] !px-0'
+                '!pt-[50px] !px-6 lg_!px-4'
             )}
         >
             <div className={classes.links}>

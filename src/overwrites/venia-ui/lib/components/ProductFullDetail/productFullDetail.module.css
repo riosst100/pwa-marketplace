@@ -64,7 +64,9 @@
     grid-area: left-container;
     grid-column: 1 / 2;
     grid-row: 1 / fold;
-    composes: max-w-[495px] from global;
+    composes: lg_max-w-[495px] from global;
+    composes: max-w-full from global;
+
 }
 
 .rightContainer {
@@ -196,4 +198,13 @@
 
 .actButton {
     composes: mt-sm from global;
+}
+
+@media only screen and (max-width: 767px) {
+    .actButton {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        row-gap: 16px;
+    }
 }

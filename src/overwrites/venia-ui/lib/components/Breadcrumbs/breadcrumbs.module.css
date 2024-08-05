@@ -4,7 +4,8 @@
     composes: flex from global;
     composes: items-center from global;
     composes: gap-[6px] from global;
-    composes: my-[10px] from global;
+    composes: mt-[10px] from global;
+    composes: mb-[24px] from global;
     padding-top: 20px;
     margin-bottom: 40px;
 }
@@ -30,4 +31,40 @@
 .currentCategory {
     composes: text-base from global;
     composes: leading-[13px] from global;
+}
+
+@media only screen and (max-width: 1023px) {
+    .text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        max-width: 160px;
+    }
+
+    .link {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        max-width: 160px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        max-width: 100px;
+    }
+
+    .link {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        max-width: 100px;
+    }
 }

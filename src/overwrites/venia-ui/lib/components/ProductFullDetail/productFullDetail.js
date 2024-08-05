@@ -13,9 +13,7 @@ import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 import Button from '@magento/venia-ui/lib/components/Button';
 import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
-import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import QuantityStepper from '../QuantityStepper';
-// import RichContent from '../RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
 import defaultClasses from './productFullDetail.module.css';
@@ -36,6 +34,7 @@ import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
 import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
+import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -50,6 +49,25 @@ const ERROR_MESSAGE_TO_FIELD_MAPPING = {
 const ERROR_FIELD_TO_MESSAGE_MAPPING = {
     quantity: 'The requested quantity is not available.'
 };
+
+const ProductDetailsCollapsible = (props) => {
+    const { data } = props;
+
+    return (
+        <>
+            {data.map((_data) => (
+                <Collapsible
+                    title={_data.title}
+                    contentWrapperClassName="!mt-0"
+                    rootClassName="first-of-type_!border-0 last-of-type_border-b last-of-type_border-gray-100"
+                    className="last-of-type_border-b last-of-type_border-gray-100"
+                >
+                    {_data.content}
+                </Collapsible>
+            ))}
+        </>
+    )
+}
 
 const ProductFullDetail = props => {
     const { product } = props;
@@ -72,7 +90,6 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
-    console.log("🚀 ~ ProductFullDetail ~ talonProps:", talonProps)
 
     const { formatMessage } = useIntl();
 
@@ -283,7 +300,7 @@ const ProductFullDetail = props => {
 
     const tokopedia_logo = './tokopedia_logo.png';
 
-    const contentContainerClass = 'content-container max-w-[1040px] p-2.5 m-auto relative mt-[34px]'
+    const contentContainerClass = 'content-container max-w-[1040px] p-2.5 m-auto relative mt-0 lg_mt-[34px] pb-6 lg_pb-0'
     const ProductDescription = () => (
         <div className={cn(contentContainerClass)}>
             {/* <span
@@ -428,7 +445,7 @@ const ProductFullDetail = props => {
                 <section className={cn(classes.leftContainer, 'relative')}>
                     <ProductLabel item={productDetails} />
                     <Carousel images={mediaGalleryEntries} />
-                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
+                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-2 lg_mt-5 mb-6 lg_mb-0'>
                         <Suspense fallback={null}>
                             <WishlistButton
                                 classes={{
@@ -660,12 +677,17 @@ const ProductFullDetail = props => {
                 </section>
             </Form>
             <section className='section_product-details-container mt-8 mb-10'>
-                <Tabs
-                    data={dataTabs}
-                    tabContentWrapperClassName='!p-0'
-                    hasContent
-                    tabWrapperClassName='xl_gap-x-[60px] justify-center'
-                />
+                <div className='hidden lg_block'>
+                    <Tabs
+                        data={dataTabs}
+                        tabContentWrapperClassName='!p-0'
+                        hasContent
+                        tabWrapperClassName='xl_gap-x-[60px] justify-center'
+                    />
+                </div>
+                <div className='block lg_hidden'>
+                    <ProductDetailsCollapsible data={dataTabs} />
+                </div>
             </section>
 
             <section className='pt-8 lg_pt-10'>
@@ -673,7 +695,7 @@ const ProductFullDetail = props => {
             </section>
 
             <section className='w-[calc(100vw-9px)] relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-gray-50 py-[30px] px-0 mb-10'>
-                <div className='max-w-[1200px] px-2.5 mx-auto relative'>
+                <div className='lg_max-w-[1200px] px-2.5 mx-auto relative max-w-screen-md'>
                     <CrossSeller />
                 </div>
             </section>
