@@ -197,3 +197,12 @@
 .actButton {
     composes: mt-sm from global;
 }
+
+@media only screen and (max-width: 767px) {
+    .actButton {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        row-gap: 16px;
+    }
+}

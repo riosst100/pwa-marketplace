@@ -24,6 +24,7 @@ import { useIntl } from 'react-intl';
 import cn from 'classnames';
 // const SearchBar = React.lazy(() => import('@magento/venia-ui/lib/components/SearchBar'));
 const SearchBar = React.lazy(() => import('@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SearchBar'));
+import { SearchNormal } from 'iconsax-react';
 
 import { useLogo } from '@riosst100/pwa-marketplace/src/talons/Header/useLogo';
 import Image from '@magento/venia-ui/lib/components/Image';
@@ -85,7 +86,7 @@ const Header = props => {
             <header className={cn(rootClass, '!flex flex-col !px-0 border-gray-100 ')} data-cy="Header-root">
                 <div className={cn('middle-header border-b border-gray-100')}>
                     <div className={cn('w-full max-w-[1210px] px-[15px] py-[10px] mx-[auto] flex justify-between items-center')}>
-                        <div className='flex'>
+                        <div className='flex items-center'>
                             <NavTrigger />
 
                             <Link
@@ -114,6 +115,16 @@ const Header = props => {
                             </Link>
                         </div>
                         <div className='flex flex-auto max-w-[700px]'>
+                            <div className=' hidden lg_flex w-full'>
+                                <Suspense fallback={searchBarFallback}>
+                                    <Route>
+                                        <SearchBar isOpen={true} ref={searchRef} />
+                                    </Route>
+                                </Suspense>
+                            </div>
+                            <div className='flex w-full justify-end lg_hidden'>
+                                <SearchNormal size="25" color="#280135" variant="Outline" className='mr-4' />
+                            </div>
                             <Suspense fallback={searchBarFallback}>
                                 <Route>
                                     <SearchBar isOpen={true} ref={searchRef} />

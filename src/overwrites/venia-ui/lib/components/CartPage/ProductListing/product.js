@@ -146,7 +146,7 @@ const Product = props => {
                             defaultMessage={' ea.'}
                         /> */}
                     </span>
-                    <div className={classes.quantity}>
+                    <div className={cn(classes.quantity, 'hidden sm_flex')}>
                         <Quantity
                             itemId={item.id}
                             initialValue={quantity}
@@ -186,7 +186,14 @@ const Product = props => {
                 </Kebab> */}
 
             </div>
-            <div className='flex justify-end gap-2.5'>
+            <div className='flex justify-end gap-2.5 items-center mt-2 sm_mt-0'>
+                <div className={cn(classes.quantity, 'flex-auto sm_hidden')}>
+                    <Quantity
+                        itemId={item.id}
+                        initialValue={quantity}
+                        onChange={handleUpdateItemQuantity}
+                    />
+                </div>
                 {editItemSection}
                 <li>
                     <AddToListButton

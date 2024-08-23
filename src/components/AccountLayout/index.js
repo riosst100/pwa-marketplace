@@ -122,6 +122,21 @@ const AccountLayout = (props) => {
                         </li>
                         <li className="list-none">
                             <Link
+                                to="/return"
+                                className={cn(
+                                    "text-[14px] font-medium p-2.5 block w-full hover_bg-gray-150 rounded-md",
+                                    activeMenu === '/return' ? 'bg-gray-150' : ''
+                                )}
+                            >
+                                <FormattedMessage
+                                    id={'myaccount.return'}
+                                    defaultMessage={'Return Request'}
+                                />
+
+                            </Link>
+                        </li>
+                        <li className="list-none">
+                            <Link
                                 to="/address-book"
                                 className={cn(
                                     "text-[14px] font-medium p-2.5 block w-full hover_bg-gray-150 rounded-md",

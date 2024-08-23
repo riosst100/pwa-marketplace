@@ -14,6 +14,7 @@ import defaultClasses from './orderRow.module.css';
 import cn from 'classnames';
 import { Verify } from 'iconsax-react';
 import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholderImage';
+import { Link } from 'react-router-dom';
 
 const OrderRow = props => {
     const { order } = props;
@@ -162,20 +163,27 @@ const OrderRow = props => {
                 </div>
             </div>
             <div className='flex flex-row justify-end py-[5px]'>
-                <button
+                {/* <button
                     className={cn(classes.contentToggleContainer, '!p-0 !border-0')}
                     onClick={handleContentToggle}
                     type="button"
                     aria-expanded={isOpen}
                 >
-                    {/* {contentToggleIcon} */}
                     <span className="text-[13px] font-medium text-blue-700 underline">
                         <FormattedMessage
                             id={'orderRow.ViewTransactionDetail'}
                             defaultMessage={'View Transaction Detail'}
                         />
                     </span>
-                </button>
+                </button> */}
+                <Link to="/order-history/view/123213">
+                    <span className="text-[13px] font-medium text-blue-700 underline">
+                        <FormattedMessage
+                            id={'orderRow.ViewTransactionDetail'}
+                            defaultMessage={'View Transaction Detail'}
+                        />
+                    </span>
+                </Link>
             </div>
 
             {/* <div className={classes.orderDateContainer}>
