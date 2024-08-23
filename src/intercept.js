@@ -144,7 +144,42 @@ module.exports = targets => {
       pattern: "/quotes/:urlKey",
       path: require.resolve("./components/RFQPage/quoteDetailPage.js"),
       authed: true,
-    }
+    },
+    {
+      exact: true,
+      name: "RMA",
+      pattern: "/return",
+      path: require.resolve("./components/RMAPage/index.js"),
+      authed: true,
+    },
+    {
+      exact: true,
+      name: "RMA Select",
+      pattern: "/return/select",
+      path: require.resolve("./components/RMAPage/RMASelectPage.js"),
+      authed: true,
+    },
+    {
+      exact: true,
+      name: "RMA Detail",
+      pattern: "/return/view/:urlKey",
+      path: require.resolve("./components/RMAPage/RMADetailPage.js"),
+      authed: true,
+    },
+    {
+      exact: true,
+      name: "New Return",
+      pattern: "/return/create/:urlKey",
+      path: require.resolve("./components/RMAPage/RMACreatePage.js"),
+      authed: true,
+    },
+    {
+      exact: true,
+      name: "Order Detail",
+      pattern: "/order-history/view/:urlKey",
+      path: require.resolve("./components/OrderDetail/orderDetailPage.js"),
+      authed: true,
+    },
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation

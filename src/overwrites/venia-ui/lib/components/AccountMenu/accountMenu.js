@@ -8,6 +8,7 @@ import SignIn from '@magento/venia-ui/lib/components/SignIn/signIn';
 import AccountMenuItems from './accountMenuItems';
 import ForgotPassword from '@magento/venia-ui/lib/components/ForgotPassword';
 import defaultClasses from './accountMenu.module.css';
+import cn from 'classnames';
 
 const AccountMenu = React.forwardRef((props, ref) => {
     const {
@@ -86,7 +87,7 @@ const AccountMenu = React.forwardRef((props, ref) => {
     }
 
     return (
-        <aside className={rootClass} data-cy="AccountMenu-root">
+        <aside className={cn(rootClass, '!top-[57px] max-w-[1210px]')} data-cy="AccountMenu-root">
             <div ref={ref} className={contentsClass}>
                 {accountMenuIsOpen ? dropdownContents : null}
             </div>
