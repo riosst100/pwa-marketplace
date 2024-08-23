@@ -57,7 +57,7 @@ const mtgSingles = (props) => {
                             <>
                                 {active === 'all' || active === initialLetter ? (
                                     <div className='singles_group-wrapper mb-4 px-4 inline-block w-full' key={index}>
-                                        <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                                        <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
                                             {initialLetter}
                                         </div>
                                         <div

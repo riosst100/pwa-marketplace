@@ -14,7 +14,7 @@
     composes: leading-[14px] from global;
     composes: text-left from global;
     composes: text-base from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .list {}

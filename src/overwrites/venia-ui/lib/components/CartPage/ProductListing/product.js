@@ -139,14 +139,14 @@ const Product = props => {
                 </div>
                 <div className="flex flex-col">
 
-                    <span className={cn(classes.price, 'text-[16px] font-semibold text-right mb-5')} data-cy="Product-price">
+                    <span className={cn(classes.price, 'text-[16px] font-medium text-right mb-5')} data-cy="Product-price">
                         <Price currencyCode={currency} value={unitPrice} />
                         {/* <FormattedMessage
                             id={'product.price'}
                             defaultMessage={' ea.'}
                         /> */}
                     </span>
-                    <div className={cn(classes.quantity, 'hidden sm_flex')}>
+                    <div className={classes.quantity}>
                         <Quantity
                             itemId={item.id}
                             initialValue={quantity}
@@ -186,14 +186,7 @@ const Product = props => {
                 </Kebab> */}
 
             </div>
-            <div className='flex justify-end gap-2.5 items-center mt-2 sm_mt-0'>
-                <div className={cn(classes.quantity, 'flex-auto sm_hidden')}>
-                    <Quantity
-                        itemId={item.id}
-                        initialValue={quantity}
-                        onChange={handleUpdateItemQuantity}
-                    />
-                </div>
+            <div className='flex justify-end gap-2.5'>
                 {editItemSection}
                 <li>
                     <AddToListButton

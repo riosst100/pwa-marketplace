@@ -35,7 +35,7 @@ const item = () => {
             >
                 <div className='social_share-container flex flex-col gap-y-7'>
                     <div className='flex justify-between'>
-                        <div className='text-lg font-semibold'>
+                        <div className='text-lg font-medium'>
                             Share to your friends
                         </div>
                         <button onClick={() => { setOpen(!open) }} >
@@ -67,7 +67,7 @@ const item = () => {
                     <div className='flex flex-col gap-y-[15px]'>
                         <div className='flex flex-col gap-[6px]'>
                             <div className='seller_summary-wrapper flex flex-row gap-x-2.5 items-center'>
-                                <div className='seller_name text-lg font-semibold leading-6'>
+                                <div className='seller_name text-lg font-medium leading-6'>
                                     Zen Market
                                 </div>
                                 <div className='seller_badge flex flex-row gap-x-[5px] items-center leading-6'>
@@ -112,7 +112,7 @@ const item = () => {
                     <div className='flex flex-col gap-y-2'>
                         <div className='rating_sales flex flex-row gap-x-[5px] items-center'>
                             <Star width={18} height={18} />
-                            <p className='font-semibold text-[18px] text-gray-600'>
+                            <p className='font-medium text-[18px] text-gray-600'>
                                 4.7
                             </p>
                         </div>

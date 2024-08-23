@@ -16,7 +16,7 @@ const productReview = (props) => {
             <div className={className}>
                 <div className='review-summary flex justify-between mb-[30px] pb-[30px] border-b border-gray-100'>
                     <div className="justify-start items-end gap-[15px] inline-flex">
-                        <div className="text-center text-zinc-900 text-[40px] font-semibold leading-10">4.7</div>
+                        <div className="text-center text-zinc-900 text-[40px] font-medium leading-10">4.7</div>
                         <div className="flex-col justify-start items-start gap-[9px] inline-flex">
                             <div className="justify-start items-start gap-1.5 inline-flex">
                                 <div className="w-3.5 h-3.5 relative">

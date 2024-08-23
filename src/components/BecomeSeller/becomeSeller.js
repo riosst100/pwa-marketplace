@@ -56,7 +56,7 @@ const BecomeSeller = props => {
             onKeyDown={handleEnterKeyPress}
             data-cy="BecomeSeller-submitButton"
             classes={{
-                content: 'font-semibold text-[16px] capitalize',
+                content: 'font-medium text-[16px] capitalize',
             }}
         >
             <FormattedMessage
@@ -89,7 +89,7 @@ const BecomeSeller = props => {
             onSubmit={handleSubmit}
             onChange={handleChange}
         >
-            <h2 data-cy="BecomeSeller-title" className="capitalize text-lg font-semibold mb-[70px]">
+            <h2 data-cy="BecomeSeller-title" className="capitalize text-lg font-medium mb-[70px]">
                 <FormattedMessage
                     id={'becomeSeller.becomeSellerText'}
                     defaultMessage={'Register as Seller'}

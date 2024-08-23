@@ -68,7 +68,7 @@
 }
 
 .name {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     grid-area: name;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -117,7 +117,7 @@
 }
 
 .stockStatusMessage {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-error from global;
     composes: text-sm from global;
     grid-area: stock;

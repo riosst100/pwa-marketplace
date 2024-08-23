@@ -26,7 +26,7 @@ const preOrderInfo = (props) => {
                         <div className='text-[14px] font-medium text-gray-500'>
                             Release Date
                         </div>
-                        <div className='text-[16px] font-semibold text-colorDefault text-center'>
+                        <div className='text-[16px] font-medium text-colorDefault text-center'>
                             {preOrderAvailableDate ? preOrderAvailableDate.getDate() + ', ' + month[preOrderAvailableDate.getMonth()] + ' ' + preOrderAvailableDate.getFullYear() : 'No Release Date.'}
                             {/* 27, February 2024 */}
                         </div>
@@ -36,7 +36,7 @@ const preOrderInfo = (props) => {
                         <div className='text-[14px] font-medium text-gray-500'>
                             Last Date
                         </div>
-                        <div className='text-[16px] font-semibold text-colorDefault text-center'>
+                        <div className='text-[16px] font-medium text-colorDefault text-center'>
                             31, March 2024
                         </div>
                     </div>
@@ -45,7 +45,7 @@ const preOrderInfo = (props) => {
                         <div className='text-[14px] font-medium text-gray-500'>
                             Deposite
                         </div>
-                        <div className='text-[16px] font-semibold text-colorDefault text-center'>
+                        <div className='text-[16px] font-medium text-colorDefault text-center'>
                             40%
                         </div>
                     </div>

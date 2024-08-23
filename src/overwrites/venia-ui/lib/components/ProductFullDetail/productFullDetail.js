@@ -13,7 +13,9 @@ import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 import Button from '@magento/venia-ui/lib/components/Button';
 import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
+import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import QuantityStepper from '../QuantityStepper';
+// import RichContent from '../RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
 import defaultClasses from './productFullDetail.module.css';
@@ -34,7 +36,6 @@ import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
 import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
-import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -49,25 +50,6 @@ const ERROR_MESSAGE_TO_FIELD_MAPPING = {
 const ERROR_FIELD_TO_MESSAGE_MAPPING = {
     quantity: 'The requested quantity is not available.'
 };
-
-const ProductDetailsCollapsible = (props) => {
-    const { data } = props;
-
-    return (
-        <>
-            {data.map((_data) => (
-                <Collapsible
-                    title={_data.title}
-                    contentWrapperClassName="!mt-0"
-                    rootClassName="first-of-type_!border-0 last-of-type_border-b last-of-type_border-gray-100"
-                    className="last-of-type_border-b last-of-type_border-gray-100"
-                >
-                    {_data.content}
-                </Collapsible>
-            ))}
-        </>
-    )
-}
 
 const ProductFullDetail = props => {
     const { product } = props;
@@ -90,6 +72,7 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
+    console.log("🚀 ~ ProductFullDetail ~ talonProps:", talonProps)
 
     const { formatMessage } = useIntl();
 
@@ -234,7 +217,7 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-semibold text-[16px]'
+                    content: 'normal-case font-medium text-[16px]'
                 }}
                 priority="low"
                 type="submit"
@@ -256,7 +239,7 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-semibold text-[16px]'
+                    content: 'normal-case font-medium text-[16px]'
                 }}
                 priority="high"
                 type="submit"
@@ -300,7 +283,7 @@ const ProductFullDetail = props => {
 
     const tokopedia_logo = './tokopedia_logo.png';
 
-    const contentContainerClass = 'content-container max-w-[1040px] p-2.5 m-auto relative mt-0 lg_mt-[34px] pb-6 lg_pb-0'
+    const contentContainerClass = 'content-container max-w-[1040px] p-2.5 m-auto relative mt-[34px]'
     const ProductDescription = () => (
         <div className={cn(contentContainerClass)}>
             {/* <span
@@ -445,7 +428,7 @@ const ProductFullDetail = props => {
                 <section className={cn(classes.leftContainer, 'relative')}>
                     <ProductLabel item={productDetails} />
                     <Carousel images={mediaGalleryEntries} />
-                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-2 lg_mt-5 mb-6 lg_mb-0'>
+                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-5'>
                         <Suspense fallback={null}>
                             <WishlistButton
                                 classes={{
@@ -473,7 +456,7 @@ const ProductFullDetail = props => {
                             aria-live="polite"
                             className={cn(
                                 classes.productName,
-                                '!font-semibold leading-[normal] mb-4 line-clamp-2'
+                                '!font-medium leading-[normal] mb-4 line-clamp-2'
                             )}
                             data-cy="ProductFullDetail-productName"
                         >
@@ -520,7 +503,7 @@ const ProductFullDetail = props => {
                                     data-cy="ProductFullDetail-productPrice"
                                     className={cn(
                                         classes.productPrice,
-                                        'text-[32px] font-semibold leading-[32px] mb-0',
+                                        'text-[32px] font-medium leading-[32px] mb-0',
                                     )}
                                 >
                                     <Price
@@ -579,13 +562,13 @@ const ProductFullDetail = props => {
                         <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
                             {sellerDetails &&
                                 <div className='text-xs'>
-                                    Ship From <span className='font-semibold'>{sellerDetails.country}</span>
+                                    Ship From <span className='font-medium'>{sellerDetails.country}</span>
                                 </div>}
                             <div className='text-xs'>
-                                Ship To <span className='font-semibold'>Yishun</span>
+                                Ship To <span className='font-medium'>Yishun</span>
                             </div>
                             <div className='text-xs'>
-                                Shiping Method <span className='font-semibold'>Store Pick Up | Meet Up</span>
+                                Shiping Method <span className='font-medium'>Store Pick Up | Meet Up</span>
                             </div>
                         </div>
 
@@ -637,7 +620,7 @@ const ProductFullDetail = props => {
                                             {sellerDetails ? sellerDetails.name : ''}
                                         </div>
                                         <div className="flex items-center relative">
-                                            <Verify variant='Bold' color='#4E31DB' size={20} />
+                                            <Verify variant='Bold' color='#f76b1c' size={20} />
                                         </div>
                                     </div>
                                     <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
@@ -645,10 +628,10 @@ const ProductFullDetail = props => {
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap items-start gap-4 relative'>
-                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                            <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Message
                                             </div>
                                         </div>
@@ -661,10 +644,10 @@ const ProductFullDetail = props => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Visit Store
                                             </div>
                                         </div>
@@ -677,17 +660,12 @@ const ProductFullDetail = props => {
                 </section>
             </Form>
             <section className='section_product-details-container mt-8 mb-10'>
-                <div className='hidden lg_block'>
-                    <Tabs
-                        data={dataTabs}
-                        tabContentWrapperClassName='!p-0'
-                        hasContent
-                        tabWrapperClassName='xl_gap-x-[60px] justify-center'
-                    />
-                </div>
-                <div className='block lg_hidden'>
-                    <ProductDetailsCollapsible data={dataTabs} />
-                </div>
+                <Tabs
+                    data={dataTabs}
+                    tabContentWrapperClassName='!p-0'
+                    hasContent
+                    tabWrapperClassName='xl_gap-x-[60px] justify-center'
+                />
             </section>
 
             <section className='pt-8 lg_pt-10'>
@@ -695,7 +673,7 @@ const ProductFullDetail = props => {
             </section>
 
             <section className='w-[calc(100vw-9px)] relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-gray-50 py-[30px] px-0 mb-10'>
-                <div className='lg_max-w-[1200px] px-2.5 mx-auto relative max-w-screen-md'>
+                <div className='max-w-[1200px] px-2.5 mx-auto relative'>
                     <CrossSeller />
                 </div>
             </section>

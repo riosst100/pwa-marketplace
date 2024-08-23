@@ -21,7 +21,7 @@ const item = () => {
                     </div>
                     <div className='flex flex-col gap-y-[15px]'>
                         <div className='seller_summary-wrapper flex flex-row gap-x-2.5 items-center'>
-                            <div className='seller_name text-lg font-semibold leading-6'>
+                            <div className='seller_name text-lg font-medium leading-6'>
                                 Zen Market
                             </div>
                             <div className='seller_badge flex flex-row gap-x-[5px] items-center leading-6'>
@@ -41,7 +41,7 @@ const item = () => {
                 </div>
 
                 <div className='price_container'>
-                    <div className='price text-lg font-semibold'>
+                    <div className='price text-lg font-medium'>
                         $34.19
                     </div>
                     <span className='shipping_note text-xs text-gray-200'>
@@ -62,7 +62,7 @@ const item = () => {
                         <Button
                             data-cy="addToCartButton"
                             classes={{
-                                content: 'normal-case font-semibold text-[16px]'
+                                content: 'normal-case font-medium text-[16px]'
                             }}
                             priority="high"
                             type="button"

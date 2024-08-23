@@ -51,7 +51,7 @@
 
 .title {
     composes: block from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: mb-xs from global;
     composes: text-colorDefault from global;
     composes: text-sm from global;

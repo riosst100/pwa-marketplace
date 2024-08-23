@@ -93,8 +93,8 @@ const CategoryContent = props => {
                 history.replace('/cards/non-sports-cards/comics.html')
             }
 
-            if (urlKey == "age-level" || urlKey == "lego" || urlKey == "minifigures" || urlKey == "sub-theme" || urlKey == "theme" || urlKey == "interest") {
-                history.replace('/lego-toys/lego/sets.html')
+            if (urlKey == "lego") {
+                history.replace('/lego/lego-sets.html')
             }
         }
     }, [category]);
@@ -254,6 +254,7 @@ const CategoryContent = props => {
     // console.log(allActiveFilters)
 
     // console.log(virtualCategoryFilters)
+    const urlKey = category?.url_key;
 
     if (allActiveFilters && allActiveFilters.size > 0) {
         allActiveFilters.forEach((value, key) => {
@@ -265,7 +266,7 @@ const CategoryContent = props => {
                 if (label == "Singles") {
                     isSingles = true;
                 }
-                if (virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
+                if (key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands" || virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
                             'label': label,
@@ -285,7 +286,7 @@ const CategoryContent = props => {
 
     let title = activeFilters && activeFilters.length ? (
         activeFilters.length > 1 ? 
-            activeFilters.map(u => u.label).join(': ')
+            activeFilters[activeFilters.length - 1].label
          : currentFilter
     ) : categoryName;
 
@@ -312,8 +313,9 @@ const CategoryContent = props => {
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
                         {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
-                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
                         {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
+                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
+                        
                     </>
                 {/* ) : ( */}
                     <>

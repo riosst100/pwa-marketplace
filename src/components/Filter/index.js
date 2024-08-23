@@ -14,7 +14,7 @@ const CatalogFilter = () => {
                 <div class="inline-flex flex-col items-start gap-[10px] bg-white relative flex-[0_0_auto]">
                     <div class="flex-col justify-center inline-flex items-center relative flex-[0_0_auto]">
                         <div class="flex w-full cursor-pointer items-center justify-between p-[10px] relative flex-[0_0_auto] bg-white">
-                            <div class="relative w-fit font-semibold text-base tracking-[0] leading-[18px] whitespace-nowrap">Category</div>
+                            <div class="relative w-fit font-medium text-base tracking-[0] leading-[18px] whitespace-nowrap">Category</div>
                             <ArrowSquareUp color="#292D32" size={14} variant="Outline" />
                         </div>
                         <hr className='w-full h-[1px]' />

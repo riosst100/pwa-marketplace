@@ -1,10 +1,10 @@
 .submenuColumn {
     /* composes: max-w-[235px] from global; */
-    composes: p-2 from global;
+    composes: pl-4 pt-2 from global;
 }
 
 .heading {
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .link {

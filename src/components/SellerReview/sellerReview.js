@@ -16,7 +16,7 @@ const SellerReview = ({ seller }) => {
             <div className='w-full flex items-start xs_flex-col lg_flex-row gap-[30px] '>
                 <div className="w-full xs_max-w-full lg_max-w-[300px] px-[25px] py-10 rounded-md border border-gray-200 flex-col justify-start items-start gap-[25px] inline-flex">
                     <div className="justify-start items-end gap-[15px] inline-flex">
-                        <div className="text-center text-zinc-900 text-[40px] font-semibold leading-10">4.7</div>
+                        <div className="text-center text-zinc-900 text-[40px] font-medium leading-10">4.7</div>
                         <div className="flex-col justify-start items-start gap-[9px] inline-flex">
                             <div className="justify-start items-start gap-1.5 inline-flex">
                                 <div className="w-3.5 h-3.5 relative">
@@ -51,7 +51,7 @@ const SellerReview = ({ seller }) => {
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
                                     <div className="w-full h-[6px] absolute bg-[#E4EBF5] rounded" />
-                                    <div className="w-full h-[6px] absolute bg-[#4E31DB] rounded" />
+                                    <div className="w-full h-[6px] absolute bg-[#f76b1c] rounded" />
                                 </div>
                             </div>
                             <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">12</div>
@@ -68,7 +68,7 @@ const SellerReview = ({ seller }) => {
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
                                     <div className="w-full h-[6px] absolute bg-[#E4EBF5] rounded" />
-                                    <div className="w-[80%] h-[6px] absolute bg-[#4E31DB] rounded" />
+                                    <div className="w-[80%] h-[6px] absolute bg-[#f76b1c] rounded" />
                                 </div>
                             </div>
                             <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">8</div>
@@ -85,7 +85,7 @@ const SellerReview = ({ seller }) => {
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
                                     <div className="w-full h-[6px] absolute bg-[#E4EBF5] rounded" />
-                                    <div className="w-[45%] h-[6px] absolute bg-[#4E31DB] rounded" />
+                                    <div className="w-[45%] h-[6px] absolute bg-[#f76b1c] rounded" />
                                 </div>
                             </div>
                             <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">5</div>
@@ -102,7 +102,7 @@ const SellerReview = ({ seller }) => {
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
                                     <div className="w-full h-[6px] absolute bg-[#E4EBF5] rounded" />
-                                    <div className="w-[1%] h-[6px] absolute bg-[#4E31DB] rounded" />
+                                    <div className="w-[1%] h-[6px] absolute bg-[#f76b1c] rounded" />
                                 </div>
                             </div>
                             <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">1</div>
@@ -119,7 +119,7 @@ const SellerReview = ({ seller }) => {
                                 </div>
                                 <div className="xs_w-full lg_w-40 h-[6px] relative">
                                     <div className="w-full h-[6px] absolute bg-[#E4EBF5] rounded" />
-                                    <div className="w-[0%] h-[6px] absolute bg-[#4E31DB] rounded" />
+                                    <div className="w-[0%] h-[6px] absolute bg-[#f76b1c] rounded" />
                                 </div>
                             </div>
                             <div className="w-10 text-zinc-900 text-base font-normal leading-[18px]">0</div>

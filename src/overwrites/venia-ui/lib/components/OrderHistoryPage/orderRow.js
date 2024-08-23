@@ -14,7 +14,6 @@ import defaultClasses from './orderRow.module.css';
 import cn from 'classnames';
 import { Verify } from 'iconsax-react';
 import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholderImage';
-import { Link } from 'react-router-dom';
 
 const OrderRow = props => {
     const { order } = props;
@@ -94,7 +93,7 @@ const OrderRow = props => {
         );
 
     const badgeStatusStyle = () => {
-        return 'bg-[#F1EFF6] text-blue-700 text-[14px] font-semibold rounded-full px-[30px] py-[5px] border-none';
+        return 'bg-[#F1EFF6] text-blue-700 text-[14px] font-medium rounded-full px-[30px] py-[5px] border-none';
     }
 
     const thumbnailProps = {
@@ -158,32 +157,25 @@ const OrderRow = props => {
                                 defaultMessage={'Order Total'}
                             />
                         </span>
-                        <div className="text-lg font-semibold text-left md_text-center block">{orderTotalPrice}</div>
+                        <div className="text-lg font-medium text-left md_text-center block">{orderTotalPrice}</div>
                     </div>
                 </div>
             </div>
             <div className='flex flex-row justify-end py-[5px]'>
-                {/* <button
+                <button
                     className={cn(classes.contentToggleContainer, '!p-0 !border-0')}
                     onClick={handleContentToggle}
                     type="button"
                     aria-expanded={isOpen}
                 >
+                    {/* {contentToggleIcon} */}
                     <span className="text-[13px] font-medium text-blue-700 underline">
                         <FormattedMessage
                             id={'orderRow.ViewTransactionDetail'}
                             defaultMessage={'View Transaction Detail'}
                         />
                     </span>
-                </button> */}
-                <Link to="/order-history/view/123213">
-                    <span className="text-[13px] font-medium text-blue-700 underline">
-                        <FormattedMessage
-                            id={'orderRow.ViewTransactionDetail'}
-                            defaultMessage={'View Transaction Detail'}
-                        />
-                    </span>
-                </Link>
+                </button>
             </div>
 
             {/* <div className={classes.orderDateContainer}>

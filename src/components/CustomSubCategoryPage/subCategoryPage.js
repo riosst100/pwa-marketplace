@@ -52,7 +52,7 @@ const SubCategoryPage = props => {
                 <>
                     {optionsResult ?
                     <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                        <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                        <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
                             {group}
                         </div>
                         <div className={cn('singles_item-list flex flex-col')}>{optionsResult}</div>

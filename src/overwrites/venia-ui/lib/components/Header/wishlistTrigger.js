@@ -14,7 +14,7 @@ const wishlistTrigger = () => {
                 className={''}
                 data-cy="wishlistLink"
             >
-                <Heart size="25" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                <Heart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
             </Link>
         </div>
     )

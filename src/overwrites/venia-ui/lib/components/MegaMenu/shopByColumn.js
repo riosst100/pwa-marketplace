@@ -51,7 +51,7 @@ const ShopByColumn = props => {
             ;
 
             return (
-                <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
                     <Link
                         {...keyboardProps}
                         // className={isActive ? classes.linkActive : classes.link}

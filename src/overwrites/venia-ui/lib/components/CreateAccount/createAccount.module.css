@@ -48,5 +48,5 @@
 .title {
     composes: capitalize from global;
     composes: text-lg from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }

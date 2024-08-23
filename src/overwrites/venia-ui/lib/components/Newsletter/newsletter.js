@@ -66,7 +66,7 @@ const Newsletter = props => {
     ) : null;
 
     return (
-        <div className='col-span-6 gap-none grid items-start max-w-[20rem] mx-0 lg_mx-auto relative sm_col-span-3' data-cy={'Newsletter-root'}>
+        <div className={classes.root} data-cy={'Newsletter-root'}>
             {maybeLoadingIndicator}
             <span data-cy="Newsletter-title" className={classes.title}>
                 <FormattedMessage

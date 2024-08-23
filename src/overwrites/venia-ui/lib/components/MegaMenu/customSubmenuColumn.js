@@ -30,7 +30,7 @@ const CustomSubmenuColumn = props => {
             );
 
             return (
-                <li key={index} className={cn(classes.submenuChildItem, 'mb-1.5')}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-1')}>
                     <Link
                         className={classes.link}
                         data-cy="MegaMenu-CustomSubmenuColumn-link"
@@ -47,10 +47,29 @@ const CustomSubmenuColumn = props => {
             );
         });
 
-        children = <ul className={cn(classes.submenuChild, 'pt-1')}>{childrenItems}</ul>;
+        children = <>
+        <ul className={cn(classes.submenuChild, 'pt-1')}><span className={classes.heading}>Categories</span>{childrenItems}</ul>
+        </>;
     }
 
     return children;
+    // return (
+    //     <div className={classes.submenuColumn}>
+    //         <Link
+    //             // {...keyboardProps}
+    //             className={classes.link}
+    //             data-cy="MegaMenu-SubmenuColumn-link"
+    //             // to={categoryUrl}
+    //             // onClick={() => {
+    //                 // handleCloseSubMenu();
+    //                 // onNavigate();
+    //             // }}
+    //         >
+    //             <span className={classes.heading}>{category.name}</span>
+    //         </Link>
+    //         {children}
+    //     </div>
+    // );
 };
 
 export default CustomSubmenuColumn;

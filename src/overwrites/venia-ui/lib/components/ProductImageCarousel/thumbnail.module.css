@@ -39,7 +39,7 @@
 
 .rootSelected {
     composes: root;
-    box-shadow: 0 0 0 2px #4E31DB;
+    box-shadow: 0 0 0 2px #f76b1c;
 }
 
 .root:nth-child(-n+5) {

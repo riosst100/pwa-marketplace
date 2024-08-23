@@ -22,22 +22,22 @@ const TrainsSets = props => {
                 <section className='singles-container'>
                     <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                         <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>
-                            <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
+                            <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' ><Shimmer width="95%" height="100vh" /></div>
                         </div>
                     </div>
                 </section>

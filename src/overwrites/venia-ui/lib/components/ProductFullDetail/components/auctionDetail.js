@@ -36,7 +36,7 @@ const AuctionDetail = (props) => {
         // Render a countdown
         return <div className='flex flex-row gap-8'>
             <div className='flex flex-col'>
-                <div className='text-[40px] leading-[normal] font-semibold'>
+                <div className='text-[40px] leading-[normal] font-medium'>
                 {days}
                 </div>
                 <div className='text-[14px] font-bold'>
@@ -44,7 +44,7 @@ const AuctionDetail = (props) => {
                 </div>
             </div>
             <div className='flex flex-col'>
-                <div className='text-[40px] leading-[normal] font-semibold'>
+                <div className='text-[40px] leading-[normal] font-medium'>
                 {hours}
                 </div>
                 <div className='text-[14px] font-bold'>
@@ -52,7 +52,7 @@ const AuctionDetail = (props) => {
                 </div>
             </div>
             <div className='flex flex-col'>
-                <div className='text-[40px] leading-[normal] font-semibold'>
+                <div className='text-[40px] leading-[normal] font-medium'>
                 {minutes}
                 </div>
                 <div className='text-[14px] font-bold'>
@@ -60,7 +60,7 @@ const AuctionDetail = (props) => {
                 </div>
             </div>
             <div className='flex flex-col'>
-                <div className='text-[40px] leading-[normal] font-semibold'>
+                <div className='text-[40px] leading-[normal] font-medium'>
                 {seconds}
                 </div>
                 <div className='text-[14px] font-bold'>
@@ -82,7 +82,7 @@ const AuctionDetail = (props) => {
         >
             <div className='modal_bid-content'>
                 <div className='header_title-modal flex justify-between mb-10'>
-                    <div className='text-lg text-black font-semibold'>
+                    <div className='text-lg text-black font-medium'>
                         Place bid
                     </div>
                     <button onClick={() => { setOpen(!open) }} >
@@ -95,7 +95,7 @@ const AuctionDetail = (props) => {
                         <span className='text-[14px] font-bold text-gray-500'>
                             Current bid
                         </span>
-                        <span className='text-2xl font-semibold'>
+                        <span className='text-2xl font-medium'>
                             $102.50
                         </span>
                     </div>
@@ -138,7 +138,7 @@ const AuctionDetail = (props) => {
                             <Button
                                 priority='low'
                                 classes={{
-                                    content: 'capitalize text-[16px] font-semibold'
+                                    content: 'capitalize text-[16px] font-medium'
                                 }}
                                 onClick={() => setOpen(false)}
                             >
@@ -147,7 +147,7 @@ const AuctionDetail = (props) => {
                             <Button
                                 priority='high'
                                 classes={{
-                                    content: 'capitalize text-[16px] font-semibold'
+                                    content: 'capitalize text-[16px] font-medium'
                                 }}
                             >
                                 Place Bid
@@ -168,7 +168,7 @@ const AuctionDetail = (props) => {
                     <div className='text-[16px] font-bold text-gray-500'>
                         Starting Price
                     </div>
-                    <div className='text-[40px] font-semibold text-colorDefault'>
+                    <div className='text-[40px] font-medium text-colorDefault'>
                         <Price
                             currencyCode={productDetails.price.currency}
                             value={auctionData.starting_price}
@@ -195,7 +195,7 @@ const AuctionDetail = (props) => {
             <Button
                 priority='high'
                 classes={{
-                    content: 'capitalize text-[16px] font-semibold'
+                    content: 'capitalize text-[16px] font-medium'
                 }}
                 onClick={() => setOpen(true)}
             >

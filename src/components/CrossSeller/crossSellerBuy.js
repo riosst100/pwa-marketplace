@@ -4,7 +4,7 @@ import Item from './item';
 const crossSellerBuy = () => {
     return (
         <>
-            <h3 className='capitalize font-semibold text-xl mb-[30px]'>
+            <h3 className='capitalize font-medium text-xl mb-[30px]'>
                 Also Available
             </h3>
             <div className='flex flex-col gap-y-5'>

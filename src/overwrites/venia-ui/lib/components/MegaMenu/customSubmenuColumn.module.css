@@ -4,7 +4,7 @@
 }
 
 .heading {
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .link {

@@ -174,7 +174,7 @@ export const useSportCardsSets = props => {
             })
         }
 
-        return sortby == "release" ? sportCardsSets.slice().sort((a, b) => b.group.toLowerCase().localeCompare(a.group.toLowerCase())) : sportCardsSets.slice().sort((a, b) => a.group.toLowerCase().localeCompare(b.group.toLowerCase()));
+        return sortby == "release" ? sportCardsSets : sportCardsSets;
     }, [queryResponse, activeTab]);
 
     const availableGroups = sportCardsSets && sportCardsSets.length ? sportCardsSets.map(({ group }) => group) : [];

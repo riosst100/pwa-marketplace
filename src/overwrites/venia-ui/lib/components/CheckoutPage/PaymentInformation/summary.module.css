@@ -11,7 +11,7 @@
 }
 
 .heading {
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .card_details_container {

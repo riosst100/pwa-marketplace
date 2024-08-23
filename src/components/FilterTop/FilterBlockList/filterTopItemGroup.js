@@ -7,7 +7,7 @@ import defaultClasses from './filterTopItemGroup.module.css';
 import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTop/CurrentTopFilters/currentTopFilter';
 
 const FilterTopItemGroup = props => {
-    const { filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
+    const { setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -46,6 +46,8 @@ const FilterTopItemGroup = props => {
             return (
                 <FilterTopItem
                     key={code}
+                    setFilterBy={setFilterBy}
+                    filterBy={filterBy}
                     filterApi={filterApi}
                     filterState={filterState}
                     group={group}
@@ -85,7 +87,7 @@ const FilterTopItemGroup = props => {
         <div className={classes.root}>
             {radioItems}
             {filterElements && filterElements.length > 10 ? <span className={classes.item}><b>More Item</b></span> : ''}
-            {filterElements && filterElements.length ? filterElements : group != "trains" && group != "trains_gauge" && group != "category" && group != "shopby" ? (<span className={classes.item}><b>All</b></span>) : ''}
+            {filterElements && filterElements.length ? filterElements : group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "trains" && group != "franchise" && group != "brands" && group != "category" && group != "filterby" && group != "shopby" && group != "cat_id" ? (<span className={classes.item}><b>All</b></span>) : ''}
         </div>
     );
 };
