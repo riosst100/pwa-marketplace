@@ -91,8 +91,8 @@ const SellerReviewItem = ({ review }) => {
                 <div class="flex flex-col items-start gap-[20px] relative self-stretch w-full flex-[0_0_auto]">
                     <div class="inline-flex flex-col items-start gap-[10px] relative flex-[0_0_auto]">
                         <div class="inline-flex items-center gap-[15px] relative flex-[0_0_auto]">
-                            <div class="flex w-[40px] h-[40px] items-center justify-around gap-[10px] p-[10px] relative bg-[#4e31db] rounded-[30px]">
-                                <div class="relative w-fit font-semibold text-white text-[14px] text-center tracking-[0] leading-[18px] whitespace-nowrap">
+                            <div class="flex w-[40px] h-[40px] items-center justify-around gap-[10px] p-[10px] relative bg-[#f76b1c] rounded-[30px]">
+                                <div class="relative w-fit font-medium text-white text-[14px] text-center tracking-[0] leading-[18px] whitespace-nowrap">
                                     {review ? getInitialName(review.nickname) : ''}
                                 </div>
                             </div>

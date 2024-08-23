@@ -273,7 +273,7 @@ const quoteDetail = () => {
                     <Button
                         priority='high'
                         classes={{
-                            content: 'capitalize text-[16px] font-semibold'
+                            content: 'capitalize text-[16px] font-medium'
                         }}
                     >
                         {

@@ -138,7 +138,7 @@ const GalleryItem = props => {
                         <span>{name}</span>
                     </Link>
                     <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
-                        <p className='font-semibold text-colorDefault !mb-1 !leading-[14px]'>
+                        <p className='font-medium text-colorDefault !mb-1 !leading-[14px]'>
                             <Price
                                 value={priceSource.value}
                                 currencyCode={priceSource.currency}

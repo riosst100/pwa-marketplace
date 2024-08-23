@@ -121,15 +121,15 @@ const ShopBySets = props => {
             <>
                 {active == "all" && newCollectibleGameSets.length > 1 ?
                 <div className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                    <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                    <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
                         {release_type}
                     </div>
                     <div className={cn('singles_item-list flex flex-col')}>{setsResult}</div>
                 </div> : ''}
                 {active == release_type || newCollectibleGameSets.length == 1 ? setsResultSplitted && setsResultSplitted.length && setsResultSplitted.map((setsResult, index) =>
                     <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                        {index == 0 ? <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2'>{release_type}</div> : 
-                        <div className='singles_item_group_letter text-xl font-semibold pb-1 mb-2' style={{"marginTop":"35px"}}></div>}
+                        {index == 0 ? <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2'>{release_type}</div> : 
+                        <div className='singles_item_group_letter text-xl font-medium pb-1 mb-2' style={{"marginTop":"35px"}}></div>}
                         <div className={cn('singles_item-list flex flex-col')}>{setsResult}</div>
                     </div>
                 )

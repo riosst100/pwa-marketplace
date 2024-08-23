@@ -31,6 +31,7 @@ import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
 import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
+import ShopByFilters from '@riosst100/pwa-marketplace/src/components/ShopByFilters';
 
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
@@ -133,6 +134,9 @@ const ShopBy = props => {
     filterSearchArr = filterSearchArr.filter(function(data) {
         return !data.includes('shopby');
     })
+    filterSearchArr = filterSearchArr.filter(function(data) {
+        return !data.includes('trains_roadname_country');
+    })
     let filterSearch = filterSearchArr.join('&')
 
     if (!filterSearch.includes('?')) {
@@ -176,15 +180,15 @@ const ShopBy = props => {
                 newAvailableGroups.length == 1 ? (
                     optionsResultSplitted && optionsResultSplitted.length && optionsResultSplitted.map((data, index) => (
                         <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                            {searchQuery && availableGroups.length > 1 && (index == 0 ? <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
-                            <div className='singles_item_group_letter text-xl font-semibold pb-1 mb-2' style={{"marginTop":"35px"}}></div>)}
+                            {searchQuery && availableGroups.length > 1 && (index == 0 ? <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
+                            <div className='singles_item_group_letter text-xl font-medium pb-1 mb-2' style={{"marginTop":"35px"}}></div>)}
                             <div className={cn('singles_item-list flex flex-col')}>{data}</div>
                         </div>
                         )
                     )
                 ) : (
                     <div className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                        <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2' >
+                        <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
                             {group}
                         </div>
                         <div className={cn('singles_item-list flex flex-col')}>{optionsResult}</div>
@@ -197,8 +201,8 @@ const ShopBy = props => {
                     {all}
                     {active == group ? optionsResultSplitted && optionsResultSplitted.length && optionsResultSplitted.map((optionsResult, index) =>
                         <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                            {index == 0 ? <div className='singles_item_group_letter text-xl font-semibold border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
-                            <div className='singles_item_group_letter text-xl font-semibold pb-1 mb-2' style={{"marginTop":"35px"}}></div>}
+                            {index == 0 ? <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
+                            <div className='singles_item_group_letter text-xl font-medium pb-1 mb-2' style={{"marginTop":"35px"}}></div>}
                             <div className={cn('singles_item-list flex flex-col')}>{optionsResult}</div>
                         </div>
                     )
@@ -280,7 +284,7 @@ const ShopBy = props => {
 
     // console.log(category)
 
-    if (shopby == "toys_brands" || shopby == "toys_product_line") {
+    if (shopby == "brands" || shopby == "product_line") {
         if (category && category.url_path.includes('anime-figures')) {
             availableFilterOption = [
                 {
@@ -335,10 +339,14 @@ const ShopBy = props => {
         setSearchQuery('')
     }
 
+    // console.log(category)
+
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
+            {category.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
+            {/* <ShopByFilters handleActiveFilter={handleActiveFilter} activeFilter={activeFilter} category={category} /> */}
             {availableFilterOption.length ? 
                 <ul className={classes.nav}>
                     {availableFilterOption.map((filter, index) => (

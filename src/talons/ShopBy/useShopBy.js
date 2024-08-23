@@ -93,7 +93,8 @@ export const useShopBy = props => {
                 filters: newFilters,
                 categoryUrlKey: categoryUrlKey,
                 attributeCode: shopby,
-                activeFilter: activeFilter
+                activeFilter: activeFilter,
+                search: search
             }
         });
     }, [
@@ -103,7 +104,7 @@ export const useShopBy = props => {
         // categoryUrlKey,
         // filters
         // filterTypeMap,
-        // search
+        search
     ]);
 
     // console.log(activeFilters)

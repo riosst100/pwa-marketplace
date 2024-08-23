@@ -13,7 +13,7 @@
 }
 
 .quantityLabel {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: leading-normal from global;
     composes: mb-sm from global;
     composes: pt-xs from global;

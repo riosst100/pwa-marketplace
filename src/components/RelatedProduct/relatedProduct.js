@@ -70,7 +70,7 @@ const relatedProduct = (props) => {
         <>
             <h2
                 className={cn(
-                    'bg-darkblue-900 text-lg font-semibold text-white leading-6 px-6 py-3 inline-block relative',
+                    'bg-darkblue-900 text-lg font-medium text-white leading-6 px-6 py-3 inline-block relative',
                     'after_border-l-[48px] after_border-t-[48px] after_border-b-0 after_border-r-0',
                     'after_border-l-darkblue-900 after_border-t-transparent after_border-r-transparent after_border-b-transparent',
                     'after_absolute after_right-[-48px] after_top-0'

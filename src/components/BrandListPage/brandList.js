@@ -58,7 +58,7 @@ const brandList = (props) => {
                         <>
                             {active === 'all' || active === initialLetter ? (
                                 <div className='brand_group-wrapper mb-10' key={index}>
-                                    <div className='brand_item_group_letter text-xl font-semibold mb-[30px]' >
+                                    <div className='brand_item_group_letter text-xl font-medium mb-[30px]' >
                                         {initialLetter}
                                     </div>
                                     <div

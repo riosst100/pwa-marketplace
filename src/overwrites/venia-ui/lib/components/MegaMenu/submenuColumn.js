@@ -74,7 +74,7 @@ const SubmenuColumn = props => {
             ) : '';
 
             return (
-                <li key={index} className={cn(classes.submenuChildItem, 'mt-4')}>
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
                     {customMenuItems.length ? (
                         <>
                             <Link

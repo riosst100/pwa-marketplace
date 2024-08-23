@@ -76,7 +76,7 @@ const CartTrigger = props => {
                     data-cy="CartTrigger-trigger"
                 >
                     {/* <Icon src={ShoppingCartIcon} /> */}
-                    <ShoppingCart size="25" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                    <ShoppingCart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
                     {maybeItemCounter}
                 </button>
             </div>

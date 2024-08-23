@@ -19,7 +19,7 @@ const bidList = (props) => {
                     )}
                     onClick={() => setExpand(!expand)}
                 >
-                    <span className='text-[16px] font-semibold'>
+                    <span className='text-[16px] font-medium'>
                         Previous bids (5)
                     </span>
                     <ArrowDown2

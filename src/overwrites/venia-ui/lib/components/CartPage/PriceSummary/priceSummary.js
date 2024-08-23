@@ -110,7 +110,7 @@ const PriceSummary = props => {
     return (
         <div className={cn(classes.root, 'border border-gray-100 rounded-md p-6')} data-cy="PriceSummary-root">
             <div>
-                <p className='text-[16px] front font-semibold mb-4'>
+                <p className='text-[16px] front font-medium mb-4'>
                     <FormattedMessage
                         id={'priceSummary.summaryLabel'}
                         defaultMessage={'Summary'}

@@ -60,7 +60,7 @@
 .card_input_container_error p {
     /* composes: text-error from global; */
     color: rgb(var(--venia-global-color-error));
-    /* composes: font-semibold from global; */
+    /* composes: font-medium from global; */
     font-weight: 600;
 }
 

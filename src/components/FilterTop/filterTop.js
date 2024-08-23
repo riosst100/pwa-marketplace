@@ -23,7 +23,10 @@ const SCROLL_OFFSET = 150;
  */
 const FilterTop = props => {
     const { shopby, filters, filterCountToOpen, allowedFilters, category } = props;
-    const talonProps = useFilterTop({ shopby, filters, category });
+    const [filterBy, setFilterBy] = useState('');
+
+    // console.log(filterBy)
+    const talonProps = useFilterTop({ shopby, filters, category, filterBy, setFilterBy });
     const {
         filterApi,
         filterItems,
@@ -111,11 +114,13 @@ const FilterTop = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
+                
                 if (customFilters && customFilters.length && customFilters.includes(group)) {
-
                     return (
                         <FilterTopBlock
                             key={group}
+                            setFilterBy={setFilterBy}
+                            filterBy={filterBy}
                             filterNames={filterNames}
                             filterApi={filterApi}
                             filterState={blockState}

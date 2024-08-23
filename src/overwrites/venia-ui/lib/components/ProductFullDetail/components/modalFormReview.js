@@ -28,7 +28,7 @@ const modalFormReview = (props) => {
             >
                 <div className='form_review-container'>
                     <div className='header_title-modal flex justify-between mb-10'>
-                        <div className='text-lg text-black font-semibold'>
+                        <div className='text-lg text-black font-medium'>
                             Write Review
                         </div>
                         <button onClick={() => { setOpen(!open) }} >
@@ -139,7 +139,7 @@ const modalFormReview = (props) => {
                             <Button
                                 priority='low'
                                 classes={{
-                                    content: 'capitalize text-[16px] font-semibold'
+                                    content: 'capitalize text-[16px] font-medium'
                                 }}
                                 onClick={() => setOpen(false)}
                             >
@@ -148,7 +148,7 @@ const modalFormReview = (props) => {
                             <Button
                                 priority='high'
                                 classes={{
-                                    content: 'capitalize text-[16px] font-semibold'
+                                    content: 'capitalize text-[16px] font-medium'
                                 }}
                             >
                                 Submit Review

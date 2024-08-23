@@ -25,7 +25,9 @@ const FilterTopBlock = props => {
         filterNames,
         initialOpen,
         originalFilterState,
-        search
+        search,
+        setFilterBy,
+        filterBy
     } = props;
 
     const { formatMessage } = useIntl();
@@ -37,6 +39,8 @@ const FilterTopBlock = props => {
 
     const list = <Form>
         <FilterBlockList
+            setFilterBy={setFilterBy}
+            filterBy={filterBy}
             filterApi={filterApi}
             filterState={filterState}
             originalFilterState={originalFilterState}

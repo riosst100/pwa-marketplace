@@ -39,6 +39,9 @@ const Dropdown = (props) => {
                     'border-gray-100 border-solid rounded-md min-w-max px-2.5 py-2',
                     className
                 )}
+                style={{
+                    "paddingLeft":"1rem"
+                }}
             >
                 {selected ? selected : placeholder}
                 <ArrowDown2

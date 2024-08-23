@@ -58,7 +58,7 @@ const SignIn = props => {
 
     return (
         <div data-cy="SignIn-root" className={cn(classes.root, '!p-[30px]')}>
-            <span data-cy="SignIn-title" className={cn(classes.title, 'text-xl font-semibold')}>
+            <span data-cy="SignIn-title" className={cn(classes.title, 'text-xl font-medium')}>
                 <FormattedMessage
                     id={'signIn.signInText'}
                     defaultMessage={'Sign In'}

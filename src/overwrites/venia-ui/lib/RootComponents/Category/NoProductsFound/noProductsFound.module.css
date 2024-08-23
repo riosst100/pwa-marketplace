@@ -7,7 +7,7 @@
 }
 
 .title {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-colorDefault from global;
     composes: text-center from global;
 }

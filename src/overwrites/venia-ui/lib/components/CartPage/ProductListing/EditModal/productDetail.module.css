@@ -17,7 +17,7 @@
 }
 
 .productName {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-xl from global;
 }
 
@@ -29,5 +29,5 @@
 }
 
 .price {
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }

@@ -19,6 +19,9 @@ const SearchField = props => {
             classes={{
                 root: 'bg-transparent'
             }}
+            style={{
+                "paddingRight":"1rem"
+            }}
         >
             <SearchNormal size="18" color="#280135" variant="Outline" />
         </Trigger>

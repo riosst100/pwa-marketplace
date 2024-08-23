@@ -10,7 +10,7 @@ const OrderSummary = props => {
     console.log("🚀 ~ OrderSummary ~ props:", props)
     return (
         <div data-cy="OrderSummary-root" className={classes.root}>
-            <h2 aria-live="polite" className="text-[16px] font-semibold mb-4">
+            <h2 aria-live="polite" className="text-[16px] font-medium mb-4">
                 <FormattedMessage
                     id={'checkoutPage.orderSummary'}
                     defaultMessage={'Summary'}

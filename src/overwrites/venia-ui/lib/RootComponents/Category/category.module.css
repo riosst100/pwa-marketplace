@@ -3,7 +3,7 @@
 }
 
 .title {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-[24px] from global;
     composes: leading-[24px] from global;
     padding: 20px 0px 20px;
@@ -19,7 +19,7 @@
 }
 
 .categoryTitle {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-[20px] from global;
 }
 

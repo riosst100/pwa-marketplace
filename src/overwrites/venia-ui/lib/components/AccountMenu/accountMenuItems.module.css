@@ -8,7 +8,7 @@
 
 .link {
     composes: cursor-pointer from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: inline-flex from global;
     composes: items-center from global;
     composes: justify-start from global;

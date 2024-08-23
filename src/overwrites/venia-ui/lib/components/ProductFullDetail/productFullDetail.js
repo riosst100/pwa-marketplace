@@ -13,7 +13,9 @@ import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
 import Button from '@magento/venia-ui/lib/components/Button';
 import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
+import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import QuantityStepper from '../QuantityStepper';
+// import RichContent from '../RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
 import defaultClasses from './productFullDetail.module.css';
@@ -90,6 +92,7 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
+    console.log("🚀 ~ ProductFullDetail ~ talonProps:", talonProps)
 
     const { formatMessage } = useIntl();
 
@@ -234,7 +237,7 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-semibold text-[16px]'
+                    content: 'normal-case font-medium text-[16px]'
                 }}
                 priority="low"
                 type="submit"
@@ -256,7 +259,7 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-semibold text-[16px]'
+                    content: 'normal-case font-medium text-[16px]'
                 }}
                 priority="high"
                 type="submit"
@@ -473,7 +476,7 @@ const ProductFullDetail = props => {
                             aria-live="polite"
                             className={cn(
                                 classes.productName,
-                                '!font-semibold leading-[normal] mb-4 line-clamp-2'
+                                '!font-medium leading-[normal] mb-4 line-clamp-2'
                             )}
                             data-cy="ProductFullDetail-productName"
                         >
@@ -520,7 +523,7 @@ const ProductFullDetail = props => {
                                     data-cy="ProductFullDetail-productPrice"
                                     className={cn(
                                         classes.productPrice,
-                                        'text-[32px] font-semibold leading-[32px] mb-0',
+                                        'text-[32px] font-medium leading-[32px] mb-0',
                                     )}
                                 >
                                     <Price
@@ -579,13 +582,13 @@ const ProductFullDetail = props => {
                         <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
                             {sellerDetails &&
                                 <div className='text-xs'>
-                                    Ship From <span className='font-semibold'>{sellerDetails.country}</span>
+                                    Ship From <span className='font-medium'>{sellerDetails.country}</span>
                                 </div>}
                             <div className='text-xs'>
-                                Ship To <span className='font-semibold'>Yishun</span>
+                                Ship To <span className='font-medium'>Yishun</span>
                             </div>
                             <div className='text-xs'>
-                                Shiping Method <span className='font-semibold'>Store Pick Up | Meet Up</span>
+                                Shiping Method <span className='font-medium'>Store Pick Up | Meet Up</span>
                             </div>
                         </div>
 
@@ -637,7 +640,7 @@ const ProductFullDetail = props => {
                                             {sellerDetails ? sellerDetails.name : ''}
                                         </div>
                                         <div className="flex items-center relative">
-                                            <Verify variant='Bold' color='#4E31DB' size={20} />
+                                            <Verify variant='Bold' color='#f76b1c' size={20} />
                                         </div>
                                     </div>
                                     <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
@@ -645,10 +648,10 @@ const ProductFullDetail = props => {
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap items-start gap-4 relative'>
-                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                            <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Message
                                             </div>
                                         </div>
@@ -661,10 +664,10 @@ const ProductFullDetail = props => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                         <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Shop color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                 Visit Store
                                             </div>
                                         </div>
@@ -688,6 +691,12 @@ const ProductFullDetail = props => {
                 <div className='block lg_hidden'>
                     <ProductDetailsCollapsible data={dataTabs} />
                 </div>
+                <Tabs
+                    data={dataTabs}
+                    tabContentWrapperClassName='!p-0'
+                    hasContent
+                    tabWrapperClassName='xl_gap-x-[60px] justify-center'
+                />
             </section>
 
             <section className='pt-8 lg_pt-10'>

@@ -3,6 +3,7 @@ const moduleOverridePlugin = require('./moduleOverrideWebpackPlugin');
 const { DefinePlugin } = require('webpack');
 const { getAvailableWebsitesConfigData } = require('./Utilities/graphQL');
 const LocalizationPlugin = require('@magento/pwa-buildpack/lib/WebpackTools/plugins/LocalizationPlugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = targets => {
   // Perform the asynchronous operation outside the tap
@@ -12,6 +13,10 @@ module.exports = targets => {
   (async () => {
     availableWebsites = await getAvailableWebsitesConfigData();
   })();
+
+  targets.of('@magento/pwa-buildpack').transformUpward.tap(def => {
+    def.staticFromRoot.inline.body.file.template.inline = './static-files/{{ filename }}';
+  });
 
   targets.of('@magento/pwa-buildpack').specialFeatures.tap(features => {
     features[targets.name] = { i18n: true, esModules: true, cssModules: true, graphqlQueries: true };
@@ -179,7 +184,7 @@ module.exports = targets => {
       pattern: "/order-history/view/:urlKey",
       path: require.resolve("./components/OrderDetail/orderDetailPage.js"),
       authed: true,
-    },
+    }
   ];
 
   // Apply DefinePlugin using the results of the asynchronous operation
@@ -187,6 +192,12 @@ module.exports = targets => {
     new DefinePlugin({
       AVAILABLE_WEBSITES: JSON.stringify(availableWebsites.availableStoresByUserIp),
       WEBSITE_CODE: process.env.WEBSITE_CODE
+    }).apply(compiler);
+  });
+
+  targets.of('@magento/pwa-buildpack').webpackCompiler.tap(compiler => {
+    new CopyPlugin({
+      patterns: [{ from: 'node_modules/@riosst100/pwa-marketplace/src/static-files', to: 'static-files' }]
     }).apply(compiler);
   });
 

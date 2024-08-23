@@ -29,7 +29,7 @@
 
 .sectionTitle {
     composes: flex from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: items-center from global;
     composes: leading-normal from global;
     composes: mb-sm from global;
@@ -48,7 +48,7 @@
 }
 
 .productName {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-colorDefault from global;
 
     composes: lg_font-normal from global;
@@ -64,9 +64,7 @@
     grid-area: left-container;
     grid-column: 1 / 2;
     grid-row: 1 / fold;
-    composes: lg_max-w-[495px] from global;
-    composes: max-w-full from global;
-
+    composes: max-w-[495px] from global;
 }
 
 .rightContainer {
@@ -89,7 +87,7 @@
 
 .quantityTitle {
     composes: block from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: leading-normal from global;
     composes: mb-sm from global;
     composes: text-colorDefault from global;

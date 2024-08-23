@@ -44,8 +44,8 @@ const Header = props => {
     const baseUrl = data?.storeConfig?.base_media_url;
     const imageSource = data?.storeConfig?.header_logo_src;
     const LogoImageSource = `${baseUrl}/logo/${imageSource}`;
-    const IMAGE_HEIGHT = data?.storeConfig?.logo_width || 33;
-    const IMAGE_WIDTH = data?.storeConfig?.logo_height || 170;
+    const IMAGE_HEIGHT = data?.storeConfig?.logo_width || 28;
+    const IMAGE_WIDTH = data?.storeConfig?.logo_height || 190;
     const IMAGE_ALT = data?.storeConfig?.logo_alt || 'TCG Collective';
 
     const classes = useStyle(defaultClasses, props.classes);
@@ -85,7 +85,7 @@ const Header = props => {
             </div>
             <header className={cn(rootClass, '!flex flex-col !px-0 border-gray-100 ')} data-cy="Header-root">
                 <div className={cn('middle-header border-b border-gray-100')}>
-                    <div className={cn('w-full max-w-[1210px] px-[15px] py-[20px] mx-[auto] flex justify-between items-center')}>
+                    <div className={cn('w-full max-w-[1210px] px-[15px] py-[10px] mx-[auto] flex justify-between items-center')}>
                         <div className='flex items-center'>
                             <NavTrigger />
 
@@ -125,6 +125,11 @@ const Header = props => {
                             <div className='flex w-full justify-end lg_hidden'>
                                 <SearchNormal size="25" color="#280135" variant="Outline" className='mr-4' />
                             </div>
+                            <Suspense fallback={searchBarFallback}>
+                                <Route>
+                                    <SearchBar isOpen={true} ref={searchRef} />
+                                </Route>
+                            </Suspense>
                         </div>
                         <div className={cn(classes.secondaryActions, 'lg_gap-x-5 pl-5 border-l-[1px] border-gray-100')}>
                             {/* <SearchTrigger
@@ -139,8 +144,8 @@ const Header = props => {
                 </div>
                 <MegaMenu
                     rootClassName={cn('nav-menu w-full max-w-[1210px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
-                    megaMenuItemClassname={cn('px-0 py-[15px] leading-[20px]')}
-                    titleClassName={cn('font-medium leading-[20px]')}
+                    megaMenuItemClassname={cn('px-0 py-[10px] leading-[20px]')}
+                    titleClassName={cn('font-normal leading-[20px]')}
                 />
             </header>
             <OnlineIndicator

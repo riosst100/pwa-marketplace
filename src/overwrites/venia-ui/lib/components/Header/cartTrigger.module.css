@@ -1,7 +1,7 @@
 .counter {
     composes: absolute from global;
     composes: bg-brand-dark from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: leading-tight from global;
     composes: left-sm from global;
     composes: min-w-[1.25rem] from global;

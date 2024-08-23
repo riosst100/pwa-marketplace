@@ -86,7 +86,7 @@
 .price {
     composes: text-colorDefault from global;
     composes: text-[14px] from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     min-height: 1rem;
 }
 

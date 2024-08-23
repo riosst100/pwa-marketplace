@@ -38,7 +38,7 @@
 
 .linkItem {
     composes: first_text-colorDefault from global;
-    composes: first_font-semibold from global;
+    composes: first_font-medium from global;
 }
 
 .callout {
@@ -52,7 +52,7 @@
 }
 
 .calloutHeading {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: text-colorDefault from global;
     composes: text-sm from global;
 }

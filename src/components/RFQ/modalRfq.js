@@ -45,7 +45,7 @@ const RFQModalForm = (props) => {
             >
                 <div className='modal_bid-content'>
                     <div className='header_title-modal flex justify-between mb-4'>
-                        <div className='text-lg text-black font-semibold'>
+                        <div className='text-lg text-black font-medium'>
                             {
                                 formatMessage({
                                     id: 'productFullDetail.RequestQuote',
@@ -183,7 +183,7 @@ const RFQModalForm = (props) => {
                                     <input {...getInputProps()} />
                                     <DocumentUpload
                                         size="32"
-                                        color="#6243FA"
+                                        color="#f76b1c"
                                     />
                                     <div className='mt-2 text-blue-600'>Drop files or click here to upload</div>
                                 </div>
@@ -199,7 +199,7 @@ const RFQModalForm = (props) => {
                                 <Button
                                     priority='low'
                                     classes={{
-                                        content: 'capitalize text-[16px] font-semibold'
+                                        content: 'capitalize text-[16px] font-medium'
                                     }}
                                     onClick={() => setOpen(false)}
                                 >
@@ -214,7 +214,7 @@ const RFQModalForm = (props) => {
                                 <Button
                                     priority='high'
                                     classes={{
-                                        content: 'capitalize text-[16px] font-semibold'
+                                        content: 'capitalize text-[16px] font-medium'
                                     }}
                                 >
                                     {

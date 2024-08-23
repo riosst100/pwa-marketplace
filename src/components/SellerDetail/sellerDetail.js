@@ -90,11 +90,11 @@ const SellerDetail = props => {
                     <div className='flex flex-col xs_items-center md_items-start justify-between relative gap-y-[18px]'>
                         <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
                             <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
-                                <div className="relative w-fit mt-[-1.00px] font-semibold text-[20px] tracking-[0] leading-[24px] whitespace-nowrap">
+                                <div className="relative w-fit mt-[-1.00px] font-medium text-[20px] tracking-[0] leading-[24px] whitespace-nowrap">
                                     {seller ? seller.name : ''}
                                 </div>
                                 <div className="flex items-center gap-[5px] relative">
-                                    <Verify variant='Bold' color='#4E31DB' size={20} />
+                                    <Verify variant='Bold' color='#f76b1c' size={20} />
                                     <div className="relative w-fit font-medium text-[#192221b3] text-[12px] tracking-[0] leading-[normal] whitespace-nowrap">
                                         Verified
                                     </div>
@@ -105,10 +105,10 @@ const SellerDetail = props => {
                             </div>
                         </div>
                         <div className='flex flex-wrap items-start gap-4 relative'>
-                            <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-white rounded-[30px] border border-solid border-[#6243fa]">
+                            <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                 <div class="flex items-center justify-center gap-[10px] relative">
-                                    <Sms color="#6243FA" size={14} variant="Outline" className='stroke-[#6243FA]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#6243fa] text-base tracking-[0] leading-[20px] whitespace-nowrap">
+                                    <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                         Message
                                     </div>
                                 </div>
@@ -140,11 +140,11 @@ const SellerDetail = props => {
                                     />
                                 </span>
                             </Button>
-                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#6243fa]">
-                                <Heart color='#6243FA' size={14} variant="Outline" className='stroke-[#6243FA]' />
+                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]">
+                                <Heart color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />
                             </button>
-                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#6243fa]">
-                                <Share color='#6243FA' size={14} variant="Outline" className='stroke-[#6243FA]' />
+                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]">
+                                <Share color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />
                             </button>
                         </div>
                     </div>

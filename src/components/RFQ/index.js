@@ -18,7 +18,7 @@ const AuctionDetail = (props) => {
             <Button
                 data-cy="ProductFullDetail-RFQ"
                 classes={{
-                    content: 'normal-case font-semibold text-[16px]'
+                    content: 'normal-case font-medium text-[16px]'
                 }}
                 priority="low"
                 type="submit"

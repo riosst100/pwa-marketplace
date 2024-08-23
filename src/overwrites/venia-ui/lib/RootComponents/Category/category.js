@@ -12,12 +12,13 @@ import { useIntl } from 'react-intl';
 import ShopBy from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy';
 import SubCategoryPage from '@riosst100/pwa-marketplace/src/components/CustomSubCategoryPage/subCategoryPage';
 import ShopBySets from '@riosst100/pwa-marketplace/src/components/ShopBySets/shopBySets';
+import ShopByCard from '@riosst100/pwa-marketplace/src/components/ShopByCard/shopByCard';
 import { useLocation } from 'react-router-dom';
 import SportCardsSets from '@riosst100/pwa-marketplace/src/components/SportCardsSets/sportCardsSets';
 import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSportCardsSets/nonSportCardsSets';
 import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/trainsSets';
-import ShopByVehicles from '@riosst100/pwa-marketplace/src/components/ShopByVehicles/shopByVehicles';
+import ShopByBrands from '@riosst100/pwa-marketplace/src/components/ShopByBrands/shopByBrands';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -94,13 +95,13 @@ const Category = props => {
                 isLoading={loading} /> : shopby && parentCategoryUrlKey == "non-sports-cards" ? <NonSportCardsSets
                 categoryId={uid}
                 shopby={shopby}
-                isLoading={loading} /> : shopby == "trains_brands" || shopby == "trains_roadname" ? <TrainsSets
-                categoryId={uid}
-                shopby={shopby}
                 isLoading={loading} /> : shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" || shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : shopby == "sets" || shopby == "expansion_sets" || shopby == "release_year" ? <ShopBySets
+                categoryId={uid}
+                shopby={shopby}
+                isLoading={loading} /> : shopby == "card" ? <ShopByCard
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : (shopby && shopby != "gauge" ? (

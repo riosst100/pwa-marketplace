@@ -93,7 +93,7 @@ const OrderRow = props => {
         );
 
     const badgeStatusStyle = () => {
-        return 'bg-[#F1EFF6] text-blue-700 text-[14px] font-semibold rounded-full px-[30px] py-[5px] border-none';
+        return 'bg-[#F1EFF6] text-blue-700 text-[14px] font-medium rounded-full px-[30px] py-[5px] border-none';
     }
 
     const thumbnailProps = {
@@ -157,7 +157,7 @@ const OrderRow = props => {
                                 defaultMessage={'Order Total'}
                             />
                         </span>
-                        <div className="text-lg font-semibold text-left md_text-center block">{orderTotalPrice}</div>
+                        <div className="text-lg font-medium text-left md_text-center block">{orderTotalPrice}</div>
                     </div>
                 </div>
             </div>

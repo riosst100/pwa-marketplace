@@ -23,7 +23,7 @@
 }
 
 .radio_label {
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: justify-self-start from global;
 }
 

@@ -47,7 +47,7 @@
     composes: border-b from global;
     composes: border-solid from global;
     composes: border-subtle from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: pb-xs from global;
     composes: text-colorDefault from global;
     composes: uppercase from global;

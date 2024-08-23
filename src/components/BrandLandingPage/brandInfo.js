@@ -34,7 +34,7 @@ const brandInfo = () => {
             >
                 <div className='social_share-container flex flex-col gap-y-7'>
                     <div className='flex justify-between'>
-                        <div className='text-lg font-semibold'>
+                        <div className='text-lg font-medium'>
                             Share to your friends
                         </div>
                         <button onClick={() => { setOpen(!open) }} >
@@ -72,7 +72,7 @@ const brandInfo = () => {
                     >
                         {initialName('Bandai Namco')}
                     </div>
-                    <div className='text-lg font-semibold'>
+                    <div className='text-lg font-medium'>
                         Bandai Namco
                     </div>
                 </div>

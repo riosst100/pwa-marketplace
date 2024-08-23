@@ -15,7 +15,7 @@ const ProductItem = () => {
                     <div class="inline-flex flex-col items-start gap-[10px] relative flex-[0_0_auto]">
                         <div class="flex flex-col w-[153px] items-start justify-center gap-[8px] relative flex-[0_0_auto]">
                             <div class="flex flex-col items-start gap-[6px] relative self-stretch w-full flex-[0_0_auto]">
-                                <div class="relative w-fit mt-[-1.00px] [font-family:'Noto_Sans',Helvetica] font-semibold text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal] whitespace-nowrap">$55.00</div>
+                                <div class="relative w-fit mt-[-1.00px] [font-family:'Noto_Sans',Helvetica] font-medium text-[#1b1b1b] text-[14px] tracking-[0] leading-[normal] whitespace-nowrap">$55.00</div>
                             </div>
                         </div>
                         <div class="flex-col items-start gap-[8px] inline-flex relative flex-[0_0_auto]">

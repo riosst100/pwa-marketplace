@@ -27,12 +27,12 @@
 
 .totalLabel {
     composes: lineItemLabel;
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .totalPrice {
     composes: price;
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .priceUpdating {

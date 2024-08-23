@@ -69,7 +69,7 @@ const CreateAccount = props => {
             onKeyDown={handleEnterKeyPress}
             data-cy="CreateAccount-submitButton"
             classes={{
-                content: 'font-semibold text-[16px] capitalize',
+                content: 'font-medium text-[16px] capitalize',
             }}
         >
             <FormattedMessage

@@ -63,7 +63,7 @@
     composes: border from global;
     composes: border-solid from global;
     composes: border-subtle from global;
-    composes: font-semibold from global;
+    composes: font-medium from global;
     composes: mb-1 from global;
     composes: px-sm from global;
     composes: py-1.5 from global;
@@ -73,7 +73,7 @@
 }
 
 .name {
-    composes: font-semibold from global;
+    composes: font-medium from global;
 }
 
 .address {
