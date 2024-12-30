@@ -24,8 +24,7 @@ const SCROLL_OFFSET = 150;
 const FilterTop = props => {
     const { shopby, filters, filterCountToOpen, allowedFilters, category } = props;
     const [filterBy, setFilterBy] = useState('');
-
-    // console.log(filterBy)
+    
     const talonProps = useFilterTop({ shopby, filters, category, filterBy, setFilterBy });
     const {
         filterApi,
@@ -46,8 +45,6 @@ const FilterTop = props => {
     const { search } = useLocation();
 
     // const filtersSearch = getFiltersFromSearch(search);
-
-    // console.log(search)
 
     // filters.forEach((values, key) => {
     //     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
@@ -103,10 +100,6 @@ const FilterTop = props => {
     //     allowedFiltersArr.push(val.code);
     // });
     // const allowedFiltersArr = ['card_rarity','card_print_version','card_set', 'card_product_type'];
-
-    // console.log(customFilters)
-
-    // console.log(filterItems)
 
     const filtersList = useMemo(
         () =>

@@ -59,6 +59,19 @@ export const ProductDetailsFragment = gql`
                     amount_off
                 }
             }
+            minimum_price {
+                final_price {
+                    currency
+                    value
+                }
+                regular_price {
+                    currency
+                    value
+                }
+                discount {
+                    amount_off
+                }
+            }
         }
         sku
         auction_data {
@@ -188,6 +201,15 @@ export const ProductDetailsFragment = gql`
                     }
                     price_range {
                         maximum_price {
+                            final_price {
+                                currency
+                                value
+                            }
+                            discount {
+                                amount_off
+                            }
+                        }
+                        minimum_price {
                             final_price {
                                 currency
                                 value

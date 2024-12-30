@@ -71,7 +71,7 @@ const AuctionDetail = (props) => {
     }
     };
 
-    console.log(auctionData)
+    // console.log(auctionData)
 
     const endDate = auctionData && auctionData.stop_auction_time ? new Date(auctionData.stop_auction_time) : null;
 

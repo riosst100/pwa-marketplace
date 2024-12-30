@@ -3,7 +3,9 @@ import Button from '@magento/venia-ui/lib/components/Button';
 import { useIntl } from 'react-intl';
 import ModalRFQ from './modalRfq';
 
-const AuctionDetail = (props) => {
+const RFQ = (props) => {
+
+    const { disabled } = props;
 
     const [open, setOpen] = useState(false);
     const { formatMessage } = useIntl();
@@ -17,6 +19,7 @@ const AuctionDetail = (props) => {
 
             <Button
                 data-cy="ProductFullDetail-RFQ"
+                disabled={disabled}
                 classes={{
                     content: 'normal-case font-medium text-[16px]'
                 }}
@@ -28,7 +31,7 @@ const AuctionDetail = (props) => {
                     formatMessage({
                         id: 'productFullDetail.RequestQuote',
                         defaultMessage:
-                            'Request a Quote'
+                            'Make An Offer'
                     })
                 }
             </Button>
@@ -36,4 +39,4 @@ const AuctionDetail = (props) => {
     )
 }
 
-export default AuctionDetail;
+export default RFQ;

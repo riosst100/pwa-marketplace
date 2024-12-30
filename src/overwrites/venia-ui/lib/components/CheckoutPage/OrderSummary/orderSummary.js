@@ -7,7 +7,6 @@ import defaultClasses from './orderSummary.module.css';
 
 const OrderSummary = props => {
     const classes = useStyle(defaultClasses, props.classes);
-    console.log("🚀 ~ OrderSummary ~ props:", props)
     return (
         <div data-cy="OrderSummary-root" className={classes.root}>
             <h2 aria-live="polite" className="text-[16px] font-medium mb-4">

@@ -133,7 +133,6 @@ export const useTrainsSets = props => {
                     }
                     
                     if (activeTab == "trains_gauge") {
-                        console.log(activeFilter + ' dan '+set.trains_gauge)
                         return set.trains_gauge.search(new RegExp('<'+activeFilter+'>', "i")) != -1;
                     }
 
@@ -176,8 +175,6 @@ export const useTrainsSets = props => {
                 }
             })
         }
-
-        console.log(filteredSets)
 
         return searchQuery || activeFilter ? filteredSets : trainsSets;
     }, [trainsSets, searchQuery, activeFilter]);

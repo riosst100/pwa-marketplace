@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment, Suspense } from 'react';
+import React, { useState, useMemo, Fragment, Suspense } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Form } from 'informed';
@@ -87,22 +87,26 @@ const ProductFullDetail = props => {
         isAddToCartDisabled,
         isSupportedProductType,
         mediaGalleryEntries,
+        selectedMedia,
         productDetails,
         customAttributes,
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
-    console.log("🚀 ~ ProductFullDetail ~ talonProps:", talonProps)
 
     const { formatMessage } = useIntl();
 
     const classes = useStyle(defaultClasses, props.classes);
+
+    const [hoveredMedia, setHoveredMedia] = useState(null);
 
     const options = isProductConfigurable(product) ? (
         <Suspense fallback={<ProductOptionsShimmer />}>
             <Options
                 onSelectionChange={handleSelectionChange}
                 options={product.configurable_options}
+                setHoveredMedia={setHoveredMedia}
+                variants={product.variants}
                 isEverythingOutOfStock={isEverythingOutOfStock}
                 outOfStockVariants={outOfStockVariants}
             />
@@ -223,28 +227,7 @@ const ProductFullDetail = props => {
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
         <section className={cn(classes.actButton, 'flex gap-x-[30px]')}>
-            <Button
-                data-cy="ProductFullDetail-addToCartButton"
-                disabled={isAddToCartDisabled}
-                aria-disabled={isAddToCartDisabled}
-                aria-label={
-                    isEverythingOutOfStock
-                        ? formatMessage({
-                            id: 'productFullDetail.outOfStockProduct',
-                            defaultMessage:
-                                'This item is currently out of stock'
-                        })
-                        : ''
-                }
-                classes={{
-                    content: 'normal-case font-medium text-[16px]'
-                }}
-                priority="low"
-                type="submit"
-            >
-                Make An Offer
-            </Button>
-
+            <RFQ disabled={isAddToCartDisabled} />
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -399,43 +382,43 @@ const ProductFullDetail = props => {
 
 
     const dataTabs =
-        [
-            {
-                id: 'product-detail',
-                title: 'Description',
-                content: <ProductDescription />
-            },
-            {
-                id: 'product-more-info',
-                title: 'Details',
-                content: <ProductMoreInfo />
-            },
-            {
-                id: 'product-tnc',
-                title: 'Term & Conditions',
-                content: <ProductTNC />
-            },
-            {
-                id: 'product-shipping-policy',
-                title: 'Shipping Policy',
-                content: <ShippingPolicy />
-            },
-            {
-                id: 'product-return-policy',
-                title: 'Return Policy',
-                content: <ReturnPolicy />
-            },
-            {
-                id: 'product-faq',
-                title: 'FAQ',
-                content: <ProductFAQ />
-            },
-            {
-                id: 'product-reviews',
-                title: 'Reviews',
-                content: <ProductReviews className={cn(contentContainerClass)} />
-            }
-        ];
+    [
+        {
+            id: 'product-detail',
+            title: 'Description',
+            content: <ProductDescription />
+        },
+        {
+            id: 'product-more-info',
+            title: 'Details',
+            content: <ProductMoreInfo />
+        },
+        {
+            id: 'product-tnc',
+            title: 'Term & Conditions',
+            content: <ProductTNC />
+        },
+        {
+            id: 'product-shipping-policy',
+            title: 'Shipping Policy',
+            content: <ShippingPolicy />
+        },
+        {
+            id: 'product-return-policy',
+            title: 'Return Policy',
+            content: <ReturnPolicy />
+        },
+        {
+            id: 'product-faq',
+            title: 'FAQ',
+            content: <ProductFAQ />
+        },
+        {
+            id: 'product-reviews',
+            title: 'Reviews',
+            content: <ProductReviews className={cn(contentContainerClass)} />
+        }
+    ];
 
     return (
         <Fragment>
@@ -447,7 +430,7 @@ const ProductFullDetail = props => {
             >
                 <section className={cn(classes.leftContainer, 'relative')}>
                     <ProductLabel item={productDetails} />
-                    <Carousel images={mediaGalleryEntries} />
+                    <Carousel images={mediaGalleryEntries} hoveredMedia={hoveredMedia} selectedMedia={selectedMedia}/>
                     <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-2 lg_mt-5 mb-6 lg_mb-0'>
                         <Suspense fallback={null}>
                             <WishlistButton
@@ -469,7 +452,7 @@ const ProductFullDetail = props => {
                     <div
                         className={cn(
                             classes.title,
-                            'mb-[30px]',
+                            'mb-xs',
                         )}
                     >
                         <h1
@@ -500,7 +483,7 @@ const ProductFullDetail = props => {
                     <div
                         className={cn(
                             'product_short_description',
-                            'mb-[30px]',
+                            'mb-xs',
                         )}
                     >
                         {shortDescription}
@@ -514,7 +497,7 @@ const ProductFullDetail = props => {
                     <div
                         className={cn(
                             'product_price_container',
-                            'py-[30px] flex justify-between flex-wrap gap-y-5'
+                            'py-xs flex justify-between flex-wrap gap-y-5'
                         )}
                     >
                         <div className='flex flex-col gap-y-5 max-w-[448px]'>
@@ -528,10 +511,11 @@ const ProductFullDetail = props => {
                                 >
                                     <Price
                                         currencyCode={productDetails.price.currency}
+                                        priceRange={productDetails.price_range}
                                         value={productDetails.price.value}
                                     />
                                 </p>
-                                <p
+                                {/* <p
                                     data-cy="ProductFullDetail-productOldPrice"
                                     className={cn(
                                         classes.productPrice,
@@ -542,7 +526,7 @@ const ProductFullDetail = props => {
                                         currencyCode={productDetails.price.currency}
                                         value={productDetails.price.value}
                                     />
-                                </p>
+                                </p> */}
                             </div>
                             <AuctionDetail className="auction_detail-container" />
                             <PreorderDetail className={'preorder_detail-container'} />
@@ -564,7 +548,7 @@ const ProductFullDetail = props => {
                         errors={errors.get('form') || []}
                     />
                     <section className={classes.options}>{options}</section>
-                    <section className={cn(classes.quantity, 'py-[30px] !border-none')}>
+                    <section className={cn(classes.quantity, 'py-xs !border-none')}>
                         {/* <span
                             data-cy="ProductFullDetail-quantityTitle"
                             className={classes.quantityTitle}
@@ -579,7 +563,7 @@ const ProductFullDetail = props => {
                             message={errors.get('quantity')}
                         />
 
-                        <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
+                        {/* <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
                             {sellerDetails &&
                                 <div className='text-xs'>
                                     Ship From <span className='font-medium'>{sellerDetails.country}</span>
@@ -590,19 +574,19 @@ const ProductFullDetail = props => {
                             <div className='text-xs'>
                                 Shiping Method <span className='font-medium'>Store Pick Up | Meet Up</span>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='product_actions-wrapper'>
                             {cartActionContent}
                         </div>
                     </section>
-                    <Divider />
+                    {/* <Divider />
                     <section className={cn(classes.quantity, 'py-[30px] !border-none')}>
                         <RFQ />
-                    </section>
+                    </section> */}
                     <Divider />
-                    <section className='product_from-other-platform py-[30px]'>
-                        <div className='text-sm flex mb-5'>
+                    <section className='product_from-other-platform py-xs'>
+                        <div className='text-sm flex mb-3'>
                             Also available in
                         </div>
                         <div className='platform-container flex gap-x-2.5'>
@@ -631,7 +615,7 @@ const ProductFullDetail = props => {
                         </div>
                     </section>
                     <Divider />
-                    <section className='seller-information py-[30px]'>
+                    <section className='seller-information py-xs'>
                         <div className='flex xs_flex-col md_flex-row xs_items-center md_items-start items-start gap-[15px] relative'>
                             <div className='flex flex-row justify-between relative w-full'>
                                 <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
@@ -691,12 +675,6 @@ const ProductFullDetail = props => {
                 <div className='block lg_hidden'>
                     <ProductDetailsCollapsible data={dataTabs} />
                 </div>
-                <Tabs
-                    data={dataTabs}
-                    tabContentWrapperClassName='!p-0'
-                    hasContent
-                    tabWrapperClassName='xl_gap-x-[60px] justify-center'
-                />
             </section>
 
             <section className='pt-8 lg_pt-10'>

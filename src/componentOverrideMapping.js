@@ -65,4 +65,10 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/OrderHistoryPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/OrderHistoryPage/index.js',
     [`@magento/venia-ui/lib/components/TextArea/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/TextArea/index.js',
     [`@magento/venia-ui/lib/components/WishlistPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/WishlistPage/index.js',
+    [`@magento/venia-ui/lib/components/ProductOptions/options.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ProductOptions/options.js',
+    [`@magento/venia-ui/lib/components/Price/price.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Price/price.js',
+    [`@magento/peregrine/lib/talons/MagentoRoute/useMagentoRoute.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/MagentoRoute/useMagentoRoute.js',
+    [`@magento/peregrine/lib/talons/ProductOptions/useOption.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useOption.js',
+    [`@magento/peregrine/lib/talons/ProductOptions/useTile.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useTile.js',
+    [`@magento/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js'
 };

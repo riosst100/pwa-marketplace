@@ -2,12 +2,15 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAppContext } from '@magento/peregrine/lib/context/app';
+import { useIntl } from 'react-intl';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './seller.gql';
 
 export const useSeller = props => {
     const { mapSeller } = props;
+
+    const { formatMessage } = useIntl();
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const { getStoreConfigData, getSellerDetailQuery } = operations;
@@ -63,9 +66,24 @@ export const useSeller = props => {
         setPageLoading(isBackgroundLoading);
     }, [isBackgroundLoading, setPageLoading]);
 
+    const favoriteSellerOptions = useMemo(() => {
+        const options = {
+            seller_id: seller?.seller_id
+        };
+
+        return options;
+    }, [seller]);
+
+    const favoriteSellerButtonProps = {
+        buttonText: '',
+        item: favoriteSellerOptions,
+        storeConfig: storeConfigData ? storeConfigData.storeConfig : {}
+    };
+
     return {
         error,
         loading,
-        seller
+        seller,
+        favoriteSellerButtonProps
     };
 };

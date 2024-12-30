@@ -67,8 +67,6 @@ const NonSportCardsSets = props => {
 
     const { error, loading, nonSportCardsSets, categoryUrlSuffix, categoryUrlKey, productType, filteredNonSportCardsSets, availableGroups, category } = talonProps;
 
-    console.log(filteredNonSportCardsSets)
-
     if (loading && !nonSportCardsSets)
         return <NonSportCardsSetsShimmer />;
     if (error && !nonSportCardsSets) return <ErrorView />;

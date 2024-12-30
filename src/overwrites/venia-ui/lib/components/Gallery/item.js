@@ -81,7 +81,8 @@ const GalleryItem = props => {
 
     // fallback to regular price when final price is unavailable
     const priceSource =
-        price_range.maximum_price.final_price ||
+        price_range.minimum_price?.final_price ||
+        price_range.minimum_price?.regular_price || price_range.maximum_price.final_price ||
         price_range.maximum_price.regular_price;
 
     // Hide the Rating component until it is updated with the new look and feel (PWA-2512).
@@ -144,12 +145,12 @@ const GalleryItem = props => {
                                 currencyCode={priceSource.currency}
                             />
                         </p>
-                        <p className='old-price text-gray-400 text-xs line-through font-normal !mb-0'>
+                        {/* <p className='old-price text-gray-400 text-xs line-through font-normal !mb-0'>
                             <Price
                                 value={priceSource.value}
                                 currencyCode={priceSource.currency}
                             />
-                        </p>
+                        </p> */}
                     </div>
 
                     <div data-cy="GalleryItem-Rating" className={cn('flex gap-[5px] items-center mb-2')}>
@@ -201,6 +202,19 @@ GalleryItem.propTypes = {
         sku: string.isRequired,
         price_range: shape({
             maximum_price: shape({
+                final_price: shape({
+                    value: number.isRequired,
+                    currency: string.isRequired
+                }),
+                regular_price: shape({
+                    value: number.isRequired,
+                    currency: string.isRequired
+                }).isRequired,
+                discount: shape({
+                    amount_off: number.isRequired
+                }).isRequired
+            }).isRequired,
+            minimum_price: shape({
                 final_price: shape({
                     value: number.isRequired,
                     currency: string.isRequired

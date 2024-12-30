@@ -110,7 +110,7 @@ const ShopBy = props => {
 
     const talonProps = useShopBy({ activeFilter, searchQuery, active, setActive, currentSort, categoryId, shopby });
 
-    const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, activeFilters } = talonProps;
+    const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, activeFilters, pageInfo } = talonProps;
 
     if (loading && !dataResult)
         return <ShopByShimmer />;
@@ -233,7 +233,8 @@ const ShopBy = props => {
         }
     ];
     
-    const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
+    // const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
+    const title = pageInfo ? pageInfo.title : '';
 
     let availableFilterOption = [];
 

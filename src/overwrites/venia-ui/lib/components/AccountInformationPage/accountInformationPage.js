@@ -34,7 +34,6 @@ const AccountInformationPage = props => {
         recaptchaWidgetProps,
         setShouldShowNewPassword,
     } = talonProps;
-    console.log("🚀 ~ AccountInformationPage ~ talonProps:", talonProps)
     const { formatMessage } = useIntl();
 
     const errorMessage = loadDataError ? (

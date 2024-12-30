@@ -107,14 +107,28 @@ const getMediaGalleryEntries = (product, optionCodes, optionSelections) => {
     const { media_gallery_entries, variants } = product;
     const isConfigurable = isProductConfigurable(product);
 
+    value = isConfigurable && variants && variants.length > 0
+    ? [
+        ...variants.flatMap(variant => variant.product.media_gallery_entries || []),
+        ...media_gallery_entries
+    ]
+    : media_gallery_entries;
+
+    return value;
+};
+
+const getSelectedMedia = (product, optionCodes, optionSelections) => {
+    let valueSelected = [];
+
+    const { media_gallery_entries, variants } = product;
+    const isConfigurable = isProductConfigurable(product);
+
     // Selections are initialized to "code => undefined". Once we select a value, like color, the selections change. This filters out unselected options.
     const optionsSelected =
         Array.from(optionSelections.values()).filter(value => !!value).length >
         0;
 
-    if (!isConfigurable || !optionsSelected) {
-        value = media_gallery_entries;
-    } else {
+    if (isConfigurable && optionsSelected) {
         // If any of the possible variants matches the selection add that
         // variant's image to the media gallery. NOTE: This _can_, and does,
         // include variants such as size. If Magento is configured to display
@@ -125,12 +139,12 @@ const getMediaGalleryEntries = (product, optionCodes, optionSelections) => {
             variants
         });
 
-        value = item
-            ? [...item.product.media_gallery_entries, ...media_gallery_entries]
+        valueSelected = item
+            ? item.product.media_gallery_entries
             : media_gallery_entries;
     }
 
-    return value;
+    return valueSelected;
 };
 
 // We only want to display breadcrumbs for one category on a PDP even if a
@@ -170,7 +184,7 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
         Array.from(optionSelections.values()).filter(value => !!value).length >
         0;
 
-    if (!isConfigurable || !optionsSelected) {
+    if (!isConfigurable) {
         value = product.price_range?.maximum_price;
     } else {
         const item = findMatchingVariant({
@@ -179,10 +193,20 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
             variants
         });
 
-        value = item
+        const priceRange = {
+            final_price: {
+                value: product.price_range?.minimum_price.final_price.value + ' - ' + product.price_range?.maximum_price.final_price.value,
+                currency: product.price_range?.minimum_price.final_price.currency
+            }
+        };
+
+        value = optionsSelected && item
             ? item.product.price_range?.maximum_price
-            : product.price_range?.maximum_price;
+            : priceRange;
     }
+
+    console.log('value----=====')
+    console.log(value)
 
     return value;
 };
@@ -365,6 +389,11 @@ export const useProductFullDetail = props => {
 
     const mediaGalleryEntries = useMemo(
         () => getMediaGalleryEntries(product, optionCodes, optionSelections),
+        [product, optionCodes, optionSelections]
+    );
+
+    const selectedMedia = useMemo(
+        () => getSelectedMedia(product, optionCodes, optionSelections),
         [product, optionCodes, optionSelections]
     );
 
@@ -629,6 +658,7 @@ export const useProductFullDetail = props => {
             isAddProductLoading,
         isSupportedProductType,
         mediaGalleryEntries,
+        selectedMedia,
         shouldShowWishlistButton:
             isSignedIn &&
             storeConfigData &&

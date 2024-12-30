@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, Suspense, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSeller';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
@@ -22,13 +22,14 @@ import Image from '@magento/venia-ui/lib/components/Image';
 import LiveChat from '@riosst100/pwa-marketplace/src/components/LiveChat';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
+const FavoriteSellerButton = React.lazy(() => import('@riosst100/pwa-marketplace/src/components/FavoriteSeller/AddToListButton'));
 
 const SellerDetail = props => {
     const talonProps = useSeller({
         mapSeller
     });
 
-    const { error, loading, seller } = talonProps;
+    const { error, loading, seller, favoriteSellerButtonProps } = talonProps;
 
     if (loading && !seller)
         return '';
@@ -69,6 +70,10 @@ const SellerDetail = props => {
     const [openChat, setOpenChat] = useState(false);
     const toggleChat = () => {
         setOpenChat(!openChat);
+    }
+
+    const addToFavourite = () => {
+        
     }
 
     return (
@@ -113,36 +118,31 @@ const SellerDetail = props => {
                                     </div>
                                 </div>
                             </button>
-                            {/* <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
-                                <div class="flex items-center justify-center gap-[10px] relative">
-                                    <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
-                                        Chat With Seller
-                                    </div>
-                                </div>
-                            </button> */}
                             <Button
                                 priority='high'
                                 classes={{
                                     content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
                                 }}
-                                className={cn(
-                                    "bg-darkblue-900 px-6 py-2 rounded-full text-white border",
-                                    "border-darkblue-900 hover_bg-blue-900 hover_border-blue-900 focus-visible_outline-none"
-                                )}
+                                className='flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]'
                                 onClick={toggleChat}
                             >
                                 <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                <span>
+                                <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
                                     <FormattedMessage
                                         id={'seller.chatWithSeller'}
                                         defaultMessage={'Chat With Seller'}
                                     />
-                                </span>
+                                </div>
                             </Button>
-                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]">
-                                <Heart color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />
-                            </button>
+                            <Suspense fallback={null}>
+                                <FavoriteSellerButton
+                                    classes={{
+                                        root: 'flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]'
+                                    }}
+                                    {...favoriteSellerButtonProps}
+                                    buttonText={''}
+                                />
+                            </Suspense>
                             <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]">
                                 <Share color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />
                             </button>

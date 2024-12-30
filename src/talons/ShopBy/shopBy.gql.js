@@ -14,14 +14,20 @@ export const GET_STORE_CONFIG_DATA = gql`
 export const GET_SHOP_BY_DATA_QUERY = gql`
     query getShopByData($search: String, $activeFilter: String, $categoryUrlKey: String!, $attributeCode: String, $filters: ProductAttributeFilterInput!) {
         shopByData(search: $search, activeFilter: $activeFilter, categoryUrlKey: $categoryUrlKey, attributeCode: $attributeCode, filters: $filters) {
-            label
-            count
-            attribute_code
-            options {
-                label
-                value
+            page_info {
+                title
+                filter_group
             }
-            position
+            data {
+                label
+                count
+                attribute_code
+                options {
+                    label
+                    value
+                }
+                position
+            }
         }
     }
 `;
