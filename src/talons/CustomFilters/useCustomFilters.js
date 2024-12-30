@@ -68,8 +68,6 @@ export const useCustomFilters = props => {
         return typeMap;
     }, [introspectionData]);
 
-    console.log(category)
-
     useEffect(() => {
 
         if (!filterTypeMap.size) {

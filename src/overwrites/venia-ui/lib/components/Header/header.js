@@ -125,11 +125,6 @@ const Header = props => {
                             <div className='flex w-full justify-end lg_hidden'>
                                 <SearchNormal size="25" color="#280135" variant="Outline" className='mr-4' />
                             </div>
-                            <Suspense fallback={searchBarFallback}>
-                                <Route>
-                                    <SearchBar isOpen={true} ref={searchRef} />
-                                </Route>
-                            </Suspense>
                         </div>
                         <div className={cn(classes.secondaryActions, 'lg_gap-x-5 pl-5 border-l-[1px] border-gray-100')}>
                             {/* <SearchTrigger

@@ -74,15 +74,12 @@ const Breadcrumbs = props => {
         );
     }
 
-    // console.log(currentFilter)
-
     const filterBreadcrumbsElement = [];
 
     const lastIndex = currentFilter ? currentFilter.length - 1 : 0;
     // const filterpath = ;
     
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
-        console.log(filter)
         currentProduct ? (
             filterBreadcrumbsElement.push(
                 <>

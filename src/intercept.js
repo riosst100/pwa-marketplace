@@ -133,7 +133,7 @@ module.exports = targets => {
       exact: true,
       name: "FavoriteSeller",
       pattern: "/favorite-seller",
-      path: require.resolve("./components/FavoriteSeller/index.js"),
+      path: require.resolve("./components/FavoriteSellerPage/index.js"),
       authed: true,
     },
     {

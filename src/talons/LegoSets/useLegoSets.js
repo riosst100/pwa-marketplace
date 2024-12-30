@@ -51,19 +51,14 @@ export const useLegoSets = props => {
     }, [introspectionData]);
     const filters = getFiltersFromSearch(search);
 
-    // console.log(search)
-
     // Construct the filter arg object.
     const newFilters = {};
     filters.forEach((values, key) => {
         newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
-// console.log(key)
-// console.log(values)
         
         if (key == "sc_baseball_release") {
             for(let item of values) {
                 if(item) {
-                    // console.log(item.split(',')[0])
                     const data = search.split('&');
                     data.pop();
                     activeFilters.push(

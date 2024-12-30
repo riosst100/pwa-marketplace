@@ -130,7 +130,7 @@ export const useShopBy = props => {
             return null;
         }
         
-        const rawData = queryResponse?.data?.shopByData;
+        const rawData = queryResponse?.data?.shopByData?.data;
         if (!rawData) {
             return null;
         }
@@ -160,7 +160,7 @@ export const useShopBy = props => {
             return null;
         }
         
-        const rawData = queryResponse?.data?.shopByData;
+        const rawData = queryResponse?.data?.shopByData?.data;
         if (!rawData) {
             return null;
         }
@@ -227,7 +227,7 @@ export const useShopBy = props => {
     }
 
 
-    const attributeData = queryResponse?.data?.shopByData && queryResponse?.data?.shopByData.length ? queryResponse.data.shopByData[0] : null
+    const attributeData = queryResponse?.data?.shopByData?.data && queryResponse?.data?.shopByData.data.length ? queryResponse.data.shopByData.data[0] : null
 
     const { data: categoryData, loading: categoryLoading } = useQuery(
         getCategoryContentQuery,
@@ -240,6 +240,14 @@ export const useShopBy = props => {
             }
         }
     );
+
+    const pageInfo = useMemo(() => {
+        if (!queryResponse) {
+            return null;
+        }
+
+        return queryResponse?.data?.shopByData?.page_info;
+    }, [queryResponse]);
 
     const category =
         categoryData && categoryData.categories.items.length
@@ -258,7 +266,8 @@ export const useShopBy = props => {
         attributeData,
         alpha,
         category,
-        activeFilters
+        activeFilters,
+        pageInfo
     //     productType
     };
 };

@@ -335,6 +335,19 @@ export const GET_PRODUCTS_BY_URL_KEY = gql`
                             amount_off
                         }
                     }
+                    minimum_price {
+                        final_price {
+                            currency
+                            value
+                        }
+                        regular_price {
+                            currency
+                            value
+                        }
+                        discount {
+                            amount_off
+                        }
+                    }
                 }
                 sku
                 small_image {

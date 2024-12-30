@@ -30,7 +30,7 @@ export const useAccountMenuItems = props => {
         //     url: ''
         // },
         {
-            name: 'Favorites Lists',
+            name: 'Wishlist',
             id: 'accountMenu.favoritesListsLink',
             url: '/wishlist'
         },

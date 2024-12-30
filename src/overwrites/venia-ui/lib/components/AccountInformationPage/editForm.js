@@ -30,7 +30,6 @@ const EditForm = props => {
 
     const [showNewPassword, setShowNewPassword] = React.useState(false);
     const handleChange = (event) => {
-        console.log("🚀 ~ handleChange ~ event:", event)
         setShowNewPassword(event.target.checked);
     }
 

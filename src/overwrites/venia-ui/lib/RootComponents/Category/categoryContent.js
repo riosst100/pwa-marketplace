@@ -251,9 +251,6 @@ const CategoryContent = props => {
 
     let isSingles = false;
 
-    // console.log(allActiveFilters)
-
-    // console.log(virtualCategoryFilters)
     const urlKey = category?.url_key;
 
     if (allActiveFilters && allActiveFilters.size > 0) {
@@ -280,9 +277,6 @@ const CategoryContent = props => {
     }
 
     const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
-
-    // console.log(activeFilters.length)
-    // console.log(activeFilters.map(u => u.label).join(' - '))
 
     let title = activeFilters && activeFilters.length ? (
         activeFilters.length > 1 ? 
