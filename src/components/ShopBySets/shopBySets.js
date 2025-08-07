@@ -37,13 +37,6 @@ const ShopBySets = props => {
             value: 'date'
         };
     }
-
-    // if (productType == "expansion_sets") {
-    //     defaultSort = {
-    //         sortText: 'All (Expansion Sets)',
-    //         value: 'all'
-    //     };
-    // }
     
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});
 
@@ -175,24 +168,14 @@ const ShopBySets = props => {
         // alpha = availableGroups;
     }
 
-    if (productType == "expansion_sets") {
-        // availableSortBy = [
-        //     {
-        //         'label': 'All (Expansion Sets)',
-        //         'value': 'all'
-        //     },
-        //     {
-        //         'label': 'Latest Sets',
-        //         'value': 'newest'
-        //     }
-        // ];
+    // console.log('==productType')
+    // console.log(productType)
 
-        // alpha = availableGroups
-    }
-
-    let title = "All Sets";
+    let title = "A2ll Sets";
     if (productType == "expansion_sets") {
         title = "Expansion Sets";
+    } else if (productType == "secret_lair") {
+        title = "Secret Lair";
     } else if (productType == "artist") {
         title = "By Artist";
     } else if (shopby == "release_year") {
@@ -203,11 +186,11 @@ const ShopBySets = props => {
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "expansion_sets" ? "Expansion Sets" : (shopby == "release_year" ? "By Year" : "All Sets")} />
-            {shopby != "release_year" && productType != "expansion_sets" && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
+            <Breadcrumbs categoryId={categoryId} customPage={shopby == "secret_lair" ? "Secret Lair" : (shopby == "expansion_sets" ? "Expansion Sets" : (shopby == "release_year" ? "By Year" : "All Set3s"))} />
+            {shopby != "release_year" && productType != "secret_lair" && productType != "expansion_sets" && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>}
-            {shopby == "release_year" || productType == "expansion_sets" ? <ul className={classes.nav}>
+            {shopby == "release_year" || productType == "secret_lair" || productType == "expansion_sets" ? <ul className={classes.nav}>
                 {availableGroups.map((group, index) => (
                 <li key={index} className={classes.nav_item}>
                     <button

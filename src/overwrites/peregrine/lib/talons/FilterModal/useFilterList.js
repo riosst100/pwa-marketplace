@@ -10,9 +10,7 @@ export const useFilterList = props => {
         () =>
             items.some((item, index) => {
                 return (
-                    filterState &&
-                    filterState.has(item) &&
-                    index >= itemCountToShow
+                    filterState && filterState.has(item) && index >= itemCountToShow
                 );
             }),
         [filterState, itemCountToShow, items]
@@ -46,7 +44,7 @@ export const useFilterList = props => {
         if (!overlay) {
             setActiveFilter(false)
         }
-    }, [overlay])
+    }, [overlay]);
 
     // const handleShowMore = useCallback(() => {
     //     handleShowAllOptions();

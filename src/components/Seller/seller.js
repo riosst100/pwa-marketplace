@@ -7,6 +7,8 @@ import mapSeller from '@riosst100/pwa-marketplace/src/util/mapSeller';
 import SellerDetail from '@riosst100/pwa-marketplace/src/components/SellerDetail/sellerDetail';
 
 const Seller = props => {
+    const { categoryUrlKey } = props;
+
     const talonProps = useSeller({
         mapSeller
     });

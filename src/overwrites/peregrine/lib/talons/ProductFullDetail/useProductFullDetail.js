@@ -107,10 +107,15 @@ const getMediaGalleryEntries = (product, optionCodes, optionSelections) => {
     const { media_gallery_entries, variants } = product;
     const isConfigurable = isProductConfigurable(product);
 
+    let variantGallery = variants && variants.length ? variants.flatMap(variant => variant.product.media_gallery_entries || []) : [];
+    if (variantGallery) {
+        // variantGallery = variantGallery.sort((a, b) => a.uid - b.uid);
+    }
+
     value = isConfigurable && variants && variants.length > 0
     ? [
-        ...variants.flatMap(variant => variant.product.media_gallery_entries || []),
-        ...media_gallery_entries
+        ...media_gallery_entries,
+        ...variantGallery
     ]
     : media_gallery_entries;
 
@@ -193,9 +198,17 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
             variants
         });
 
+        const minPrice = product.price_range?.minimum_price.final_price.value;
+        const maxPrice = product.price_range?.maximum_price.final_price.value;
+
+        let val = minPrice;
+        if (minPrice != maxPrice) {
+            val = minPrice + ' - ' + maxPrice;
+        }
+
         const priceRange = {
             final_price: {
-                value: product.price_range?.minimum_price.final_price.value + ' - ' + product.price_range?.maximum_price.final_price.value,
+                value: val,
                 currency: product.price_range?.minimum_price.final_price.currency
             }
         };
@@ -204,9 +217,6 @@ const getConfigPrice = (product, optionCodes, optionSelections) => {
             ? item.product.price_range?.maximum_price
             : priceRange;
     }
-
-    console.log('value----=====')
-    console.log(value)
 
     return value;
 };
@@ -266,7 +276,8 @@ export const useProductFullDetail = props => {
     const {
         addConfigurableProductToCartMutation,
         addSimpleProductToCartMutation,
-        product
+        product,
+        isPreview
     } = props;
 
     const [, { dispatch }] = useEventingContext();
@@ -583,7 +594,9 @@ export const useProductFullDetail = props => {
         price: productPrice?.final_price,
         price_range: product?.price_range,
         sku: product.sku,
+        publish_status: product.publish_status,
         term_and_conditions: product.term_and_conditions,
+        link_to_other_stores: product.link_to_other_stores,
         shipping_policy: product.shipping_policy,
         return_policy: product.return_policy,
         preorder: product.preorder,
@@ -650,7 +663,7 @@ export const useProductFullDetail = props => {
         isEverythingOutOfStock,
         outOfStockVariants,
         isAddToCartDisabled:
-            isOutOfStock ||
+            isPreview || isOutOfStock ||
             isEverythingOutOfStock ||
             isMissingOptions ||
             isAddConfigurableLoading ||

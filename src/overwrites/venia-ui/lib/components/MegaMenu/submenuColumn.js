@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
@@ -6,9 +6,6 @@ import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './submenuColumn.module.css';
 import PropTypes from 'prop-types';
-import { ArrowDown2 } from 'iconsax-react';
-import { textPrimary } from '@riosst100/pwa-marketplace/src/theme/vars';
-import CustomSubmenuColumn from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/MegaMenu/customSubmenuColumn';
 import cn from 'classnames';
 
 /**
@@ -31,14 +28,12 @@ const SubmenuColumn = props => {
     const categoryUrl = resourceUrl(
         `/${category.url_path}${categoryUrlSuffix || ''}`
     );
-    let children = null;
 
-    // let maybeDownArrowIcon = () => {
-    //     return ;
-    // };
+    let children = null;
+    let childrenItems = '';
 
     if (category.children.length) {
-        const childrenItems = category.children.map((subCategory, index) => {
+        childrenItems = category.children.map((subCategory, index) => {
             const { url_path, isActive, name } = subCategory;
             const categoryUrl = resourceUrl(
                 `/${url_path}${categoryUrlSuffix || ''}`
@@ -52,31 +47,12 @@ const SubmenuColumn = props => {
 
             const customMenuItems = subCategory.custom_submenu;
 
-            const [showCustomMenu, setShowCustomMenu] = useState(false);
-
-            const toggleCustomMenu = () => {
-                if (!showCustomMenu) {
-                    setShowCustomMenu(true);
-                } else {
-                    setShowCustomMenu(false);
-                }
-            }
-
-            const customSubMenus = customMenuItems.length ? (
-                <CustomSubmenuColumn
-                    categoryUrlSuffix={categoryUrlSuffix}
-                    onNavigate={onNavigate}
-                    handleCloseSubMenu={handleCloseSubMenu}
-                    category={subCategory}
-                    customMenuItems={customMenuItems}
-                    toggleCustomMenu={toggleCustomMenu}
-                />
-            ) : '';
-
-            return (
-                <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
-                    {customMenuItems.length ? (
-                        <>
+            let result = [];
+            if (customMenuItems.length) {
+                customMenuItems.map((submenu, index) => {
+                    const {name} = submenu;
+                    result.push(
+                        <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
                             <Link
                                 {...keyboardProps}
                                 className={isActive ? classes.linkActive : classes.link}
@@ -89,8 +65,12 @@ const SubmenuColumn = props => {
                             >
                                 {name}
                             </Link>
-                        </>
-                    ) : (
+                        </li>
+                    )
+                })
+            } else {
+                result.push(
+                    <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
                         <Link
                             {...keyboardProps}
                             className={isActive ? classes.linkActive : classes.link}
@@ -103,11 +83,51 @@ const SubmenuColumn = props => {
                         >
                             {name}
                         </Link>
-                    )}
+                    </li>
+                );
+            }
+
+            return result;
+        });
+    }
+
+    if (category.custom_submenu && category.custom_submenu.length) {
+        childrenItems = category.custom_submenu.map((subCategory, index) => {
+            const { path, isActive, name } = subCategory;
+            const categoryUrl = resourceUrl(
+                `/${path}`
+            );
+
+            // setting keyboardProps if it is last child of that category
+            const keyboardProps =
+                index === category.children.length - 1
+                    ? props.keyboardProps
+                    : {};
+
+            let result = [];
+
+            result.push(
+                <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
+                    <Link
+                        {...keyboardProps}
+                        className={isActive ? classes.linkActive : classes.link}
+                        data-cy="MegaMenu-SubmenuColumn-link"
+                        to={categoryUrl}
+                        onClick={() => {
+                            handleCloseSubMenu();
+                            onNavigate();
+                        }}
+                    >
+                        {name}
+                    </Link>
                 </li>
             );
-        });
 
+            return result;
+        });
+    }
+
+    if (childrenItems) {
         children = <ul className={classes.submenuChild}>{childrenItems}</ul>;
     }
 

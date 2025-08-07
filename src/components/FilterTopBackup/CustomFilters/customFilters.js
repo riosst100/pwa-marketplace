@@ -59,7 +59,7 @@ const CustomFilters = props => {
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {
         const elements = [];
-        customFiltersData && customFiltersData.map((filter, index) => {
+        customFiltersData && customFiltersData.filters && customFiltersData.filters.map((filter, index) => {
             const { label, attribute_code, options } = filter || {};
 
             const group = attribute_code;

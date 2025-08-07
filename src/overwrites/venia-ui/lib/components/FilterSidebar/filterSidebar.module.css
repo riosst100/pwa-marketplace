@@ -8,7 +8,7 @@
     composes: z-foreground from global;
     grid-template-rows: 1fr 7rem;
 
-    composes: lg_grid from global;
+    composes: lg_block from global;
     composes: border from global;
     composes: border-gray-100 from global;
     composes: shadow-type-1 from global;

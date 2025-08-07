@@ -37,6 +37,7 @@ const Adapter = props => {
     websiteCodes.sort((a, b) => b.length - a.length);
 
     const { location } = globalThis;
+    const pathname = location.pathname;
     const match = location && location.pathname.split("/")[1];
     let websiteCodeInUrl = websiteCodes.find((str) => str === match);
 

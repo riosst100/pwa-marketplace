@@ -30,7 +30,8 @@ const Thumbnail = props => {
         isActive,
         item: { file, label },
         onClickHandler,
-        itemIndex
+        itemIndex,
+        alt = ''
     } = props;
 
     const talonProps = useThumbnail({
@@ -50,7 +51,7 @@ const Thumbnail = props => {
 
         return file ? (
             <Image
-                alt={label}
+                alt={alt}
                 classes={{ image: classes.image }}
                 height={DEFAULT_THUMBNAIL_HEIGHT}
                 resource={file}
@@ -58,12 +59,12 @@ const Thumbnail = props => {
             />
         ) : (
             <Image
-                alt={label}
+                alt={alt}
                 classes={{ image: classes.image }}
                 src={transparentPlaceholder}
             />
         );
-    }, [file, isDesktop, label, classes.image]);
+    }, [file, isDesktop, alt, classes.image]);
 
     return (
         <button

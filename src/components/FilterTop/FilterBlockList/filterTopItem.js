@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const FilterTopItem = props => {
     const { setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
-    const { removeGroup, toggleItem } = filterApi;
+    const { removeGroup, toggleItem, clear } = filterApi;
     const { title, value } = item;
 
     const classes = useStyle(defaultClasses, props.classes);
@@ -14,8 +14,11 @@ const FilterTopItem = props => {
 
     const handleOnchange = useCallback(
         e => {
+            // filterApi.clear();
+
             if (group != "category_uid") {
                 removeGroup({ group });
+                // clear();
                 if (e === item.value) {
                     toggleItem({ group, item });
                 }
@@ -44,6 +47,36 @@ const FilterTopItem = props => {
 
     // const catId = null;
 
+    // const newSearch = (search) => {
+    //     console.log(search)
+
+    //     let filterSearchArr = search ? search.split('&') : [];
+        
+    //     let filterSearch = filterSearchArr.join('&')
+
+    //     if (!filterSearch.includes('?')) {
+    //         filterSearch = '?'+filterSearch;
+    //     }
+
+    //     return result;
+    // }
+
+    let newfilterSearchArr = search ? search.split('&') : [];
+    newfilterSearchArr = newfilterSearchArr.filter(function(data) {
+        return !data.includes(group + '%5Bfilter%5D');
+    });
+
+    // alert(group)
+    
+    let filterSearch = newfilterSearchArr.join('&')
+
+    if (!filterSearch.includes('?')) {
+        filterSearch = '?'+filterSearch;
+    }
+
+    // console.log('--filterSearch--')
+    // console.log(filterSearch)
+
     const element = group == "filterby" ? (
         filterBy == value ? (
             <span className={classes.item}><b>{title}</b></span>
@@ -53,9 +86,9 @@ const FilterTopItem = props => {
     ) : group == "category" ? (
         <Link className={classes.item} to={'/'+value}>{title}</Link>
     ) : value == "shopby_all" ? (
-        <Link className={classes.item} to={search ? search + '&shopby=' + group : '?shopby=' + group}>{title}</Link>
+        <Link className={classes.item} to={search ? filterSearch + '&shopby=' + group : '?shopby=' + group}>{title}</Link>
     ) : group == "shopby" || group == "shopby_with_all" ? (
-        <Link className={classes.item} to={search ? search + '&shopby=' + value : '?shopby=' + value}>{title}</Link>
+        <Link className={classes.item} to={search ? filterSearch + '&shopby=' + value : '?shopby=' + value}>{title}</Link>
     ) : group == "cat_id" ? (
         value == "all" && !categoryIdFilters.length || categoryIdFilters.length && categoryIdFilters[0].includes('cat_id='+value) ? (
             <span className={classes.item}><b>{title}</b></span>

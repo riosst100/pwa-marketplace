@@ -13,18 +13,24 @@ import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy
 import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySearchInput';
 import { useCustomSort } from '@riosst100/pwa-marketplace/src/hooks/useCustomSort';
 import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
+import { useLocation } from 'react-router-dom';
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 const SetsData = props => {
     const { categoryId } = props
 
     const { location } = globalThis;
 
+    const { search } = useLocation();
+
     const query = new URLSearchParams(location.search);
 
     const [active, setActive] = useState('all');
     const [activeTab, setActiveTab] = useState('all');
     const [activeFilter, setActiveFilter] = useState('');
+    const [activeYear, setActiveYear] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [setsFilters, setSetsFilters] = useState([]);
     
     const shopby = query.get('shopby') || null;
     const setType = query.get('set_type') || null;
@@ -40,13 +46,6 @@ const SetsData = props => {
             value: 'date'
         };
     }
-
-    // if (productType == "expansion_sets") {
-    //     defaultSort = {
-    //         sortText: 'All (Expansion Sets)',
-    //         value: 'all'
-    //     };
-    // }
     
     // Sorting
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});
@@ -69,21 +68,19 @@ const SetsData = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useSetsData({ activeFilter, searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab });
+    const talonProps = useSetsData({ setsFilters, activeFilter, activeYear, searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab });
 
-    const { error, loading, setsData, categoryUrlSuffix, categoryUrlKey, productType, filteredSetsData, availableGroups, category, attributeData, pageInfo } = talonProps;
+    const { error, loading, setsData, availableFilters, categoryUrlSuffix, categoryUrlKey, productType, filteredSetsData, availableGroups, availableYears, category, attributeData, pageInfo } = talonProps;
 
-    if (loading && !setsData)
+    if (loading) {
         return <SetsDataShimmer />;
-    if (error && !setsData) return <ErrorView />;
-
-    if (!setsData && !loading && !error) {
-        return <SetsDataShimmer />;
+    } else if (error) {
+        return <ErrorView />;
     }
 
     const setsLengthArr = [];
 
-    const newSetsData = searchQuery ? filteredSetsData : setsData;
+    const newSetsData = searchQuery || activeYear ? filteredSetsData : setsData;
 
     // useEffect(() => {
         if (setsData && setsData.length) {
@@ -112,45 +109,70 @@ const SetsData = props => {
     //     byYearTitle = "By Year";
     // }
 
+    let newfilterSearchArr = search ? search.split('&') : [];
+    newfilterSearchArr = newfilterSearchArr.filter(function(data) {
+        return !data.includes(attributeCode + '%5Bfilter%5D') && !data.includes('shopby');
+    });
+    
+    let filterSearch = newfilterSearchArr.join('&')
+
+    if (!filterSearch.includes('?')) {
+        filterSearch = '?'+filterSearch;
+    }
+
     const setRelases = newSetsData && newSetsData.length && newSetsData.map((setRelease, index) => {
-        const { group, sets } = setRelease;
+        const { group, release_year, sets } = setRelease;
 
         const setsResult = [];
-
+        
         if (sets.length) {
             sets.map((set, index) => {
-                const { set_name, option_id, release_year } = set;
+                const { products_count, set_name, option_id, release_year } = set;
 
                 const categoryUrl = resourceUrl(
-                    `/${category?.url_path}${categoryUrlSuffix || ''}?${attributeCode}[filter]=${set_name},${option_id}`
+                    `/${category?.url_path}${categoryUrlSuffix || ''}${filterSearch || ''}&${attributeCode}[filter]=${set_name},${option_id}`
                 );
 
-                setsResult.push(<li className='list-none'>
-                    <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
-                        {set_name}
-                    </Link>
+                if (parseInt(products_count) > 0) {
+                    setsResult.push(<li key={index} className='list-none'>
+                        <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
+                            {set_name} <span className='text-[12px]'>({products_count})</span>
+                        </Link>
+                    </li>)
+                } else {
+                    setsResult.push(<li key={index} className='list-none'>
+                    <span className="text-[#8f8f8f] w-full block text-[14px] py-[2px] px-0">
+                        {set_name} <span className='text-[12px]'>({products_count})</span>
+                    </span>
                 </li>)
+                }
             })
         }
 
         let setsResultSplitted = [];
-        if (active == group || newSetsData.length == 1) {
+        if (active && active == group || newSetsData.length == 1) {
             setsResultSplitted = splitToNChunks(setsResult, 3);
         }
         
         return (
             <>
-                {active == "all" && newSetsData.length > 1 ?
+                {active == "all" && activeYear && activeYear == release_year && newSetsData.length > 1 || active == "all" && !activeYear && newSetsData.length > 1 ?
                 <div className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                    <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
+                    {shopby == "secret_lair" ? <div className='singles_item_group_letter text-[14px] font-medium border-b border-gray-100 pb-1 mb-2'>
                         {group}
-                    </div>
+                    </div> : <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
+                        {group}
+                    </div>}
                     <div className={cn('singles_item-list flex flex-col')}>{setsResult}</div>
                 </div> : ''}
                 {active == group || newSetsData.length == 1 ? setsResultSplitted && setsResultSplitted.length && setsResultSplitted.map((setsResult, index) =>
                     <div key={index} className={cn('singles_group-wrapper mb-4 px-2 inline-block', classes.singlesGroupWrapper)}>
-                        {index == 0 ? <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2'>{group}</div> : 
-                        <div className='singles_item_group_letter text-xl font-medium pb-1 mb-2' style={{"marginTop":"35px"}}></div>}
+                        {index == 0 ? shopby == "secret_lair" ? <div className='singles_item_group_letter text-[14px] font-medium border-b border-gray-100 pb-1 mb-2'>
+                        {group}
+                    </div> : <div className='singles_item_group_letter text-xl font-medium border-b border-gray-100 pb-1 mb-2' >
+                        {group}
+                    </div> : 
+                        (shopby == "secret_lair" ? <div className='singles_item_group_letter text-[14px] font-medium pb-1 mb-2' style={{"marginTop":"22px"}}></div> : <div className='singles_item_group_letter text-xl font-medium pb-1 mb-2' style={{"marginTop":"35px"}}></div>)}
                         <div className={cn('singles_item-list flex flex-col')}>{setsResult}</div>
                     </div>
                 )
@@ -172,24 +194,50 @@ const SetsData = props => {
 
         setSearchQuery('')
     }
+
+    const handleActiveYear = (val) => {
+        setActiveYear(val);
+        setActive('all');
+        setActiveFilter('');
+        setSearchQuery('')
+    }
+
     const handleSearchQuery = (val) => {
         setSearchQuery(val)
+        setActiveYear('');
         setActive('all')
     }
 
+    const handleSetsFilters = (code, val) => {
+        setSetsFilters((prevFilters) => {
+            const updated = [...prevFilters];
+            const index = updated.findIndex((f) => f.code === code);
+
+            if (index !== -1) {
+                // Update value jika code sudah ada
+                updated[index].value = val;
+            } else {
+                // Tambahkan jika belum ada
+                updated.push({ code, value: val });
+            }
+
+            return updated;
+        });
+    };
+
     let alpha = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-    let title = pageInfo ? pageInfo.title : 'All Sets';
+    let title = pageInfo ? pageInfo.title : 'All S2ets';
     if (activeTab == "year") {
         title = "Sets | By Year";
     }
     
-    const availableFilters = [
-        'Theme',
-        'Sub-Theme',
-        'Interest',
-        'Age Level'
-    ];
+    // const availableFilters = [
+    //     'Theme',
+    //     'Sub-Theme',
+    //     'Interest',
+    //     'Age Level'
+    // ];
 
     const handleActiveFilter = (val) => {
         setActiveFilter(val);
@@ -199,55 +247,80 @@ const SetsData = props => {
         setSearchQuery('')
     }
 
+    const activeFilters = [];
+    
+    const allActiveFilters = getFiltersFromSearch(search);
+
+    if (allActiveFilters && allActiveFilters.size > 0) {
+        allActiveFilters.forEach((value, key) => {
+            value.forEach((value) => {
+                const filterArr = value.split(',');
+                
+                const label = filterArr[0];
+                const optionId = filterArr[1];
+                if (label == "Singles") {
+                    isSingles = true;
+                }
+                if (key == "bricks_categories" || key == "sc_sports_categories" || key == "card_game" || key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands" || virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
+                    activeFilters.push(
+                        {
+                            'label': label,
+                            'code': key,
+                            'option_id': optionId
+                        }
+                    )
+                }
+            })
+        });
+    }
+
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "singles" ? "Mini-Figures" : title} />
-            {/* <ul className={classes.nav}>
-                <li className={classes.nav_item}>
-                    <button
-                        onClick={() => {
-                            handleActiveTab('year')
-                        }}
-                    >
-                        {activeTab == 'year' ? <b>{byYearTitle}</b> : byYearTitle}
-                    </button>
-                </li>
-                <li className={classes.nav_item}>
-                    <button
-                        onClick={() => {
-                            handleActiveTab('all')
-                        }}
-                    >
-                        {activeTab == 'all' ? <b>{allSetsTitle}</b> : allSetsTitle}
-                    </button>
-                </li>
-            </ul> */}
-            {shopby == "lego_set_name" && activeTab == "all" ? <><ul className={classes.nav}>
-                {availableFilters.map((group, index) => (
-                <li key={index} className={classes.nav_item}>
-                    <button
-                        onClick={() => {
-                            handleActiveFilter(group)
-                        }}
-                    >
-                        {activeFilter == group ? <b>{group}</b> : group}
-                    </button>
-                </li>
-            ))}<li className={classes.nav_item}>
-            <button
-                onClick={() => {
-                    handleActiveFilter('')
-                }}
-            >
-                {!activeFilter ? <b>A-Z</b> : 'A-Z'}
-            </button>
-        </li></ul>
-            
-                </> : ''}
-            {!pageInfo.hide_title && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
+            <Breadcrumbs categoryId={categoryId} currentFilter={activeFilters} customPage={shopby == "singles" ? "Mini-Figures" : title} />
+            {pageInfo && !pageInfo.hide_title && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>}
+            {shopby == "secret_lair" ? <>
+                <ul className={classes.nav}>
+                    {availableYears.map((group, index) => (
+                    <li key={index} className={classes.nav_item}>
+                        <button
+                            onClick={() => {
+                                handleActiveYear(group)
+                            }}
+                        >
+                            {activeYear == group ? <b>{group}</b> : group}
+                        </button>
+                    </li>
+                    ))}
+                    <li key={"all"} className={classes.nav_item}>
+                        <button
+                            onClick={() => {
+                                handleActiveYear('')
+                            }}
+                        >
+                            {!activeYear ? <b>All Year</b> : 'All Year'}
+                        </button>
+                    </li>
+                </ul>
+            </> : ''}
+            {availableFilters ? <>
+                {availableFilters.map(({code, options}, index) => (
+                <ul className={classes.nav} key={index}>
+                    {options.map((value, index) => (
+                        <li key={index} className={classes.nav_item}>
+                            <button
+                                onClick={() => {
+                                    handleSetsFilters(code, value)
+                                }}
+                            >
+                                {setsFilters.find(f => f.code === code && f.value === value) || !setsFilters.length && index == 0 ? <b>{value}</b> : value}
+                            </button>
+                        </li>
+                    ))}
+                </ul>))}
+            </> : ''}
             {activeTab == "year" && availableGroups ? <ul className={classes.nav}>
                 {availableGroups.map((group, index) => (
                 <li key={index} className={classes.nav_item}>
@@ -260,7 +333,7 @@ const SetsData = props => {
                     </button>
                 </li>
             ))}
-            <li className={classes.nav_item}>
+            <li key={'all'} className={classes.nav_item}>
                 <button
                     onClick={() => {
                         handleActive('all')
@@ -270,7 +343,7 @@ const SetsData = props => {
                 </button>
             </li>
             </ul> : ''}
-            {pageInfo.filter_group && <ul className={classes.nav}>
+            {pageInfo && pageInfo.filter_group && <ul className={classes.nav}>
                 {availableGroups.map((group, index) => (
                     <li key={index} className={classes.nav_item}>
                         <button
@@ -282,7 +355,7 @@ const SetsData = props => {
                         </button>
                     </li>
                 ))}
-                <li className={classes.nav_item}>
+                {availableGroups && availableGroups.length ? <li key={'all'} className={classes.nav_item}>
                     <button
                         onClick={() => {
                             handleActive('all')
@@ -290,7 +363,7 @@ const SetsData = props => {
                     >
                         {active == 'all' ? <b>All</b> : 'All'}
                     </button>
-                </li>
+                </li> : ''}
             </ul>}
             <div className='border border-gray-100 px-6'>
                 {setsData ? (
@@ -301,9 +374,9 @@ const SetsData = props => {
                         {/* <CustomSortBy sortProps={sortProps} availableSortMethods={availableSortBy} /> */}
                     </div>
                 ) : ''}
-                <section className='single_list-indexing-container relative m-auto pt-5'>
-                    {!activeFilter && activeTab != "year" && <ul className='flex gap-2 justify-center flex-wrap'>
-                        <li>
+                {shopby != "secret_lair" && <section className='single_list-indexing-container relative m-auto pt-5'>
+                    {shopby != "secret_lair" && !activeFilter && activeTab != "year" && <ul className='flex gap-2 justify-center flex-wrap'>
+                        <li key={'all'}>
                             <button
                                 className={cn(
                                     'rounded-md border border-solid border-gray-100 p-2 min-w-[28px]',
@@ -334,11 +407,11 @@ const SetsData = props => {
                             </li>
                         ))}
                     </ul>}
-                </section>
+                </section>}
                 <Divider className="mb-5 px-4 mt-5" />
                 <section className='singles-container'>
-                    <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>
-                        {newSetsData && newSetsData.length ? setRelases : (searchQuery ? <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No sets found for <b>{searchQuery}</b> search query.</div> : <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No sets found.</div>)}
+                    <div className={cn('singles-wrapper block', classes.singlesWrapper)}>
+                        {setsData && Object.keys(setsData).length != 0  ? setRelases : (searchQuery ? <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No sets found for <b>{searchQuery}</b> search query.</div> : <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No sets found.</div>)}
                     </div>
                 </section>
             </div>

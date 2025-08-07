@@ -1,0 +1,33 @@
+.sellerSubmenuColumn {
+    /* composes: max-w-[235px] from global; */
+    composes: pl-4 pt-2 from global;
+}
+
+.heading {
+    composes: font-medium from global;
+}
+
+.link {
+    composes: whitespace-nowrap from global;
+
+    composes: focus_underline from global;
+
+    composes: hover_underline from global;
+
+    align-items: center;
+    composes: inline-flex from global;
+}
+
+.linkActive {
+    composes: underline from global;
+    align-items: center;
+    composes: inline-flex from global;
+}
+
+.submenuChild {
+    composes: mt-0 from global;
+}
+
+.submenuChildItem {
+    composes: mb-0 from global;
+}

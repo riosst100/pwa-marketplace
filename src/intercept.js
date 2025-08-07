@@ -103,6 +103,20 @@ module.exports = targets => {
     },
     {
       exact: true,
+      name: "SellerProductCategoriesPage",
+      pattern: "/seller/:urlKey/:categoryUrlKey",
+      path: require.resolve("./components/SellerPage/index.js"),
+      authed: false,
+    },
+     {
+      exact: true,
+      name: "SellerProductCategoriesPage",
+      pattern: "/seller/:urlKey/:categoryUrlKey/:childCategoryUrlKey",
+      path: require.resolve("./components/SellerPage/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
       name: "CollectibleGameSetsPage",
       pattern: "/games/collectible-game/:urlKey/:productType",
       path: require.resolve("./components/CollectibleGameSetsPage/index.js"),
@@ -195,15 +209,66 @@ module.exports = targets => {
     }).apply(compiler);
   });
 
+  const path = require('path');
+
   targets.of('@magento/pwa-buildpack').webpackCompiler.tap(compiler => {
     new CopyPlugin({
-      patterns: [{ from: 'node_modules/@riosst100/pwa-marketplace/src/static-files', to: 'static-files' }]
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../src/static-files'),
+          to: 'static-files'
+        }
+      ]
     }).apply(compiler);
   });
+
+  // const path = require('path');
+
+  // new CopyPlugin({
+  //   patterns: [
+  //     {
+  //       from: path.resolve(__dirname, '../extensions/pwa-marketplace/src/static-files'),
+  //       to: 'static-files'
+  //     }
+  //   ]
+  // }).apply(compiler);
 
   // Handle the routes directly within the routes tap
   targets.of("@magento/venia-ui").routes.tap(routesArray => {
     routesArray.push(...routes);
     return routesArray;
   });
+
+  const paymentMethods = [
+    'paypal_express'
+  ];
+
+  const veniaTargets = targets.of('@magento/venia-ui');
+  const gatewaysPath = '@riosst100/pwa-marketplace/src/components/PaymentMethod/';
+
+console.log('[Intercept] Registering paypal_express payment method');
+
+paymentMethods.map(method =>
+  veniaTargets.checkoutPagePaymentTypes.tap(checkoutPagePaymentTypes => {
+    console.log(`[Intercept] Adding payment method: ${method}`);
+    checkoutPagePaymentTypes.add({
+      paymentCode: method,
+      importPath: gatewaysPath + method
+    });
+  })
+);
+
+  // targets.of('@magento/venia-ui').checkoutPagePaymentTypes.tap(checkoutPagePaymentTypes =>
+  //   checkoutPagePaymentTypes.add({
+  //     paymentCode: 'xendit',
+  //     importPath: '@riosst100/pwa-marketplace/src/components/Xendit/xendit.js'
+  //   })
+  // );
+
+  // targets.of('@magento/venia-ui').summaryPagePaymentTypes.tap(summaryPagePaymentTypes =>
+  //   summaryPagePaymentTypes.add({
+  //     paymentCode: 'xendit',
+  //     importPath: '@riosst100/pwa-marketplace/src/components/Xendit/summary.js'
+  //   })
+  // );
 };

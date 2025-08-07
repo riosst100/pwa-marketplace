@@ -43,7 +43,7 @@ const CustomFilter = props => {
 
     const subCategory = [];
 
-    const customAttributeLandingPage = ['card_set', 'sc_baseball_release'];
+    const customAttributeLandingPage = ['card_game','card_set', 'sc_baseball_release'];
 
     if (customAttributeLandingPage.includes(group)) {
         normalizedData && normalizedData.map(({ label, path }, index) => {

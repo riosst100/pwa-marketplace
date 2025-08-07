@@ -184,8 +184,8 @@ export const useFilterTop = props => {
         const itemsByGroup = new Map();
         const customFiltersMap = [];
         
-        if (customFiltersData) {
-            customFiltersData.map(({ attribute_code, options }, index) => {
+        if (customFiltersData && customFiltersData.filters) {
+            customFiltersData.filters.map(({ attribute_code, options }, index) => {
 
                 customFiltersMap.push(attribute_code)
                 

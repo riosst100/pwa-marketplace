@@ -9,7 +9,7 @@ import Trigger from '@magento/venia-ui/lib/components/Trigger';
 import defaultClasses from './currentFilter.module.css';
 
 const CurrentFilter = props => {
-    const { group, item, removeItem, onRemove } = props;
+    const { group, item, removeItem, onRemove, filterNames } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
 
@@ -30,17 +30,27 @@ const CurrentFilter = props => {
         }
     );
 
+    const groupName = filterNames.get(group);
+
     return (
         <span className={classes.root} data-cy="CurrentFilter-root">
             <Trigger
                 action={handleClick}
+                style={{
+                    "width":"30px"
+                }}
                 aria-label={ariaLabel}
                 data-cy="CurrentFilter-trigger"
             >
                 <Icon size={14} src={Remove} />
             </Trigger>
             <span className={classes.text}>
-                {item.label ? item.label : item.title}
+                <div style={{
+                    "fontSize": "10px",
+                    "color": "grey",
+                    "fontWeight": "normal"
+                }}>{groupName}</div>
+                <div>{item.label ? item.label : item.title}</div>
             </span>
         </span>
     );

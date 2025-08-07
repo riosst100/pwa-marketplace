@@ -8,6 +8,8 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import FilterItem from './filterItem';
 import defaultClasses from './filterList.module.css';
 import FilterItemRadioGroup from './filterItemRadioGroup';
+import SubFilterItemRadioGroup from './subFilterItemRadioGroup';
+import { Link, useLocation } from 'react-router-dom';
 
 const labels = new WeakMap();
 const labels2 = new WeakMap();
@@ -19,6 +21,11 @@ const FilterList = props => {
         filterApi,
         filterState,
         filterFrontendInput,
+        isSubFilter,
+        filterItems,
+        subFilterItems,
+        allowedSubFilters,
+        subFilter,
         name,
         group,
         itemCountToShow,
@@ -99,11 +106,54 @@ const FilterList = props => {
         onApply
     ]);
 
+    // const subFilter = useMemo(
+    //     () =>
+    //         Array.from(filterItems, ([group, items], iteration) => {
+    //             // const blockState = filterState.get(group);
+    //             // const groupName = filterNames.get(group);
+    //             // const frontendInput = filterFrontendInput.get(group);
+
+    //             if (group.includes('card_set')) {
+    //                 return (
+    //                     // <FilterBlock
+    //                     //     key={group}
+    //                     //     filterApi={filterApi}
+    //                     //     filterState={blockState}
+    //                     //     filterFrontendInput={frontendInput}
+    //                     //     group={group}
+    //                     //     filterItems={filterItems}
+    //                     //     items={items}
+    //                     //     name={groupName}
+    //                     //     onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
+    //                     //     initialOpen={true}
+    //                     // />
+    //                     <SubFilterItemRadioGroup
+    //                         filterApi={filterApi}
+    //                         filterState={filterState}
+    //                         group={group}
+    //                         name={'Set Name'}
+    //                         items={items}
+    //                         onApply={onApply}
+    //                         labels={labels}
+    //                         isListExpanded={isListExpanded}
+    //                         itemCountToShow={itemCountToShow}
+    //                     />
+    //                 );
+    //             }
+    //         }),
+    //     [
+    //         filterApi,
+    //         filterItems
+    //     ]
+    // );
+
     // memoize item creation
     // search value is not referenced, so this array is stable
     const itemElements = useMemo(() => {
         // if (filterFrontendInput === 'boolean') {
+            
             const key = `item-${group}`;
+            
             return (
                 <li
                     key={key}
@@ -115,9 +165,15 @@ const FilterList = props => {
                         filterState={filterState}
                         group={group}
                         name={name}
+                        subFilterItems={subFilterItems}
+                        subFilter={subFilter}
+                        allowedSubFilters={allowedSubFilters}
+                        isSubFilter={isSubFilter}
                         items={items}
                         onApply={onApply}
                         labels={labels}
+                        isListExpanded={isListExpanded}
+                        itemCountToShow={itemCountToShow}
                     />
                 </li>
             );
@@ -201,7 +257,11 @@ const FilterList = props => {
         classes
     ]);
 
+    const { pathname, search } = useLocation();
+
     const showMoreItem = useMemo(() => {
+        console.log('itemCountToShow')
+        console.log(itemCountToShow)
         if (items.length <= itemCountToShow) {
             return null;
         }
@@ -211,19 +271,25 @@ const FilterList = props => {
             defaultMessage: 'View All'
         });
 
+        const params = search ? JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}') : {};
+
+        params[`filterby`] = `${group}`;
+
+        const finalParams = params ? Object.keys(params).map(key => `${key}=${params[key]}`).join('&') : '';
+        const path = pathname + finalParams;
+
         return (
             <li className={classes.showMoreLessItem}>
-                <button
-                    onClick={handleShowMore}
+                <Link
+                    to={path}
                     className={classes.showMoreLessButton}
                     data-cy="FilterList-showMoreLessButton"
                 >
                     {label}
-                </button>
+                </Link>
             </li>
         );
     }, [
-        handleShowMore,
         items,
         itemCountToShow,
         formatMessage,
@@ -232,7 +298,7 @@ const FilterList = props => {
 
     return (
         <Fragment>
-            <ul className={classes.items}>
+            <ul className={isSubFilter ? classes.sub_items : classes.items}>
                 {itemElements}
                 {showMoreItem}
             </ul>

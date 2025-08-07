@@ -136,7 +136,7 @@ export const useMagentoRoute = (props = {}) => {
         // REDIRECT
         routeData = {
             isRedirect: true,
-            relativeUrl: relative_url.startsWith('/')
+            relativeUrl: relative_url?.startsWith('/')
                 ? relative_url
                 : '/' + relative_url
         };

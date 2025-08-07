@@ -3,8 +3,12 @@ import { useLazyQuery, useQuery } from '@apollo/client';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
-
+import { useLocation } from 'react-router-dom';
 import DEFAULT_OPERATIONS from './categoryContent.gql';
+import {
+    getFiltersFromSearch,
+    getFilterInput
+} from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 /**
  * Returns props necessary to render the categoryContent component.
@@ -27,13 +31,16 @@ export const useCategoryContent = props => {
         getCategoryContentQuery,
         getProductFiltersByCategoryQuery,
         getCategoryAvailableSortMethodsQuery,
-        getStoreConfigQuery
+        getStoreConfigQuery,
+        getFilterInputsQuery,
+        getMasterAttributesQuery
     } = operations;
 
     const placeholderItems = Array.from({ length: pageSize }).fill(null);
     
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
     });
 
     const virtualCategoryFilters = useMemo(() => {
@@ -72,18 +79,75 @@ export const useCategoryContent = props => {
     );
 
     const [, { dispatch }] = useEventingContext();
+    const { search } = useLocation();
+
+    const {
+        called: introspectionCalled,
+        data: introspectionData,
+        loading: introspectionLoading
+    } = useQuery(getFilterInputsQuery);
+
+    const filterTypeMap = useMemo(() => {
+        const typeMap = new Map();
+        if (introspectionData) {
+            introspectionData.__type.inputFields.forEach(({ name, type }) => {
+                typeMap.set(name, type.name);
+            });
+        }
+        return typeMap;
+    }, [introspectionData]);
+
+    // MASTER ATTRIBUTES
+    const {
+        called: masterAttributesCalled,
+        data: masterAttributesData,
+        loading: masterAttributesLoading
+    } = useQuery(getMasterAttributesQuery,
+    {
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
+    });
+
+    const masterAttributes = useMemo(() => {
+        const masterAttributes = [];
+        
+        if (masterAttributesData) {
+            masterAttributesData.masterAttributes.forEach(({ attribute_code }) => {
+                masterAttributes.push(attribute_code);
+            });
+        }
+
+        return masterAttributes;
+    }, [masterAttributesData]);
+    
 
     useEffect(() => {
         if (categoryId) {
+
+            // categoryIdFilter: {
+            //     eq: categoryId
+            // }
+            if (!filterTypeMap.size) {
+                return;
+            }
+    
+            const filters = getFiltersFromSearch(search);
+    
+            // Construct the filter arg object.
+            const newFilters = {};
+            filters.forEach((values, key) => {
+                if (masterAttributes.includes(key)) {
+                    newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+                }
+            });
+
             getFilters({
                 variables: {
-                    categoryIdFilter: {
-                        eq: categoryId
-                    }
+                    filters: newFilters
                 }
             });
         }
-    }, [categoryId, getFilters]);
+    }, [categoryId, getFilters, filterTypeMap, search, masterAttributes]);
 
     useEffect(() => {
         if (categoryId) {
@@ -96,6 +160,9 @@ export const useCategoryContent = props => {
             });
         }
     }, [categoryId, getSortMethods]);
+
+    // console.log('filterData')
+    // console.log(filterData)
 
     const rawFilters = filterData ? filterData.products.aggregations : null;
     const items = data ? data.products.items : placeholderItems;
@@ -110,7 +177,13 @@ export const useCategoryContent = props => {
 
     const filters = [];
 
+    // console.log('rawFilters')
+    // console.log(rawFilters)
+
     rawFilters && rawFilters.map((filter, index) => {
+
+    //     console.log('filter')
+    // console.log(filter)
 
         const filterOptions = [];
         let label = filter.label;

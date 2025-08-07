@@ -5,7 +5,7 @@ import { useProductListing } from '@magento/peregrine/lib/talons/CartPage/Produc
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator';
 import defaultClasses from './productListing.module.css';
-import Product from './product';
+import ProductListingBySeller from '../ProductListingBySeller/productListingBySeller';
 import ErrorMessage from './errorMessage';
 import cn from 'classnames';
 
@@ -29,7 +29,9 @@ const ProductListing = props => {
     const {
         onAddToWishlistSuccess,
         setIsCartUpdating,
-        fetchCartDetails
+        fetchCartDetails,
+        isCartUpdating,
+        hasItems
     } = props;
 
     const talonProps = useProductListing();
@@ -56,34 +58,53 @@ const ProductListing = props => {
         );
     }
 
-    if (items.length) {
-        const productComponents = items.map(product => (
-            <Product
-                item={product}
-                key={product.uid}
+    // Grouping berdasarkan seller_id dengan data seller di atas
+    const groupedItems = items.reduce((acc, item) => {
+        if (!item.seller) {
+            return [];
+        }
+        
+        const { seller_id, seller_name, seller_url } = item.seller;
+        
+        if (!acc[seller_id]) {
+            acc[seller_id] = {
+                seller: {
+                seller_id,
+                seller_name,
+                seller_url
+                },
+                items: []
+            };
+        }
+    
+        acc[seller_id].items.push(item);
+        return acc;
+    }, {});
+    
+    // Ubah hasil ke dalam array
+    const itemsBySeller = Object.values(groupedItems);
+
+    if (itemsBySeller.length) {
+        const productBySellerComponents = itemsBySeller.map((sellerItems, index) => (
+            <ProductListingBySeller 
+                onAddToWishlistSuccess={onAddToWishlistSuccess} 
+                activeEditItem={activeEditItem}
+                isLoading={isLoading}
+                hasItems={hasItems}
+                key={index}
+                error={error}
                 setActiveEditItem={setActiveEditItem}
-                setIsCartUpdating={setIsCartUpdating}
-                onAddToWishlistSuccess={onAddToWishlistSuccess}
-                fetchCartDetails={fetchCartDetails}
                 wishlistConfig={wishlistConfig}
-            />
+                setIsCartUpdating={setIsCartUpdating} 
+                fetchCartDetails={fetchCartDetails} 
+                seller={sellerItems.seller}
+                isCartUpdating={isCartUpdating}
+                items={sellerItems.items} />
         ));
 
         return (
             <Fragment>
-                <ErrorMessage error={error} />
-                <ul className={cn(classes.root, 'border border-gray-100 rounded-md')} data-cy="ProductListing-root">
-                    <div className='px-4'>
-                        {productComponents}
-                    </div>
-                </ul>
-                <Suspense fallback={null}>
-                    <EditModal
-                        item={activeEditItem}
-                        setIsCartUpdating={setIsCartUpdating}
-                        setActiveEditItem={setActiveEditItem}
-                    />
-                </Suspense>
+                {productBySellerComponents}
             </Fragment>
         );
     }

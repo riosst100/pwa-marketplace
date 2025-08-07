@@ -82,19 +82,19 @@ const CategoryContent = props => {
         if (category) {
             const urlKey = category.url_key;
             if (urlKey == "collectible-game") {
-                history.replace('/games/collectible-game/magic-the-gathering.html')
+                // history.replace('/games/collectible-game/magic-the-gathering.html')
             }
 
             if (urlKey == "sport-cards") {
-                history.replace('/cards/sport-cards/baseball.html')
+                // history.replace('/cards/sport-cards/baseball.html')
             }
 
             if (urlKey == "non-sports-cards") {
-                history.replace('/cards/non-sports-cards/comics.html')
+                // history.replace('/cards/non-sports-cards/comics.html')
             }
 
             if (urlKey == "lego") {
-                history.replace('/lego/lego-sets.html')
+                // history.replace('/lego/lego-sets.html')
             }
         }
     }, [category]);
@@ -163,6 +163,12 @@ const CategoryContent = props => {
         <FilterModal filters={filters} />
     ) : null;
 
+    // console.log('filters')
+    // console.log(filters)
+
+    // console.log('shouldShowFilterButtons')
+    // console.log(shouldShowFilterButtons)
+
     const sidebar = shouldShowFilterButtons ? (
         <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
@@ -193,14 +199,19 @@ const CategoryContent = props => {
         <ProductListTabShimmer />
     ) : null;
 
+    const formatNumber = (num) => {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     const categoryResultsHeading =
     galleryItems.length > 0 ? (
             <FormattedMessage
-                id={'categoryContent.resultCount'}
+                id={'categoryContent.resultAndTotalCount'}
                 values={{
-                    count: galleryItems.length
+                    count: galleryItems.length,
+                    total_count: formatNumber(totalCount)
                 }}
-                defaultMessage={'{count} Results'}
+                defaultMessage={"Showing {count} of {total_count} products"}
             />
         ) : isLoading ? (
             <Shimmer width={5} />
@@ -263,7 +274,7 @@ const CategoryContent = props => {
                 if (label == "Singles") {
                     isSingles = true;
                 }
-                if (key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands" || virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
+                if (key == "bricks_categories" || key == "sc_sports_categories" || key == "card_game" || key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands" || virtualCategoryFilters && virtualCategoryFilters.includes(key)) {
                     activeFilters.push(
                         {
                             'label': label,
@@ -306,19 +317,13 @@ const CategoryContent = props => {
                 </div>
                 {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
+                        {/* {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />} */}
                         {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
-                        {shopby != "gauge" ? <SubCategory parent={parent} children={children} /> : ''}
-                        
+                        {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''}
                     </>
                 {/* ) : ( */}
                     <>
-                        {/* <SubCategory filters={filters} children={children} /> */}
                         <FilterTop shopby={shopby} filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
-                        {/* <AttributesBlock category={category} attributesBlock={attributesBlock} /> */}
-                        {/* <section className='category_brand-slider my-5'>
-                            <BrandSlider />
-                        </section> */}
                         <div className={classes.contentWrapper}>
                             <div ref={sidebarRef} className={classes.sidebar}>
                                 <Suspense fallback={<FilterSidebarShimmer />}>
@@ -335,10 +340,7 @@ const CategoryContent = props => {
                                     {maybeSortContainer}
                                 </div>
                                 <div className={cn(classes.heading)}>
-                                    <div
-                                        data-cy="CategoryContent-categoryInfo"
-                                        className={classes.categoryInfo}
-                                    >
+                                    <div data-cy="CategoryContent-categoryInfo" className={classes.categoryInfo}>
                                         {categoryResultsHeading}
                                     </div>
                                 </div>

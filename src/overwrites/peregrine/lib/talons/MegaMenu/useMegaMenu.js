@@ -27,7 +27,8 @@ export const useMegaMenu = (props = {}) => {
     const [disableFocus, setDisableFocus] = useState(false);
 
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
     });
 
     const { data } = useQuery(getMegaMenuQuery, {

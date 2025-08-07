@@ -40,13 +40,6 @@ const ShopByBrands = props => {
             value: 'date'
         };
     }
-
-    // if (productType == "expansion_sets") {
-    //     defaultSort = {
-    //         sortText: 'All (Expansion Sets)',
-    //         value: 'all'
-    //     };
-    // }
     
     // Sorting
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});

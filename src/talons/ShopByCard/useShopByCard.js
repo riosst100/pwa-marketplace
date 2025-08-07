@@ -5,6 +5,7 @@ import { useAppContext } from '@magento/peregrine/lib/context/app';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './shopByCard.gql';
+import { getFilterInput, getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 export const useShopByCard = props => {
 
@@ -13,8 +14,9 @@ export const useShopByCard = props => {
     const { value: sortby } = currentSort
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, null);
-    const { getStoreConfigData, getCollectibleGameQuery } = operations;
-    const { pathname } = useLocation();
+    const { getStoreConfigData, getFilterInputsQuery, getCollectibleGameQuery } = operations;
+    const { pathname, search } = useLocation();
+
     const [
         ,
         {
@@ -34,11 +36,50 @@ export const useShopByCard = props => {
     
     const categoryUrlSuffix = storeConfigData?.storeConfig?.category_url_suffix;
 
+    const {
+        called: introspectionCalled,
+        data: introspectionData,
+        loading: introspectionLoading
+    } = useQuery(getFilterInputsQuery);
+
+    const filterTypeMap = useMemo(() => {
+        const typeMap = new Map();
+        if (introspectionData) {
+            introspectionData.__type.inputFields.forEach(({ name, type }) => {
+                typeMap.set(name, type.name);
+            });
+        }
+        return typeMap;
+    }, [introspectionData]);
+
+    const filters = getFiltersFromSearch(search);
+
+    const newFilters = {};
+    filters.forEach((values, key) => {
+        newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+        if (key == "sc_baseball_release") {
+            for(let item of values) {
+                if(item) {
+                    // console.log(item.split(',')[0])
+                    const data = search.split('&');
+                    data.pop();
+                    activeFilters.push(
+                        {
+                            'label': item.split(',')[0],
+                            'path': data
+                        }
+                    )
+                }   
+            }
+        }
+    });
+
     const { error, loading, data } = useQuery(getCollectibleGameQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first',
         skip: !storeConfigData,
         variables: {
+            filters: newFilters,
             categoryUrlKey: categoryUrlKey,
             productType: productType
         }

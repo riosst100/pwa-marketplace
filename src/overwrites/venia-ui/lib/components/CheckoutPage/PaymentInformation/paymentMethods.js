@@ -37,6 +37,8 @@ const PaymentMethods = props => {
         return null;
     }
 
+    console.log('payments', payments)
+
     const radios = availablePaymentMethods
         .map(({ code, title }) => {
             // If we don't have an implementation for a method type, ignore it.

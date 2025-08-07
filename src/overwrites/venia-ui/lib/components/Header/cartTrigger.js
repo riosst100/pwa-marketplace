@@ -12,8 +12,7 @@ import { GET_ITEM_COUNT_QUERY } from '@magento/venia-ui/lib/components/Header/ca
 import cn from 'classnames';
 import { ShoppingCart } from 'iconsax-react';
 import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
-
-const MiniCart = React.lazy(() => import('@magento/venia-ui/lib/components/MiniCart'));
+import { Link } from 'react-router-dom';
 
 const CartTrigger = props => {
     const {
@@ -50,8 +49,8 @@ const CartTrigger = props => {
         <span
             className={cn(
                 classes.counter,
-                'bg-yellow-300 min-w-[18px] min-h-[18px] text-base font-regular leading-[18px] top-[-5px]',
-                '!left-auto right-[0px]'
+                'bg-yellow-300 min-w-[18px] min-h-[18px] text-base font-regular leading-[18px] top-[-2px]',
+                '!left-auto right-[3px]'
             )}
             data-cy="CartTrigger-counter"
         >
@@ -65,20 +64,19 @@ const CartTrigger = props => {
         // and control which one displays via CSS.
         <Fragment>
             <div className={cn(triggerClassName, '!h-auto')} ref={miniCartTriggerRef}>
-                <button
-                    aria-expanded={miniCartIsOpen}
-                    aria-label={buttonAriaLabel}
+                <Link
                     className={cn(
                         classes.trigger,
                         'gap-[5px] !min-h-[30px] !h-auto !min-w-[35px] !w-fit !justify-between',
                     )}
-                    onClick={handleTriggerClick}
-                    data-cy="CartTrigger-trigger"
+                    to='/cart'
                 >
-                    {/* <Icon src={ShoppingCartIcon} /> */}
-                    <ShoppingCart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
-                    {maybeItemCounter}
-                </button>
+                    <span>
+                        {/* <Icon src={ShoppingCartIcon} /> */}
+                        <ShoppingCart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                        {maybeItemCounter}
+                    </span>
+                </Link>
             </div>
             <button
                 aria-expanded={miniCartIsOpen}
@@ -89,13 +87,6 @@ const CartTrigger = props => {
                 <Icon src={ShoppingCartIcon} />
                 {maybeItemCounter}
             </button>
-            <Suspense fallback={null}>
-                <MiniCart
-                    isOpen={miniCartIsOpen}
-                    setIsOpen={setMiniCartIsOpen}
-                    ref={miniCartRef}
-                />
-            </Suspense>
         </Fragment>
     );
 

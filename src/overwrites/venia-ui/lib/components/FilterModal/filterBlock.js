@@ -19,6 +19,11 @@ const FilterBlock = props => {
         filterApi,
         filterState,
         filterFrontendInput,
+        filterItems,
+        subFilter,
+        subFilterItems,
+        allowedSubFilters,
+        isSubFilter,
         group,
         items,
         name,
@@ -72,6 +77,11 @@ const FilterBlock = props => {
                 filterApi={filterApi}
                 filterState={filterState}
                 name={name}
+                isSubFilter={isSubFilter}
+                subFilter={subFilter}
+                allowedSubFilters={allowedSubFilters}
+                filterItems={filterItems}
+                subFilterItems={subFilterItems}
                 filterFrontendInput={filterFrontendInput}
                 group={group}
                 items={items}
@@ -86,7 +96,7 @@ const FilterBlock = props => {
             aria-label={itemAriaLabel}
             data-cy="FilterBlock-root"
         >
-            <button
+            {name && <button
                 className={classes.trigger}
                 onClick={handleClick}
                 data-cy="FilterBlock-triggerButton"
@@ -103,7 +113,7 @@ const FilterBlock = props => {
                         variant="Outline"
                     />
                 </span>
-            </button>
+            </button>}
             {list}
         </li>
     );

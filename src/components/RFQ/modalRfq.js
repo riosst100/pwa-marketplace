@@ -230,7 +230,7 @@ const RFQModalForm = (props) => {
                     </div>
                 </div>
             </Modal>
-            <style jsx>
+            <style jsx="true">
                 {`
                     .react-datepicker__input-container>input:focus-visible,
                     .react-datepicker__input-container>input:focus, 

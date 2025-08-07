@@ -3,6 +3,7 @@ import SellerLocation from '../SellerLocation';
 import { Location, ShopAdd } from 'iconsax-react';
 import OperatingHours from '@riosst100/pwa-marketplace/src/components/OperatingHours';
 import SellerAddressCard from '@riosst100/pwa-marketplace/src/components/Seller/sellerAddressCard';
+import SellerSocialMedia from '@riosst100/pwa-marketplace/src/components/SellerSocialMedia';
 
 const SellerInformation = ({ seller }) => {
     return (
@@ -59,10 +60,11 @@ const SellerInformation = ({ seller }) => {
                                 {seller ? seller.term_and_conditions : ''}
                             </div>
                         </div>
-                    </div >
-                </div >
+                    </div>
+                </div>
+                <SellerSocialMedia seller={seller} />
                 {seller ? <SellerLocation storeLocators={seller.store_locators} /> : ''}
-            </div >
+            </div>
         </>
     )
 }

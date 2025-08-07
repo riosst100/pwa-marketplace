@@ -35,7 +35,8 @@ export const useCustomFilters = props => {
     const { getCustomFilters, getFilterInputsQuery, getStoreConfigQuery } = operations;
 
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
     });
 
     const [runQuery, queryResponse] = useLazyQuery(getCustomFilters, {

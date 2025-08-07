@@ -99,7 +99,7 @@ const MegaMenuItem = props => {
         }
         : {};
 
-    return (
+    return category.name != 'Auction' && (
         <div
             className={cn(itemClassName, megaMenuItemClassname)}
             data-cy="MegaMenu-MegaMenuItem-megaMenuItem"

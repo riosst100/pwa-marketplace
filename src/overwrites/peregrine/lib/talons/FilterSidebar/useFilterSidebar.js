@@ -12,7 +12,7 @@ import {
     sortFiltersArray,
     stripHtml
 } from '@magento/peregrine/lib/talons/FilterModal/helpers';
-
+import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 import DEFAULT_OPERATIONS from '@magento/peregrine/lib/talons/FilterModal/filterModal.gql';
 
 const DRAWER_NAME = 'filter';
@@ -21,7 +21,7 @@ export const useFilterSidebar = props => {
     const { filters } = props;
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
-    const { getFilterInputsQuery } = operations;
+    const { getFilterInputsQuery, getSubFiltersQuery } = operations;
 
     const [isApplying, setIsApplying] = useState(false);
     const [{ drawer }, { toggleDrawer, closeDrawer }] = useAppContext();
@@ -32,7 +32,20 @@ export const useFilterSidebar = props => {
     const history = useHistory();
     const { pathname, search } = useLocation();
 
+    const allActiveFilters = getFiltersFromSearch(search);
+
     const { data: introspectionData } = useQuery(getFilterInputsQuery);
+
+    const {
+        called: subFilterItemsCalled,
+        data: subFilterItems,
+        loading: subFilterItemsLoading,
+        error: subFilterItemsError
+    } = useQuery(getSubFiltersQuery,
+    {
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
+    });
 
     const attributeCodes = useMemo(
         () => filters.map(({ attribute_code }) => attribute_code),
@@ -140,8 +153,10 @@ export const useFilterSidebar = props => {
                     // Add frontend input type
                     frontendInput.set(group, null);
                     // add items
-                    for (const { label, value, path } of options) {
-                        items.push({ title: stripHtml(label), value, path });
+                    for (const { label, value, path, count } of options) {
+                        if (count > 0) {
+                            items.push({ title: stripHtml(label), value, path, count });
+                        }
                     }
                 }
                 itemsByGroup.set(group, items);
@@ -236,7 +251,31 @@ export const useFilterSidebar = props => {
         closeDrawer();
     }, [closeDrawer]);
 
-    const handleApply = useCallback(() => {
+    const handleApply = useCallback((...args) => {
+        const group = args[0];
+        const item = args[1]; 
+
+        // REMOVE ACTIVE FILTER
+        // if (group.includes('card_release')) {
+        //     const subFilter = group.replace("card_release", "card_set");
+        //     filterApi.removeGroup({ group: subFilter });
+        // }
+
+        // if (group.includes('sc_release')) {
+        //     const subFilter = group.replace("sc_release", "sc_set_name");
+        //     filterApi.removeGroup({ group: subFilter });
+        // }
+
+        // if (group.includes('sc_set_name')) {
+        //     const subFilter = group.replace("sc_set_name", "sc_release");
+        //     filterApi.removeGroup({ group: subFilter });
+        // }
+
+        // if (group.includes('card_set')) {
+        //     const subFilter = group.replace("card_set", "card_release");
+        //     filterApi.removeGroup({ group: subFilter });
+        // }
+
         setIsApplying(true);
         handleClose();
     }, [handleClose]);
@@ -298,6 +337,7 @@ export const useFilterSidebar = props => {
         filterApi,
         filterItems,
         filterKeys,
+        subFilterItems,
         filterNames,
         filterFrontendInput,
         filterState,

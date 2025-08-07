@@ -76,7 +76,6 @@ const OrderDetails = props => {
                 className={classes.printButton}
                 onClick={() => {
                     // TODO will be implemented in PWA-978
-                    console.log('Printing Receipt');
                 }}
             >
                 <Icon src={Printer} />

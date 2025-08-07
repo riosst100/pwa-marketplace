@@ -3,14 +3,17 @@ import { gql } from '@apollo/client';
 export const GET_CUSTOM_FILTERS = gql`
     query GetCustomFilters($filters: ProductAttributeFilterInput!) {
         customSubFilters(filters: $filters) {
-            label
-            count
-            attribute_code
-            options {
+            filter_id
+            filters {
                 label
-                value
+                count
+                attribute_code
+                options {
+                    label
+                    value
+                }
+                position
             }
-            position
         }
     }
 `;

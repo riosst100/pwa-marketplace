@@ -212,7 +212,7 @@ const RMACreate = () => {
                     </div>
                 </div>
             </div>
-            <style jsx>
+            <style jsx="true">
                 {`
                     .chat-container::-webkit-scrollbar {
                         width: 8px;

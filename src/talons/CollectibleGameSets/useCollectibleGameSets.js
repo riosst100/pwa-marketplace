@@ -88,6 +88,11 @@ export const useCollectibleGameSets = props => {
     }, [data, sortby]);
 
     const availableGroups = collectibleGameSets && collectibleGameSets.length ? collectibleGameSets.map(({ release_type }) => release_type) : [];
+    // const availableReleaseYears = collectibleGameSets && collectibleGameSets.length ? collectibleGameSets.map(({ data }) => data.release_year) : [];
+    const availableReleaseYears = [];
+
+    // console.log('collectibleGameSets')
+    // console.log(collectibleGameSets)
 
     const filteredCollectibleGameSets = useMemo(() => {
         if (!collectibleGameSets) {
@@ -129,6 +134,7 @@ export const useCollectibleGameSets = props => {
         categoryUrlSuffix,
         categoryUrlKey,
         productType,
-        availableGroups
+        availableGroups,
+        availableReleaseYears
     };
 };

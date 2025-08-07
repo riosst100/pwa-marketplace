@@ -23,21 +23,25 @@
 
 .imageContainer {
     composes: w-full from global;
+    grid-area: 1 / 1 / 2 / 4;
 }
 
 .currentImage {
     composes: block from global;
     composes: h-full from global;
     composes: object-center from global;
-    composes: object-cover from global;
+    composes: object-contain from global;
     composes: w-full from global;
 
     composes: lg_object-top from global;
 }
 
+.carouselContainer {
+    composes: flex items-center justify-center p-4 bg-[#f7f7f8] rounded-md max-h-[660px] from global;
+}
+
 .currentImage_placeholder {
     composes: currentImage;
-
     composes: bg-subtle from global;
 }
 

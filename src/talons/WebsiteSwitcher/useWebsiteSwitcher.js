@@ -156,7 +156,7 @@ export const useWebsiteSwitcher = (props = {}) => {
                     newPath = routeData.route.relative_url;
                 }
             }
-            return newPath.startsWith('/') ? newPath.substr(1) : newPath;
+            return newPath?.startsWith('/') ? newPath.substr(1) : newPath;
         },
         [pathname, fetchRouteData, internalRoutes]
     );

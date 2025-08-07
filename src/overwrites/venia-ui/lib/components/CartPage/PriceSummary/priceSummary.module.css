@@ -1,4 +1,6 @@
-.root {}
+.root {
+    text-align: right;
+}
 
 .errorText {
     composes: leading-normal from global;
@@ -46,6 +48,6 @@
     composes: inline-flex from global;
     composes: justify-center from global;
     composes: mt-xs from global;
-    composes: w-full from global;
+    width: 20%;
     min-height: 5.5rem;
 }

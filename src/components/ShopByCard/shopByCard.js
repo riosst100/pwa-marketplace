@@ -13,9 +13,13 @@ import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy
 import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySearchInput';
 import { useCustomSort } from '@riosst100/pwa-marketplace/src/hooks/useCustomSort';
 import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
+import { useLocation } from 'react-router-dom';
 
 const ShopByCard = props => {
     const { categoryId } = props
+
+    const { search } = useLocation();
+
 
     const [active, setActive] = useState('all');
 
@@ -37,13 +41,6 @@ const ShopByCard = props => {
             value: 'date'
         };
     }
-
-    // if (productType == "expansion_sets") {
-    //     defaultSort = {
-    //         sortText: 'All (Expansion Sets)',
-    //         value: 'all'
-    //     };
-    // }
     
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});
 
@@ -90,6 +87,17 @@ const ShopByCard = props => {
         return result;
     }
 
+    let newfilterSearchArr = search ? search.split('&') : [];
+    newfilterSearchArr = newfilterSearchArr.filter(function(data) {
+        return !data.includes('card_name%5Bfilter%5D') && !data.includes('shopby');
+    });
+    
+    let filterSearch = newfilterSearchArr.join('&')
+
+    if (!filterSearch.includes('?')) {
+        filterSearch = '?'+filterSearch;
+    }
+
     const setRelases = newShopByCard.length && newShopByCard.map((setRelease, index) => {
         const { release_type, sets } = setRelease;
 
@@ -100,7 +108,7 @@ const ShopByCard = props => {
                 const { set_name, option_id, set_abbreviation, release_year } = set;
 
                 const categoryUrl = resourceUrl(
-                    `/games/collectible-game/${categoryUrlKey}${categoryUrlSuffix || ''}?card_name[filter]=${set_name},${option_id}`
+                    `/games/${categoryUrlKey}${categoryUrlSuffix || ''}${filterSearch || ''}&card_name[filter]=${set_name},${option_id}`
                 );
 
                 setsResult.push(<li className='list-none'>
@@ -172,21 +180,6 @@ const ShopByCard = props => {
         ];
 
         // alpha = availableGroups;
-    }
-
-    if (productType == "expansion_sets") {
-        // availableSortBy = [
-        //     {
-        //         'label': 'All (Expansion Sets)',
-        //         'value': 'all'
-        //     },
-        //     {
-        //         'label': 'Latest Sets',
-        //         'value': 'newest'
-        //     }
-        // ];
-
-        // alpha = availableGroups
     }
 
     let title = "By Card Name";

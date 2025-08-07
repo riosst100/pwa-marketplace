@@ -2,7 +2,7 @@
     composes: content-start from global;
     composes: grid from global;
     /* composes: gap-y-2xs from global; */
-    composes: max-w-[315px] from global;
+    /* composes: max-w-[315px] from global; */
 }
 
 .images {
@@ -14,9 +14,11 @@
 .imageContainer {
     grid-area: main;
     composes: max-h-[215px] from global;
+    /* composes: bg-[#f7f7f8] from global; */
 }
 
 .image {
+    composes: p-[16px] from global;
     composes: block from global;
     composes: h-full from global;
     composes: object-contain from global;

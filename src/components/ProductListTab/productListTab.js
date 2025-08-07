@@ -39,10 +39,10 @@ const ProductListTab = props => {
             'label': 'Pre Order',
             'value': 'lof_preorder'
         },
-        {
-            'label': 'Auction',
-            'value': 'auction'
-        }
+        // {
+        //     'label': 'Auction',
+        //     'value': 'auction'
+        // }
     ];
 
     const handleClickremove = useCallback((group, item) => {

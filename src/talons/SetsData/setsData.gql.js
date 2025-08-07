@@ -12,11 +12,15 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_SETS_DATA_QUERY = gql`
-    query getSetsData($categoryUrlKey: String!, $activeTab: String, $filters: ProductAttributeFilterInput!, $shopby: String, $activeFilter: String) {
-        getSetsData(categoryUrlKey: $categoryUrlKey, activeTab: $activeTab, filters: $filters, shopby: $shopby, activeFilter: $activeFilter) {
+    query getSetsData($categoryUrlKey: String!, $activeTab: String, $filters: ProductAttributeFilterInput!, $shopby: String, $activeFilter: String, $set_filters: [SetFiltersInput]) {
+        getSetsData(categoryUrlKey: $categoryUrlKey, activeTab: $activeTab, filters: $filters, shopby: $shopby, activeFilter: $activeFilter, set_filters: $set_filters) {
             attribute {
                 attribute_code
                 label
+            }
+            available_filters {
+                code
+                options
             }
             page_info {
                 title
@@ -25,7 +29,9 @@ export const GET_SETS_DATA_QUERY = gql`
             }
             data {
                 group
+                release_year
                 sets {
+                    products_count
                     set_name
                     option_id
                     release_year

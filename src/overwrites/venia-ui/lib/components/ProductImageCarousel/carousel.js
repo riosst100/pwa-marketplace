@@ -58,6 +58,7 @@ const ProductImageCarousel = props => {
                 <Thumbnail
                     key={item.uid}
                     item={item}
+                    alt={altText}
                     itemIndex={index}
                     isActive={activeItemIndex === index}
                     onClickHandler={handleThumbnailClick}

@@ -62,11 +62,17 @@ const CartPage = props => {
         return fullPageLoadingIndicator;
     }
 
+    const priceSummary = hasItems ? (
+        <PriceSummary isUpdating={isCartUpdating} />
+    ) : null;
+
     const productListing = hasItems ? (
         <ProductListing
             onAddToWishlistSuccess={onAddToWishlistSuccess}
             setIsCartUpdating={setIsCartUpdating}
             fetchCartDetails={fetchCartDetails}
+            isCartUpdating={isCartUpdating}
+            hasItems={hasItems}
         />
     ) : (
         <h3>
@@ -81,10 +87,7 @@ const CartPage = props => {
         <PriceAdjustments setIsCartUpdating={setIsCartUpdating} />
     ) : null;
 
-    const priceSummary = hasItems ? (
-        <PriceSummary isUpdating={isCartUpdating} />
-    ) : null;
-
+    
     return (
         <div className={classes.root} data-cy="CartPage-root">
             <StoreTitle>
@@ -110,14 +113,14 @@ const CartPage = props => {
             </div>
             <div className={classes.body}>
                 <div className={classes.items_container}>{productListing}</div>
-                <div className={classes.price_adjustments_container}>
+                {/* <div className={classes.price_adjustments_container}>
                     {priceAdjustments}
-                </div>
-                <div className={classes.summary_container}>
+                </div> */}
+                {/* <div className={classes.summary_container}>
                     <div className={classes.summary_contents}>
                         {priceSummary}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -28,7 +28,7 @@ import cn from 'classnames';
  * import PriceSummary from "@magento/venia-ui/lib/components/CartPage/PriceSummary";
  */
 const PriceSummary = props => {
-    const { isUpdating } = props;
+    const { isUpdating, sellerUrl } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const talonProps = usePriceSummary();
 
@@ -91,7 +91,7 @@ const PriceSummary = props => {
             <Button
                 disabled={isPriceUpdating}
                 priority={'high'}
-                onClick={handleProceedToCheckout}
+                onClick={() => handleProceedToCheckout({ sellerUrl })}
                 onKeyDown={handleEnterKeyPress}
                 data-cy="PriceSummary-checkoutButton"
                 classes={{
@@ -100,7 +100,7 @@ const PriceSummary = props => {
                 }}
             >
                 <FormattedMessage
-                    id={'priceSummary.checkoutButton'}
+                    id={'splitCart.checkoutButton'}
                     defaultMessage={'Checkout'}
                 />
             </Button>
@@ -108,14 +108,8 @@ const PriceSummary = props => {
     ) : null;
 
     return (
-        <div className={cn(classes.root, 'border border-gray-100 rounded-md p-6')} data-cy="PriceSummary-root">
-            <div>
-                <p className='text-[16px] front font-medium mb-4'>
-                    <FormattedMessage
-                        id={'priceSummary.summaryLabel'}
-                        defaultMessage={'Summary'}
-                    />
-                </p>
+        <div className={cn(classes.root, 'pb-6 px-3')} data-cy="PriceSummary-root">
+            {/* <div>
                 <ul>
                     <li className={classes.lineItems}>
                         <span
@@ -137,71 +131,8 @@ const PriceSummary = props => {
                             />
                         </span>
                     </li>
-                    <DiscountSummary
-                        classes={{
-                            lineItems: classes.lineItems,
-                            lineItemLabel: classes.lineItemLabel,
-                            price: priceClass
-                        }}
-                        data={discounts}
-                    />
-                    <li className={classes.lineItems}>
-                        <GiftCardSummary
-                            classes={{
-                                lineItemLabel: classes.lineItemLabel,
-                                price: priceClass
-                            }}
-                            data={giftCards}
-                        />
-                    </li>
-                    <li className={classes.lineItems}>
-                        <GiftOptionsSummary
-                            classes={{
-                                lineItemLabel: classes.lineItemLabel,
-                                price: priceClass
-                            }}
-                            data={giftOptions}
-                        />
-                    </li>
-                    <li className={classes.lineItems}>
-                        <TaxSummary
-                            classes={{
-                                lineItemLabel: classes.lineItemLabel,
-                                price: priceClass
-                            }}
-                            data={taxes}
-                            isCheckout={isCheckout}
-                        />
-                    </li>
-                    <li className={classes.lineItems}>
-                        <ShippingSummary
-                            classes={{
-                                lineItemLabel: classes.lineItemLabel,
-                                price: priceClass
-                            }}
-                            data={shipping}
-                            isCheckout={isCheckout}
-                        />
-                    </li>
-                    <li className={classes.lineItems}>
-                        <span
-                            data-cy="PriceSummary-totalLabel"
-                            className={classes.totalLabel}
-                        >
-                            {totalPriceLabel}
-                        </span>
-                        <span
-                            data-cy="PriceSummary-totalValue"
-                            className={totalPriceClass}
-                        >
-                            <Price
-                                value={total.value}
-                                currencyCode={total.currency}
-                            />
-                        </span>
-                    </li>
                 </ul>
-            </div>
+            </div> */}
             {proceedToCheckoutButton}
         </div>
     );

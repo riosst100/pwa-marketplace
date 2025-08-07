@@ -14,7 +14,8 @@ export const useCarousel = (props = {}) => {
     useCustomerWishlistSkus();
 
     const { data: storeConfigData } = useQuery(operations.getStoreConfigQuery, {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
     });
 
     const storeConfig = storeConfigData ? storeConfigData.storeConfig : null;

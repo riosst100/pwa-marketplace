@@ -13,8 +13,11 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_PRODUCT_DETAIL_QUERY = gql`
-    query getProductDetailForProductPage($urlKey: String!) {
-        products(filter: { url_key: { eq: $urlKey } }) {
+    query getProductDetailForProductPage($urlKey: String!, $productPreviewToken: String) {
+        products(
+            product_preview_token: $productPreviewToken,
+            filter: { url_key: { eq: $urlKey } }
+        ) {
             items {
                 id
                 uid

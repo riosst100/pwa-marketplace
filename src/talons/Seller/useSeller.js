@@ -27,7 +27,7 @@ export const useSeller = props => {
         nextFetchPolicy: 'cache-first'
     });
 
-    const slug = pathname.split('/').pop();
+    const slug = pathname.split('/')[2];
     const productUrlSuffix = storeConfigData?.storeConfig?.product_url_suffix;
     const urlKey = productUrlSuffix ? slug.replace(productUrlSuffix, '') : slug;
 

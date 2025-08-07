@@ -13,26 +13,67 @@ import RadioGroup from '@magento/venia-ui/lib/components/RadioGroup';
 import FilterItemRadio from './filterItemRadio';
 import { useFieldApi } from 'informed';
 import useFieldState from '@magento/peregrine/lib/hooks/hook-wrappers/useInformedFieldStateWrapper';
+import FilterBlock from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/FilterModal/filterBlock';
 
 const FilterItemRadioGroup = props => {
-    const { filterApi, filterState, group, items, onApply, labels } = props;
-
+    const { filterApi, subFilterItems, allowedSubFilters, subFilter, filterState, group, isSubFilter, items, onApply, labels,isListExpanded = true, itemCountToShow = 5 } = props;
     const radioItems = useMemo(() => {
-        return items.map(item => {
+        return items.map((item,index) => {
+            if (index >= itemCountToShow) {
+                return null;
+            }
+
             const code = `item-${group}-${item.value}`;
+
+            // if (allowedSubFilters.length && !allowedSubFilters.includes(item.title)) {
+            //     return '';
+            // }
+
+            // let newAllowedSubFilters = [];
+            
+            // if (subFilter && subFilterItems) {
+            //     const result = subFilterItems.find(item => item.attribute_code === "card_release" || item.attribute_code === "sc_release");
+
+            //     // Ambil options jika ditemukan
+            //     const options = result ? result.options : [];
+            //     const option = options ? options.find(option => option.option_label === item.title) : [];
+            //     if (option) {
+            //         newAllowedSubFilters = option.sub_option_labels;
+            //     }
+
+            //     // console.log(newAllowedSubFilters)
+            // }
+            
             return (
-                <FilterItemRadio
-                    key={code}
-                    filterApi={filterApi}
-                    filterState={filterState}
-                    group={group}
-                    item={item}
-                    onApply={onApply}
-                    labels={labels}
-                />
+                <>
+                    <FilterItemRadio
+                        key={code}
+                        filterApi={filterApi}
+                        filterState={filterState}
+                        group={group}
+                        item={item}
+                        onApply={onApply}
+                        labels={labels}
+                    />
+                    {/* {subFilter && <FilterBlock
+                        key={subFilter.key}
+                        filterApi={subFilter.filterApi}
+                        filterState={subFilter.filterState}
+                        filterFrontendInput={subFilter.filterFrontendInput}
+                        group={subFilter.group}
+                        allowedSubFilters={newAllowedSubFilters}
+                        subFilterItems={subFilterItems}
+                        isSubFilter={true}
+                        items={subFilter.items}
+                        name={''}
+                        onApply={subFilter.onApply}
+                        initialOpen={true}
+                    />} */}
+                    {/* {subFilterBlock} */}
+                </>
             );
         });
-    }, [filterApi, filterState, group, items, labels, onApply]);
+    }, [filterApi, allowedSubFilters, subFilter, filterState, group, items, labels, onApply,isListExpanded,itemCountToShow]);
 
     const fieldValue = useMemo(() => {
         if (filterState) {
@@ -57,7 +98,7 @@ const FilterItemRadioGroup = props => {
     }, [field, fieldApi, fieldState.value, fieldValue]);
 
     return (
-        <RadioGroup field={field} data-cy="FilterDefault-radioGroup">
+        <RadioGroup isSubFilter={isSubFilter} field={field} data-cy="FilterDefault-radioGroup">
             {radioItems}
         </RadioGroup>
     );

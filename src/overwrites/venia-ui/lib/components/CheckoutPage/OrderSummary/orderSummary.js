@@ -16,7 +16,7 @@ const OrderSummary = props => {
                 />
             </h2>
             <PriceSummary isUpdating={props.isUpdating} />
-            <style jsx>
+            <style jsx="true">
                 {`
                     li[class*="priceSummary-lineItems"] span:first-child {
                         margin-top: 0;

@@ -62,7 +62,7 @@ const ShopBy = props => {
     //     pageControl,
     //     sortProps,
     //     pageSize
-    } = props;
+    } = props || {};
     // const [currentSort] = sortProps;
 
     // const talonProps = useCategoryContent({
@@ -112,12 +112,12 @@ const ShopBy = props => {
 
     const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, activeFilters, pageInfo } = talonProps;
 
-    if (loading && !dataResult)
-        return <ShopByShimmer />;
-    if (error && !dataResult) return <ErrorView />;
+    console.log('dataResult SHOPBY', dataResult)
 
-    if (!dataResult && !loading && !error) {
+    if (loading) {
         return <ShopByShimmer />;
+    } else if (error) {
+        return <ErrorView />;
     }
 
     const newAvailableGroups = searchQuery ? filteredAvailableGroups : availableGroups;
@@ -153,18 +153,18 @@ const ShopBy = props => {
 
         if (active === 'all' || active === group) {
             dataResult[group] && dataResult[group].length && dataResult[group].map((option, index) => {
-                const { label, value } = option;
+                const { products_count, label, value } = option;
 
                 const filter = attributeData.attribute_code + '[filter]=' + label + ',' + value;
                 const params = filterSearch ? filterSearch + '&' + filter + additionalFilter : '?' + filter + additionalFilter;
 
                 const categoryUrl = resourceUrl(
-                    `/${category.url_path}${categoryUrlSuffix || ''}${params}`
+                    `/${category?.url_path}${categoryUrlSuffix || ''}${params}`
                 );
 
-                optionsResult.push(<li className='list-none'>
-                    <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-2">
-                        {label}
+                optionsResult.push(<li key={index} className='list-none'>
+                    <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
+                        {label} <span className='text-[12px]'>({products_count})</span>
                     </Link>
                 </li>)
             });
@@ -286,7 +286,7 @@ const ShopBy = props => {
     // console.log(category)
 
     if (shopby == "brands" || shopby == "product_line") {
-        if (category && category.url_path.includes('anime-figures')) {
+        if (category && category?.url_path.includes('anime-figures')) {
             availableFilterOption = [
                 {
                     'code': 'anime_figures',
@@ -346,7 +346,7 @@ const ShopBy = props => {
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
-            {category.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
+            {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
             {/* <ShopByFilters handleActiveFilter={handleActiveFilter} activeFilter={activeFilter} category={category} /> */}
             {availableFilterOption.length ? 
                 <ul className={classes.nav}>
@@ -425,7 +425,7 @@ const ShopBy = props => {
                 <Divider className="mb-5 px-4 mt-5" />
                 <section className='singles-container'>
                     <div className={cn('singles-wrapper block -mx-4', classes.singlesWrapper)}>
-                        {Object.keys(dataResult).length != 0 ? setRelases : (searchQuery ? <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No data found for <b>{searchQuery}</b> search query.</div> : <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No data found.</div>)}
+                        {dataResult && Object.keys(dataResult).length != 0 ? setRelases : (searchQuery ? <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No data found for <b>{searchQuery}</b> search query.</div> : <div className='singles_group-wrapper mb-4 px-2 inline-block w-full'>No data found.</div>)}
                     </div>
                 </section>
             </div>

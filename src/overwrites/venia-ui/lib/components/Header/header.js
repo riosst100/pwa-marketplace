@@ -147,7 +147,7 @@ const Header = props => {
                 hasBeenOffline={hasBeenOffline}
                 isOnline={isOnline}
             />
-            <style jsx>
+            <style jsx="true">
                 {`
                     .logo-wrapper>img:first-child {
                         height: ${IMAGE_HEIGHT}px;

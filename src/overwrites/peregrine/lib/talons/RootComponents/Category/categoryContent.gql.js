@@ -2,9 +2,9 @@ import { gql } from '@apollo/client';
 
 export const GET_PRODUCT_FILTERS_BY_CATEGORY = gql`
     query getProductFiltersByCategory(
-        $categoryIdFilter: FilterEqualTypeInput!
+        $filters: ProductAttributeFilterInput!
     ) {
-        products(filter: { category_uid: $categoryIdFilter }) {
+        products(filter: $filters) {
             aggregations {
                 label
                 count
@@ -12,6 +12,7 @@ export const GET_PRODUCT_FILTERS_BY_CATEGORY = gql`
                 options {
                     label
                     value
+                    count
                 }
                 position
             }
@@ -83,8 +84,30 @@ export const GET_STORE_CONFIG_DATA = gql`
     query GetStoreConfigForBreadcrumbs {
         # eslint-disable-next-line @graphql-eslint/require-id-when-available
         storeConfig {
+            category_url_suffix
             store_code
             custommarketplace_plp_filters_virtualcategory
+        }
+    }
+`;
+
+export const GET_FILTER_INPUTS = gql`
+    query GetFilterInputsForCategory {
+        __type(name: "ProductAttributeFilterInput") {
+            inputFields {
+                name
+                type {
+                    name
+                }
+            }
+        }
+    }
+`;
+
+export const GET_MASTER_ATTRIBUTES = gql`
+    query GetMasterAttributes {
+        masterAttributes {
+            attribute_code
         }
     }
 `;
@@ -94,5 +117,7 @@ export default {
     getCategoryContentQuery: GET_CATEGORY_CONTENT,
     getProductFiltersByCategoryQuery: GET_PRODUCT_FILTERS_BY_CATEGORY,
     getCategoryAvailableSortMethodsQuery: GET_CATEGORY_AVAILABLE_SORT_METHODS,
-    getStoreConfigQuery: GET_STORE_CONFIG_DATA
+    getStoreConfigQuery: GET_STORE_CONFIG_DATA,
+    getFilterInputsQuery: GET_FILTER_INPUTS,
+    getMasterAttributesQuery: GET_MASTER_ATTRIBUTES
 };

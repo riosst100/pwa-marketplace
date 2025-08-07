@@ -19,6 +19,7 @@ import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSpor
 import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/trainsSets';
 import SetsData from '@riosst100/pwa-marketplace/src/components/SetsData/setsData';
+import FilterContent from '@riosst100/pwa-marketplace/src/components/FilterContent/filterContent';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -39,6 +40,7 @@ const Category = props => {
 
     const query = new URLSearchParams(location.search);
     const shopby = query.get('shopby') || null;
+    const filterby = query.get('filterby') || null;
     const showSubcategory = query.get('show_subcategory') || null;
 
     const talonProps = useCategory({
@@ -91,10 +93,21 @@ const Category = props => {
                 categoryId={uid}
                 isLoading={loading} />
             ) : (
-                allowedShopby.includes(shopby) ? <ShopBy
+                filterby ? (
+                    <FilterContent
+                        categoryId={uid}
+                        classes={classes}
+                        data={categoryData}
+                        filterby={filterby}
+                        isLoading={loading}
+                        pageControl={pageControl}
+                        sortProps={sortProps}
+                        pageSize={pageSize} 
+                    />
+                ) : allowedShopby.includes(shopby) ? <ShopBy
                 categoryId={uid}
                 shopby={shopby}
-                isLoading={loading} /> : shopby == "release_year" || shopby == "expansion_sets" || shopby == "sets" ? <SetsData
+                isLoading={loading} /> : shopby == "release_year" || shopby == "secret_lair" || shopby == "expansion_sets" || shopby == "sets" || shopby == "release" ? <SetsData
                 categoryId={uid}
                 shopby={shopby}
                 isLoading={loading} /> : shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets

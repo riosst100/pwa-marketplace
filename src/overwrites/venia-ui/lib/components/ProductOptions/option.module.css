@@ -14,7 +14,7 @@
     composes: block from global;
     composes: font-semibold from global;
     composes: leading-normal from global;
-    composes: mb-xs from global;
+    composes: mb-3 from global;
     composes: text-colorDefault from global;
 }
 

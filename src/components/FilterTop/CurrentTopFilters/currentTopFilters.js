@@ -21,7 +21,7 @@ const CurrentTopFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                const customAttributeLandingPage = ['card_set', 'sc_baseball_release'];
+                const customAttributeLandingPage = ['card_game','card_set', 'bricks_categories', 'sc_sports_categories'];
 
                 if (group === currentGroup && !customAttributeLandingPage.includes(group)) {
                     elements.push(

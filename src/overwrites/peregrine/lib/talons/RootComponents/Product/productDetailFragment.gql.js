@@ -10,6 +10,7 @@ export const ProductDetailsFragment = gql`
                 category_uid
             }
         }
+        link_to_other_stores
         seller {
             name
             url_key
@@ -73,6 +74,7 @@ export const ProductDetailsFragment = gql`
                 }
             }
         }
+        publish_status
         sku
         auction_data {
             is_auction

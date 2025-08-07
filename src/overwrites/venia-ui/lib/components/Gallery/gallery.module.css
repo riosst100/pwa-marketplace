@@ -12,7 +12,7 @@
     composes: grid from global;
     composes: mb-6 from global;
     grid-area: items;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 @media only screen and (max-width: 1023px) {

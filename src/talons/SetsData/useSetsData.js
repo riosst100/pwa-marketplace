@@ -8,7 +8,7 @@ import { getFilterInput, getFiltersFromSearch } from '@magento/peregrine/lib/tal
 
 export const useSetsData = props => {
 
-    const { searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab, activeFilter } = props
+    const { setsFilters, searchQuery, setActive, currentSort, shopby, setType, categoryId, activeTab, activeFilter, activeYear } = props
 
     const { value: sortby } = currentSort
 
@@ -26,7 +26,11 @@ export const useSetsData = props => {
     const parentCategoryUrlKey = pathnameArr[pathnameArr.length - 2].replace('.html','');
     const productType = shopby;
     
-    const { data: introspectionData } = useQuery(getFilterInputsQuery);
+    const { data: introspectionData,loading: introspectionLoading,error: introspectionDataError } = useQuery(getFilterInputsQuery, {
+        variables: {},
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
+    });
 
     const filterTypeMap = useMemo(() => {
         const typeMap = new Map();
@@ -39,35 +43,54 @@ export const useSetsData = props => {
     }, [introspectionData]);
     const filters = getFiltersFromSearch(search);
 
-    // console.log(search)
+    
 
     // Construct the filter arg object.
-    const newFilters = {};
-    filters.forEach((values, key) => {
-        newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
-// console.log(key)
-// console.log(values)
-        
-        if (key == "sc_baseball_release") {
-            for(let item of values) {
-                if(item) {
-                    // console.log(item.split(',')[0])
-                    const data = search.split('&');
-                    data.pop();
-                    activeFilters.push(
-                        {
-                            'label': item.split(',')[0],
-                            'path': data
+    // const newFilters = {};
+    // filters.forEach((values, key) => {
+    //     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+    //     if (key == "sc_baseball_release") {
+    //         for(let item of values) {
+    //             if(item) {
+    //                 const data = search.split('&');
+    //                 data.pop();
+    //                 activeFilters.push(
+    //                     {
+    //                         'label': item.split(',')[0],
+    //                         'path': data
+    //                     }
+    //                 )
+    //             }   
+    //         }
+    //     }
+    // });
+    const { newFilters, activeFilters } = useMemo(() => {
+        const resultFilters = {};
+        const resultActiveFilters = [];
+
+        if (filterTypeMap.size) {
+            filters.forEach((values, key) => {
+                resultFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+
+                if (key === "sc_baseball_release") {
+                    for (let item of values) {
+                        if (item) {
+                            const data = search.split('&');
+                            data.pop();
+                            resultActiveFilters.push({
+                                label: item.split(',')[0],
+                                path: data
+                            });
                         }
-                    )
-                }   
-            }
+                    }
+                }
+            });
         }
-    });
+
+        return { newFilters: resultFilters, activeFilters: resultActiveFilters };
+    }, [filterTypeMap]);
 
     useEffect(() => {
-        // console.log("MASUK")
-
         // if (queryResponse.data) {
 
         
@@ -81,6 +104,7 @@ export const useSetsData = props => {
                 filters: newFilters,
                 categoryUrlKey: pathname,
                 activeTab: activeTab,
+                set_filters: setsFilters,
                 shopby: shopby,
                 activeFilter: activeFilter
             }
@@ -89,11 +113,12 @@ export const useSetsData = props => {
     }, [
         runQuery,
         activeTab,
-        activeFilter
+        activeFilter,
+        setsFilters,
         // queryResponse
         // filterTypeMap,
         // search,
-        // newFilters,
+        newFilters,
         // shopby,
         // categoryUrlKey
     ]);
@@ -133,7 +158,42 @@ export const useSetsData = props => {
         return setsData;
     }, [queryResponse]);
 
-    const availableGroups = setsData && setsData.length ? setsData.map(({ group }) => group) : [];
+    // const availableGroups = setsData && setsData.length ? setsData.map(({ group }) => group) : [];
+    const availableGroups = useMemo(() => {
+        if (!setsData) {
+            return null;
+        }
+
+        const groups = [];
+
+        setsData.map(({ group, release_year, sets }, index) => {
+            // const newSets = sets.filter(function(set) {
+            //     return set.set_name.search(new RegExp(searchQuery, "i")) != -1 || group.search(new RegExp(searchQuery, "i")) != -1;
+            //     // return set.set_name.includes(searchQuery);
+            // });
+
+            // if (newSets && newSets.length) {
+            //     filteredSets.push({
+            //         'group': group,
+            //         'sets': newSets
+            //     })
+            // }
+            if (activeYear && activeYear == release_year) {
+                groups.push(group)
+            }
+        })
+
+        return groups;
+    }, [setsData, activeYear]);
+    let availableYears = setsData && setsData.length 
+    ? [...new Set(setsData.map(({ release_year }) => release_year))].sort((a, b) => b - a)
+    : [];
+    // let availableYears = setsData && setsData.length ? setsData.map(({ release_year }) => release_year) : [];
+    // availableYears = availableYears && availableYears.length ? availableYears.slice().sort((a, b) =>a.group.toLowerCase().localeCompare(b.group.toLowerCase())) : [];
+    // const groupByYears = setsData && setsData.length ? setsData.map(({ group,release_year }) => release_year) : [];
+
+    // console.log('availableYears')
+    // console.log(availableYears)
 
     // const availableLeagues = setsData && setsData.length ? setsData.map(({ sets }) => setsData.map(({ sc_league }) => sc_league)) : [];
 // console.log(availableLeagues)
@@ -144,6 +204,14 @@ export const useSetsData = props => {
         }
 
         return queryResponse?.data?.getSetsData?.attribute;
+    }, [queryResponse]);
+
+    const availableFilters = useMemo(() => {
+        if (!queryResponse) {
+            return null;
+        }
+
+        return queryResponse?.data?.getSetsData?.available_filters;
     }, [queryResponse]);
 
     const pageInfo = useMemo(() => {
@@ -167,23 +235,36 @@ export const useSetsData = props => {
             //     setActive('all')
             // }, [active]);
 
-            setsData.map(({ group, sets }, index) => {
+            setsData.map(({ group, release_year, sets }, index) => {
                 const newSets = sets.filter(function(set) {
-                    return set.set_name.search(new RegExp(searchQuery, "i")) != -1 || group.search(new RegExp(searchQuery, "i")) != -1;
+                    return set.set_name && set.set_name.search(new RegExp(searchQuery, "i")) != -1 || group && group.search(new RegExp(searchQuery, "i")) != -1;
                     // return set.set_name.includes(searchQuery);
                 });
 
                 if (newSets && newSets.length) {
                     filteredSets.push({
                         'group': group,
+                        'release_year': release_year,
                         'sets': newSets
                     })
                 }
             })
         }
 
-        return searchQuery ? filteredSets : setsData;
-    }, [setsData, searchQuery]);
+        if (!searchQuery && activeYear) {
+            setsData.map(({ group, release_year, sets }, index) => {
+                if (activeYear == release_year) {
+                    filteredSets.push({
+                        'group': group,
+                        'release_year': release_year,
+                        'sets': sets
+                    })
+                }
+            })
+        }
+
+        return searchQuery || activeYear ? filteredSets : setsData;
+    }, [setsData, searchQuery, activeYear]);
 
     // useEffect(() => {
     //     setPageLoading(isBackgroundLoading);
@@ -218,8 +299,10 @@ export const useSetsData = props => {
         categoryUrlKey,
         productType,
         availableGroups,
+        availableYears,
         category,
         attributeData,
+        availableFilters,
         pageInfo
     };
 };

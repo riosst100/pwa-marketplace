@@ -31,7 +31,7 @@ const ProductItem = () => {
                     </div>
                 </div>
             </div>
-            <style jsx>
+            <style jsx="true">
                 {`
                     .line-clamp-2 {
                         display: -webkit-box;

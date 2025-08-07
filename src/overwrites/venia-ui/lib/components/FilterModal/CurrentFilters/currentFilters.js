@@ -7,7 +7,7 @@ import CurrentFilter from './currentFilter';
 import defaultClasses from './currentFilters.module.css';
 
 const CurrentFilters = props => {
-    const { filterApi, filterState, onRemove } = props;
+    const { filterApi, filterState, onRemove, filterNames } = props;
     const { removeItem } = filterApi;
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
@@ -20,20 +20,21 @@ const CurrentFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                const customAttributeLandingPage = ['card_set', 'sc_baseball_release','auction','special_price','lof_preorder','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
+                const customAttributeLandingPage = ['bricks_categories','sc_sports_categories','card_game', 'sc_baseball_release','auction','special_price','lof_preorder','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
 
-                // if (!customAttributeLandingPage.includes(group)) {
+                if (!customAttributeLandingPage.includes(group)) {
                     elements.push(
                         <li key={key} className={classes.item}>
                             <CurrentFilter
                                 group={group}
+                                filterNames={filterNames}
                                 item={item}
                                 removeItem={removeItem}
                                 onRemove={onRemove}
                             />
                         </li>
                     );
-                // }
+                }
             }
         }
 

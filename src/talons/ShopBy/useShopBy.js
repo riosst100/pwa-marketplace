@@ -22,7 +22,7 @@ export const useShopBy = props => {
     //     }
     // ] = useAppContext();
 
-    const [runQuery, queryResponse] = useLazyQuery(getShopByDataQuery, {
+    const [runQuery, {data: queryResponse, loading, error}] = useLazyQuery(getShopByDataQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first'
     });
@@ -50,7 +50,7 @@ export const useShopBy = props => {
         return typeMap;
     }, [introspectionData]);
 
-    const activeFilters = [];
+    // const activeFilters = [];
 
     // if (!filterTypeMap.size) {
     //     return;
@@ -59,26 +59,51 @@ export const useShopBy = props => {
     const filters = getFiltersFromSearch(search);
 
     // Construct the filter arg object.
-    const newFilters = {};
-    filters.forEach((values, key) => {
-        newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+    // const newFilters = {};
+    // filters.forEach((values, key) => {
+    //     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
         
-        if (key == "sc_baseball_release") {
-            for(let item of values) {
-                if(item) {
-                    // console.log(item.split(',')[0])
-                    const data = search.split('&');
-                    data.pop();
-                    activeFilters.push(
-                        {
-                            'label': item.split(',')[0],
-                            'path': data
+    //     if (key == "sc_baseball_release") {
+    //         for(let item of values) {
+    //             if(item) {
+    //                 // console.log(item.split(',')[0])
+    //                 const data = search.split('&');
+    //                 data.pop();
+    //                 activeFilters.push(
+    //                     {
+    //                         'label': item.split(',')[0],
+    //                         'path': data
+    //                     }
+    //                 )
+    //             }   
+    //         }
+    //     }
+    // });
+    const { newFilters, activeFilters } = useMemo(() => {
+        const resultFilters = {};
+        const resultActiveFilters = [];
+
+        if (filterTypeMap.size) {
+            filters.forEach((values, key) => {
+                resultFilters[key] = getFilterInput(values, filterTypeMap.get(key));
+
+                if (key === "sc_baseball_release") {
+                    for (let item of values) {
+                        if (item) {
+                            const data = search.split('&');
+                            data.pop();
+                            resultActiveFilters.push({
+                                label: item.split(',')[0],
+                                path: data
+                            });
                         }
-                    )
-                }   
-            }
+                    }
+                }
+            });
         }
-    });
+
+        return { newFilters: resultFilters, activeFilters: resultActiveFilters };
+    }, [filterTypeMap]);
 
     useEffect(() => {
 
@@ -130,7 +155,7 @@ export const useShopBy = props => {
             return null;
         }
         
-        const rawData = queryResponse?.data?.shopByData?.data;
+        const rawData = queryResponse?.shopByData?.data;
         if (!rawData) {
             return null;
         }
@@ -156,11 +181,12 @@ export const useShopBy = props => {
     }, [queryResponse, sortby]);
 
     const filteredOptions = useMemo(() => {
+        console.log('queryResponse', queryResponse)
         if (!queryResponse) {
             return null;
         }
         
-        const rawData = queryResponse?.data?.shopByData?.data;
+        const rawData = queryResponse?.shopByData?.data;
         if (!rawData) {
             return null;
         }
@@ -196,6 +222,8 @@ export const useShopBy = props => {
         return options;
     }, [queryResponse, searchQuery]);
 
+    console.log('filteredOptions',filteredOptions)
+
     const dataResult = useMemo(() => {
         if (filteredOptions) {
             return filteredOptions.reduce((acc, item) => {
@@ -215,7 +243,7 @@ export const useShopBy = props => {
         return filteredOptions;
     }, [filteredOptions])
 
-    // console.log(dataResult)
+    console.log('dataResult',dataResult)
 
     let availableGroups = originalDataResult ? Object.keys(originalDataResult).sort() : [];
 
@@ -227,7 +255,7 @@ export const useShopBy = props => {
     }
 
 
-    const attributeData = queryResponse?.data?.shopByData?.data && queryResponse?.data?.shopByData.data.length ? queryResponse.data.shopByData.data[0] : null
+    const attributeData = queryResponse?.shopByData?.data && queryResponse?.shopByData.data.length ? queryResponse.shopByData.data[0] : null
 
     const { data: categoryData, loading: categoryLoading } = useQuery(
         getCategoryContentQuery,
@@ -246,7 +274,7 @@ export const useShopBy = props => {
             return null;
         }
 
-        return queryResponse?.data?.shopByData?.page_info;
+        return queryResponse?.shopByData?.page_info;
     }, [queryResponse]);
 
     const category =
@@ -255,8 +283,8 @@ export const useShopBy = props => {
             : null;
 
     return {
-        // error,
-        // loading,
+        error,
+        loading,
         dataResult,
     //     collectibleGameSets,
         filteredAvailableGroups,

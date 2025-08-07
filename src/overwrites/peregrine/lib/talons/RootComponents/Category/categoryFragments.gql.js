@@ -16,14 +16,6 @@ export const ProductsFragment = gql`
             id
             uid
             name
-            preorder {
-                is_preorder
-                preorder_notes
-                preorder_availability
-            }
-            auction_data {
-                is_auction
-            }
             seller {
                 name
             }
@@ -91,7 +83,6 @@ export const ProductsFragment = gql`
                 url
             }
             stock_status
-            rating_summary
             __typename
             url_key
         }

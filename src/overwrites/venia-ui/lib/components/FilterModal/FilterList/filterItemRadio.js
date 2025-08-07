@@ -6,7 +6,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import { useIntl } from 'react-intl';
 
 const FilterItemRadio = props => {
-    const { filterApi, group, item, onApply, labels } = props;
+    const { filterApi, group, item, isSubFilter, onApply, labels } = props;
     const { removeGroup, toggleItem } = filterApi;
     const { title, value } = item;
     const classes = useStyle(defaultClasses);
@@ -44,6 +44,7 @@ const FilterItemRadio = props => {
             classes={classes}
             id={`item-${group}-${value}`}
             label={title}
+            isSubFilter={isSubFilter}
             value={value}
             onChange={handleOnchange}
             data-cy="FilterDefault-radio"

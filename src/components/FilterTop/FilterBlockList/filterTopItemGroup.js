@@ -87,7 +87,7 @@ const FilterTopItemGroup = props => {
         <div className={classes.root}>
             {radioItems}
             {filterElements && filterElements.length > 10 ? <span className={classes.item}><b>More Item</b></span> : ''}
-            {filterElements && filterElements.length ? filterElements : group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "trains" && group != "franchise" && group != "brands" && group != "category" && group != "filterby" && group != "shopby" && group != "cat_id" ? (<span className={classes.item}><b>All</b></span>) : ''}
+            {filterElements && filterElements.length ? filterElements : group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "trains" && group != "franchise" && group != "brands" && group != "bricks_categories" && group != "category" && group != "sc_sports_categories" && group != "card_game" && group != "filterby" && group != "shopby" && group != "cat_id" ? (<span className={classes.item}><b>All</b></span>) : ''}
         </div>
     );
 };

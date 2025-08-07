@@ -49,6 +49,7 @@ const FilterModal = props => {
                     <FilterBlock
                         key={group}
                         filterApi={filterApi}
+                        allowedSubFilters={[]}
                         filterState={blockState}
                         filterFrontendInput={frontendInput}
                         group={group}

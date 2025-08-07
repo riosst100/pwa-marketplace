@@ -28,10 +28,15 @@ const FilterSidebar = props => {
         filterItems,
         filterNames,
         filterFrontendInput,
+        subFilterItems,
         filterState,
         handleApply,
         handleReset
     } = talonProps;
+
+    // console.log(filters)
+    // console.log('filterCountToOpen'+filterCountToOpen)
+    // console.log('hideFilters'+hideFilters)
 
     const filterRef = useRef();
     const classes = useStyle(defaultClasses, props.classes);
@@ -44,9 +49,9 @@ const FilterSidebar = props => {
                 typeof filterElement.getBoundingClientRect === 'function'
             ) {
                 const filterTop = filterElement.getBoundingClientRect().top;
-                const windowScrollY =
-                    window.scrollY + filterTop - SCROLL_OFFSET;
-                window.scrollTo(0, windowScrollY);
+                // const windowScrollY =
+                //     window.scrollY + filterTop - SCROLL_OFFSET;
+                // window.scrollTo(0, windowScrollY);
             }
 
             handleApply(...args);
@@ -80,9 +85,9 @@ const FilterSidebar = props => {
 
     const allowedFiltersArr = [];
 
-    // allowedFilters?.length && allowedFilters.map((val, index) => {
-    //     allowedFiltersArr.push(val.code);
-    // });
+    allowedFilters?.length && allowedFilters.map((val, index) => {
+        allowedFiltersArr.push(val.code);
+    });
 
     const filtersList = useMemo(
         () =>
@@ -91,25 +96,59 @@ const FilterSidebar = props => {
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
 
-                const hideFilters = ['trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
-                if (!hideFilters.includes(group) && groupName) {
+                const hideFilters = ['card_game','bricks_categories','sc_sports_categories','trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
+                if (!allowedFiltersArr?.length || filterState.size && allowedFiltersArr.length || !filterState.size && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
+                    if (!hideFilters.includes(group) && groupName && !group.includes('card_release') && !group.includes('card_set') && !group.includes('sc_set_name')) {
                     
-                // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
+                    // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
+                        let subFilter = null;
+                        // if (group.includes('sc_release') || group.includes('card_release')) {
+                        //     let subGroup = '';
+                        //     if (group.includes('card_release')) {
+                        //         subGroup = group.replace('card_release', 'card_set');
+                        //     }
 
+                        //     if (group.includes('sc_release')) {
+                        //         subGroup = group.replace('sc_release', 'sc_set_name');
+                        //     }
 
-                    return (
-                        <FilterBlock
-                            key={group}
-                            filterApi={filterApi}
-                            filterState={blockState}
-                            filterFrontendInput={frontendInput}
-                            group={group}
-                            items={items}
-                            name={groupName}
-                            onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
-                            initialOpen={true}
-                        />
-                    );
+                        //     const subBlockState = filterState.get(subGroup);
+                        //     const subFrontendInput = filterFrontendInput.get(subGroup);
+                        //     const subFilterItems = filterItems.get(subGroup);
+
+                        //     subFilter = {
+                        //         key: subGroup,
+                        //         filterApi: filterApi,
+                        //         filterState: subBlockState,
+                        //         filterFrontendInput: subFrontendInput,
+                        //         group: subGroup,
+                        //         isSubFilter: true,
+                        //         items: subFilterItems,
+                        //         name: '',
+                        //         onApply: handleApplyFilter,
+                        //         initialOpen: true
+                        //     };
+
+                        // }
+
+                        return (
+                            <FilterBlock
+                                key={group}
+                                filterApi={filterApi}
+                                filterState={blockState}
+                                allowedSubFilters={[]}
+                                filterFrontendInput={frontendInput}
+                                group={group}
+                                subFilterItems={subFilterItems?.subFilters}
+                                filterItems={filterItems}
+                                subFilter={subFilter}
+                                items={items}
+                                name={groupName}
+                                onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
+                                initialOpen={true}
+                            />
+                        );
+                    }
                 }
             }),
         [
@@ -118,6 +157,7 @@ const FilterSidebar = props => {
             filterNames,
             filterFrontendInput,
             filterState,
+            subFilterItems,
             filterCountToOpen,
             handleApplyFilter
         ]

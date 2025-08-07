@@ -94,7 +94,7 @@ const Tile = props => {
             aria-label={result}
             disabled={isEverythingOutOfStock || isOptionOutOfStock}
         >
-            {image}
+            {!isOptionOutOfStock ? image : ''}
             <span className={classes.label}>{label}</span>
         </button>
     );

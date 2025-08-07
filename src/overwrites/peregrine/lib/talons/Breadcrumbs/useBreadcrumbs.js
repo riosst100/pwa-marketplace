@@ -48,7 +48,8 @@ export const useBreadcrumbs = props => {
     });
 
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
     });
 
     const categoryUrlSuffix = useMemo(() => {

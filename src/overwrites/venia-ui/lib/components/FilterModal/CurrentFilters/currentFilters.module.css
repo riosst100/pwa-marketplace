@@ -4,7 +4,9 @@
     composes: overflow-auto from global;
     composes: flex from global;
     composes: flex-wrap from global;
-    composes: gap-2 from global;
+    composes: gap-0 from global;
+    composes: flex-col from global;
+    composes: items-start from global;
 }
 
 /* TODO @TW: cannot compose */
@@ -14,8 +16,9 @@
 
 .item {
     composes: float-left from global;
-    composes: pb-0 from global;
+    composes: pt-0 from global;
     composes: pl-0 from global;
-    composes: pr-2 from global;
-    composes: pt-2 from global;
+    /* composes: pr-2 from global; */
+    composes: pb-2 from global;
+    composes: w-full from global;
 }

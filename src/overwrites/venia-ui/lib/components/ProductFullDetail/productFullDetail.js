@@ -36,7 +36,9 @@ import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
 import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
+import LinkToOtherStores from '@riosst100/pwa-marketplace/src/components/LinkToOtherStores';
 import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
+import { useLocation } from 'react-router-dom';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -74,7 +76,12 @@ const ProductDetailsCollapsible = (props) => {
 const ProductFullDetail = props => {
     const { product } = props;
 
-    const talonProps = useProductFullDetail({ product });
+    const { search } = useLocation();
+
+    const params = new URLSearchParams(search);
+    const isPreview = params.get('preview');
+
+    const talonProps = useProductFullDetail({ product, isPreview });
 
     const {
         breadcrumbCategoryId,
@@ -420,9 +427,49 @@ const ProductFullDetail = props => {
         }
     ];
 
+    const getSellerAddressDisplay = (seller) => {
+        let city = seller?.city;
+        let country = seller?.country;
+
+        let result = '';
+        if (city && country) {
+            result = `${city}, ${country}`;
+        }
+        if (city && !country) {
+            result = `${city}`;
+        }
+        if (!city && country) {
+            result = `${country}`;
+        }        
+        return result;
+    }
+
+    const productPreviewMessages = isPreview && productDetails?.publish_status != 1 ? (
+        <div
+        style={{
+            backgroundColor: "white", // Light gray background
+            border: "1px solid rgb(242 101 102)", // Subtle border
+            borderRadius: "5px", // Rounded corners
+            padding: "10px 15px", // Space inside the box
+            margin: "10px 0px 20px 0", // Space outside the box
+            fontSize: "14px", // Readable text size
+            color: "rgb(242 101 102)", // Dark gray text
+        }}
+        >
+            <span
+                style={{
+                fontWeight: "500", // Slightly bold text
+                }}
+            >
+                This is a preview of your product. Only you can see this page.
+            </span>
+        </div>
+    ) : null;
+
     return (
         <Fragment>
             {breadcrumbs}
+            {productPreviewMessages}
             <Form
                 className={classes.root}
                 data-cy="ProductFullDetail-root"
@@ -500,7 +547,7 @@ const ProductFullDetail = props => {
                             'py-xs flex justify-between flex-wrap gap-y-5'
                         )}
                     >
-                        <div className='flex flex-col gap-y-5 max-w-[448px]'>
+                        <div className='flex flex-col gap-y-3'>
                             <div className='flex flex-col gap-y-3'>
                                 <p
                                     data-cy="ProductFullDetail-productPrice"
@@ -585,36 +632,7 @@ const ProductFullDetail = props => {
                         <RFQ />
                     </section> */}
                     <Divider />
-                    <section className='product_from-other-platform py-xs'>
-                        <div className='text-sm flex mb-3'>
-                            Also available in
-                        </div>
-                        <div className='platform-container flex gap-x-2.5'>
-                            <Link
-                                className='platform_logo-wrapper rounded-md px-5 py-2.5 border border-gray-100 flex items-center'
-                                to=""
-                            >
-                                <img
-                                    alt="tokopedia"
-                                    width={60}
-                                    height={30}
-                                    src={'https://upload.wikimedia.org/wikipedia/commons/a/a7/Tokopedia.svg'}
-                                />
-                            </Link>
-                            <Link
-                                className='platform_logo-wrapper rounded-md px-5 py-2.5 border border-gray-100 flex items-center'
-                                to=""
-                            >
-                                <img
-                                    alt="shopee"
-                                    width={60}
-                                    height={30}
-                                    src={'https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg'}
-                                />
-                            </Link>
-                        </div>
-                    </section>
-                    <Divider />
+                    <LinkToOtherStores productDetails={productDetails} />
                     <section className='seller-information py-xs'>
                         <div className='flex xs_flex-col md_flex-row xs_items-center md_items-start items-start gap-[15px] relative'>
                             <div className='flex flex-row justify-between relative w-full'>
@@ -628,7 +646,7 @@ const ProductFullDetail = props => {
                                         </div>
                                     </div>
                                     <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
-                                        {sellerDetails ? sellerDetails.city + ', ' + sellerDetails.country : ''}
+                                        {sellerDetails ? getSellerAddressDisplay(sellerDetails) : ''}
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap items-start gap-4 relative'>

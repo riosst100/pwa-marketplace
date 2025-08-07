@@ -102,7 +102,7 @@ const GalleryItem = props => {
                 data-cy="GalleryItem-root"
                 className={cn(
                     classes.root,
-                    'border border-gray-100 rounded-lg hover_shadow-type-1 bg-white min-h-[388px]'
+                    'border border-gray-100 rounded-lg hover_shadow-type-1 bg-white min-h-[300px]'
                 )}
                 ref={itemRef}
             >
@@ -129,7 +129,7 @@ const GalleryItem = props => {
                         {ratingAverage}
                     </Link>
                 </div>
-                <div className={cn('item-info px-[15px] pt-[15px] pb-[20px]')}>
+                <div className={cn('item-info px-[15px] pb-[20px]')}>
                     <Link
                         onClick={handleLinkClick}
                         to={productLink}
@@ -139,7 +139,7 @@ const GalleryItem = props => {
                         <span>{name}</span>
                     </Link>
                     <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
-                        <p className='font-medium text-colorDefault !mb-1 !leading-[14px]'>
+                        <p className='font-medium !text-[#f76b1c] text-[1.1rem] !mb-1 !leading-[14px]'>
                             <Price
                                 value={priceSource.value}
                                 currencyCode={priceSource.currency}

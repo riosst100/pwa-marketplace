@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, useMemo, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { string } from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -78,6 +78,29 @@ const Breadcrumbs = props => {
 
     const lastIndex = currentFilter ? currentFilter.length - 1 : 0;
     // const filterpath = ;
+
+    const { search } = useLocation();
+
+    // const previousSearch = useRef(search);
+
+    const removeShopbyParam = (url) => {
+        const urlParts = url.split("?"); // Pisahkan URL sebelum dan sesudah tanda tanya
+        if (urlParts.length < 2) return url; // Jika tidak ada query string, kembalikan URL asli
+
+        const baseUrl = urlParts[0]; // Bagian URL sebelum query string
+        const queryString = urlParts[1]; // Bagian query string
+
+        // Pisahkan parameter menjadi array
+        const params = queryString.split("&").filter(param => !param.startsWith("shopby="));
+
+        // Gabungkan kembali parameter tanpa "shopby"
+        const newQueryString = params.join("&");
+
+        // Gabungkan URL dasar dengan query string yang telah dimodifikasi
+        return newQueryString ? `${baseUrl}?${newQueryString}` : baseUrl;
+    }
+
+    const params = removeShopbyParam(search);
     
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
         currentProduct ? (
@@ -102,7 +125,7 @@ const Breadcrumbs = props => {
                     <Link
                         key={index}
                         className={classes.link}
-                        to={resourceUrl('/'+currentCategoryPath)}
+                        to={resourceUrl('/'+currentCategoryPath+params)}
                         onClick={handleClick}
                     >
                         {filter.label}
@@ -111,15 +134,15 @@ const Breadcrumbs = props => {
                 )
             ) : filterBreadcrumbsElement.push(
                 index == lastIndex ?
-                <span key={index}>
+                <>
                     <span className={classes.divider}>{DELIMITER}</span>
-                    <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                </span> : <>
+                    <span key={index} className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
+                </> : <>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <Link
                         key={index}
                         className={classes.link}
-                        to={resourceUrl('/'+currentCategoryPath+'?' + filter.code + '[filter]=' + filter.label + ',' + filter.option_id)}
+                        to={resourceUrl('/'+currentCategoryPath+params)}
                         onClick={handleClick}
                     >
                         {filter.label}

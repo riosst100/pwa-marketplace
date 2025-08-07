@@ -12,8 +12,8 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_COLLECTIBLE_GAME_QUERY = gql`
-    query getShopByCard($categoryUrlKey: String!, $productType: String) {
-        shopByCard(categoryUrlKey: $categoryUrlKey, productType: $productType) {
+    query getShopByCard($categoryUrlKey: String!, $productType: String, $filters: ProductAttributeFilterInput!) {
+        shopByCard(categoryUrlKey: $categoryUrlKey, productType: $productType, filters: $filters) {
             release_type
             sets {
                 set_name
@@ -40,8 +40,22 @@ export const GET_SPORT_CARDS_SETS_QUERY = gql`
     }
 `;
 
+export const GET_FILTER_INPUTS = gql`
+    query GetFilterInputsForCategory {
+        __type(name: "ProductAttributeFilterInput") {
+            inputFields {
+                name
+                type {
+                    name
+                }
+            }
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
     getCollectibleGameQuery: GET_COLLECTIBLE_GAME_QUERY,
-    getSportCardsSetsQuery: GET_SPORT_CARDS_SETS_QUERY
+    getSportCardsSetsQuery: GET_SPORT_CARDS_SETS_QUERY,
+    getFilterInputsQuery: GET_FILTER_INPUTS
 };

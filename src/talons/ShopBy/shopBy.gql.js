@@ -23,6 +23,7 @@ export const GET_SHOP_BY_DATA_QUERY = gql`
                 count
                 attribute_code
                 options {
+                    products_count
                     label
                     value
                 }

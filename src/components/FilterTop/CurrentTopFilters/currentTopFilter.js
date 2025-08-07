@@ -31,7 +31,7 @@ const CurrentTopFilter = props => {
         }
     );
 
-    return group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "filterby" && group != "trains" && group != "franchise" && group != "brands" && group != "category" && group != "shopby" ? (
+    return group && group != "bricks_categories" && group != "sc_sports_categories" && group != "card_game" && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "filterby" && group != "trains" && group != "franchise" && group != "brands" && group != "category" && group != "shopby" ? (
         <span className={classes.item} data-cy="CurrentTopFilter-root">
             <Trigger
                 action={handleClick}

@@ -53,7 +53,7 @@ const SellerDetail = props => {
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <SellerProducts seller={seller} />
+                content: <SellerProducts sellerId={seller?.seller_id} seller={seller} />
             },
             {
                 id: 'store-information',
@@ -76,6 +76,23 @@ const SellerDetail = props => {
         
     }
 
+    const getSellerAddressDisplay = (seller) => {
+        let city = seller?.city;
+        let country = seller?.country;
+
+        let result = '';
+        if (city && country) {
+            result = `${city}, ${country}`;
+        }
+        if (city && !country) {
+            result = `${city}`;
+        }
+        if (!city && country) {
+            result = `${country}`;
+        }        
+        return result;
+    }
+
     return (
         <div className=' py-8'>
             <Slider seller={seller} rootClassname='mb-[30px]' />
@@ -85,6 +102,7 @@ const SellerDetail = props => {
                         <Image
                             alt={seller.name}
                             width='100'
+                            style={{"height":'100px',"objectFit":"cover"}}
                             src={seller.thumbnail || ''} />
                     ) : (
                         <div className='flex items-center justify-center bg-gray-300 border rounded-radius1 relative w-[100px] h-[100px]'>
@@ -106,7 +124,7 @@ const SellerDetail = props => {
                                 </div>
                             </div>
                             <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
-                                {seller ? seller.city + ', ' + seller.country : ''}
+                                {seller ? getSellerAddressDisplay(seller) : ''}
                             </div>
                         </div>
                         <div className='flex flex-wrap items-start gap-4 relative'>
@@ -149,8 +167,8 @@ const SellerDetail = props => {
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-[20px] px-[10px] py-[30px] relative">
-                    <img class="relative self-stretch w-px object-cover" alt="Line" src="https://c.animaapp.com/2pP7niVX/img/line-16.svg" />
+                <div class="flex items-center gap-[20px] px-[10px] py-[10px] relative">
+                    {/* <img class="relative self-stretch w-px object-cover" alt="Line" src="https://c.animaapp.com/2pP7niVX/img/line-16.svg" /> */}
                     <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
                         <div class="flex items-center gap-[5px] relative">
                             <Star1 color='#F7C317' size={18} className='fill-[#F7C317]' />

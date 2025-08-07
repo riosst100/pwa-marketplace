@@ -122,7 +122,7 @@ const Product = props => {
                         />
                     </Link>
                     <div className='flex flex-col'>
-                        <div className={cn(classes.name, 'text-[14px] font-medium max-w-[260px]')} data-cy="Product-name">
+                        <div className={cn(classes.name, 'text-[14px] font-normal max-w-[260px]')} data-cy="Product-name">
                             <Link to={itemLink}>{name}</Link>
                         </div>
                         <ProductOptions
@@ -195,7 +195,7 @@ const Product = props => {
                     />
                 </div>
                 {editItemSection}
-                <li>
+                <span>
                     <AddToListButton
                         // {...addToWishlistProps}
                         afterAdd={afterAdd}
@@ -210,7 +210,7 @@ const Product = props => {
                         }}
                         icon={HeartIcon}
                     />
-                </li>
+                </span>
                 {/* <Section
                     // text={formatMessage({
                     //     id: 'product.removeFromCart',
