@@ -1,0 +1,1 @@
+export { default } from '@riosst100/pwa-marketplace/src/components/FilterListContent/filterListPage';

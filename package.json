@@ -1,0 +1,24 @@
+{
+  "name": "@riosst100/pwa-marketplace",
+  "author": "riosst100@gmail.com",
+  "version": "2.7.5",
+  "main": "src/index.js",
+  "pwa-studio": {
+    "targets": {
+      "intercept": "src/intercept.js"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "formik": "^2.4.6",
+    "iconsax-react": "^0.0.8",
+    "react-countdown": "^2.3.5",
+    "react-datepicker": "4.10.0",
+    "react-dropzone": "^14.2.3",
+    "react-phone-number-input": "^3.3.9",
+    "react-slick": "^0.30.2",
+    "yup": "^1.4.0"
+  },
+  "license": "MIT",
+  "private": false
+}

@@ -1,0 +1,21 @@
+.root {
+    composes: px-[10px] from global;
+    composes: py-2 from global;
+    composes: overflow-auto from global;
+    composes: flex from global;
+    composes: flex-wrap from global;
+    composes: gap-2 from global;
+}
+
+/* TODO @TW: cannot compose */
+.root:empty {
+    display: none;
+}
+
+.item {
+    composes: float-left from global;
+    composes: pb-0 from global;
+    composes: pl-0 from global;
+    composes: pr-2 from global;
+    composes: pt-2 from global;
+}

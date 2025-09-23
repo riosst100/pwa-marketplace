@@ -1,0 +1,57 @@
+.sellerSubmenu {
+    composes: absolute from global;
+    composes: bg-white from global;
+    composes: left-0 from global;
+    composes: px-3 from global;
+    composes: py-1 from global;
+    composes: right-0 from global;
+    top: 608px;
+    /* box-shadow: 0 3px rgb(var(--venia-global-color-gray-100)); */
+}
+
+.sellerSubmenuContainer {
+    composes: w-full from global;
+    composes: max-w-[1180px] from global;
+    composes: mx-[auto] from global;
+    composes: gap-[15px] from global;
+    composes: max-h-[50vh] from global;
+    composes: overflow-y-auto from global;
+    composes: rounded-[6px] from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: border-gray-100 from global;
+    z-index: 99;
+    background-color: white;
+    position: relative;
+    /* box-shadow: 0 3px 6px rgb(var(--venia-global-color-gray-100)); */
+}
+
+/* TODO @TW: cannot compose */
+.sellerSubmenu::before {
+    /* box-shadow: inset 0 2px rgb(var(--venia-global-color-gray-100)); */
+    content: '';
+    height: 1px;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.sellerSubmenu_inactive {
+    composes: sellerSubmenu;
+    composes: hidden from global;
+}
+
+.sellerSubmenu_active {
+    composes: sellerSubmenu;
+}
+
+.sellerSubmenuItems {
+    composes: grid from global;
+    composes: grid-cols-6 pb-2 from global;
+    /* composes: justify-between from global; */
+    /* composes: ml-auto from global; */
+    /* composes: mr-auto from global; */
+    /* composes: flex-col from global; */
+}

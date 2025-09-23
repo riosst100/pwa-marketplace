@@ -1,0 +1,76 @@
+.nav {
+    composes: flex from global;
+    composes: flex-wrap from global;
+    margin: 0 0 20px 0;
+    composes: gap-[10px] from global;
+}
+
+.nav_item {
+    composes: px-4 from global;
+    composes: py-2 from global;
+    composes: transition-colors from global;
+    composes: duration-150 from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: leading-normal from global;
+    composes: text-base from global;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-gray-100 from global;
+    border-radius: 5px;
+}
+
+.toolbar {
+    composes: relative from global;
+    composes: ml-2xs from global;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.tabs {
+    composes: flex from global;
+    composes: flex-wrap from global;
+    composes: mt-3 from global;
+    composes: gap-[15px] from global;
+    margin-bottom: 30px;
+}
+
+.tabs_item {
+    composes: px-4 from global;
+    composes: py-2 from global;
+    composes: transition-colors from global;
+    composes: duration-150 from global;
+    composes: border from global;
+    composes: border-solid from global;
+    composes: leading-normal from global;
+    composes: text-base from global;
+    composes: text-colorDefault from global;
+    composes: bg-white from global;
+    composes: border-gray-100 from global;
+    border-radius: 5px;
+}
+
+.singlesWrapper {
+    column-count: 1;
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.singlesGroupWrapper {
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .singlesGroupWrapper {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1023px) {
+    .singlesGroupWrapper {
+        width: 33.33%;
+    }
+}

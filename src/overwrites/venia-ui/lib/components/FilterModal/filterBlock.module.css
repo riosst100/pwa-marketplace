@@ -1,0 +1,25 @@
+.root {
+    composes: grid from global;
+}
+
+.header {
+    composes: grid from global;
+    composes: grid-cols-autoLast from global;
+    composes: grid-flow-col from global;
+    composes: items-center from global;
+    composes: py-2.5 from global;
+}
+
+.name {
+    composes: leading-[14px] from global;
+    composes: text-left from global;
+    composes: text-base from global;
+    composes: font-medium from global;
+}
+
+.list {}
+
+/* TODO @TW: cannot compose */
+.list:empty {
+    display: none;
+}

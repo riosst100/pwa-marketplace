@@ -1,0 +1,37 @@
+.items {
+    composes: gap-[15px] from global;
+    composes: grid from global;
+    /* composes: -ml-1.5 from global; */
+    composes: py-2.5 from global;
+    grid-template-columns: 100%;
+    composes: border-t from global;
+    composes: border-gray-100 from global;
+}
+
+.sub_items {
+    composes: gap-[15px] from global;
+    composes: grid from global;
+    /* composes: -ml-1.5 from global; */
+    composes: py-2.5 from global;
+    grid-template-columns: 100%;
+    composes: border-gray-100 from global;
+}
+
+.showMoreLessItem {
+    composes: pl-1 from global;
+}
+
+.showMoreLessButton {
+    composes: text-base from global;
+    composes: underline from global;
+
+    composes: hover_no-underline from global;
+}
+
+.popupFilterItem {
+    border: 1px solid #e1e1e1;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 10px;
+}

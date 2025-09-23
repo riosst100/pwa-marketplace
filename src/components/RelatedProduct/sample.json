@@ -1,0 +1,154 @@
+[
+    {
+        "__typename": "SimpleProduct",
+        "id": 25,
+        "uid": "MjU=",
+        "name": "Test Product 13",
+        "seller": {
+            "__typename": "Seller",
+            "name": null
+        },
+        "price_range": {
+            "__typename": "PriceRange",
+            "maximum_price": {
+                "__typename": "ProductPrice",
+                "final_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "regular_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "discount": {
+                    "__typename": "ProductDiscount",
+                    "amount_off": 0
+                }
+            }
+        },
+        "sku": "Test Product 7-1-2",
+        "small_image": {
+            "__typename": "ProductImage",
+            "url": "https://seller-dev.tcgcollective.co/media/catalog/product/cache/9d2223072e07b2ec257382d238a7acb0/b/p/bp19439l_4_.jpg"
+        },
+        "stock_status": "IN_STOCK",
+        "rating_summary": 0,
+        "url_key": "test-product-13"
+    },
+    {
+        "__typename": "SimpleProduct",
+        "id": 24,
+        "uid": "MjQ=",
+        "name": "Test Product 12",
+        "seller": {
+            "__typename": "Seller",
+            "name": null
+        },
+        "price_range": {
+            "__typename": "PriceRange",
+            "maximum_price": {
+                "__typename": "ProductPrice",
+                "final_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "regular_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "discount": {
+                    "__typename": "ProductDiscount",
+                    "amount_off": 0
+                }
+            }
+        },
+        "sku": "Test Product 11-1",
+        "small_image": {
+            "__typename": "ProductImage",
+            "url": "https://seller-dev.tcgcollective.co/static/frontend/Magento/luma/en_US/Magento_Catalog/images/product/placeholder/small_image.jpg"
+        },
+        "stock_status": "IN_STOCK",
+        "rating_summary": 0,
+        "url_key": "test-product-12"
+    },
+    {
+        "__typename": "SimpleProduct",
+        "id": 23,
+        "uid": "MjM=",
+        "name": "Test Product 11",
+        "seller": {
+            "__typename": "Seller",
+            "name": null
+        },
+        "price_range": {
+            "__typename": "PriceRange",
+            "maximum_price": {
+                "__typename": "ProductPrice",
+                "final_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "regular_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "discount": {
+                    "__typename": "ProductDiscount",
+                    "amount_off": 0
+                }
+            }
+        },
+        "sku": "Test Product 11",
+        "small_image": {
+            "__typename": "ProductImage",
+            "url": "https://seller-dev.tcgcollective.co/static/frontend/Magento/luma/en_US/Magento_Catalog/images/product/placeholder/small_image.jpg"
+        },
+        "stock_status": "IN_STOCK",
+        "rating_summary": 0,
+        "url_key": "test-product-11"
+    },
+    {
+        "__typename": "SimpleProduct",
+        "id": 21,
+        "uid": "MjE=",
+        "name": "Test Product 9",
+        "seller": {
+            "__typename": "Seller",
+            "name": null
+        },
+        "price_range": {
+            "__typename": "PriceRange",
+            "maximum_price": {
+                "__typename": "ProductPrice",
+                "final_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 98
+                },
+                "regular_price": {
+                    "__typename": "Money",
+                    "currency": "SGD",
+                    "value": 120
+                },
+                "discount": {
+                    "__typename": "ProductDiscount",
+                    "amount_off": 22
+                }
+            }
+        },
+        "sku": "Test Product 7-1-1",
+        "small_image": {
+            "__typename": "ProductImage",
+            "url": "https://seller-dev.tcgcollective.co/media/catalog/product/cache/9d2223072e07b2ec257382d238a7acb0/f/4/f4f14229_14.jpg"
+        },
+        "stock_status": "IN_STOCK",
+        "rating_summary": 0,
+        "url_key": "test-product-9"
+    }
+]

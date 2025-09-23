@@ -1,0 +1,48 @@
+/** The "thumbnail" is a round pil button below the product image in mobile or
+ * as a thumbnail to the left of the product image in desktop.
+ */
+.root {
+    composes: border from global;
+    composes: border-solid from global;
+    composes: border-strong from global;
+    composes: min-w-[80px] from global;
+    composes: min-h-[80px] from global;
+    composes: max-w-[80px] from global;
+    composes: max-h-[80px] from global;
+    composes: rounded-[4px] from global;
+
+    composes: lg_border-0 from global;
+    composes: lg_h-auto from global;
+    composes: lg_w-auto from global;
+    composes: hidden from global;
+    composes: bg-[#e6e9ea] from global;
+    box-shadow: 0 0 0 1px #E6E9EA;
+}
+
+.rootSelected {
+    composes: root;
+
+    /* composes: bg-gray-900 from global; */
+}
+
+.image {
+    composes: hidden from global;
+    composes: max-w-[80px] from global;
+    composes: max-h-[80px] from global;
+    composes: lg_bg-subtle from global;
+    composes: lg_block from global;
+    composes: lg_h-full from global;
+    composes: lg_object-center from global;
+    composes: lg_object-contain from global;
+    composes: rounded-[4px] from global;
+    composes: lg_w-full from global;
+}
+
+.rootSelected {
+    composes: root;
+    box-shadow: 0 0 0 2px #f76b1c;
+}
+
+.root:nth-child(-n+5) {
+    display: block;
+}
