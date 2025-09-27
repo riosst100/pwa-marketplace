@@ -4,26 +4,24 @@
     composes: lg_items-start from global;
     composes: gap-x-10 from global;
 }
-
-@media (min-width: 1024px) {
-    .root {
-        grid-template-areas:
-            'left-container right-container';
-        grid-template-columns: minmax(0, 495px) minmax(0, 1fr);
-        grid-template-rows: repeat(5, min-content) 1fr [fold];
-    }
-
-    .title {
-        grid-template-columns: 1fr max-content;
-    }
+.rfqButton {
+  padding: 10px 0px;
 }
-
+.rfqButton span {
+  font-size: 14px;
+}
+.customAttributesList {
+    padding-left: 0 !important;
+}
+.contentContainerTabOverride {
+  max-width: none !important;
+}
 .section {
     composes: border-solid from global;
     composes: border-subtle from global;
     composes: border-t-0 from global;
     composes: border-r-0 from global;
-    composes: border-b from global;
+    composes: border-b-0 from global;
     composes: border-l-0 from global;
 }
 
@@ -35,7 +33,10 @@
     composes: mb-sm from global;
     composes: text-colorDefault from global;
 }
-
+:global(.root).makeOfferButton { 
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 .title {
     /* composes: section;
     composes: gap-2 from global;
@@ -74,6 +75,13 @@
 
 .options {
     grid-area: options;
+    border: none;
+}
+.options :global([class*="option"]) {
+  border-bottom: none !important;
+}
+.options {
+  border: none !important;
 }
 
 .formErrors {
@@ -145,16 +153,6 @@
     list-style: none;
 }
 
-@media (min-width: 1024px) {
-    .details {
-        align-self: stretch;
-        border-top-width: 1px;
-        margin: 0;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-    }
-}
-
 .detailsTitle {
     composes: sectionTitle;
 }
@@ -205,5 +203,37 @@
         flex-wrap: wrap;
         flex-direction: column;
         row-gap: 16px;
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    .root {
+        grid-template-areas:
+            'left-container right-container';
+        grid-template-columns: minmax(0, 500px) minmax(0, 1fr);
+        grid-template-rows: repeat(5, min-content) 1fr [fold];
+    }
+     .details {
+        align-self: stretch;
+        border-top-width: 1px;
+        margin: 0;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    .title {
+        grid-template-columns: 1fr max-content;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    .root {
+        grid-template-areas:
+            'left-container right-container';
+        grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+        grid-template-rows: repeat(5, min-content) 1fr [fold];
+    }
+}
+@media (max-width: 769px) {
+    .leftContainer {
+        composes: max-w-[100%] from global;
     }
 }

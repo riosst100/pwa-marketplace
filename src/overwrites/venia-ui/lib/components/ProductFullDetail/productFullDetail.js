@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment, Suspense } from 'react';
+import React, { useState, useMemo, Fragment, Suspense, useRef, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Form } from 'informed';
@@ -15,7 +15,6 @@ import Carousel from '@magento/venia-ui/lib/components/ProductImageCarousel';
 import FormError from '@magento/venia-ui/lib/components/FormError';
 import RichContent from '@magento/venia-ui/lib/components/RichContent/richContent';
 import QuantityStepper from '../QuantityStepper';
-// import RichContent from '../RichContent/richContent';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
 import defaultClasses from './productFullDetail.module.css';
@@ -33,12 +32,13 @@ import Share from '@riosst100/pwa-marketplace/src/components/SocialMediaShare';
 import PreorderDetail from './components/preOrderDetail';
 import AuctionDetail from './components/auctionDetail';
 import CrossSeller from '@riosst100/pwa-marketplace/src/components/CrossSeller';
-import RelatedProduct from '@riosst100/pwa-marketplace/src/components/RelatedProduct';
 import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel';
 import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
 import LinkToOtherStores from '@riosst100/pwa-marketplace/src/components/LinkToOtherStores';
 import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
 import { useLocation } from 'react-router-dom';
+
+import { totalListings, lowestPrice } from '@riosst100/pwa-marketplace/src/components/CrossSeller/crossSellerBuy';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
 // string but it may contain contextual info such as product id. We can use
@@ -100,7 +100,7 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
-
+    
     const { formatMessage } = useIntl();
 
     const classes = useStyle(defaultClasses, props.classes);
@@ -126,7 +126,6 @@ const ProductFullDetail = props => {
             currentProduct={productDetails.name}
         />
     ) : null;
-
     // Fill a map with field/section -> error.
     const errors = new Map();
     if (errorMessage) {
@@ -184,22 +183,6 @@ const ProductFullDetail = props => {
     const customAttributesDetails = useMemo(() => {
         const list = [];
         const pagebuilder = [];
-        // const skuAttribute = {
-        //     attribute_metadata: {
-        //         uid: 'attribute_sku',
-        //         used_in_components: ['PRODUCT_DETAILS_PAGE'],
-        //         ui_input: {
-        //             ui_input_type: 'TEXT'
-        //         },
-        //         label: formatMessage({
-        //             id: 'global.sku',
-        //             defaultMessage: 'SKU'
-        //         })
-        //     },
-        //     entered_attribute_value: {
-        //         value: productDetails.sku
-        //     }
-        // };
         if (Array.isArray(customAttributes)) {
             customAttributes.forEach(customAttribute => {
                 if (
@@ -233,8 +216,12 @@ const ProductFullDetail = props => {
         );
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
-        <section className={cn(classes.actButton, 'flex gap-x-[30px]')}>
-            <RFQ disabled={isAddToCartDisabled} />
+        <section className={cn(classes.actButton, 'flex gap-x-[20px] px-[12px] py-0')}>
+           <RFQ
+                disabled={isAddToCartDisabled}
+                classes={{ rfqButton: classes.rfqButton }}
+            />
+
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -249,7 +236,8 @@ const ProductFullDetail = props => {
                         : ''
                 }
                 classes={{
-                    content: 'normal-case font-medium text-[16px]'
+                    rootClass: '!px-0 !py-3',
+                    content: 'normal-case font-medium text-[14px]'
                 }}
                 priority="high"
                 type="submit"
@@ -295,17 +283,7 @@ const ProductFullDetail = props => {
 
     const contentContainerClass = 'content-container max-w-[1040px] p-2.5 m-auto relative mt-0 lg_mt-[34px] pb-6 lg_pb-0'
     const ProductDescription = () => (
-        <div className={cn(contentContainerClass)}>
-            {/* <span
-                data-cy="ProductFullDetail-descriptionTitle"
-                className={classes.descriptionTitle}
-            >
-                <FormattedMessage
-                    id={'productFullDetail.description'}
-                    defaultMessage={'Description'}
-                />
-            </span> */}
-            {/* <RichContent html={productDetails.description} /> */}
+        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <RichText
                 rootClassName="px-0"
                 content={productDetails.description}
@@ -313,11 +291,12 @@ const ProductFullDetail = props => {
         </div>
     );
 
-    const ProductMoreInfo = () => (
+    const ProductMoreInfo = ({ className }) => (
         <>
-            <div className={cn(contentContainerClass)}>
+            <div className={cn(contentContainerClass,  className)}>
                 <CustomAttributes
                     customAttributes={customAttributesDetails.list}
+                    classes={{ list: classes.customAttributesList }}
                 />
             </div>
             {pageBuilderAttributes}
@@ -342,7 +321,7 @@ const ProductFullDetail = props => {
     );
 
     const ProductTNC = () => (
-        <div className={cn(contentContainerClass)}>
+        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <p>{customAttributesList.map((data, index) => {
                 if (data.code == "term_and_conditions") {
                     return data.value;
@@ -352,7 +331,7 @@ const ProductFullDetail = props => {
     )
 
     const ShippingPolicy = () => (
-        <div className={cn(contentContainerClass)}>
+        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <p>{customAttributesList.map((data, index) => {
                 if (data.code == "shipping_policy") {
                     return data.value;
@@ -362,7 +341,7 @@ const ProductFullDetail = props => {
     )
 
     const ReturnPolicy = () => (
-        <div className={cn(contentContainerClass)}>
+        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <p>{customAttributesList.map((data, index) => {
                 if (data.code == "return_policy") {
                     return data.value;
@@ -372,7 +351,7 @@ const ProductFullDetail = props => {
     )
 
     const ProductFAQ = () => (
-        <div className={cn(contentContainerClass)}>
+        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             {customAttributesList.map((data, index) => {
                 if (data.code == "faq") {
                     return (
@@ -387,6 +366,88 @@ const ProductFullDetail = props => {
         </div>
     )
 
+    
+    const getAttributeValue = (customAttributesDetails, key, useSuffix = false) => {
+        if (!customAttributesDetails?.list?.length) return "";
+
+        const attr = customAttributesDetails.list.find(attr => {
+            const code = attr.attribute_metadata?.code || "";
+            return useSuffix ? code.endsWith(key) : code === key;
+        });
+
+        if (!attr) return "";
+
+        if (attr.selected_attribute_options?.attribute_option?.length) {
+            return attr.selected_attribute_options.attribute_option
+                .map(opt => opt.label)
+                .join(", ");
+        }
+        return attr.entered_attribute_value?.value || "";
+    };
+
+
+    const setNameValue = getAttributeValue(customAttributesDetails, "card_set", true);
+    const conditionValue = getAttributeValue(customAttributesDetails, "card_condition");
+
+    const ExpandableSection = ({ children, maxHeight = 280 }) => {
+    const [expanded, setExpanded] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    const contentRef = useRef(null);
+
+        useEffect(() => {
+            if (!contentRef.current) return;
+
+            const checkContent = () => {
+                const { scrollHeight } = contentRef.current;
+                const isDesktop = window.innerWidth >= 769;
+
+                if (isDesktop && scrollHeight > maxHeight) {
+                    setShowButton(true);
+                } else {
+                    setShowButton(false);
+                    setExpanded(false);
+                }
+            };
+
+            checkContent();
+            window.addEventListener("resize", checkContent);
+            return () => window.removeEventListener("resize", checkContent);
+        }, [children, maxHeight]);
+
+        const isDesktop = typeof window !== "undefined" && window.innerWidth >= 769;
+
+        return (
+            <div className="relative">
+                <div
+                    ref={contentRef}
+                    style={{
+                        maxHeight:
+                            isDesktop && showButton && !expanded
+                                ? `${maxHeight}px`
+                                : "none",
+                        overflow: "hidden",
+                        transition: "max-height 0.3s ease"
+                    }}
+                >
+                    {children}
+                </div>
+
+                {isDesktop && !expanded && showButton && (
+                    <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t to-transparent pointer-events-none" />
+                )}
+
+                {isDesktop && showButton && (
+                    <button
+                        type="button"
+                        onClick={() => setExpanded(!expanded)}
+                        className="mt-2 text-blue-600 font-medium underline focus:outline-none"
+                    >
+                        {expanded ? "Show Less" : "Read More"}
+                    </button>
+                )}
+            </div>
+        );
+    };
 
     const dataTabs =
     [
@@ -395,11 +456,11 @@ const ProductFullDetail = props => {
             title: 'Description',
             content: <ProductDescription />
         },
-        {
-            id: 'product-more-info',
-            title: 'Details',
-            content: <ProductMoreInfo />
-        },
+        // {
+        //     id: 'product-more-info',
+        //     title: 'Details',
+        //     content: <ProductMoreInfo />
+        // },
         {
             id: 'product-tnc',
             title: 'Term & Conditions',
@@ -423,7 +484,7 @@ const ProductFullDetail = props => {
         {
             id: 'product-reviews',
             title: 'Reviews',
-            content: <ProductReviews className={cn(contentContainerClass)} />
+            content: <ProductReviews className={cn(contentContainerClass, classes.contentContainerTabOverride)} />
         }
     ];
 
@@ -478,22 +539,6 @@ const ProductFullDetail = props => {
                 <section className={cn(classes.leftContainer, 'relative')}>
                     <ProductLabel item={productDetails} />
                     <Carousel images={mediaGalleryEntries} hoveredMedia={hoveredMedia} selectedMedia={selectedMedia}/>
-                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 justify-center items-center mt-2 lg_mt-5 mb-6 lg_mb-0'>
-                        <Suspense fallback={null}>
-                            <WishlistButton
-                                classes={{
-                                    root: cn(
-                                        'button_share border border-solid border-gray-100 p-2.5',
-                                        'rounded-full flex justify-center items-center h-fitContent min-w-min'
-                                    )
-                                }}
-                                {...wishlistButtonProps}
-                                buttonText={''}
-                            />
-                        </Suspense>
-                        <Divider className="w-[1px] !h-[40px]" />
-                        <Share />
-                    </div>
                 </section>
                 <section className={classes.rightContainer}>
                     <div
@@ -506,179 +551,135 @@ const ProductFullDetail = props => {
                             aria-live="polite"
                             className={cn(
                                 classes.productName,
-                                '!font-medium leading-[normal] mb-4 line-clamp-2'
+                                '!font-medium leading-[normal] mb-4 line-clamp-2 !text-[1.5rem]'
                             )}
                             data-cy="ProductFullDetail-productName"
                         >
                             {productDetails.name}
                         </h1>
-                        <div className='product_review-container flex items-center gap-x-2'>
-                            <div className='product_rating leading-[14px] flex items-center gap-x-[5px]'>
-                                <span className="w-3.5 h-3.5 relative">
-                                    <Star1 color='#F7C317' size={14} className='fill-[#F7C317]' />
-                                </span>
-                                <span className='text-gray-200 text-sm'>
-                                    {rating_value}
-                                </span>
-                            </div>
-                            <div className='before_block before_w-[1px] before_bg-gray-200 before_h-full before_relative w-[1px] h-[14px]'></div>
-                            <span className='review_count text-gray-200 text-base leading-[14px]'>
-                                {review_count} Reviews
-                            </span>
-                        </div>
-                    </div>
-                    <div
-                        className={cn(
-                            'product_short_description',
-                            'mb-xs',
+                        {setNameValue && (
+                            <div className="text-gray-400 text-sm mb-2">{setNameValue}</div>
                         )}
-                    >
-                        {shortDescription}
                     </div>
-                    {/* <div className='product_brand-container mb-[30px] leading-[18px]'>
-                        <div className='text-sm'>
-                            Brand : <span className='text-blue-700'><Link to="">Bandai Namco</Link></span>
-                        </div>
-                    </div> */}
-                    <Divider />
-                    <div
-                        className={cn(
-                            'product_price_container',
-                            'py-xs flex justify-between flex-wrap gap-y-5'
-                        )}
-                    >
-                        <div className='flex flex-col gap-y-3'>
-                            <div className='flex flex-col gap-y-3'>
-                                <p
-                                    data-cy="ProductFullDetail-productPrice"
+                    <section className="bottom_right-container block sm_flex md_flex lg_flex xl_flex 2xl_flex gap-[7px]">
+                        <section className='right_left-container'>
+                            <ExpandableSection maxHeight={280}>
+                                <div
                                     className={cn(
-                                        classes.productPrice,
-                                        'text-[32px] font-medium leading-[32px] mb-0',
+                                        'product_short_description',
+                                        'mb-xs',
                                     )}
                                 >
-                                    <Price
-                                        currencyCode={productDetails.price.currency}
-                                        priceRange={productDetails.price_range}
-                                        value={productDetails.price.value}
-                                    />
-                                </p>
-                                {/* <p
-                                    data-cy="ProductFullDetail-productOldPrice"
+                                    <p className="font-bold text-[15px] mb-3">Product Details</p>
+                                    {shortDescription}
+                                    <ProductMoreInfo className="!mt-0 lg:!mt-0 !p-0" />
+                                </div>
+                            </ExpandableSection>
+                        </section>
+                        <section className='right_right-container'>
+                            <div className={cn('product_purchase-section', 'border border-[lightgray] rounded-[10px] mb-[15px]')}>
+                                <div
                                     className={cn(
-                                        classes.productPrice,
-                                        'text-lg font-normal leading-none text-gray-400 mb-0 line-through',
+                                        'product_price_container',
+                                        'flex justify-between flex-wrap gap-y-5'
                                     )}
                                 >
-                                    <Price
-                                        currencyCode={productDetails.price.currency}
-                                        value={productDetails.price.value}
-                                    />
-                                </p> */}
-                            </div>
-                            <AuctionDetail className="auction_detail-container" />
-                            <PreorderDetail className={'preorder_detail-container'} />
-                            <small className='shipping-calculation-notes text-gray-200 text-xs'>
-                                Shipping method is calculated on checkout
-                            </small>
-                        </div>
-                        <div>
-                            <p className='text-gray-200 text-[14px]'>
-                                SKU : {productDetails.sku}
-                            </p>
-                        </div>
-                    </div>
-                    <Divider />
-                    <FormError
-                        classes={{
-                            root: classes.formErrors
-                        }}
-                        errors={errors.get('form') || []}
-                    />
-                    <section className={classes.options}>{options}</section>
-                    <section className={cn(classes.quantity, 'py-xs !border-none')}>
-                        {/* <span
-                            data-cy="ProductFullDetail-quantityTitle"
-                            className={classes.quantityTitle}
-                        >
-                            <FormattedMessage
-                                id={'global.quantity'}
-                                defaultMessage={'Quantity'}
-                            />
-                        </span> */}
-                        <QuantityStepper
-                            min={1}
-                            message={errors.get('quantity')}
-                        />
-
-                        {/* <div className='product_shipping-information mb-[30px] leading-[18px] mt-[25px]'>
-                            {sellerDetails &&
-                                <div className='text-xs'>
-                                    Ship From <span className='font-medium'>{sellerDetails.country}</span>
-                                </div>}
-                            <div className='text-xs'>
-                                Ship To <span className='font-medium'>Yishun</span>
-                            </div>
-                            <div className='text-xs'>
-                                Shiping Method <span className='font-medium'>Store Pick Up | Meet Up</span>
-                            </div>
-                        </div> */}
-
-                        <div className='product_actions-wrapper'>
-                            {cartActionContent}
-                        </div>
-                    </section>
-                    {/* <Divider />
-                    <section className={cn(classes.quantity, 'py-[30px] !border-none')}>
-                        <RFQ />
-                    </section> */}
-                    <Divider />
-                    <LinkToOtherStores productDetails={productDetails} />
-                    <section className='seller-information py-xs'>
-                        <div className='flex xs_flex-col md_flex-row xs_items-center md_items-start items-start gap-[15px] relative'>
-                            <div className='flex flex-row justify-between relative w-full'>
-                                <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
-                                    <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
-                                        <div className="text-sm">
-                                            {sellerDetails ? sellerDetails.name : ''}
+                                    <div className='flex flex-col gap-y-3 pl-[1rem] pt-[1.5rem]'>
+                                        <div className='flex flex-col gap-y-3'>
+                                            {conditionValue && (
+                                                <div className="text-gray-600 text-sm mb-1">
+                                                    {conditionValue}
+                                                </div>
+                                            )}
+                                            <p
+                                                data-cy="ProductFullDetail-productPrice"
+                                                className={cn(
+                                                    classes.productPrice,
+                                                    'text-[32px] font-medium leading-[32px] mb-0',
+                                                )}
+                                            >
+                                                <Price
+                                                    currencyCode={productDetails.price.currency}
+                                                    priceRange={productDetails.price_range}
+                                                    value={productDetails.price.value}
+                                                />
+                                            </p>
                                         </div>
-                                        <div className="flex items-center relative">
-                                            <Verify variant='Bold' color='#f76b1c' size={20} />
+                                        <AuctionDetail className="auction_detail-container" />
+                                        <PreorderDetail className={'preorder_detail-container'} />
+                                        <small className='shipping-calculation-notes text-gray-200 text-xs'>
+                                            Shipping is calculated on checkout
+                                        </small>
+                                        <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
+                                            <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
+                                                <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
+                                                    <div class="flex items-center justify-center gap-[10px] relative">
+                                                        <p>Sold by</p>
+                                                        <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                                            {sellerDetails ? sellerDetails.name : ''}
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
-                                        {sellerDetails ? getSellerAddressDisplay(sellerDetails) : ''}
+                                </div>
+                                <FormError
+                                    classes={{
+                                        root: classes.formErrors
+                                    }}
+                                    errors={errors.get('form') || []}
+                                />
+                                { options &&
+                                    <section className={classes.options}>{options}</section>
+                                }
+                                <section className={cn(classes.quantity, 'py-xs !border-none')}>
+                                    <div className='product_group-actions flex gap-x-[18px] gap-y-4 pl-[1rem] items-center mt-2 lg_mt-0 mb-6 lg_mb-0'>
+                                        <QuantityStepper
+                                            min={1}
+                                            message={errors.get('quantity')}
+                                        />
+                                        <Suspense fallback={null}>
+                                            <WishlistButton
+                                                classes={{
+                                                    root: cn(
+                                                        'button_share border border-solid border-gray-100 p-2.5',
+                                                        'rounded-full flex justify-center items-center h-fitContent min-w-min'
+                                                    )
+                                                }}
+                                                {...wishlistButtonProps}
+                                                buttonText={''}
+                                            />
+                                        </Suspense>
                                     </div>
-                                </div>
-                                <div className='flex flex-wrap items-start gap-4 relative'>
-                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
-                                        <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
-                                                Message
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <Link to='/' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]">
-                                        <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
-                                                Chat With Seller
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
-                                        <div class="flex items-center justify-center gap-[10px] relative">
-                                            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
-                                            <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
-                                                Visit Store
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </div>
+                                    <div className='product_actions-wrapper'>
+                                        {cartActionContent}
+                                    </div>
+                                </section>
                             </div>
-                        </div>
+                            <section>
+                                <div 
+                                    className="text-center pt-3 pb-3 cursor-pointer border border-[lightgray] rounded-[10px] mb-[15px]"
+                                    onClick={() => {
+                                        const section = document.getElementById("cross-seller-section");
+                                        if (section) {
+                                            section.scrollIntoView({ behavior: "smooth" });
+                                        }
+                                    }}
+                                >
+                                    <span className="font-bold underline">
+                                        View {totalListings} Other Listings
+                                    </span>
+                                    <p className="text-sm text-gray-600">
+                                        As low as ${lowestPrice.toFixed(2)}
+                                    </p>
+                                </div>
+                            </section>
+                            <div className={cn('product_otherlink-section', 'border border-[lightgray] rounded-[10px]')}>
+                                <LinkToOtherStores productDetails={productDetails} />
+                            </div>
+                        </section>
                     </section>
-                    <Divider />
                 </section>
             </Form>
             <section className='section_product-details-container mt-8 mb-10'>
@@ -687,21 +688,16 @@ const ProductFullDetail = props => {
                         data={dataTabs}
                         tabContentWrapperClassName='!p-0'
                         hasContent
-                        tabWrapperClassName='xl_gap-x-[60px] justify-center'
+                        tabWrapperClassName='xl_gap-x-[60px] justify-between'
                     />
                 </div>
                 <div className='block lg_hidden'>
                     <ProductDetailsCollapsible data={dataTabs} />
                 </div>
             </section>
-
-            <section className='pt-8 lg_pt-10'>
-                <RelatedProduct />
-            </section>
-
-            <section className='w-[calc(100vw-9px)] relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-gray-50 py-[30px] px-0 mb-10'>
+            <section id="cross-seller-section" className='w-[calc(100vw-9px)] relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-gray-50 py-[30px] px-0 mb-10'>
                 <div className='lg_max-w-[1200px] px-2.5 mx-auto relative max-w-screen-md'>
-                    <CrossSeller />
+                    <CrossSeller/>
                 </div>
             </section>
         </Fragment>

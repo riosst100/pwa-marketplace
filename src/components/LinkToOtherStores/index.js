@@ -61,14 +61,13 @@ const LinkToOtherStores = (props) => {
 
     return finalLinkToOtherStores && finalLinkToOtherStores.length ? <>
         <section className='product_from-other-platform py-xs'>
-            <div className='text-sm flex mb-3'>
+            <div className='title-section text-gray-400 text-sm flex mb-3 pl-[1rem]'>
                 Also available in
             </div>
-            <div className='platform-container flex gap-x-2.5'>
+            <div className='content-section platform-container flex gap-x-2.5 pl-[1rem]'>
                 {finalLinkToOtherStores}
             </div>
         </section>
-        <Divider />
     </> : '';
 }
 
