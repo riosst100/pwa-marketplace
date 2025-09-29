@@ -290,9 +290,9 @@ const ProductFullDetail = props => {
         </div>
     );
 
-    const ProductMoreInfo = ({ className }) => (
+    const ProductMoreInfo = () => (
         <>
-            <div className={cn(contentContainerClass,  className)}>
+            <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
                 <CustomAttributes
                     customAttributes={customAttributesDetails.list}
                     classes={{ list: classes.customAttributesList }}
@@ -384,10 +384,13 @@ const ProductFullDetail = props => {
         return attr.entered_attribute_value?.value || "";
     };
 
-
     const setNameValue = getAttributeValue(customAttributesDetails, "card_set", true);
-    const conditionValue = getAttributeValue(customAttributesDetails, "card_condition");
-
+    const cardNameValue = getAttributeValue(customAttributesDetails, "card_name", true);
+    const cardNumberValue = getAttributeValue(customAttributesDetails, "card_number", true);
+    const rarityValue = getAttributeValue(customAttributesDetails, "card_rarity", true);
+    const featureValue = getAttributeValue(customAttributesDetails, "card_feature", true);
+    const conditionValue = getAttributeValue(customAttributesDetails, "card_condition", true);
+    const foilValue = getAttributeValue(customAttributesDetails, "card_foil", true);
     const ExpandableSection = ({ children, maxHeight = 480 }) => {
     const [expanded, setExpanded] = useState(false);
     const [showButton, setShowButton] = useState(false);
@@ -455,15 +458,15 @@ const ProductFullDetail = props => {
     const dataTabs =
     [
         {
+            id: 'product-more-info',
+            title: 'Product Information',
+            content: <ProductMoreInfo />
+        },
+        {
             id: 'product-detail',
             title: 'Product Description',
             content: <ProductDescription />
         },
-        // {
-        //     id: 'product-more-info',
-        //     title: 'Details',
-        //     content: <ProductMoreInfo />
-        // },
         {
             id: 'product-tnc',
             title: 'Term & Conditions',
@@ -560,22 +563,32 @@ const ProductFullDetail = props => {
                         >
                             {productDetails.name}
                         </h1>
-                        {setNameValue && (
-                            <div className="text-gray-400 text-[14px] mb-5">{setNameValue}</div>
-                        )}
                     </div>
                     <section className="bottom_right-container justify-center gap-x-6 block sm_flex md_flex lg_flex xl_flex 2xl_flex gap-[7px]">
                         <section className='right_left-container w-full'>
                             <ExpandableSection>
-                                <div
-                                    className={cn(
-                                        'product_short_description',
-                                        'mb-xs',
+                                <div className="text-sm leading-6 leading-[2.5rem]">
+                                    {setNameValue && (
+                                        <p><strong>Set Name:</strong> {setNameValue}</p>
                                     )}
-                                >
-                                    <p className={cn(classes.productDetailTabs, "font-bold text-[15px] mb-2")}>Product Details</p>
-                                    {shortDescription}
-                                    <ProductMoreInfo className="!mt-0 lg:!mt-0 !p-0" />
+                                    {cardNameValue && (
+                                        <p><strong>Card Name:</strong> {cardNameValue}</p>
+                                    )}
+                                    {cardNumberValue && (
+                                        <p><strong>Card Number:</strong> {cardNumberValue}</p>
+                                    )}
+                                    {rarityValue && (
+                                        <p><strong>Rarity:</strong> {rarityValue}</p>
+                                    )}
+                                    {featureValue && (
+                                        <p><strong>Feature:</strong> {featureValue}</p>
+                                    )}
+                                    {conditionValue && (
+                                        <p><strong>Condition:</strong> {conditionValue}</p>
+                                    )}
+                                    {foilValue && (
+                                        <p><strong>Foil/Non Foil:</strong> {foilValue}</p>
+                                    )}
                                 </div>
                             </ExpandableSection>
                         </section>
@@ -589,11 +602,6 @@ const ProductFullDetail = props => {
                                 >
                                     <div className='flex flex-col gap-y-2 pl-[1rem] pt-[1rem]'>
                                         <div className='flex flex-col gap-y-1'>
-                                            {conditionValue && (
-                                                <div className="text-gray-600 text-sm mb-1">
-                                                    {conditionValue}
-                                                </div>
-                                            )}
                                             <p
                                                 data-cy="ProductFullDetail-productPrice"
                                                 className={cn(
