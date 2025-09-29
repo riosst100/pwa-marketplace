@@ -7,8 +7,8 @@
     composes: mt-[10px] from global;
     composes: mb-[24px] from global;
     composes: my-[10px] from global;
-    padding-top: 20px;
-    margin-bottom: 40px;
+    padding-top: 10px;
+    margin-bottom: 25px;
 }
 
 .text {

@@ -46,7 +46,7 @@ const LinkToOtherStores = (props) => {
             if (store.product_link) {
                 const logo = getLogo(store.stores);
                 finalLinkToOtherStores.push(
-                    <a href={store.product_link} className='platform_logo-wrapper rounded-md px-5 py-2.5 border border-gray-100 flex items-center' target="_blank">
+                    <a href={store.product_link} className='platform_logo-wrapper rounded-md px-5 py-2.5 border border-gray-100 flex items-center w-full justify-center' target="_blank">
                         {logo ? <img
                             alt={store.stores}
                             width={60}
@@ -61,10 +61,10 @@ const LinkToOtherStores = (props) => {
 
     return finalLinkToOtherStores && finalLinkToOtherStores.length ? <>
         <section className='product_from-other-platform py-xs'>
-            <div className='title-section text-gray-400 text-sm flex mb-3 pl-[1rem]'>
+            <div className='title-section text-gray-400 text-sm flex mb-3 px-[15px]'>
                 Also available in
             </div>
-            <div className='content-section platform-container flex gap-x-2.5 pl-[1rem]'>
+            <div className='content-section platform-container flex gap-x-2.5 pl-[1rem] px-[15px] justify-between'>
                 {finalLinkToOtherStores}
             </div>
         </section>

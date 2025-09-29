@@ -22,6 +22,7 @@
 }
 
 .imageContainer {
+    composes: h-full from global;
     composes: w-full from global;
     grid-area: 1 / 1 / 2 / 4;
 }
@@ -37,7 +38,7 @@
 }
 
 .carouselContainer {
-    composes: flex items-center justify-center p-4 bg-[#f7f7f8] rounded-md max-h-[660px] from global;
+    composes: flex items-center justify-center p-4 bg-[#f7f7f8] rounded-md h-[540px] max-h-[540px] from global;
 }
 
 .currentImage_placeholder {

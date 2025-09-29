@@ -22,7 +22,7 @@ import cn from 'classnames';
 import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import ProductReviews from './components/productReview';
 import RichText from '@magento/venia-ui/lib/components/RichText';
-import { Star1, Verify, Sms, Message, Shop } from 'iconsax-react';
+import { Star1, Verify, Sms, Message, Shop, ArrowUp2 } from 'iconsax-react';
 import { Link } from "react-router-dom";
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 
@@ -216,12 +216,11 @@ const ProductFullDetail = props => {
         );
     // Error message for screen reader
     const cartActionContent = isSupportedProductType ? (
-        <section className={cn(classes.actButton, 'flex gap-x-[20px] px-[12px] py-0')}>
+        <section className={cn(classes.actButton, 'justify-between flex gap-x-[20px] px-[15px] py-0')}>
            <RFQ
                 disabled={isAddToCartDisabled}
-                classes={{ rfqButton: classes.rfqButton }}
+                classes={{ rfqButton: cn(classes.rfqButton, "w-full") }}
             />
-
             <Button
                 data-cy="ProductFullDetail-addToCartButton"
                 disabled={isAddToCartDisabled}
@@ -237,7 +236,7 @@ const ProductFullDetail = props => {
                 }
                 classes={{
                     rootClass: '!px-0 !py-3',
-                    content: 'normal-case font-medium text-[14px]'
+                    content: 'w-full normal-case font-medium text-[14px]'
                 }}
                 priority="high"
                 type="submit"
@@ -389,7 +388,7 @@ const ProductFullDetail = props => {
     const setNameValue = getAttributeValue(customAttributesDetails, "card_set", true);
     const conditionValue = getAttributeValue(customAttributesDetails, "card_condition");
 
-    const ExpandableSection = ({ children, maxHeight = 280 }) => {
+    const ExpandableSection = ({ children, maxHeight = 480 }) => {
     const [expanded, setExpanded] = useState(false);
     const [showButton, setShowButton] = useState(false);
     const contentRef = useRef(null);
@@ -417,35 +416,39 @@ const ProductFullDetail = props => {
         const isDesktop = typeof window !== "undefined" && window.innerWidth >= 769;
 
         return (
-            <div className="relative">
-                <div
-                    ref={contentRef}
-                    style={{
-                        maxHeight:
-                            isDesktop && showButton && !expanded
-                                ? `${maxHeight}px`
-                                : "none",
-                        overflow: "hidden",
-                        transition: "max-height 0.3s ease"
-                    }}
-                >
-                    {children}
+            <>
+                <div className="relative">
+                    <div
+                        ref={contentRef}
+                        style={{
+                            maxHeight:
+                                isDesktop && showButton && !expanded
+                                    ? `${maxHeight}px`
+                                    : "none",
+                            overflow: "hidden",
+                            transition: "max-height 0.3s ease"
+                        }}
+                    >
+                        {children}
+                    </div>
+
+                    {isDesktop && !expanded && showButton && (
+                        <div className={cn("absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t to-transparent pointer-events-none", classes.productDetailsMaxContent)}/>
+                    )}
                 </div>
-
-                {isDesktop && !expanded && showButton && (
-                    <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t to-transparent pointer-events-none" />
-                )}
-
                 {isDesktop && showButton && (
                     <button
                         type="button"
                         onClick={() => setExpanded(!expanded)}
-                        className="mt-2 text-blue-600 font-medium underline focus:outline-none"
+                        className="mt-0 text-[14px] text-blue-600 font-medium underline focus:outline-none"
                     >
-                        {expanded ? "Show Less" : "Read More"}
+                        {expanded ? "Show Less" : "Read More"} <ArrowUp2 size="14" style={{
+                            "display": "inline-block",
+                            "marginLeft": "5px"
+                        }} className={cn(expanded ? 'rotate-0 ' : 'rotate-180', 'transition-all stroke-current')} variant="Outline" />
                     </button>
                 )}
-            </div>
+            </>
         );
     };
 
@@ -453,7 +456,7 @@ const ProductFullDetail = props => {
     [
         {
             id: 'product-detail',
-            title: 'Description',
+            title: 'Product Description',
             content: <ProductDescription />
         },
         // {
@@ -551,32 +554,32 @@ const ProductFullDetail = props => {
                             aria-live="polite"
                             className={cn(
                                 classes.productName,
-                                '!font-medium leading-[normal] mb-4 line-clamp-2 !text-[1.5rem]'
+                                '!font-medium leading-[1] mb-1.5 line-clamp-2 !text-[1.5rem]'
                             )}
                             data-cy="ProductFullDetail-productName"
                         >
                             {productDetails.name}
                         </h1>
                         {setNameValue && (
-                            <div className="text-gray-400 text-sm mb-2">{setNameValue}</div>
+                            <div className="text-gray-400 text-[14px] mb-5">{setNameValue}</div>
                         )}
                     </div>
-                    <section className="bottom_right-container block sm_flex md_flex lg_flex xl_flex 2xl_flex gap-[7px]">
-                        <section className='right_left-container'>
-                            <ExpandableSection maxHeight={280}>
+                    <section className="bottom_right-container justify-center gap-x-6 block sm_flex md_flex lg_flex xl_flex 2xl_flex gap-[7px]">
+                        <section className='right_left-container w-full'>
+                            <ExpandableSection>
                                 <div
                                     className={cn(
                                         'product_short_description',
                                         'mb-xs',
                                     )}
                                 >
-                                    <p className="font-bold text-[15px] mb-3">Product Details</p>
+                                    <p className={cn(classes.productDetailTabs, "font-bold text-[15px] mb-2")}>Product Details</p>
                                     {shortDescription}
                                     <ProductMoreInfo className="!mt-0 lg:!mt-0 !p-0" />
                                 </div>
                             </ExpandableSection>
                         </section>
-                        <section className='right_right-container'>
+                        <section className='right_right-container w-full'>
                             <div className={cn('product_purchase-section', 'border border-[lightgray] rounded-[10px] mb-[15px]')}>
                                 <div
                                     className={cn(
@@ -584,8 +587,8 @@ const ProductFullDetail = props => {
                                         'flex justify-between flex-wrap gap-y-5'
                                     )}
                                 >
-                                    <div className='flex flex-col gap-y-3 pl-[1rem] pt-[1.5rem]'>
-                                        <div className='flex flex-col gap-y-3'>
+                                    <div className='flex flex-col gap-y-2 pl-[1rem] pt-[1rem]'>
+                                        <div className='flex flex-col gap-y-1'>
                                             {conditionValue && (
                                                 <div className="text-gray-600 text-sm mb-1">
                                                     {conditionValue}
@@ -613,7 +616,7 @@ const ProductFullDetail = props => {
                                         <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
                                             <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
                                                 <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
-                                                    <div class="flex items-center justify-center gap-[10px] relative">
+                                                    <div class="flex items-center justify-center gap-[5px] relative">
                                                         <p>Sold by</p>
                                                         <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                             {sellerDetails ? sellerDetails.name : ''}
@@ -633,7 +636,7 @@ const ProductFullDetail = props => {
                                 { options &&
                                     <section className={classes.options}>{options}</section>
                                 }
-                                <section className={cn(classes.quantity, 'py-xs !border-none')}>
+                                <section className={cn(classes.quantity, 'pb-[20px] pt-[10px] !border-none')}>
                                     <div className='product_group-actions flex gap-x-[18px] gap-y-4 pl-[1rem] items-center mt-2 lg_mt-0 mb-6 lg_mb-0'>
                                         <QuantityStepper
                                             min={1}
@@ -657,9 +660,12 @@ const ProductFullDetail = props => {
                                     </div>
                                 </section>
                             </div>
+                            <div className={cn('product_otherlink-section', 'border border-[lightgray] rounded-[10px] mb-[15px]')}>
+                                <LinkToOtherStores productDetails={productDetails} />
+                            </div>
                             <section>
                                 <div 
-                                    className="text-center pt-3 pb-3 cursor-pointer border border-[lightgray] rounded-[10px] mb-[15px]"
+                                    className="text-center pt-3 pb-3 cursor-pointer border border-[lightgray] rounded-[10px]"
                                     onClick={() => {
                                         const section = document.getElementById("cross-seller-section");
                                         if (section) {
@@ -667,7 +673,7 @@ const ProductFullDetail = props => {
                                         }
                                     }}
                                 >
-                                    <span className="font-bold underline">
+                                    <span className="font-bold underline text-[14px]">
                                         View {totalListings} Other Listings
                                     </span>
                                     <p className="text-sm text-gray-600">
@@ -675,9 +681,6 @@ const ProductFullDetail = props => {
                                     </p>
                                 </div>
                             </section>
-                            <div className={cn('product_otherlink-section', 'border border-[lightgray] rounded-[10px]')}>
-                                <LinkToOtherStores productDetails={productDetails} />
-                            </div>
                         </section>
                     </section>
                 </section>

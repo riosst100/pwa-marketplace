@@ -4,6 +4,15 @@
     composes: lg_items-start from global;
     composes: gap-x-10 from global;
 }
+.productDetailsMaxContent{
+    background: linear-gradient(0deg,#fff 20px,#fff0);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    content: "";
+}
 .rfqButton {
   padding: 10px 0px;
 }
@@ -46,6 +55,12 @@
     composes: px-sm from global;
     composes: py-xs from global;
     grid-area: title; */
+}
+
+.productDetailTabs {
+    border-bottom: 1px solid #d3d3d3;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .productName {
