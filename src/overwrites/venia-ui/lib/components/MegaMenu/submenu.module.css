@@ -11,7 +11,7 @@
 
 .submenuContainer {
     composes: w-full from global;
-    composes: max-w-[1400px] from global;
+    composes: max-w-[1300px] from global;
     composes: mx-[auto] from global;
     composes: gap-[15px] from global;
     composes: max-h-[50vh] from global;

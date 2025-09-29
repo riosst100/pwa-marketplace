@@ -24,7 +24,7 @@ const CustomAttributes = props => {
                     const attributeContent = (
                         <li
                             key={currentAttribute.attribute_metadata.uid}
-                            className={cn(classes.listItem, '!text-[14px] py-1')}
+                            className={cn(classes.listItem, '!text-[14px] py-2')}
                         >
                             <AttributeType
                                 showLabels={showLabels}
