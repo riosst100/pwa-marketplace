@@ -249,7 +249,7 @@ const ProductContent = props => {
         <>
             <div className='w-full mb-[30px]'>
                 <SellerMegaMenu
-                    rootClassName={cn('nav-menu w-full max-w-[1400px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
+                    rootClassName={cn('nav-menu w-full max-w-[1300px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
                     sellerMegaMenuItemClassname={cn('px-0 py-[10px] leading-[20px]')}
                     seller={seller}
                     titleClassName={cn('font-normal leading-[20px]')}
