@@ -12,7 +12,7 @@ import { useHeader } from '@magento/peregrine/lib/talons/Header/useHeader';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import defaultClasses from '@magento/venia-ui/lib/components/Header/header.module.css';
+import defaultClasses from './header.module.css';
 import StoreSwitcher from '@magento/venia-ui/lib/components/Header/storeSwitcher';
 import WebsiteSwitcher from '@riosst100/pwa-marketplace/src/components/WebsiteSwitcher/websiteSwitcher';
 // import CurrencySwitcher from '@magento/venia-ui/lib/components/Header/currencySwitcher';
@@ -76,7 +76,7 @@ const Header = props => {
         <Fragment>
             <PageLoadingIndicator absolute />
             <div className={cn(classes.switchersContainer, '!bg-white border-b border-gray-100')}>
-                <div className={cn(classes.switchers, 'flex flex-row gap-x-[25px] !py-2')} data-cy="Header-switchers">
+                <div className={cn(classes.switchers, 'max-w-[1400px] flex flex-row gap-x-[25px] !py-2')} data-cy="Header-switchers">
                     <BecomeSellerLink />
                     <WebsiteSwitcher />
                     <StoreSwitcher />
@@ -85,7 +85,7 @@ const Header = props => {
             </div>
             <header className={cn(rootClass, '!flex flex-col !px-0 border-gray-100 ')} data-cy="Header-root">
                 <div className={cn('middle-header border-b border-gray-100')}>
-                    <div className={cn('w-full max-w-[1210px] px-[15px] py-[10px] mx-[auto] flex justify-between items-center')}>
+                    <div className={cn('w-full max-w-[1400px] px-[15px] py-[10px] mx-[auto] flex justify-between items-center')}>
                         <div className='flex items-center'>
                             <NavTrigger />
 
@@ -138,7 +138,7 @@ const Header = props => {
                     </div>
                 </div>
                 <MegaMenu
-                    rootClassName={cn('nav-menu w-full max-w-[1210px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
+                    rootClassName={cn('nav-menu w-full max-w-[1400px] px-[15px] mx-[auto] flex-row gap-x-[40px]')}
                     megaMenuItemClassname={cn('px-0 py-[10px] leading-[20px]')}
                     titleClassName={cn('font-normal leading-[20px]')}
                 />

@@ -11,7 +11,7 @@
 
 .page {
     composes: md_max-w-screen-md from global;
-    composes: lg_max-w-[1210px] from global;
+    composes: lg_max-w-[1400px] from global;
     composes: mx-auto from global;
     composes: my-0 from global;
     composes: px-[15px] from global;
