@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { element, func, shape, string } from 'prop-types';
+import { element, func, shape, string, bool } from 'prop-types';
 import { Heart } from 'react-feather';
 import { useAddToFavoriteListButton } from '@riosst100/pwa-marketplace/src/talons/FavoriteSeller/AddToListButton/useAddToFavoriteListButton';
 import { useButton } from 'react-aria';
@@ -33,6 +33,7 @@ const AddToFavoriteListButton = props => {
     return (
         <button ref={buttonRef} className={buttonClass} {...ariaButtonProps}>
             {props.icon}
+            {buttonText && <span className={`text-[#f76b1c] text-[14px] font-medium whitespace-nowrap ${props.hideTextOnMobile ? 'md_block xs_hidden' : ''}`}>{buttonText}</span>}
         </button>
     );
 };
@@ -50,5 +51,6 @@ AddToFavoriteListButton.propTypes = {
         root: string,
         root_selected: string
     }),
-    icon: element
+    icon: element,
+    hideTextOnMobile: bool
 };

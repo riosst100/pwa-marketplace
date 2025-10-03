@@ -4,7 +4,7 @@ import Filter from '@riosst100/pwa-marketplace/src/components/Filter';
 import Search from '@riosst100/pwa-marketplace/src/components/Search';
 import SortBy from '@riosst100/pwa-marketplace/src/components/SortBy';
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import { FilterSidebarShimmer } from '@magento/venia-ui/lib/components/FilterSidebar';
 import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
 import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/category.module.css';
@@ -40,6 +40,7 @@ const FilterTop = React.lazy(() =>
     import('@riosst100/pwa-marketplace/src/components/FilterTop')
 );
 
+
 const ProductContent = props => {
     const {
         categoryId,
@@ -49,9 +50,8 @@ const ProductContent = props => {
         sortProps,
         seller,
         isLoading,
-        pageSize
+        pageSize,
     } = props;
-
     const [currentSort] = sortProps;
 
     const [activeTab, setActiveTab] = useState('all');
@@ -60,6 +60,7 @@ const ProductContent = props => {
     const classes = useStyle(defaultClasses, props.classes);
     
     const sidebarRef = useRef(null);
+    const searchRef = useRef(null);
 
     const shouldRenderSidebarContent = useIsInViewport({
         elementRef: sidebarRef
@@ -80,7 +81,7 @@ const ProductContent = props => {
         categoryName,
         totalPagesFromData
     } = talonProps;
-
+   
     const shouldShowFilterButtons = filters && filters.length;
     const shouldShowFilterShimmer = filters === null;
 
@@ -208,7 +209,7 @@ const ProductContent = props => {
         totalPagesFromData,
         activeLetter
     ]);
-    
+
     const { search } = useLocation();
     const allActiveFilters = getFiltersFromSearch(search);
 

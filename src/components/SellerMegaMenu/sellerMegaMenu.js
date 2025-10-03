@@ -30,6 +30,12 @@ const SellerMegaMenu = (props) => {
         handleNavigate,
         handleClickOutside
     } = useSellerMegaMenu({ mainNavRef });
+    
+    const allowedCategoryUids = props.allowedCategoryUids || ['NTI=', 'NTA=', 'NTM=', 'MjY='];
+
+    const filteredChildren = Array.isArray(megaMenuData?.children)
+        ? megaMenuData.children.filter(c => allowedCategoryUids.includes(c.uid))
+        : [];
 
     const [mainNavWidth, setMainNavWidth] = useState(0);
     const shouldRenderItems = useIsInViewport({
@@ -54,28 +60,27 @@ const SellerMegaMenu = (props) => {
         };
     }, [setMainNavWidth]);
 
-    const items = megaMenuData.children
-        ? megaMenuData.children.map(category => {
-            return (
-                <SellerMegaMenuItem
-                    category={category}
-                    activeCategoryId={activeCategoryId}
-                    categoryUrlSuffix={categoryUrlSuffix}
-                    mainNavWidth={mainNavWidth}
-                    onNavigate={handleNavigate}
-                    key={category.uid}
-                    seller={seller}
-                    sellerSubMenuState={sellerSubMenuState}
-                    disableFocus={disableFocus}
-                    handleSellerSubMenuFocus={handleSellerSubMenuFocus}
-                    handleClickOutside={handleClickOutside}
-                    sellerMegaMenuItemClassname={sellerMegaMenuItemClassname}
-                    titleClassName={titleClassName}
-                />
-            );
-        })
-        : null;
-
+    const items = filteredChildren.length
+        ? filteredChildren.map(category => {
+             return (
+                 <SellerMegaMenuItem
+                     category={category}
+                     activeCategoryId={activeCategoryId}
+                     categoryUrlSuffix={categoryUrlSuffix}
+                     mainNavWidth={mainNavWidth}
+                     onNavigate={handleNavigate}
+                     key={category.uid}
+                     seller={seller}
+                    //  sellerSubMenuState={sellerSubMenuState}
+                     disableFocus={disableFocus}
+                     handleSellerSubMenuFocus={handleSellerSubMenuFocus}
+                     handleClickOutside={handleClickOutside}
+                     sellerMegaMenuItemClassname={sellerMegaMenuItemClassname}
+                     titleClassName={titleClassName}
+                 />
+             );
+         })
+         : null;
     return (
         <nav
             ref={mainNavRef}
