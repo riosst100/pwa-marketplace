@@ -142,7 +142,10 @@ export const useAddToFavoriteListButton = props => {
 
     return {
         buttonProps,
-        buttonText: props.buttonText && props.buttonText(isSelected),
+        buttonText:
+            typeof props.buttonText === 'function'
+                ? props.buttonText(isSelected)
+                : props.buttonText,
         // customerFavoriteSellers,
         errorToastProps,
         handleClick,

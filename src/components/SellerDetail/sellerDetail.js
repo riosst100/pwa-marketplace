@@ -19,9 +19,9 @@ import {
     Shop,
 } from 'iconsax-react';
 import Image from '@magento/venia-ui/lib/components/Image';
-import LiveChat from '@riosst100/pwa-marketplace/src/components/LiveChat';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
+import Rating from '@riosst100/pwa-marketplace/src/components/commons/Rating';
 const FavoriteSellerButton = React.lazy(() => import('@riosst100/pwa-marketplace/src/components/FavoriteSeller/AddToListButton'));
 
 const SellerDetail = props => {
@@ -30,7 +30,6 @@ const SellerDetail = props => {
     });
 
     const { error, loading, seller, favoriteSellerButtonProps } = talonProps;
-
     if (loading && !seller)
         return '';
     // return <SellerShimmer />;
@@ -47,6 +46,22 @@ const SellerDetail = props => {
             </h1>
         );
     }
+
+    const dummyRating = {
+        rating_summary: {
+            average_rating_percent: 70, 
+            positive_percentage: 80,
+            rating_count: 2
+        },
+        followers_count: 12
+    };
+
+    // Use the real data if available, otherwise fallback to dummy data
+    const sellerData = {
+        ...seller,
+        rating_summary: seller.rating_summary || dummyRating.rating_summary,
+        followers_count: seller.followers_count || dummyRating.followers_count
+    };
 
     const dataTabs =
         [
@@ -96,7 +111,8 @@ const SellerDetail = props => {
     return (
         <div className=' py-8'>
             <Slider seller={seller} rootClassname='mb-[30px]' />
-            <div className='flex xs_flex-col md_flex-row xs_items-center md_item-start lg_flex-row justify-between mb-[30px] p-[20px] rounded-[6px] border border-solid border-gray-100 shadow-[0px_0px_5px_3px_#d9d9d933]'>
+            <div className='flex xs_flex-col lg_flex-row justify-between mb-[30px] p-[20px] rounded-[6px] border border-solid border-gray-100 shadow-[0px_0px_5px_3px_#d9d9d933]'>
+                {/* Left: logo + info */}
                 <div className='flex xs_flex-col md_flex-row xs_items-center md_items-start items-start gap-[15px] relative'>
                     {seller?.thumbnail ? (
                         <Image
@@ -110,76 +126,48 @@ const SellerDetail = props => {
                         </div>
                     )}
 
-                    <div className='flex flex-col xs_items-center md_items-start justify-between relative gap-y-[18px]'>
+                    <div className='flex flex-col xs_items-center md_items-start justify-between relative gap-y-[10px]'>
                         <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
                             <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
-                                <div className="relative w-fit mt-[-1.00px] font-medium text-[20px] tracking-[0] leading-[24px] whitespace-nowrap">
+                                <div className="relative w-fit mt-[-1.00px] font-medium text-[20px] tracking-[0] leading-[24px] whitespace-nowrap text-center md_text-left">
                                     {seller ? seller.name : ''}
                                 </div>
-                                <div className="flex items-center gap-[5px] relative">
-                                    <Verify variant='Bold' color='#f76b1c' size={20} />
-                                    <div className="relative w-fit font-medium text-[#192221b3] text-[12px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                        Verified
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="relative w-fit font-normal text-[#999999] text-[12px] tracking-[0] leading-[14px] whitespace-nowrap">
-                                {seller ? getSellerAddressDisplay(seller) : ''}
                             </div>
                         </div>
-                        <div className='flex flex-wrap items-start gap-4 relative'>
-                            <button class="flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
-                                <div class="flex items-center justify-center gap-[10px] relative">
-                                    <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
-                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-base tracking-[0] leading-[20px] whitespace-nowrap">
-                                        Message
-                                    </div>
-                                </div>
-                            </button>
-                            <Button
-                                priority='high'
-                                classes={{
-                                    content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
-                                }}
-                                className='flex items-center justify-center gap-[5px] xs_p-[11px] lg_px-[20px] lg_py-[8px] relative bg-[#280135] rounded-[30px] border border-solid border-[#280135]'
-                                onClick={toggleChat}
-                            >
-                                <Message color='#FFFFFF' size={14} variant="Outline" className='stroke-[#FFFFFF]' />
-                                <div class="relative xs_hidden lg_flex w-fit font-medium text-[#fff] text-base tracking-[0] leading-[20px] whitespace-nowrap">
-                                    <FormattedMessage
-                                        id={'seller.chatWithSeller'}
-                                        defaultMessage={'Chat With Seller'}
-                                    />
-                                </div>
-                            </Button>
-                            <Suspense fallback={null}>
-                                <FavoriteSellerButton
-                                    classes={{
-                                        root: 'flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]'
-                                    }}
-                                    {...favoriteSellerButtonProps}
-                                    buttonText={''}
-                                />
-                            </Suspense>
-                            <button class="flex items-center justify-center gap-[5px] p-[11px] relative bg-white rounded-[30px] overflow-hidden border border-solid border-[#f76b1c]">
-                                <Share color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />
-                            </button>
+
+                        {/* Rating summary and followers */}
+                        <div className='flex flex-col gap-[4px]'>
+                            <div className='flex items-center gap-[6px] flex-wrap justify-center md_justify-start'>
+                                <Rating percentage={sellerData.rating_summary.average_rating_percent} />
+                                <span className='text-[12px] text-[#1a1a1a] text-center md_text-left'>
+                                    <b>{sellerData.rating_summary.positive_percentage}% positive</b> in last 12 month ({sellerData.rating_summary.rating_count} Ratings)
+                                </span>
+                            </div>
+                            <div className='text-[12px] text-[#666] text-center md_text-left'>{sellerData.followers_count} Followers</div>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-[20px] px-[10px] py-[10px] relative">
-                    {/* <img class="relative self-stretch w-px object-cover" alt="Line" src="https://c.animaapp.com/2pP7niVX/img/line-16.svg" /> */}
-                    <div class="flex flex-col items-center justify-center gap-[9px] p-[10px] relative">
-                        <div class="flex items-center gap-[5px] relative">
-                            <Star1 color='#F7C317' size={18} className='fill-[#F7C317]' />
-                            <div class="relative self-stretch w-[25px] mt-[-1.00px] font-bold text-[#005947] text-[18px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                0.0
-                            </div>
-                        </div>
-                        <div class="relative w-fit [font-family:'Frederik-Regular',Helvetica] font-normal text-[#009a7b] text-[10px] tracking-[0] leading-[normal] whitespace-nowrap">
-                            Rating &amp; Reviews
-                        </div>
-                    </div>
+                
+                {/* Right: action buttons */}
+                <div className='flex xs_flex-wrap items-center xs_justify-center lg_justify-end gap-[10px] xs_mt-4 lg_mt-0 xs_pt-2 lg_pt-0 relative'>
+                    <button className='flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                        <Sms color="#f76b1c" size={16} variant='Outline' className='stroke-[#f76b1c]' />
+                        <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Send Message</span>
+                    </button>
+                    <Suspense fallback={null}>
+                        <FavoriteSellerButton
+                            classes={{
+                                root: 'flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'
+                            }}
+                            {...favoriteSellerButtonProps}
+                            buttonText={'Follow Seller'}
+                            hideTextOnMobile={true}
+                        />
+                    </Suspense>
+                    <button className='flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                        <Share color='#f76b1c' size={16} variant='Outline' className='stroke-[#f76b1c]' />
+                        <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Share</span>
+                    </button>
                 </div>
             </div>
             <Tabs
@@ -187,10 +175,7 @@ const SellerDetail = props => {
                 tabContentWrapperClassName='!p-0'
                 hasContent
                 tabWrapperClassName='xl_gap-x-[60px]'
-            />
-            <LiveChat
-                open={openChat}
-                setOpen={setOpenChat}
+                tabActiveClassName='!border-[#FF6E26] !border-b-[3px]'
             />
         </div>
     )
