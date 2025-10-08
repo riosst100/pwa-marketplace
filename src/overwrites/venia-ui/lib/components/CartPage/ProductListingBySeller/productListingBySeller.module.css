@@ -31,3 +31,21 @@
     /* outline: none; */
     cursor: pointer;
 }
+
+.subtotalContainer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+    border-bottom: 2px solid #f1f1f1;
+    gap: 5rem;
+}
+
+.subtotalLabel {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.subtotalAmount {
+    font-weight: 600;
+    font-size: 16px;
+}

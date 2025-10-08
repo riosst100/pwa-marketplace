@@ -78,11 +78,10 @@ const ProductListingBySeller = props => {
                 wishlistConfig={wishlistConfig}
             />
         ));
-
+ 
         const priceSummary = hasItems ? (
             <PriceSummary isUpdating={isCartUpdating} sellerUrl={seller.seller_url} />
         ) : null;
-
         return (
             <Fragment>
                 <ErrorMessage error={error} />
@@ -97,10 +96,19 @@ const ProductListingBySeller = props => {
                                 "display": "flex",
                                 "gap": "7px"
                             }}>
-                                <span style={{"paddingTop": "2px"}}><Shop size="20" color="#999999" /></span>
-                                 {seller?.seller_name}<span style={{"paddingTop": "3px"}}><ArrowRight2 size="18" color="#999999" /></span></span></Link>
+                                 {seller?.seller_name}</span></Link>
                         </div>
                         {productComponents}
+                        <div className={classes.subtotalContainer}>
+                            <div className={classes.subtotalLabel}>Subtotal:</div>
+                            <div className={classes.subtotalAmount}>
+                                {seller.seller_currency || 'SGD'} {items.reduce((total, item) => {
+                                    const itemPrice = item?.prices?.price?.value || 0;
+                                    const quantity = item?.quantity || 0;
+                                    return total + (itemPrice * quantity);
+                                }, 0).toFixed(2)}
+                            </div>
+                        </div>
                         <div className={classes.summary_container}>
                             <div className={classes.summary_contents}>
                                 {priceSummary}

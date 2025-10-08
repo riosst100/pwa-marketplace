@@ -139,7 +139,7 @@ const Product = props => {
                 </div>
                 <div className="flex flex-col">
 
-                    <span className={cn(classes.price, 'text-[16px] font-medium text-right mb-5')} data-cy="Product-price">
+                    <span className={cn(classes.price, 'text-[16px] font-medium text-right mb-5 text-blue-600')} data-cy="Product-price">
                         <Price currencyCode={currency} value={unitPrice} />
                         {/* <FormattedMessage
                             id={'product.price'}

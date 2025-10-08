@@ -51,3 +51,9 @@
     width: 20%;
     min-height: 5.5rem;
 }
+
+@media (max-width: 768px) {
+    .checkoutButton_container {
+        width: 100%;
+    }
+}
