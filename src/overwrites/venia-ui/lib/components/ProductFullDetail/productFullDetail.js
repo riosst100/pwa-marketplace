@@ -3,6 +3,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Form } from 'informed';
 import { Info } from 'react-feather';
+import { useToasts } from '@magento/peregrine/lib';
 
 import Price from '@magento/venia-ui/lib/components/Price';
 import { useProductFullDetail } from '@magento/peregrine/lib/talons/ProductFullDetail/useProductFullDetail';
@@ -86,7 +87,7 @@ const ProductFullDetail = props => {
     const {
         breadcrumbCategoryId,
         errorMessage,
-        handleAddToCart,
+        handleAddToCart: originalHandleAddToCart,
         handleSelectionChange,
         isOutOfStock,
         isEverythingOutOfStock,
@@ -100,7 +101,9 @@ const ProductFullDetail = props => {
         wishlistButtonProps,
         sellerDetails
     } = talonProps;
-    
+
+    const [, { addToast }] = useToasts();
+
     const { formatMessage } = useIntl();
 
     const classes = useStyle(defaultClasses, props.classes);
@@ -532,6 +535,39 @@ const ProductFullDetail = props => {
             </span>
         </div>
     ) : null;
+
+    const handleAddToCart = async (...args) => {
+        try {
+            await originalHandleAddToCart(...args);
+            addToast({
+                type: 'success',
+                message: formatMessage({
+                    id: 'productFullDetail.addToCartSuccess',
+                    defaultMessage: 'Product successfully added to cart!'
+                })
+            });
+        } catch (e) {
+            addToast({
+                type: 'error',
+                message: formatMessage({
+                    id: 'productFullDetail.addToCartError',
+                    defaultMessage: 'Failed to add product to cart.'
+                })
+            });
+        }
+    };
+
+    useEffect(() => {
+        const toastRoot = document.getElementById('toast-root');
+        if (toastRoot) {
+            toastRoot.classList.add('toast-center-bottom');
+        }
+        return () => {
+            if (toastRoot) {
+                toastRoot.classList.remove('toast-center-bottom');
+            }
+        };
+    }, []);
 
     return (
         <Fragment>

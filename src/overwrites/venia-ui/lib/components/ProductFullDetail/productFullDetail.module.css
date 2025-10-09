@@ -255,3 +255,22 @@
         composes: max-w-[100%] from global;
     }
 }
+
+/* productFullDetail.module.css */
+:global(#toast-root).toast-center-bottom {
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 2rem !important;
+    right: auto !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    max-width: 90vw !important;
+    min-width: 320px !important;
+    width: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
