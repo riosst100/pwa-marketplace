@@ -62,7 +62,7 @@ export const useBecomeSeller = props => {
                 // Create the account and then sign in.
                 const result = await becomeSeller({
                     variables: {
-                        seller_type: sellerType,
+                        seller_type: formValues.seller.seller_type,
                         group_id: '',
                         url_key: formValues.seller.store_url,
                         name: formValues.seller.seller_profile_name,
