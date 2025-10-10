@@ -43,39 +43,25 @@ const SellerAccountPage = props => {
         sellerLoginAccount = (
             <Fragment>
                 <div className={classes.accountDetails}>
-                    <span className={classes.nameLabel}>
-                        <FormattedMessage
-                            id={'global.sellerDashboardLoginAccountText'}
-                            defaultMessage={'Seller Dashboard Login Account'}
-                        />
-                    </span>
-                    <div className={classes.lineItemsContainer}>
-                        <span className={classes.emailLabel}>
-                            <FormattedMessage
-                                id={'global.email'}
-                                defaultMessage={'Email'}
-                            />
-                        </span>
-                        <span className={classes.emailValue}>
-                            {customer.email}
-                        </span>
-                        <span className={classes.passwordLabel}>
-                            <FormattedMessage
-                                id={'global.password'}
-                                defaultMessage={'Password'}
-                            />
-                        </span>
-                        <span className={classes.passwordValue}>
-                            {passwordValue}
-                        </span>
+                    <div className={classes.container}>
+                    <div className={classes.success}>
+                        {/* <h2 className={classes.title}>Seller Registration Successful!</h2> */}
+                        <p className={classes.message}>
+                        Congratulations! Your registration as a seller was successful.  
+                        Please log in to the <strong>Seller Dashboard</strong> with your account to complete the verification process and start managing your listings.
+                        </p>
                     </div>
-                    <div className={classes.editButtonContainer}>
-                        <a href={process.env.MAGENTO_BACKEND_URL + "/lofmarketplace/seller/login"} className={classes.editInformationButton}>
+
+                    {/* <div className={classes.card}> */}
+                        <div className={classes.actions}>
+                        <a href={process.env.MAGENTO_BACKEND_URL + "/lofmarketplace/seller/login"} className={classes.btn} role="button">
                             <FormattedMessage
                                 id={'global.sellerDashboardText'}
-                                defaultMessage={'Seller Dashboard'}
-                            />
+                                defaultMessage={'Go to Seller Dashboard'}
+                            /> →
                         </a>
+                        </div>
+                    {/* </div> */}
                     </div>
                 </div>
             </Fragment>

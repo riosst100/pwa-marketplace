@@ -5,9 +5,69 @@
     composes: py-md from global;
 }
 
+.container {
+  max-width: 600px;
+  margin: 0px auto;
+  padding: 20px;
+}
+
+.success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.title {
+  color: #065f46;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.message {
+  color: #065f46;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.actions {
+  /* margin-top: 16px; */
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  background: #f76b1c;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+  background: #f76b1c;
+  transform: translateY(-1px);
+}
+
+.nameLabel {
+  font-weight: 600;
+}
+
+
 .title {
     composes: font-bold from global;
-    composes: font-serif from global;
+    /* composes: font-serif from global; */
     composes: justify-self-center from global;
 }
 
@@ -16,7 +76,7 @@
     composes: grid from global;
     composes: grid-cols-1 from global;
 
-    composes: lg_grid-cols-3 from global;
+    composes: lg_grid-cols-1 from global;
 }
 
 .lineItemsContainer {

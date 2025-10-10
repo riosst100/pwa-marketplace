@@ -56,16 +56,16 @@ export const useAccountMenuItems = props => {
         }
     ];
     
-    if (storage && storage.getItem('is_seller')) {
-        MENU_ITEMS = [
-            ...MENU_ITEMS,
-            {
-                name: 'Seller Account Information',
-                id: 'accountMenu.sellerAccountInfoLink',
-                url: '/seller-account'
-            }
-        ];
-    }
+    // if (storage && storage.getItem('is_seller')) {
+    //     MENU_ITEMS = [
+    //         ...MENU_ITEMS,
+    //         {
+    //             name: 'Seller Account Information',
+    //             id: 'accountMenu.sellerAccountInfoLink',
+    //             url: '/seller-account'
+    //         }
+    //     ];
+    // }
 
     return {
         handleSignOut,
