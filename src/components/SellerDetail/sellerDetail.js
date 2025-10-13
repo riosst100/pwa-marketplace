@@ -22,7 +22,11 @@ import Image from '@magento/venia-ui/lib/components/Image';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
 import Rating from '@riosst100/pwa-marketplace/src/components/commons/Rating';
+
 const FavoriteSellerButton = React.lazy(() => import('@riosst100/pwa-marketplace/src/components/FavoriteSeller/AddToListButton'));
+
+
+import { useHistory } from 'react-router-dom';
 
 const SellerDetail = props => {
     const talonProps = useSeller({
@@ -30,9 +34,11 @@ const SellerDetail = props => {
     });
 
     const { error, loading, seller, favoriteSellerButtonProps } = talonProps;
+    const history = useHistory();
+
     if (loading && !seller)
         return '';
-    // return <SellerShimmer />;
+    
     if (error && !seller) return <ErrorView />;
     if (!seller) {
         return (
@@ -68,7 +74,7 @@ const SellerDetail = props => {
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <SellerProducts sellerId={seller?.seller_id} seller={seller} />
+                // content: <SellerProducts sellerId={seller?.seller_id} seller={seller} />
             },
             {
                 id: 'store-information',
@@ -162,6 +168,9 @@ const SellerDetail = props => {
                             {...favoriteSellerButtonProps}
                             buttonText={'Follow Seller'}
                             hideTextOnMobile={true}
+                            afterAdd={isSelected => {
+                                if (!isSelected) history.push('/favorite-seller');
+                            }}
                         />
                     </Suspense>
                     <button className='flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
