@@ -59,6 +59,11 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
 
     return (
         <>
+            <style>{`
+                .btn-orange-outline { border-color: #f76b1c !important; color: #f76b1c !important; background: #ffffff; }
+                .btn-orange-outline:hover { background: #f76b1c !important; color: #ffffff !important; }
+                .btn-orange-outline:hover span { color: #ffffff !important; }
+            `}</style>
             <div className='border border-gray-100 rounded-md p-5 flex flex-col md_flex-row justify-between gap-y-4 relative'>
                 {removing && (
                     <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center z-10">
@@ -78,17 +83,12 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
                                     {sellerItem?.seller?.name || '-'}
                                 </div>
                             </div>
-                            <div className='flex flex-row gap-x-[5px] items-center'>
-                                <span className='font-normal text-[12px] text-gray-200 '>
-                                    {sellerItem?.seller?.description || '-'}
-                                </span>
-                            </div>
                         </div>
                         <div className='flex gap-4'>
                             <Button
                                 classes={{
                                     content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium text-[14px]',
-                                    rootClass: 'py-[0px] h-9 hover_border-orange-500 border-orange-500 text-[#f76b1c]'
+                                    rootClass: 'btn-orange-outline py-[0px] h-9 border-orange-500 text-[#f76b1c]'
                                 }}
                                 onClick={handleGoToSellerPage}
                                 variant="outlined"
@@ -101,7 +101,7 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
                             <Button
                                 classes={{
                                     content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium text-[14px]',
-                                    rootClass: 'py-[0px] h-9 hover_border-orange-500 border-orange-500 text-[#f76b1c]'
+                                    rootClass: 'btn-orange-outline py-[0px] h-9 border-orange-500 text-[#f76b1c]'
                                 }}
                                 onClick={handleRemoveFromFavorite}
                                 disabled={removing}
