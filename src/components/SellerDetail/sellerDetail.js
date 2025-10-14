@@ -116,6 +116,17 @@ const SellerDetail = props => {
 
     return (
         <div className=' py-8'>
+            <style>{`
+                .send-message-btn:hover { background: #f76b1c !important; }
+                .send-message-btn:hover .stroke { stroke: #ffffff !important; }
+                .send-message-btn:hover span { color: #ffffff !important; }
+                .share-btn:hover { background: #f76b1c !important; }
+                .share-btn:hover .stroke { stroke: #ffffff !important; }
+                .share-btn:hover span { color: #ffffff !important; }
+                .favorite-btn:hover { background: #f76b1c !important; color: #ffffff !important; }
+                .favorite-btn:hover span { color: #ffffff !important; }
+                .favorite-btn:hover svg { stroke: #ffffff !important; fill: #ffffff !important; }
+            `}</style>
             <Slider seller={seller} rootClassname='mb-[30px]' />
             <div className='flex xs_flex-col lg_flex-row justify-between mb-[30px] p-[20px] rounded-[6px] border border-solid border-gray-100 shadow-[0px_0px_5px_3px_#d9d9d933]'>
                 {/* Left: logo + info */}
@@ -156,14 +167,14 @@ const SellerDetail = props => {
                 
                 {/* Right: action buttons */}
                 <div className='flex xs_flex-wrap items-center xs_justify-center lg_justify-end gap-[10px] xs_mt-4 lg_mt-0 xs_pt-2 lg_pt-0 relative'>
-                    <button className='flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
-                        <Sms color="#f76b1c" size={16} variant='Outline' className='stroke-[#f76b1c]' />
+                      <button className='send-message-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                        <Sms color="#f76b1c" size={16} variant='Outline' className='stroke' />
                         <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Send Message</span>
                     </button>
                     <Suspense fallback={null}>
                         <FavoriteSellerButton
                             classes={{
-                                root: 'flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'
+                                root: 'favorite-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'
                             }}
                             {...favoriteSellerButtonProps}
                             buttonText={'Follow Seller'}
@@ -173,8 +184,8 @@ const SellerDetail = props => {
                             }}
                         />
                     </Suspense>
-                    <button className='flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
-                        <Share color='#f76b1c' size={16} variant='Outline' className='stroke-[#f76b1c]' />
+                    <button className='share-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                        <Share color='#f76b1c' size={16} variant='Outline' className='stroke' />
                         <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Share</span>
                     </button>
                 </div>
