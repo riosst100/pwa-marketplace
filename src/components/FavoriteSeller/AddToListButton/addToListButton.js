@@ -11,6 +11,7 @@ import { useCommonToasts } from '@magento/venia-ui/lib/components/Wishlist/AddTo
 
 const HeartIcon = <Heart color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />;
 
+
 const AddToFavoriteListButton = props => {
     const talonProps = useAddToFavoriteListButton(props);
     const buttonRef = useRef();
@@ -21,7 +22,8 @@ const AddToFavoriteListButton = props => {
         errorToastProps,
         isSelected,
         loginToastProps,
-        successToastProps
+        successToastProps,
+        isLoading
     } = talonProps;
 
     useCommonToasts({ errorToastProps, loginToastProps, successToastProps });
@@ -30,10 +32,15 @@ const AddToFavoriteListButton = props => {
     const classes = useStyle(defaultClasses, props.classes);
     const buttonClass = isSelected ? classes.root_selected : classes.root;
 
+    // Only hide text on mobile for follow, always show for unfollow
+    const textClass = isSelected
+        ? 'text-[#f76b1c] text-[14px] font-medium whitespace-nowrap'
+        : `text-[#f76b1c] text-[14px] font-medium whitespace-nowrap ${props.hideTextOnMobile ? 'md_block xs_hidden' : ''}`;
+
     return (
-        <button ref={buttonRef} className={buttonClass} {...ariaButtonProps}>
-            {props.icon}
-            {buttonText && <span className={`text-[#f76b1c] text-[14px] font-medium whitespace-nowrap ${props.hideTextOnMobile ? 'md_block xs_hidden' : ''}`}>{buttonText}</span>}
+        <button ref={buttonRef} className={buttonClass} {...ariaButtonProps} disabled={isLoading}>
+            {!isSelected && props.icon}
+            {buttonText && <span className={textClass}>{buttonText}</span>}
         </button>
     );
 };

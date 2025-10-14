@@ -1,17 +1,19 @@
-import { useCallback, useMemo, useState } from 'react';
+
+import { useCallback, useMemo, useState, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from '@apollo/client';
-
 import { useUserContext } from '@magento/peregrine/lib/context/user';
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
-
 import defaultOperations from './addToListButton.gql';
+import favoriteSellerListGqls from '@riosst100/pwa-marketplace/src/talons/FavoriteSeller/FavoriteSellerList/favoriteSellerList.gql';
+
 
 export const useAddToFavoriteListButton = props => {
+    const unfollowedRef = useRef(false);
     const { afterAdd, beforeAdd, item } = props;
-
     const operations = mergeOperations(defaultOperations, props.operations);
 
+    // Mutation for add
     const [
         addToFavoriteSeller,
         {
@@ -21,19 +23,28 @@ export const useAddToFavoriteListButton = props => {
         }
     ] = useMutation(operations.addToFavoriteSellerMutation);
 
-    // const {
-    //     client,
-    //     data: { customerFavoriteSellers }
-    // } = useQuery(operations.getSellerInFavoriteListsQuery);
+    // Mutation for remove
+    const [removeSeller, { loading: isRemoving }] = useMutation(
+        favoriteSellerListGqls.removeSellerFromFavoriteListMutation
+    );
 
-    // const isSelected = useMemo(() => {
-    //     return (
-    //         customerFavoriteSellers.includes(item.seller_id) || isAddingToList
-    //     );
-    // }, [customerFavoriteSellers, isAddingToList, item.seller_id]);
-    const isSelected = false;
+    // Query to get current favorite sellers
+    const { data: favoriteListData, refetch: refetchFavoriteList } = useQuery(
+        favoriteSellerListGqls.getFavoriteSellerListQuery,
+        {
+            variables: { pageSize: 100, currentPage: 1 },
+            fetchPolicy: 'cache-and-network',
+        }
+    );
+
+    // Determine if this seller is already in favorite list
+    const isSelected = useMemo(() => {
+        const items = favoriteListData?.favoritelist?.items || [];
+        return items.some(i => i.seller?.seller_id == item.seller_id);
+    }, [favoriteListData, item.seller_id]);
 
     const [showLoginToast, setShowLoginToast] = useState(0);
+    const [showUnfollowToast, setShowUnfollowToast] = useState(0);
 
     const { formatMessage } = useIntl();
     const [{ isSignedIn }] = useUserContext();
@@ -46,37 +57,35 @@ export const useAddToFavoriteListButton = props => {
                 if (beforeAdd) {
                     await beforeAdd();
                 }
-
-                await addToFavoriteSeller({
-                    variables: { sellerId: item.seller_id }
-                });
-
-                // client.writeQuery({
-                //     query: operations.getSellerInFavoriteListsQuery,
-                //     data: {
-                //         customerFavoriteSellers: [
-                //             ...customerFavoriteSellers,
-                //             item.seller_id
-                //         ]
-                //     }
-                // });
-
-                // if (afterAdd) {
-                //     afterAdd();
-                // }
+                const wasSelected = isSelected;
+                unfollowedRef.current = false;
+                if (isSelected) {
+                    // Unfollow
+                    unfollowedRef.current = true;
+                    await removeSeller({ variables: { sellerIds: [item.seller_id] } });
+                } else {
+                    // Follow
+                    await addToFavoriteSeller({ variables: { sellerId: item.seller_id } });
+                }
+                await refetchFavoriteList();
+                if (unfollowedRef.current) {
+                    setShowUnfollowToast(current => current + 1);
+                    unfollowedRef.current = false;
+                }
+                if (afterAdd) afterAdd(wasSelected);
             } catch (error) {
                 console.error(error);
             }
         }
     }, [
         addToFavoriteSeller,
+        removeSeller,
         afterAdd,
         beforeAdd,
-        // client,
-        // customerFavoriteSellers,
         isSignedIn,
         item,
-        // operations.getSellerInFavoriteListsQuery
+        isSelected,
+        refetchFavoriteList
     ]);
 
     const loginToastProps = useMemo(() => {
@@ -107,9 +116,18 @@ export const useAddToFavoriteListButton = props => {
                 timeout: 5000
             };
         }
-
+        if (showUnfollowToast) {
+            return {
+                type: 'success',
+                message: formatMessage({
+                    id: 'favoriteSeller.galleryButton.unfollowSuccessMessage',
+                    defaultMessage: 'Seller removed from your favorites list.'
+                }),
+                timeout: 5000
+            };
+        }
         return null;
-    }, [addSellerData, formatMessage]);
+    }, [addSellerData, formatMessage, showUnfollowToast]);
 
     const errorToastProps = useMemo(() => {
         if (errorAddingProduct) {
@@ -129,15 +147,20 @@ export const useAddToFavoriteListButton = props => {
 
     const buttonProps = useMemo(
         () => ({
-            'aria-label': formatMessage({
-                id: 'favoriteSellerButton.addText',
-                defaultMessage: 'Add to Favorites'
-            }),
-            isDisabled: false,
+            'aria-label': isSelected
+                ? formatMessage({
+                    id: 'favoriteSellerButton.unfollowText',
+                    defaultMessage: 'Unfollow Seller'
+                })
+                : formatMessage({
+                    id: 'favoriteSellerButton.addText',
+                    defaultMessage: 'Follow Seller'
+                }),
+            isDisabled: isAddingToList || isRemoving,
             onPress: handleClick,
             type: 'button'
         }),
-        [formatMessage, handleClick]
+        [formatMessage, handleClick, isSelected, isAddingToList, isRemoving]
     );
 
     return {
@@ -145,12 +168,12 @@ export const useAddToFavoriteListButton = props => {
         buttonText:
             typeof props.buttonText === 'function'
                 ? props.buttonText(isSelected)
-                : props.buttonText,
-        // customerFavoriteSellers,
+                : (isSelected ? 'Unfollow Seller' : 'Follow Seller'),
         errorToastProps,
         handleClick,
         isSelected,
         loginToastProps,
-        successToastProps
+        successToastProps,
+        isLoading: isAddingToList || isRemoving
     };
 };
