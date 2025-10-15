@@ -1,7 +1,7 @@
 {
   "name": "@riosst100/pwa-marketplace",
   "author": "riosst100@gmail.com",
-  "version": "2.8.4",
+  "version": "2.8.5",
   "main": "src/index.js",
   "pwa-studio": {
     "targets": {
