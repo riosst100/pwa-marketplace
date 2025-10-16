@@ -13,10 +13,32 @@
     padding: 8px 14px;
     font-weight: 500;
     font-size: 14px;
-    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
 }
-
 .root_selected {
     composes: root;
     composes: no-underline from global;
+}
+
+.root:hover {
+    background: #f76b1c !important;
+    color: #fff !important;
+}
+.root:hover svg {
+    stroke: #fff !important;
+    fill: #fff !important;
+}
+.root:hover span {
+    color: #fff !important;
+}
+.root_selected:hover {
+    background: #f76b1c !important;
+    color: #fff !important;
+}
+.root_selected:hover svg {
+    stroke: #fff !important;
+    fill: #fff !important;
+}
+.root_selected:hover span {
+    color: #fff !important;
 }
