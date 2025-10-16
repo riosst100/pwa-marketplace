@@ -126,6 +126,9 @@ const SellerDetail = props => {
                 .favorite-btn:hover { background: #f76b1c !important; color: #ffffff !important; }
                 .favorite-btn:hover span { color: #ffffff !important; }
                 .favorite-btn:hover svg { stroke: #ffffff !important; fill: #ffffff !important; }
+                .favorite-btn.root_selected:hover { background: #f76b1c !important; color: #ffffff !important; }
+                .favorite-btn.root_selected:hover span { color: #ffffff !important; }
+                .favorite-btn.root_selected:hover svg { stroke: #ffffff !important; fill: #ffffff !important; }
             `}</style>
             <Slider seller={seller} rootClassname='mb-[30px]' />
             <div className='flex xs_flex-col lg_flex-row justify-between mb-[30px] p-[20px] rounded-[6px] border border-solid border-gray-100 shadow-[0px_0px_5px_3px_#d9d9d933]'>
@@ -179,9 +182,6 @@ const SellerDetail = props => {
                             {...favoriteSellerButtonProps}
                             buttonText={'Follow Seller'}
                             hideTextOnMobile={true}
-                            afterAdd={isSelected => {
-                                if (!isSelected) history.push('/favorite-seller');
-                            }}
                         />
                     </Suspense>
                     <button className='share-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>

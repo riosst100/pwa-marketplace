@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { element, func, shape, string, bool } from 'prop-types';
 import { Heart } from 'react-feather';
+
 import { useAddToFavoriteListButton } from '@riosst100/pwa-marketplace/src/talons/FavoriteSeller/AddToListButton/useAddToFavoriteListButton';
 import { useButton } from 'react-aria';
 
@@ -8,6 +9,14 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import Icon from '@magento/venia-ui/lib/components/Icon';
 import defaultClasses from './addToListButton.module.css';
 import { useCommonToasts } from '@magento/venia-ui/lib/components/Wishlist/AddToListButton/useCommonToasts';
+
+const Spinner = () => (
+    <svg className="animate-spin mr-2" width="16" height="16" viewBox="0 0 50 50">
+        <circle className="path" cx="25" cy="25" r="20" fill="none" stroke="#f76b1c" strokeWidth="5" strokeLinecap="round" strokeDasharray="31.415, 31.415" transform="rotate(0 25 25)">
+            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+        </circle>
+    </svg>
+);
 
 const HeartIcon = <Heart color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />;
 
@@ -39,7 +48,11 @@ const AddToFavoriteListButton = props => {
 
     return (
         <button ref={buttonRef} className={buttonClass} {...ariaButtonProps} disabled={isLoading}>
-            {!isSelected && props.icon}
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                !isSelected && props.icon
+            )}
             {buttonText && <span className={textClass}>{buttonText}</span>}
         </button>
     );
