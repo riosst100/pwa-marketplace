@@ -1,5 +1,5 @@
 
-import { useCallback, useMemo, useState, useRef } from 'react';
+import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from '@apollo/client';
 import { useUserContext } from '@magento/peregrine/lib/context/user';
@@ -45,6 +45,7 @@ export const useAddToFavoriteListButton = props => {
 
     const [showLoginToast, setShowLoginToast] = useState(0);
     const [showUnfollowToast, setShowUnfollowToast] = useState(0);
+    const [showFollowToast, setShowFollowToast] = useState(false);
 
     const { formatMessage } = useIntl();
     const [{ isSignedIn }] = useUserContext();
@@ -97,7 +98,7 @@ export const useAddToFavoriteListButton = props => {
                     defaultMessage:
                         'Please sign-in to your Account to save seller for later.'
                 }),
-                timeout: 5000
+                timeout: 3000
             };
         }
 
@@ -105,7 +106,7 @@ export const useAddToFavoriteListButton = props => {
     }, [formatMessage, showLoginToast]);
 
     const successToastProps = useMemo(() => {
-        if (addSellerData) {
+        if (showFollowToast) {
             return {
                 type: 'success',
                 message: formatMessage({
@@ -113,7 +114,7 @@ export const useAddToFavoriteListButton = props => {
                     defaultMessage:
                         'Seller successfully added to your favorites list.'
                 }),
-                timeout: 5000
+                timeout: 3000
             };
         }
         if (showUnfollowToast) {
@@ -123,11 +124,27 @@ export const useAddToFavoriteListButton = props => {
                     id: 'favoriteSeller.galleryButton.unfollowSuccessMessage',
                     defaultMessage: 'Seller removed from your favorites list.'
                 }),
-                timeout: 5000
+                timeout: 3000
             };
         }
         return null;
-    }, [addSellerData, formatMessage, showUnfollowToast]);
+    }, [formatMessage, showFollowToast, showUnfollowToast]);
+
+    useEffect(() => {
+        let timeout;
+        if (addSellerData && isSelected) {
+            setShowFollowToast(true);
+            timeout = setTimeout(() => {
+                setShowFollowToast(false);
+            }, 3100);
+        }
+        if (showUnfollowToast) {
+            timeout = setTimeout(() => {
+                setShowUnfollowToast(0);
+            }, 3100);
+        }
+        return () => clearTimeout(timeout);
+    }, [addSellerData, showUnfollowToast, isSelected]);
 
     const errorToastProps = useMemo(() => {
         if (errorAddingProduct) {
@@ -138,7 +155,7 @@ export const useAddToFavoriteListButton = props => {
                     defaultMessage:
                         'Something went wrong adding the product to your favorite seller list.'
                 }),
-                timeout: 5000
+                timeout: 3000
             };
         }
 
