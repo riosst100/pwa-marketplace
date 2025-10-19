@@ -63,6 +63,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/pagebuilder/lib/ContentTypes/Slider/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/pagebuilder/lib/ContentTypes/Slider/index.js',
     [`@magento/venia-ui/lib/components/App/app.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/App/app.js',
     [`@magento/venia-ui/lib/components/SignIn/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignIn/index.js',
+    [`@magento/venia-ui/lib/components/SignIn/signIn.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignIn/signIn.js',
     [`@magento/venia-ui/lib/components/SignInPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignInPage/index.js',
     [`@magento/venia-ui/lib/components/Password/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Password/index.js',
     [`@magento/venia-ui/lib/components/Password/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Password/index.js',

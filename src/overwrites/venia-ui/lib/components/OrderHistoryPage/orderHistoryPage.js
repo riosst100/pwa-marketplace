@@ -52,7 +52,7 @@ const OrderHistoryPage = props => {
     const { formatMessage } = useIntl();
     const PAGE_TITLE = formatMessage({
         id: 'orderHistoryPage.pageTitleText',
-        defaultMessage: 'Order History'
+        defaultMessage: 'My Orders'
     });
     const SEARCH_PLACE_HOLDER = formatMessage({
         id: 'orderHistoryPage.search',

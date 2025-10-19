@@ -96,7 +96,7 @@ export const useAddToFavoriteListButton = props => {
                 message: formatMessage({
                     id: 'favoriteSeller.galleryButton.loginMessage',
                     defaultMessage:
-                        'Please sign-in to your Account to save seller for later.'
+                        'Please sign in to your account to follow this store.'
                 }),
                 timeout: 3000
             };
@@ -112,7 +112,7 @@ export const useAddToFavoriteListButton = props => {
                 message: formatMessage({
                     id: 'favoriteSeller.galleryButton.successMessageGeneral',
                     defaultMessage:
-                        'Seller successfully added to your favorites list.'
+                        "You're now following this store."
                 }),
                 timeout: 3000
             };
@@ -122,7 +122,7 @@ export const useAddToFavoriteListButton = props => {
                 type: 'success',
                 message: formatMessage({
                     id: 'favoriteSeller.galleryButton.unfollowSuccessMessage',
-                    defaultMessage: 'Seller removed from your favorites list.'
+                    defaultMessage: "You've unfollowed this store."
                 }),
                 timeout: 3000
             };
@@ -153,7 +153,7 @@ export const useAddToFavoriteListButton = props => {
                 message: formatMessage({
                     id: 'favoriteSeller.galleryButton.addError',
                     defaultMessage:
-                        'Something went wrong adding the product to your favorite seller list.'
+                        'Something went wrong. Please try again.'
                 }),
                 timeout: 3000
             };
@@ -167,11 +167,11 @@ export const useAddToFavoriteListButton = props => {
             'aria-label': isSelected
                 ? formatMessage({
                     id: 'favoriteSellerButton.unfollowText',
-                    defaultMessage: 'Unfollow Seller'
+                    defaultMessage: 'Following'
                 })
                 : formatMessage({
                     id: 'favoriteSellerButton.addText',
-                    defaultMessage: 'Follow Seller'
+                    defaultMessage: 'Follow Store'
                 }),
             isDisabled: isAddingToList || isRemoving,
             onPress: handleClick,
@@ -185,7 +185,7 @@ export const useAddToFavoriteListButton = props => {
         buttonText:
             typeof props.buttonText === 'function'
                 ? props.buttonText(isSelected)
-                : (isSelected ? 'Unfollow Seller' : 'Follow Seller'),
+                : (isSelected ? 'Following' : 'Follow Store'),
         errorToastProps,
         handleClick,
         isSelected,

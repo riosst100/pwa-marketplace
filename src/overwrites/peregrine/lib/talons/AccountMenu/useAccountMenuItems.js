@@ -19,9 +19,19 @@ export const useAccountMenuItems = props => {
 
     let MENU_ITEMS = [
         {
-            name: 'Order History',
+            name: 'Account Information',
+            id: 'accountMenu.accountInfoLink',
+            url: '/account-information'
+        },
+        {
+            name: 'My Orders',
             id: 'accountMenu.orderHistoryLink',
             url: '/order-history'
+        },
+        {
+            name: 'My Offers',
+            id: 'accountMenu.offersLink',
+            url: '/quotes'
         },
         // Hide links until features are completed
         // {
@@ -35,25 +45,31 @@ export const useAccountMenuItems = props => {
             url: '/wishlist'
         },
         {
+            name: 'Return Request',
+            id: 'accountMenu.returnRequestLink',
+            url: '/return'
+        },
+        {
+            name: 'Followed Stores',
+            id: 'accountMenu.followedStoresLink',
+            url: '/favorite-seller'
+        },
+        {
             name: 'Address Book',
             id: 'accountMenu.addressBookLink',
             url: '/address-book'
         },
+        // {
+        //     name: 'Saved Payments',
+        //     id: 'accountMenu.savedPaymentsLink',
+        //     url: '/saved-payments'
+        // },
         {
-            name: 'Saved Payments',
-            id: 'accountMenu.savedPaymentsLink',
-            url: '/saved-payments'
-        },
-        {
-            name: 'Communications',
+            name: 'Newsletter',
             id: 'accountMenu.communicationsLinak',
             url: '/communications'
         },
-        {
-            name: 'Account Information',
-            id: 'accountMenu.accountInfoLink',
-            url: '/account-information'
-        }
+        
     ];
     
     // if (storage && storage.getItem('is_seller')) {

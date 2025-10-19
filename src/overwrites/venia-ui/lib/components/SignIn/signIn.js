@@ -148,10 +148,13 @@ const SignIn = props => {
                             content: 'capitalize font-medium text-[16px]'
                         }}
                     >
-                        <FormattedMessage
+                        {isBusy ? <FormattedMessage
+                            id={'signIn.waitingConfig'}
+                            defaultMessage={'Please wait...'}
+                        /> : <FormattedMessage
                             id={'signIn.signInText'}
                             defaultMessage={'Sign In'}
-                        />
+                        />}
                     </Button>
                     <div className='block text-center'>
                         <span className='text-xs font-normal'>
@@ -171,7 +174,7 @@ const SignIn = props => {
                             />
                         </Link>
                     </div>
-                    {showSocialLogin ? (
+                    {/* {showSocialLogin ? (
                         <>
                             <div className='max-w-[390px] w-full mx-auto'>
                                 <label
@@ -192,8 +195,7 @@ const SignIn = props => {
                             </div>
                             <SocialLogin />
                         </>
-                    ) : null}
-
+                    ) : null} */}
                 </div>
             </Form>
         </div>

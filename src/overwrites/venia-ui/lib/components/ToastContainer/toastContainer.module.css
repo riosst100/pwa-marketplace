@@ -14,7 +14,7 @@
     left: 50%;
     transform: translateX(-50%);
     /* opacity: 0; */
-    pointer-events: none;
+    /* pointer-events: none; */
     transition: opacity 0.5s, transform 0.5s;
     z-index: 9999;
 }

@@ -50,14 +50,17 @@ export const useSignIn = props => {
         fetchPolicy: 'no-cache'
     });
 
-    const {
-        generateReCaptchaData,
-        recaptchaLoading,
-        recaptchaWidgetProps
-    } = useGoogleReCaptcha({
-        currentForm: 'CUSTOMER_LOGIN',
-        formAction: 'signIn'
-    });
+    // const {
+    //     generateReCaptchaData,
+    //     recaptchaLoading,
+    //     recaptchaWidgetProps
+    // } = useGoogleReCaptcha({
+    //     currentForm: 'CUSTOMER_LOGIN',
+    //     formAction: 'signIn'
+    // });
+
+    const recaptchaWidgetProps = null;
+    const generateReCaptchaData = null;
 
     const [fetchCartId] = useMutation(createCartMutation);
     const [mergeCarts] = useMutation(mergeCartsMutation);
@@ -76,7 +79,8 @@ export const useSignIn = props => {
                 const sourceCartId = cartId;
 
                 // Get recaptchaV3 data for login
-                const recaptchaData = await generateReCaptchaData();
+                // const recaptchaData = await generateReCaptchaData();
+                const recaptchaData = null;
 
                 // Sign in and set the token.
                 const signInResponse = await signIn({
@@ -219,7 +223,8 @@ export const useSignIn = props => {
         handleForgotPassword,
         forgotPasswordHandleEnterKeyPress,
         handleSubmit,
-        isBusy: isGettingDetails || isSigningIn || recaptchaLoading,
+        // isBusy: isGettingDetails || isSigningIn || recaptchaLoading,
+        isBusy: isGettingDetails || isSigningIn,
         setFormApi,
         recaptchaWidgetProps
     };
