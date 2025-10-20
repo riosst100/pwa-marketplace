@@ -371,12 +371,6 @@ const CheckoutPage = props => {
                         cartItems={cartItems}
                         message={stockStatusMessageElement}
                     />
-                    <h1
-                        className={classes.heading}
-                        data-cy="ChekoutPage-headerText"
-                    >
-                        {headerText}
-                    </h1>
                 </div>
                 {signInContainerElement}
                 <div className={classes.shipping_information_container}>
