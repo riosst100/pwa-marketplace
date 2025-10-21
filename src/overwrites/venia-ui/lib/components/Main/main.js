@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { bool, shape, string } from 'prop-types';
 import { useScrollLock } from '@magento/peregrine';
 
@@ -10,6 +11,8 @@ import cn from 'classnames';
 
 const Main = props => {
     const { children, isMasked } = props;
+    const location = useLocation();
+    const isCheckoutPage = location.pathname === '/checkout';
     const classes = useStyle(defaultClasses, props.classes);
 
     const rootClass = isMasked ? classes.root_masked : classes.root;
@@ -19,9 +22,9 @@ const Main = props => {
 
     return (
         <main className={rootClass}>
-            <Header />
+            {!isCheckoutPage && <Header />}
             <div className={cn(pageClass, 'main-content-container pb-16 !min-h-[50vh]')}>{children}</div>
-            <Footer />
+            {!isCheckoutPage && <Footer />}
         </main>
     );
 };
