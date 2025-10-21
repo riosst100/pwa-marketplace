@@ -93,7 +93,7 @@ const item = () => {
                             >
                                 <FormattedMessage
                                     id={'favoriteSeller.visitStore'}
-                                    defaultMessage={'Visit Store'}
+                                    defaultMessage={'View Store'}
                                 />
                             </Button>
                             <div

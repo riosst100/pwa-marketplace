@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { element, func, shape, string, bool } from 'prop-types';
-import { Heart } from 'react-feather';
+import { Heart,Check } from 'react-feather';
 
 import { useAddToFavoriteListButton } from '@riosst100/pwa-marketplace/src/talons/FavoriteSeller/AddToListButton/useAddToFavoriteListButton';
 import { useButton } from 'react-aria';
@@ -11,7 +11,7 @@ import defaultClasses from './addToListButton.module.css';
 import { useCommonToasts } from '@magento/venia-ui/lib/components/Wishlist/AddToListButton/useCommonToasts';
 
 const Spinner = () => (
-    <svg className="animate-spin mr-2" width="16" height="16" viewBox="0 0 50 50">
+    <svg className="animate-spin mr-0" width="16" height="16" viewBox="0 0 50 50">
         <circle className="path" cx="25" cy="25" r="20" fill="none" stroke="#f76b1c" strokeWidth="5" strokeLinecap="round" strokeDasharray="31.415, 31.415" transform="rotate(0 25 25)">
             <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
         </circle>
@@ -19,6 +19,7 @@ const Spinner = () => (
 );
 
 const HeartIcon = <Heart color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />;
+const CheckIcon = <Check color='#f76b1c' size={14} variant="Outline" className='stroke-[#f76b1c]' />;
 
 
 const AddToFavoriteListButton = props => {
@@ -36,8 +37,9 @@ const AddToFavoriteListButton = props => {
     } = talonProps;
 
     useCommonToasts({ errorToastProps, loginToastProps, successToastProps });
+    
     const { buttonProps: ariaButtonProps } = useButton(buttonProps, buttonRef);
-
+    
     const classes = useStyle(defaultClasses, props.classes);
     const buttonClass = isSelected ? classes.root_selected : classes.root;
 
@@ -46,12 +48,14 @@ const AddToFavoriteListButton = props => {
         ? 'text-[#f76b1c] text-[14px] font-medium whitespace-nowrap'
         : `text-[#f76b1c] text-[14px] font-medium whitespace-nowrap ${props.hideTextOnMobile ? 'md_block xs_hidden' : ''}`;
 
+    const icon = isSelected ? CheckIcon : HeartIcon;
+
     return (
         <button ref={buttonRef} className={buttonClass} {...ariaButtonProps} disabled={isLoading}>
             {isLoading ? (
                 <Spinner />
             ) : (
-                !isSelected && props.icon
+                icon
             )}
             {buttonText && <span className={textClass}>{buttonText}</span>}
         </button>

@@ -18,6 +18,9 @@ import {
     Star1,
     Shop,
 } from 'iconsax-react';
+
+import { Share2 } from 'react-feather';
+
 import Image from '@magento/venia-ui/lib/components/Image';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
@@ -123,6 +126,7 @@ const SellerDetail = props => {
                 .share-btn:hover { background: #f76b1c !important; }
                 .share-btn:hover .stroke { stroke: #ffffff !important; }
                 .share-btn:hover span { color: #ffffff !important; }
+                .favorite-btn:focus-visible { outline: none !important; }
                 .favorite-btn:hover { background: #f76b1c !important; color: #ffffff !important; }
                 .favorite-btn:hover span { color: #ffffff !important; }
                 .favorite-btn:hover svg { stroke: #ffffff !important; fill: #ffffff !important; }
@@ -170,7 +174,7 @@ const SellerDetail = props => {
                 
                 {/* Right: action buttons */}
                 <div className='flex xs_flex-wrap items-center xs_justify-center lg_justify-end gap-[10px] xs_mt-4 lg_mt-0 xs_pt-2 lg_pt-0 relative'>
-                      <button className='send-message-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                    <button className='send-message-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
                         <Sms color="#f76b1c" size={16} variant='Outline' className='stroke' />
                         <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Send Message</span>
                     </button>
@@ -180,12 +184,12 @@ const SellerDetail = props => {
                                 root: 'favorite-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'
                             }}
                             {...favoriteSellerButtonProps}
-                            buttonText={'Follow Seller'}
+                            buttonText={'Follow Store'}
                             hideTextOnMobile={true}
                         />
                     </Suspense>
                     <button className='share-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
-                        <Share color='#f76b1c' size={16} variant='Outline' className='stroke' />
+                        <Share2 color='#f76b1c' size={16} variant='Outline' className='stroke' />
                         <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Share</span>
                     </button>
                 </div>

@@ -45,6 +45,7 @@ const AccountTrigger = props => {
         id: 'accountTrigger.ariaLabelSignIn',
         defaultMessage: 'Sign In'
     });
+    
     const ariaLabel = isUserSignedIn ? ariaLabelMyMenu : ariaLabelSignIn;
     return (
         <Fragment>
@@ -67,12 +68,17 @@ const AccountTrigger = props => {
                         shouldIndicateLoading={true}
                     /> */}
                     <User size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
-                    <span className='text-base font-medium'>
+                    {isUserSignedIn ? <span className='text-base font-medium'>
+                        {formatMessage({
+                            id: 'accountTrigger.myAccount',
+                            defaultMessage: 'My Account'
+                        })}
+                    </span> : <span className='text-base font-medium'>
                         {formatMessage({
                             id: 'accountTrigger.buttonFallback',
                             defaultMessage: 'Sign In'
                         })}
-                    </span>
+                    </span>}
                 </button>
             </div>
             <Suspense fallback={null}>

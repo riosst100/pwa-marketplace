@@ -50,7 +50,7 @@ const RMAList = props => {
     const { formatMessage } = useIntl();
     const PAGE_TITLE = formatMessage({
         id: 'RMA.pageTitleText',
-        defaultMessage: 'Quotes'
+        defaultMessage: 'My Return Request'
     });
     const SEARCH_PLACE_HOLDER = formatMessage({
         id: 'RMA.search',

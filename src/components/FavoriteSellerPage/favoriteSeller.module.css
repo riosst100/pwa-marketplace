@@ -1,0 +1,4 @@
+.pagination {
+    composes: relative from global;
+    composes: bottom-0 from global;
+}

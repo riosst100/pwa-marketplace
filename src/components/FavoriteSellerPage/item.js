@@ -15,12 +15,15 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import useRemoveFavoriteSeller from '@riosst100/pwa-marketplace/src/talons/FavoriteSeller/FavoriteSellerList/useRemoveFavoriteSeller';
 import { useState } from 'react';
 import { useToasts } from '@magento/peregrine';
+import { Link } from "react-router-dom";
 
 const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
     const [open, setOpen] = useState(false);
     const { remove, loading: removing } = useRemoveFavoriteSeller();
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
+
+    console.log(sellerItem.seller)
 
     const handleRemoveFromFavorite = async () => {
         try {
@@ -29,7 +32,7 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
                 type: 'success',
                 message: formatMessage({
                     id: 'favoriteSeller.toastUnfollowSuccess',
-                    defaultMessage: 'Successfully unfollowed seller.'
+                    defaultMessage: "You've unfollowed this store. You won't receive any more updates or newsletters from them."
                 }),
                 timeout: 3000
             });
@@ -41,11 +44,10 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
                 type: 'error',
                 message: formatMessage({
                     id: 'favoriteSeller.toastUnfollowError',
-                    defaultMessage: 'Failed to unfollow seller.'
+                    defaultMessage: 'Failed to unfollow this store. Please try again later.'
                 }),
                 timeout: 3000
             });
-            console.error('Failed to unfollow seller:', e);
         }
     };
 
@@ -85,19 +87,23 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
                             </div>
                         </div>
                         <div className='flex gap-4'>
-                            <Button
-                                classes={{
-                                    content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium text-[14px]',
-                                    rootClass: 'btn-orange-outline py-[0px] h-9 border-orange-500 text-[#f76b1c]'
-                                }}
-                                onClick={handleGoToSellerPage}
-                                variant="outlined"
-                            >
-                                <FormattedMessage
-                                    id={'favoriteSeller.visitStore'}
-                                    defaultMessage={'Visit Store'}
-                                />
-                            </Button>
+                            <Link to={"/seller/"+sellerItem?.seller?.url}>
+                                <Button
+                                    classes={{
+                                        content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium text-[14px]',
+                                        rootClass: 'btn-orange-outline py-[0px] h-9 border-orange-500 text-[#f76b1c]'
+                                    }}
+                                    // onClick={handleGoToSellerPage}
+                                    variant="outlined"
+                                >
+                                    
+                                        <FormattedMessage
+                                            id={'favoriteSeller.visitStore'}
+                                            defaultMessage={'View Store'}
+                                        />
+                                    
+                                </Button>
+                            </Link>
                             <Button
                                 classes={{
                                     content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium text-[14px]',

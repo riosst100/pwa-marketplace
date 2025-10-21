@@ -1,5 +1,7 @@
 module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/Adapter/adapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Adapter/adapter.js',
+    [`@magento/venia-ui/lib/components/ToastContainer/toast.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toast.module.css',
+    [`@magento/venia-ui/lib/components/ToastContainer/toastContainer.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toastContainer.module.css',
     [`@magento/venia-ui/lib/components/Header/header.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/header.js',
     [`@magento/venia-ui/lib/components/Header/storeSwitcher.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/storeSwitcher.js',
     [`@magento/venia-ui/lib/components/Header/switcherItem.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/switcherItem.js',
@@ -61,6 +63,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/pagebuilder/lib/ContentTypes/Slider/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/pagebuilder/lib/ContentTypes/Slider/index.js',
     [`@magento/venia-ui/lib/components/App/app.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/App/app.js',
     [`@magento/venia-ui/lib/components/SignIn/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignIn/index.js',
+    [`@magento/venia-ui/lib/components/SignIn/signIn.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignIn/signIn.js',
     [`@magento/venia-ui/lib/components/SignInPage/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/SignInPage/index.js',
     [`@magento/venia-ui/lib/components/Password/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Password/index.js',
     [`@magento/venia-ui/lib/components/Password/index.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Password/index.js',

@@ -210,7 +210,7 @@ export const useSellerProducts = props => {
     ]);
 
     const totalPagesFromData = data
-        ? data.productsBySellerId.page_info.total_pages
+        ? data?.productsBySellerId?.page_info.total_pages
         : null;
 
     useEffect(() => {

@@ -52,7 +52,7 @@ const QuoteList = props => {
     const { formatMessage } = useIntl();
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleText',
-        defaultMessage: 'Quotes'
+        defaultMessage: 'My Offers'
     });
     const SEARCH_PLACE_HOLDER = formatMessage({
         id: 'Quotes.search',

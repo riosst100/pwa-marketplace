@@ -62,6 +62,21 @@ const AccountLayout = (props) => {
                     >
                         <li className="list-none">
                             <Link
+                                to="/account-information"
+                                className={cn(
+                                    "text-[14px] font-medium p-2.5 block w-full hover_bg-gray-150 rounded-md",
+                                    activeMenu === '/account-information' ? 'bg-gray-150' : ''
+                                )}
+                            >
+                                <FormattedMessage
+                                    id={'myaccount.accountInformation'}
+                                    defaultMessage={'Account Information'}
+                                />
+
+                            </Link>
+                        </li>
+                        <li className="list-none">
+                            <Link
                                 to="/order-history"
                                 className={cn(
                                     "text-[14px] font-medium p-2.5 block w-full hover_bg-gray-150 rounded-md",
@@ -70,7 +85,7 @@ const AccountLayout = (props) => {
                             >
                                 <FormattedMessage
                                     id={'myaccount.orderHistory'}
-                                    defaultMessage={'Order History'}
+                                    defaultMessage={'My Orders'}
                                 />
 
                             </Link>
@@ -85,7 +100,7 @@ const AccountLayout = (props) => {
                             >
                                 <FormattedMessage
                                     id={'myaccount.Quotes'}
-                                    defaultMessage={'Quotes'}
+                                    defaultMessage={'My Offers'}
                                 />
 
                             </Link>
@@ -130,7 +145,7 @@ const AccountLayout = (props) => {
                             >
                                 <FormattedMessage
                                     id={'myaccount.favoriteSeller'}
-                                    defaultMessage={'Favorite Seller'}
+                                    defaultMessage={'Followed Stores'}
                                 />
 
                             </Link>
@@ -150,7 +165,7 @@ const AccountLayout = (props) => {
 
                             </Link>
                         </li>
-                        <li className="list-none">
+                        {/* <li className="list-none">
                             <Link
                                 to="/saved-payments"
                                 className={cn(
@@ -164,7 +179,7 @@ const AccountLayout = (props) => {
                                 />
 
                             </Link>
-                        </li>
+                        </li> */}
                         <li className="list-none">
                             <Link
                                 to="/communications"
@@ -180,21 +195,7 @@ const AccountLayout = (props) => {
 
                             </Link>
                         </li>
-                        <li className="list-none">
-                            <Link
-                                to="/account-information"
-                                className={cn(
-                                    "text-[14px] font-medium p-2.5 block w-full hover_bg-gray-150 rounded-md",
-                                    activeMenu === '/account-information' ? 'bg-gray-150' : ''
-                                )}
-                            >
-                                <FormattedMessage
-                                    id={'myaccount.accountInformation'}
-                                    defaultMessage={'Account Information'}
-                                />
-
-                            </Link>
-                        </li>
+                        
 
                     </div>
                 </div>
