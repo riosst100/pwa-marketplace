@@ -11,6 +11,8 @@ import { fullPageLoadingIndicator } from '@magento/venia-ui/lib/components/Loadi
 import defaultClasses from './accountInformationPage.module.css';
 import AccountInformationPageOperations from './accountInformationPage.gql.js';
 
+import DeleteAccount from './DeleteAccount';
+
 const EditModal = React.lazy(() => import('./editModal'));
 
 const AccountInformationPage = props => {
@@ -116,6 +118,7 @@ const AccountInformationPage = props => {
                         setShouldShowNewPassword={setShouldShowNewPassword}
                     />
                 </Suspense>
+                <DeleteAccount />
             </Fragment>
         );
     }
