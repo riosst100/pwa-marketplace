@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SellerReviewItem from '../SellerReviewItem';
 import Pagination from '../Pagination';
 import { Star1 } from 'iconsax-react';
@@ -41,6 +41,7 @@ const SellerReview = ({ seller }) => {
     // });
     // const { reviews, loading } = talonProps;
     
+    const [filter, setFilter] = useState('All');
     const reviews = dummyReviews;
 
     // count stars
@@ -55,8 +56,12 @@ const SellerReview = ({ seller }) => {
         }
         return counts;
     };
-
     const starCounts = getStarCounts();
+
+    // Filter reviews sesuai rating
+    const filteredReviews = filter === 'All'
+        ? reviews.items
+        : reviews.items.filter(item => item.rating === parseInt(filter));
 
     return (
         <>
@@ -68,7 +73,6 @@ const SellerReview = ({ seller }) => {
                 <div className='w-full flex items-start xs_flex-col lg_flex-row gap-[30px]'>
                     <div className="w-full xs_max-w-full lg_max-w-[365px] border border-[#E6E9EA] rounded-md p-6">
                         <div className="flex justify-between items-start mb-1">
-                            {/* Left - Star rating */}
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1 mb-1">
                                     {[...Array(5)].map((_, i) => (
@@ -93,7 +97,6 @@ const SellerReview = ({ seller }) => {
                             </div>
                         </div>
                         
-                        {/* Rating Bars */}
                         <div className="mt-4">
                             {[5, 4, 3, 2, 1].map(star => {
                                 const count = starCounts[star] || 0;
@@ -101,21 +104,17 @@ const SellerReview = ({ seller }) => {
                                 
                                 return (
                                     <div key={star} className="flex items-center mb-2">
-                                        {/* Star number */}
                                         <div className="flex items-center mr-2">
                                             <Star1 color="#F7C317" size={14} className="fill-[#F7C317]" />
                                             <span className="text-sm ml-1">{star}</span>
                                         </div>
                                         
-                                        {/* Progress bar */}
                                         <div className="relative h-[8px] flex-1 bg-[#E4EBF5] rounded-sm mr-2">
                                             <div 
                                                 className="absolute h-[8px] bg-[#FF7A00] rounded-sm" 
                                                 style={{width: `${percentage}%`}}
                                             />
                                         </div>
-                                        
-                                        {/* Percentage */}
                                         <span className="text-sm text-right">{percentage}%</span>
                                     </div>
                                 );
@@ -123,24 +122,25 @@ const SellerReview = ({ seller }) => {
                         </div>
                     </div>
                     
-                    {/* Right Column - Reviews */}
                     <div className="flex-1">
-                        {/* Filter */}
                         <div className="flex items-center mb-6">
                             <span className="font-medium mr-3">Filter By</span>
-                            <select className="border border-[#E6E9EA] rounded px-3 py-2 text-sm">
-                                <option>All Stars</option>
-                                <option>5 Stars</option>
-                                <option>4 Stars</option>
-                                <option>3 Stars</option>
-                                <option>2 Stars</option>
-                                <option>1 Stars</option>
+                            <select
+                                className="border border-[#E6E9EA] rounded px-3 py-2 text-sm"
+                                value={filter}
+                                onChange={e => setFilter(e.target.value)}
+                            >
+                                <option value="All">All Stars</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Stars</option>
                             </select>
                         </div>
-                        
-                        {/* Reviews List */}
+
                         <div className="space-y-4 mb-6">
-                            {reviews && reviews.items && reviews.items.map((review, index) => (
+                            {filteredReviews.map((review, index) => (
                                 <div key={index} className="border border-[#E6E9EA] rounded-md p-4">
                                     <div className="flex items-center mb-2">
                                         <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold mr-3">
@@ -151,8 +151,7 @@ const SellerReview = ({ seller }) => {
                                             <div className="text-gray-500 text-sm">{review.date}</div>
                                         </div>
                                     </div>
-                                    
-                                    {/* Star Rating */}
+
                                     <div className="flex mb-3">
                                         {[...Array(5)].map((_, i) => (
                                             <Star1 
@@ -163,14 +162,11 @@ const SellerReview = ({ seller }) => {
                                             />
                                         ))}
                                     </div>
-                                    
-                                    {/* Review Text */}
                                     <p className="text-gray-700">{review.comment}</p>
                                 </div>
                             ))}
                         </div>
                         
-                        {/* Pagination */}
                         <div className="flex justify-center">
                             {reviews && reviews.page_info && reviews.page_info.total_pages > 0 && (
                                 <Pagination
