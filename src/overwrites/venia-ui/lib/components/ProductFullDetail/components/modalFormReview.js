@@ -27,7 +27,7 @@ const modalFormReview = (props) => {
                 className="modal_form_review !p-[30px] md_min-w-[650px]"
             >
                 <div className='form_review-container'>
-                    <div className='header_title-modal flex justify-between mb-10'>
+                    <div className='header_title-modal flex justify-between mb-5'>
                         <div className='text-lg text-black font-medium'>
                             Write Review
                         </div>
@@ -38,7 +38,7 @@ const modalFormReview = (props) => {
 
                     <Form
                         data-cy="form_review"
-                        className="flex flex-col gap-y-6"
+                        className="flex flex-col gap-y-3"
                         initialValues={{}}
                         onSubmit={() => { }}
                         onChange={() => { }}
