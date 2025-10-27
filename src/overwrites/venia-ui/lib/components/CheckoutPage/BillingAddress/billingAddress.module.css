@@ -23,7 +23,10 @@
 
     composes: lg_col-end-span1 from global;
 }
-
+.cardTitle{
+    font-weight: 500;
+    font-size: 16px;
+}
 .country,
 .street1,
 .street2,
@@ -33,4 +36,9 @@
 .postal_code,
 .phone_number {
     composes: col-end-span2 from global;
+    margin-left: 5px;
+}
+.address_check{
+    margin-top: 5px;
+    margin-left: 5px;
 }

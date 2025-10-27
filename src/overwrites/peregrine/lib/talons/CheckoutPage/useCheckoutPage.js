@@ -13,10 +13,59 @@ import { setCheckoutState} from '@magento/peregrine/lib/store/actions/cart';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 
-import DEFAULT_OPERATIONS from '@magento/peregrine/lib/talons/CheckoutPage/checkoutPage.gql.js';
+import DEFAULT_OPERATIONS from '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CheckoutPage/checkoutPage.extended.gql.js';
 
 import CheckoutError from '@magento/peregrine/lib/talons/CheckoutPage/CheckoutError';
 import { useGoogleReCaptcha } from '@magento/peregrine/lib/hooks/useGoogleReCaptcha';
+import { XENDIT_CREATE_INVOICE } from '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CheckoutPage/xendit.gql';
+
+// Lightweight UI helper: show a full-screen overlay when redirecting to Xendit
+const XENDIT_OVERLAY_ID = 'xendit-redirect-overlay';
+function showXenditRedirectOverlay() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById(XENDIT_OVERLAY_ID)) return;
+
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.textContent = `@keyframes xendit-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+
+    const overlay = document.createElement('div');
+    overlay.id = XENDIT_OVERLAY_ID;
+    overlay.setAttribute('data-cy', 'xendit-redirect-overlay');
+    overlay.style.cssText = [
+        'position:fixed',
+        'inset:0',
+        'background:rgba(0,0,0,0.85)',
+        'color:#fff',
+        'display:flex',
+        'flex-direction:column',
+        'align-items:center',
+        'justify-content:center',
+        'z-index:2147483647',
+        'text-align:center',
+        'padding:24px'
+    ].join(';');
+
+    const spinner = document.createElement('div');
+    spinner.style.cssText = [
+        'width:48px',
+        'height:48px',
+        'border:4px solid #ffffff',
+        'border-top-color:transparent',
+        'border-radius:50%',
+        'animation:xendit-spin 1s linear infinite',
+        'margin-bottom:16px'
+    ].join(';');
+
+    const text = document.createElement('div');
+    text.textContent = 'Redirecting you to Xendit payment page…';
+    text.style.cssText = 'font-size:16px; opacity:0.33;';
+
+    overlay.appendChild(spinner);
+    overlay.appendChild(text);
+    document.body.appendChild(overlay);
+}
 
 export const CHECKOUT_STEP = {
     SHIPPING_ADDRESS: 1,
@@ -114,6 +163,12 @@ export const useCheckoutPage = (props = {}) => {
             loading: placeOrderLoading
         }
     ] = useMutation(placeOrderMutation);
+
+    // Xendit: create invoice after successful placeOrder
+    const [
+        xenditCreateInvoice,
+        { data: xenditInvoiceData, loading: xenditInvoiceLoading, error: xenditInvoiceError }
+    ] = useMutation(XENDIT_CREATE_INVOICE);
 
     const [
         getOrderDetails,
@@ -237,6 +292,9 @@ export const useCheckoutPage = (props = {}) => {
     }, [checkoutStep]);
 
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    // When true, we intentionally hide the OrderConfirmationPage (orderNumber)
+    // to allow external payment (Xendit) to complete first.
+    const [suppressOrderConfirmation, setSuppressOrderConfirmation] = useState(false);
 
     const handlePlaceOrder = useCallback(async () => {
         // Fetch order details and then use an effect to actually place the
@@ -273,20 +331,68 @@ export const useCheckoutPage = (props = {}) => {
         async function placeOrderAndCleanup() {
             try {
                 const reCaptchaData = await generateReCaptchaData();
-
-                await placeOrder({
+                // Execute placeOrder and get the order number directly from the response
+                const placeOrderResult = await placeOrder({
                     variables: {
                         cartId
                     },
                     ...reCaptchaData
                 });
-                // Cleanup stale cart and customer info.
-                await removeCart();
-                await apolloClient.clearCacheData(apolloClient, 'cart');
 
-                await createCart({
-                    fetchCartId
-                });
+                const orderNumber =
+                    placeOrderResult?.data?.placeOrder?.order?.order_number;
+                // If payment is Xendit, create invoice and redirect BEFORE cleaning up cart
+                const selectedPayment = orderDetailsData?.cart?.selected_payment_method;
+                const paymentCode = selectedPayment?.code;
+                const paymentTitle = selectedPayment?.title;
+                const isXendit =
+                    (paymentCode && paymentCode.toLowerCase() === 'xendit') ||
+                    (paymentTitle && paymentTitle.toLowerCase().includes('xendit'));
+                if (isXendit && orderNumber) {
+                    try {
+                        // Prevent success page from rendering; we'll redirect to Xendit first
+                        setSuppressOrderConfirmation(true);
+                        const res = await xenditCreateInvoice({
+                            variables: { orderId: orderNumber }
+                        });
+                        const payload = res?.data?.xenditCreateInvoice;
+                        const url = payload?.invoice_url;
+                        if (url) {
+                            // Show overlay to inform user before redirecting
+                            showXenditRedirectOverlay();
+                            // Perform cart cleanup before redirecting away
+                            try {
+                                await removeCart();
+                                await apolloClient.clearCacheData(apolloClient, 'cart');
+                                await createCart({ fetchCartId });
+                            } catch (cleanupErr) {
+                                // eslint-disable-next-line no-console
+                                console.warn('Cleanup before Xendit redirect failed', cleanupErr);
+                            }
+                            // Give the browser a brief moment to paint the overlay
+                            setTimeout(() => {
+                                // Redirect in the SAME TAB per requested flow
+                                window.location.assign(url);
+                            }, 2000);
+                        } else {
+                            // eslint-disable-next-line no-console
+                            console.warn(
+                                'Xendit: invoice_url missing in response'
+                            );
+                        }
+                    } catch (err) {
+                        // eslint-disable-next-line no-console
+                        console.error(
+                            'Xendit: failed to create invoice',
+                            err
+                        );
+                    }
+                } else {
+                    // Non-Xendit: proceed with normal cleanup
+                    await removeCart();
+                    await apolloClient.clearCacheData(apolloClient, 'cart');
+                    await createCart({ fetchCartId });
+                }
             } catch (err) {
                 console.error(
                     'An error occurred during when placing the order',
@@ -365,7 +471,11 @@ export const useCheckoutPage = (props = {}) => {
                     type: 'CHECKOUT_PLACE_ORDER_BUTTON_CLICKED',
                     payload: eventPayload
                 });
-            } else if (placeOrderData && orderDetailsData?.cart.id === cartId) {
+            } else if (
+                placeOrderData &&
+                orderDetailsData?.cart.id === cartId &&
+                !suppressOrderConfirmation
+            ) {
                 dispatch({
                     type: 'ORDER_CONFIRMATION_PAGE_VIEW',
                     payload: {
@@ -386,6 +496,7 @@ export const useCheckoutPage = (props = {}) => {
         dispatch,
         placeOrderData,
         isPlacingOrder,
+        suppressOrderConfirmation,
         reviewOrderButtonClicked
     ]);
 
@@ -408,9 +519,9 @@ export const useCheckoutPage = (props = {}) => {
         isUpdating,
         orderDetailsData,
         orderDetailsLoading,
-        orderNumber:
-            (placeOrderData && placeOrderData.placeOrder.order.order_number) ||
-            null,
+        orderNumber: suppressOrderConfirmation
+            ? null
+            : (placeOrderData && placeOrderData.placeOrder.order.order_number) || null,
         placeOrderLoading,
         placeOrderButtonClicked,
         setCheckoutStep,

@@ -1,7 +1,8 @@
 .root {
     composes: grid from global;
-    composes: p-md from global;
+    /* composes: p-md from global; */
     composes: pb-s from global;
+    padding: 1rem;
 }
 
 .radio_group {
@@ -10,10 +11,11 @@
 
 .payment_method {
     composes: border-b from global;
-    composes: border-solid from global;
-    composes: border-subtle from global;
+    /* composes: border-solid from global; */
+    /* composes: border-subtle from global; */
     composes: pb-xs from global;
     composes: pt-xs from global;
+    border-color: lightgray;
 }
 
 /* TODO @TW: cannot compose */
@@ -31,4 +33,12 @@
     composes: grid from global;
     composes: gap-2xs from global;
     composes: text-error from global;
+}
+.cardTitle{
+    font-weight: 500;
+    font-size: 16px;
+}
+.address_check{
+    margin-left: 5px;
+    margin-top: 5px;
 }

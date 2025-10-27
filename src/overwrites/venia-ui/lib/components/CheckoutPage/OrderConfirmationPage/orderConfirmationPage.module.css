@@ -1,4 +1,3 @@
-/* prettier-ignore */
 .root {
     composes: gap-xs from global;
     composes: grid from global;
@@ -9,17 +8,17 @@
     composes: px-sm from global;
     composes: py-sm from global;
 
-    composes: lg_gap-md from global;
+    /* composes: lg_gap-md from global; */
     /* TODO @TW: review (B7) */
-    composes: lg_grid-cols-[2fr,1fr] from global;
+    /* composes: lg_grid-cols-[2fr,1fr] from global;
     composes: lg_px-lg from global;
-    composes: lg_py-md from global;
+    composes: lg_py-md from global; */
 }
 
 .mainContainer {
     composes: col-start-1 from global;
     composes: grid from global;
-    composes: gap-y-xs from global;
+    composes: gap-y-sm from global;
 }
 
 .sidebarContainer {
@@ -44,6 +43,72 @@
     composes: header;
 }
 
+.successHeader {
+    composes: grid from global;
+    composes: gap-y-xs from global;
+    composes: rounded-md from global;
+    composes: border from global;
+    border-color: #E6E9EA;
+    composes: bg-surface from global;
+    composes: p-md from global;
+    composes: text-center from global;
+}
+
+.iconCheck {
+    composes: mx-auto from global;
+    composes: h-14 from global;
+    composes: w-14 from global;
+    color: #f76b1c;
+}
+
+.orderNumberRow {
+    composes: flex from global;
+    composes: items-center from global;
+    composes: justify-center from global;
+    composes: gap-x-xs from global;
+}
+
+.orderNumberText {
+    composes: header;
+}
+
+.copyBtn {
+    composes: text-sm from global;
+    composes: px-sm from global;
+    composes: py-2xs from global;
+    composes: rounded from global;
+    composes: border from global;
+    composes: border-subtle from global;
+    composes: hover_bg-subtle from global;
+}
+
+.actions {
+    composes: flex from global;
+    composes: gap-x-xs from global;
+    composes: justify-center from global;
+}
+
+.primaryAction {
+    composes: inline-flex from global;
+    composes: items-center from global;
+    composes: justify-center from global;
+    composes: px-lg from global;
+    composes: py-xs from global;
+    composes: rounded-full from global;
+    composes: font-semibold from global;
+    color: #fff;
+    background: #f76b1c;
+    border: 1px solid #f76b1c;
+}
+
+.primaryAction:hover {
+    color: #fff;
+    background: #f26313;
+    border: 1px solid #f26313;
+}
+
+.secondaryAction { display: none; }
+
 .shippingInfoHeading {
     composes: header;
 }
@@ -67,4 +132,36 @@
 
 .additionalText {
     composes: text;
+}
+
+.detailsGrid {
+    composes: grid from global;
+    composes: gap-sm from global;
+    composes: md_grid-cols-2 from global;
+}
+
+.card {
+    composes: rounded-md from global;
+    composes: border from global;
+    border-color: #E6E9EA;
+    composes: bg-surface from global;
+    composes: p-md from global;
+}
+
+.cardHeading {
+    composes: header;
+    composes: mb-2xs from global;
+}
+
+.itemsReview {
+    composes: rounded-md from global;
+    composes: border from global;
+    border-color: #E6E9EA;
+    composes: bg-surface from global;
+    composes: p-md from global;
+}
+
+.heading {
+    composes: font-bold from global;
+    composes: text-2xl from global;
 }

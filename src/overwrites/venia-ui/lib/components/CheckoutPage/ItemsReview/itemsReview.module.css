@@ -1,7 +1,8 @@
 .items_review_container {
-    composes: border-2 from global;
+    composes: border-1 from global;
     composes: border-solid from global;
-    composes: border-subtle from global;
+    /* composes: border-subtle from global; */
+    border: 1px solid #E6E9EA;
     composes: rounded-md from global;
     min-height: 2rem;
 }
