@@ -3,7 +3,7 @@ import {mergeClasses} from '@magento/venia-ui/lib/classify';
 import {shape, string, bool, func} from 'prop-types';
 import BillingAddress from '@magento/venia-ui/lib/components/CheckoutPage/BillingAddress';
 
-import {usePaypalExpress} from '../../talons/PaymentMethod/PaypalExpress/usePaypalExpress';
+import {usePaypalExpress} from '@riosst100/pwa-marketplace/src/talons/PaymentMethod/PaypalExpress/usePaypalExpress';
 import defaultClasses from './paypalExpress.css';
 import {FormattedMessage} from 'react-intl';
 
@@ -56,7 +56,8 @@ PaypalExpress.propTypes = {
     shouldSubmit: bool.isRequired,
     onPaymentSuccess: func,
     onPaymentError: func,
-    resetShouldSubmit: func.isRequired
+    resetShouldSubmit: func.isRequired,
+    currentSelectedPaymentMethod: string
 };
 
 export default PaypalExpress;

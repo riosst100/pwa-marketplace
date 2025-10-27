@@ -10,6 +10,8 @@
     composes: text-colorDefault from global;
     grid-template-areas: 'input label';
     grid-template-columns: min-content 1fr;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 .input {

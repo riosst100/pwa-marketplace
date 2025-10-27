@@ -37,7 +37,30 @@ const PaymentMethods = props => {
         return null;
     }
 
-    console.log('payments', payments)
+    // Warn if Magento exposes payment methods that don't have a mapped UI component.
+    const knownCodes = Object.keys(payments);
+    const unknownMethods = availablePaymentMethods.filter(
+        ({ code }) => !knownCodes.includes(code)
+    );
+    if (unknownMethods.length) {
+        // eslint-disable-next-line no-console
+        console.warn(
+            'Checkout: Ditemukan metode pembayaran yang belum dipetakan:',
+            unknownMethods.map(m => m.code),
+            '\nPastikan metode tersebut terdaftar melalui target build Venia "checkoutPagePaymentTypes" atau ditambahkan ke paymentMethodCollection.'
+        );
+    }
+
+    // Title fallback map to ensure labels are always visible.
+    const TITLE_FALLBACK = {
+        braintree: 'Credit/Debit Card',
+        paypal_express: 'PayPal Express Checkout',
+        paypal_express_bml: 'PayPal Credit',
+        checkmo: 'Check / Money Order',
+        xendit: 'Xendit',
+        cc: 'Credit Card',
+        free: 'Free'
+    };
 
     const radios = availablePaymentMethods
         .map(({ code, title }) => {
@@ -48,6 +71,7 @@ const PaymentMethods = props => {
 
             const id = `paymentMethod--${code}`;
             const isSelected = currentSelectedPaymentMethod === code;
+            const displayTitle = title || TITLE_FALLBACK[code] || code;
             const PaymentMethodComponent = payments[code];
             const renderedComponent = isSelected ? (
                 <PaymentMethodComponent
@@ -55,6 +79,7 @@ const PaymentMethods = props => {
                     onPaymentError={onPaymentError}
                     resetShouldSubmit={resetShouldSubmit}
                     shouldSubmit={shouldSubmit}
+                    currentSelectedPaymentMethod={currentSelectedPaymentMethod}
                 />
             ) : null;
 
@@ -62,7 +87,7 @@ const PaymentMethods = props => {
                 <div key={code} className={classes.payment_method}>
                     <Radio
                         id={id}
-                        label={title}
+                        label={displayTitle}
                         value={code}
                         classes={{
                             label: classes.radio_label
@@ -95,6 +120,12 @@ const PaymentMethods = props => {
 
     return (
         <div className={classes.root}>
+            <h5 className={classes.cardTitle}>
+                {formatMessage({
+                    id: 'checkoutPage.paymentInformation',
+                    defaultMessage: 'Payment Information'
+                })}
+            </h5>
             <RadioGroup
                 classes={{ root: classes.radio_group }}
                 field="selectedPaymentMethod"

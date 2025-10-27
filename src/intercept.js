@@ -34,6 +34,7 @@ module.exports = targets => {
         plugin => plugin instanceof LocalizationPlugin
       );
 
+    // ...existing code...
       // Check if LocalizationPlugin is found
       if (localizationPlugin) {
         // Store the original mergeLocales function
@@ -85,6 +86,13 @@ module.exports = targets => {
       path: require.resolve("./components/BecomeSellerPage/index.js"),
       authed: true,
       redirectTo: "/sign-in"
+    },
+    {
+      exact: true,
+      name: "VerifyEmailPage",
+      pattern: "/verify-email",
+      path: require.resolve("./components/VerifyEmailPage/index.js"),
+      authed: true,
     },
     {
       exact: true,
