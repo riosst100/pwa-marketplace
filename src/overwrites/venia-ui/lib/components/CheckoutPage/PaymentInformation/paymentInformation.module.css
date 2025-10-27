@@ -21,3 +21,9 @@
 
     composes: lg_border from global;
 }
+
+.cardTitle {
+    composes: font-medium from global;
+    composes: text-[16px] from global;
+    composes: ml-[5px] from global;
+}

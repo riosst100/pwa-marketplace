@@ -173,14 +173,25 @@
 
 .review_order_button {
     composes: root_highPriority from '@magento/venia-ui/lib/components/Button/button.module.css';
-
+    box-shadow: none;
     grid-column: 1 / span 1;
     composes: m-auto from global;
+    text-transform: capitalize;
 }
-
+.review_order_button:hover,
+.review_order_button:focus,
+.review_order_button:active {
+    box-shadow: none;
+}
 .place_order_button {
     composes: root_highPriority from '@magento/venia-ui/lib/components/Button/button.module.css';
-
+    box-shadow: none;
     grid-column: 1 / span 1;
     composes: m-auto from global;
+    text-transform: capitalize;
+}
+.place_order_button:hover,
+.place_order_button:focus,
+.place_order_button:active {
+    box-shadow: none;
 }

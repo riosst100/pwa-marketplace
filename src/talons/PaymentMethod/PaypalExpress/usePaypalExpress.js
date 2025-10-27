@@ -37,8 +37,12 @@ export const usePaypalExpress = props => {
      * This function will be called if address was successfully set.
      */
     const onBillingAddressChangedSuccess = useCallback(() => {
+        // Guard: avoid sending an invalid mutation if selectedMethod is missing.
+        if (!selectedMethod) {
+            return;
+        }
         updatePaymentMethod({
-            variables: {cartId, selectedMethod}
+            variables: { cartId, selectedMethod }
         });
     }, [updatePaymentMethod, cartId, selectedMethod]);
 

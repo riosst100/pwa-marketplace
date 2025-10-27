@@ -5,6 +5,7 @@ import { useOrderConfirmationPage } from '@magento/peregrine/lib/talons/Checkout
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
+import { Link } from 'react-router-dom';
 import CreateAccount from './createAccount';
 import ItemsReview from '../ItemsReview';
 import defaultClasses from './orderConfirmationPage.module.css';
@@ -63,6 +64,8 @@ const OrderConfirmationPage = props => {
     const nameString = `${firstname} ${lastname}`;
     const additionalAddressString = `${city}, ${region} ${postcode} ${country}`;
 
+    // copy button removed per request
+
     return (
         <div className={classes.root} data-cy="OrderConfirmationPage-root">
             <StoreTitle>
@@ -72,52 +75,73 @@ const OrderConfirmationPage = props => {
                 })}
             </StoreTitle>
             <div className={classes.mainContainer}>
-                <h2
-                    data-cy="OrderConfirmationPage-header"
-                    className={classes.heading}
-                >
-                    <FormattedMessage
-                        id={'checkoutPage.thankYou'}
-                        defaultMessage={'Thank you for your order!'}
-                    />
-                </h2>
-                <div
-                    data-cy="OrderConfirmationPage-orderNumber"
-                    className={classes.orderNumber}
-                >
-                    <FormattedMessage
-                        id={'checkoutPage.orderNumber'}
-                        defaultMessage={'Order Number: {orderNumber}'}
-                        values={{ orderNumber }}
-                    />
+                <div className={classes.successHeader}>
+                    <div className={classes.iconCheck} aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" opacity="0.4" />
+                            <path d="M7 12.5L10.2 16L17 8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </div>
+                    <h2
+                        data-cy="OrderConfirmationPage-header"
+                        className={classes.heading}
+                    >
+                        <FormattedMessage
+                            id={'checkoutPage.thankYou'}
+                            defaultMessage={'Thank you for your order!'}
+                        />
+                    </h2>
+                    <div
+                        data-cy="OrderConfirmationPage-orderNumber"
+                        className={classes.orderNumberRow}
+                    >
+                        <div className={classes.orderNumberText}>
+                            <FormattedMessage
+                                id={'checkoutPage.orderNumber'}
+                                defaultMessage={'Order Number: {orderNumber}'}
+                                values={{ orderNumber }}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.actions}>
+                        <Link to="/" className={classes.primaryAction} data-cy="OrderConfirmationPage-continueShopping">
+                            <FormattedMessage id={'checkoutPage.continueShopping'} defaultMessage={'Continue Shopping'} />
+                        </Link>
+                    </div>
                 </div>
-                <div
-                    data-cy="OrderConfirmationPage-shippingInfoHeading"
-                    className={classes.shippingInfoHeading}
-                >
-                    <FormattedMessage
-                        id={'global.shippingInformation'}
-                        defaultMessage={'Shipping Information'}
-                    />
+                <div className={classes.detailsGrid}>
+                    <div className={classes.card}>
+                        <div
+                            data-cy="OrderConfirmationPage-shippingInfoHeading"
+                            className={classes.cardHeading}
+                        >
+                            <FormattedMessage
+                                id={'global.shippingInformation'}
+                                defaultMessage={'Shipping Information'}
+                            />
+                        </div>
+                        <div className={classes.shippingInfo}>
+                            <span className={classes.email}>{email}</span>
+                            <span className={classes.name}>{nameString}</span>
+                            {streetRows}
+                            <span className={classes.addressAdditional}>
+                                {additionalAddressString}
+                            </span>
+                        </div>
+                    </div>
+                    <div className={classes.card}>
+                        <div
+                            data-cy="OrderConfirmationPage-shippingMethodHeading"
+                            className={classes.cardHeading}
+                        >
+                            <FormattedMessage
+                                id={'global.shippingMethod'}
+                                defaultMessage={'Shipping Method'}
+                            />
+                        </div>
+                        <div className={classes.shippingMethod}>{shippingMethod}</div>
+                    </div>
                 </div>
-                <div className={classes.shippingInfo}>
-                    <span className={classes.email}>{email}</span>
-                    <span className={classes.name}>{nameString}</span>
-                    {streetRows}
-                    <span className={classes.addressAdditional}>
-                        {additionalAddressString}
-                    </span>
-                </div>
-                <div
-                    data-cy="OrderConfirmationPage-shippingMethodHeading"
-                    className={classes.shippingMethodHeading}
-                >
-                    <FormattedMessage
-                        id={'global.shippingMethod'}
-                        defaultMessage={'Shipping Method'}
-                    />
-                </div>
-                <div className={classes.shippingMethod}>{shippingMethod}</div>
                 <div className={classes.itemsReview}>
                     <ItemsReview data={data} />
                 </div>
