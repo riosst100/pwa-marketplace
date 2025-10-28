@@ -7,7 +7,7 @@ import defaultClasses from './filterTopItemGroup.module.css';
 import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTop/CurrentTopFilters/currentTopFilter';
 
 const FilterTopItemGroup = props => {
-    const { setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
+    const { customFiltersData, setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -83,11 +83,29 @@ const FilterTopItemGroup = props => {
         }
     }, [field, fieldApi, fieldState.value, fieldValue]);
 
+    // console.log(customFiltersData.filters)
+                    
+
+    const customFilterData = useMemo(() => {
+        const filtered = customFiltersData.filters.filter(item => item.attribute_code === group);
+        // console.log('filtered ' + group,filtered);
+        if (filtered) {
+            // console.log('filtered ' + group,filtered);
+            // console.log('show_all_btn 2 ' + group,isShowAllBtn);
+            return filtered[0];
+        }
+
+        return null;
+    }, [customFiltersData]);
+
     return (
         <div className={classes.root}>
             {radioItems}
             {filterElements && filterElements.length > 10 ? <span className={classes.item}><b>More Item</b></span> : ''}
-            {filterElements && filterElements.length ? filterElements : group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "trains" && group != "franchise" && group != "brands" && group != "bricks_categories" && group != "category" && group != "sc_sports_categories" && group != "card_game" && group != "filterby" && group != "shopby" && group != "cat_id" ? (<span className={classes.item}><b>All</b></span>) : ''}
+
+            {customFilterData && customFilterData.show_all_btn ? <span className={classes.item}><b>All</b></span> : ''}
+
+            {/* {filterElements && filterElements.length ? filterElements : group && group != "character" && group != "product_series" && group != "scale" && group != "product_line" && group != "trains" && group != "franchise" && group != "brands" && group != "bricks_categories" && group != "category" && group != "sc_sports_categories" && group != "card_game" && group != "filterby" && group != "shopby" && group != "cat_id" ? (<span className={classes.item}><b>All</b></span>) : ''} */}
         </div>
     );
 };

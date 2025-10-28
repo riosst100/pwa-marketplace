@@ -7,6 +7,7 @@ export const GET_CUSTOM_FILTERS = gql`
             filters {
                 label
                 count
+                show_all_btn
                 attribute_code
                 options {
                     label

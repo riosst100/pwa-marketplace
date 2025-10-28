@@ -23,6 +23,7 @@ const FilterTopBlock = props => {
         name,
         onApply,
         filterNames,
+        customFiltersData,
         initialOpen,
         originalFilterState,
         search,
@@ -42,6 +43,7 @@ const FilterTopBlock = props => {
             setFilterBy={setFilterBy}
             filterBy={filterBy}
             filterApi={filterApi}
+            customFiltersData={customFiltersData}
             filterState={filterState}
             originalFilterState={originalFilterState}
             name={name}
