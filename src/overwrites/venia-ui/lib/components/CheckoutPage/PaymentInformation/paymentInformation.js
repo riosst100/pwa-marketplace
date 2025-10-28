@@ -55,9 +55,8 @@ const PaymentInformation = props => {
         );
     }
 
-    const paymentInformation = doneEditing ? (
-        <Summary onEdit={showEditModal} />
-    ) : (
+    // Always show the full payment methods UI so users can switch/edit easily even after Review.
+    const paymentInformation = (
         <Form>
             <PaymentMethods
                 onPaymentError={handlePaymentError}
@@ -68,11 +67,8 @@ const PaymentInformation = props => {
         </Form>
     );
 
-    const editModal = doneEditing ? (
-        <Suspense fallback={null}>
-            <EditModal onClose={hideEditModal} isOpen={isEditModalActive} />
-        </Suspense>
-    ) : null;
+    // Do not render the edit modal; changes happen inline.
+    const editModal = null;
 
     return (
         <div className={classes.root} data-cy="PaymentInformation-root">

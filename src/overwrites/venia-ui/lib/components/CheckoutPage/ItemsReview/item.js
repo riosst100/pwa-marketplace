@@ -25,7 +25,7 @@ const Item = props => {
             <Image
                 alt={product.name}
                 classes={{ root: classes.thumbnail }}
-                width={100}
+                width={50}
                 resource={
                     configurableThumbnailSource === 'itself' &&
                         configured_variant
