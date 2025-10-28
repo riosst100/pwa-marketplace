@@ -15,6 +15,7 @@ const FilterBlockList = props => {
         originalFilterState,
         search,
         setFilterBy,
+        customFiltersData,
         filterBy
     } = props;
 
@@ -23,6 +24,7 @@ const FilterBlockList = props => {
         return (
             <FilterTopItemGroup
                 setFilterBy={setFilterBy}
+                customFiltersData={customFiltersData}
                 filterBy={filterBy}
                 filterApi={filterApi}
                 filterState={filterState}

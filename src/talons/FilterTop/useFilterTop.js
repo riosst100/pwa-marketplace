@@ -307,6 +307,7 @@ export const useFilterTop = props => {
         handleReset,
         isApplying,
         isOpen,
-        customFilters
+        customFilters,
+        customFiltersData
     };
 };

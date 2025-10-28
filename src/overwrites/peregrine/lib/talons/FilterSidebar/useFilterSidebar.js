@@ -36,16 +36,18 @@ export const useFilterSidebar = props => {
 
     const { data: introspectionData } = useQuery(getFilterInputsQuery);
 
-    const {
-        called: subFilterItemsCalled,
-        data: subFilterItems,
-        loading: subFilterItemsLoading,
-        error: subFilterItemsError
-    } = useQuery(getSubFiltersQuery,
-    {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-first'
-    });
+    // const {
+    //     called: subFilterItemsCalled,
+    //     data: subFilterItems,
+    //     loading: subFilterItemsLoading,
+    //     error: subFilterItemsError
+    // } = useQuery(getSubFiltersQuery,
+    // {
+    //     fetchPolicy: 'cache-and-network',
+    //     nextFetchPolicy: 'cache-first'
+    // });
+
+    const subFilterItems = [];
 
     const attributeCodes = useMemo(
         () => filters.map(({ attribute_code }) => attribute_code),

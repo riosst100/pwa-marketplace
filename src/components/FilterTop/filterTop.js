@@ -34,7 +34,8 @@ const FilterTop = props => {
         filterState,
         handleApply,
         handleReset,
-        customFilters
+        customFilters,
+        customFiltersData
     } = talonProps;
 
     const classes = useStyle(defaultClasses, props.classes);
@@ -116,6 +117,7 @@ const FilterTop = props => {
                             filterBy={filterBy}
                             filterNames={filterNames}
                             filterApi={filterApi}
+                            customFiltersData={customFiltersData}
                             filterState={blockState}
                             originalFilterState={filterState}
                             filterFrontendInput={frontendInput}
@@ -137,6 +139,7 @@ const FilterTop = props => {
             filterState,
             filterCountToOpen,
             customFilters,
+            customFiltersData,
             handleApplyFilter
         ]
     );
