@@ -8,8 +8,9 @@
     composes: grid from global;
     composes: grid-cols-[100%] from global;
     composes: justify-start from global;
-
-    composes: sm_grid-cols-autoAuto from global;
+    /* On small screens and up, make two columns: name grows, price auto */
+    composes: sm_grid-cols-[1fr,auto] from global;
+    composes: items-center from global;
 }
 
 .radioMessage {
@@ -19,4 +20,52 @@
 .error {
     composes: leading-normal from global;
     composes: text-error from global;
+}
+
+/* Fix alignment and visual of radio controls inside the modal */
+.radioContainer {
+    /* Ensure consistent layout: control + content */
+    composes: justify-items-start from global;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas: 'input label';
+    justify-content: flex-start !important;
+    align-items: flex-start;
+}
+
+/* Normalize the control size and overlaying layers so input and icon overlap */
+.radioContainer :global([class*="radio-input-"]) {
+    width: 1.5rem; /* 24px default Venia size for harmony with icon */
+    height: 1.5rem;
+    box-shadow: none !important; /* remove active/focus blobs that appear offset */
+}
+
+.radioContainer :global([class*="radio-icon-"]) {
+    position: relative !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    display: inline-block;
+}
+
+/* Prevent filled background bleed that can look like an offset dot */
+.radioContainer :global([class*="radio-input-"]:checked) {
+    background-color: transparent !important; /* dot handled via icon ::after */
+}
+
+/* Draw an inner dot centered in the ring when checked */
+.radioContainer :global([class*="radio-icon-"]) {
+    position: relative;
+}
+
+.radioContainer :global([class*="radio-input-"]:checked) + :global([class*="radio-icon-"])::after {
+    content: '';
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    width: 0.6rem;
+    height: 0.6rem;
+    background: #f76b1c;
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }

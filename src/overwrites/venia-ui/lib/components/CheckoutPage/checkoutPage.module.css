@@ -124,6 +124,7 @@
 
 .items_review_container {
     grid-column: 1 / span 1;
+    margin-top: 2rem;
 }
 
 .summaryContainer {
@@ -132,7 +133,7 @@
     composes: lg_h-minContent from global;
     composes: lg_sticky from global;
     /* TODO @TW: review. Magic number. Slightly bigger than sticky header. */
-    composes: lg_top-[9rem] from global;
+    composes: lg_top-[2.5rem] from global;
 }
 
 @media (min-width: 960px) {

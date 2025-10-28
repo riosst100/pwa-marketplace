@@ -21,7 +21,7 @@ const ShowAllButton = props => {
                 <span className={classes.text}>
                     <FormattedMessage
                         id={'checkoutPage.showAllItems'}
-                        defaultMessage={'SHOW ALL ITEMS'}
+                        defaultMessage={'Show All Items'}
                     />
                 </span>
                 <Icon

@@ -244,36 +244,19 @@ const CheckoutPage = props => {
                 </div>
             ) : null;
 
-        const reviewOrderButton =
-            checkoutStep === CHECKOUT_STEP.PAYMENT ? (
-                <Button
-                    onClick={handleReviewOrder}
-                    onKeyDown={handleReviewOrderEnterKeyPress}
-                    priority="high"
-                    className={classes.review_order_button}
-                    data-cy="CheckoutPage-reviewOrderButton"
-                    disabled={
-                        reviewOrderButtonClicked ||
-                        isUpdating ||
-                        !isPaymentAvailable
-                    }
-                >
-                    <FormattedMessage
-                        id={'checkoutPage.reviewOrder'}
-                        defaultMessage={'Review Order'}
-                    />
-                </Button>
-            ) : null;
+        // Remove Review Order button; flow uses only Place Order
+        const reviewOrderButton = null;
 
-        const itemsReview =
-            checkoutStep === CHECKOUT_STEP.REVIEW ? (
-                <div className={classes.items_review_container}>
-                    <ItemsReview />
-                </div>
-            ) : null;
+        // Show ItemsReview from the beginning, not only at the REVIEW step
+        const itemsReview = (
+            <div className={classes.items_review_container}>
+                <ItemsReview />
+            </div>
+        );
 
+        // Allow placing order starting from the Payment step (no separate review action)
         const placeOrderButton =
-            checkoutStep === CHECKOUT_STEP.REVIEW ? (
+            checkoutStep >= CHECKOUT_STEP.PAYMENT ? (
                 <Button
                     onClick={handlePlaceOrder}
                     onKeyDown={handlePlaceOrderEnterKeyPress}
@@ -312,6 +295,7 @@ const CheckoutPage = props => {
                 }
             >
                 <OrderSummary isUpdating={isUpdating} />
+                {itemsReview}
             </div>
         );
 
@@ -394,7 +378,6 @@ const CheckoutPage = props => {
                 </div>
                 {priceAdjustmentsSection}
                 {reviewOrderButton}
-                {itemsReview}
                 {orderSummary}
                 {placeOrderButton}
                 <GoogleReCaptcha {...recaptchaWidgetProps} />

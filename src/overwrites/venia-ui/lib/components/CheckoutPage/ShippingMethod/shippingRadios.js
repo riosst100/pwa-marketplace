@@ -26,7 +26,9 @@ const ShippingRadios = props => {
     const radioGroupClasses = {
         message: classes.radioMessage,
         radioLabel: classes.radioLabel,
-        root: classes.radioRoot
+        root: classes.radioRoot,
+        // Ensure we can tweak the label container (the clickable row)
+        radioContainer: classes.radioContainer
     };
 
     const shippingRadios = shippingMethods.map(method => {

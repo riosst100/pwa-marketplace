@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { shape, string, bool, func } from 'prop-types';
 import { useIntl } from 'react-intl';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { usePaymentMethods } from '@magento/peregrine/lib/talons/CheckoutPage/PaymentInformation/usePaymentMethods';
+import { useCartContext } from '@magento/peregrine/lib/context/cart';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import RadioGroup from '@magento/venia-ui/lib/components/RadioGroup';
 import Radio from '@magento/venia-ui/lib/components/RadioGroup/radio';
 import defaultClasses from './paymentMethods.module.css';
 import payments from './paymentMethodCollection';
+import {
+    GET_SHIPPING_ADDRESS,
+    SET_BILLING_ADDRESS
+} from '@riosst100/pwa-marketplace/src/talons/Xendit/xendit';
 
 const PaymentMethods = props => {
     const {
@@ -32,6 +38,57 @@ const PaymentMethods = props => {
         initialSelectedMethod,
         isLoading
     } = talonProps;
+
+    const [{ cartId }] = useCartContext();
+
+    const { data: shippingData } = useQuery(GET_SHIPPING_ADDRESS, {
+        skip: !cartId,
+        variables: { cartId }
+    });
+
+    const [setBillingAddress] = useMutation(SET_BILLING_ADDRESS);
+
+    const getRegionValue = region => {
+        if (!region) return '';
+        return region.region_id || region.label || region.code || '';
+    };
+
+    const handleChangeAndSetBilling = useCallback(
+        async event => {
+            // First, run canonical selection logic (updates selected payment on cart)
+            handlePaymentMethodSelection(event);
+
+            // Then, proactively set billing address using the selected shipping address
+            try {
+                const shippingAddresses =
+                    shippingData?.cart?.shippingAddresses || [];
+                const addr = shippingAddresses[0];
+                if (!addr || !cartId) return;
+
+                const street1 = Array.isArray(addr.street) ? addr.street[0] || '' : '';
+                const street2 = Array.isArray(addr.street) ? addr.street[1] || '' : '';
+                await setBillingAddress({
+                    variables: {
+                        cartId,
+                        firstName: addr.firstName || '',
+                        lastName: addr.lastName || '',
+                        street1,
+                        street2,
+                        city: addr.city || '',
+                        region: getRegionValue(addr.region),
+                        postcode: addr.postcode || '',
+                        country: addr.country?.code || '',
+                        phoneNumber: addr.phoneNumber || ''
+                    }
+                });
+            } catch (e) {
+                // Non-blocking; payment selection should still work even if billing sync fails
+                // eslint-disable-next-line no-console
+                console.warn('Gagal menyetel billing address saat memilih metode pembayaran:', e);
+            }
+        },
+        [cartId, handlePaymentMethodSelection, setBillingAddress, shippingData]
+    );
 
     if (isLoading) {
         return null;
@@ -93,7 +150,7 @@ const PaymentMethods = props => {
                             label: classes.radio_label
                         }}
                         checked={isSelected}
-                        onChange={handlePaymentMethodSelection}
+                        onChange={handleChangeAndSetBilling}
                     />
                     {renderedComponent}
                 </div>
