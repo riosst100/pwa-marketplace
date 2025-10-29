@@ -86,7 +86,7 @@ const FilterTopItem = props => {
     ) : group == "category" ? (
         <Link className={classes.item} to={'/'+value}>{title}</Link>
     ) : value == "shopby_all" ? (
-        <Link className={classes.item} to={search ? filterSearch + '&shopby=' + group : '?shopby=' + group}>{title}</Link>
+        <Link className={classes.item} to={search ? filterSearch + '&show_more=' + group : '?show_more=' + group}>{title}</Link>
     ) : group == "shopby" || group == "shopby_with_all" ? (
         <Link className={classes.item} to={search ? filterSearch + '&shopby=' + value : '?shopby=' + value}>{title}</Link>
     ) : group == "cat_id" ? (

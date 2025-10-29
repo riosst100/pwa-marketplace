@@ -1,49 +1,22 @@
 import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { array, number, shape, string } from 'prop-types';
-
-import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
-import { useCategoryContent } from '@magento/peregrine/lib/talons/RootComponents/Category';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
-import FilterModalOpenButton, {
-    FilterModalOpenButtonShimmer
-} from '@magento/venia-ui/lib/components/FilterModalOpenButton';
-import { FilterSidebarShimmer } from '@magento/venia-ui/lib/components/FilterSidebar';
-import Gallery, { GalleryShimmer } from '@magento/venia-ui/lib/components/Gallery';
-import Pagination from '@magento/venia-ui/lib/components/Pagination';
-import ProductSort, { ProductSortShimmer } from '@magento/venia-ui/lib/components/ProductSort';
-import RichContent from '@magento/venia-ui/lib/components/RichContent';
-import Shimmer from '@magento/venia-ui/lib/components/Shimmer';
-import SortedByContainer, {
-    SortedByContainerShimmer
-} from '@magento/venia-ui/lib/components/SortedByContainer';
-import NoProductsFound from '@magento/venia-ui/lib/RootComponents/Category/NoProductsFound';
 import cn from 'classnames';
-import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
-import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
-import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
-
-import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
-import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
-import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
-import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
-import ShopByFilters from '@riosst100/pwa-marketplace/src/components/ShopByFilters';
 
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
-import defaultClasses from './shopBy.module.css';
+import defaultClasses from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy.module.css';
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
-import { ShopByShimmer } from '@riosst100/pwa-marketplace/src/components/ShopBy';
+import { ShowMoreShimmer } from '@riosst100/pwa-marketplace/src/components/ShowMore';
 import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy';
 import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySearchInput';
 import { useCustomSort } from '@riosst100/pwa-marketplace/src/hooks/useCustomSort';
-import { useShopBy } from '@riosst100/pwa-marketplace/src/talons/ShopBy/useShopBy';
+import { useShowMore } from '@riosst100/pwa-marketplace/src/talons/ShowMore/useShowMore';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -53,7 +26,7 @@ const FilterTop = React.lazy(() =>
     import('@riosst100/pwa-marketplace/src/components/FilterTop')
 );
 
-const ShopBy = props => {
+const ShowMore = props => {
     const {
         categoryId,
         shopby
@@ -107,12 +80,12 @@ const ShopBy = props => {
 
     const classes = useStyle(defaultClasses);
 
-    const talonProps = useShopBy({ activeFilter, searchQuery, active, setActive, currentSort, categoryId, shopby });
+    const talonProps = useShowMore({ activeFilter, searchQuery, active, setActive, currentSort, categoryId, shopby });
 
     const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, pageInfo } = talonProps;
 
     if (loading) {
-        return <ShopByShimmer />;
+        return <ShowMoreShimmer />;
     } else if (error) {
         return <ErrorView />;
     }
@@ -129,7 +102,7 @@ const ShopBy = props => {
 
     let filterSearchArr = search ? search.split('&') : [];
     filterSearchArr = filterSearchArr.filter(function(data) {
-        return !data.includes('shopby');
+        return !data.includes('show_more');
     })
     filterSearchArr = filterSearchArr.filter(function(data) {
         return !data.includes('trains_roadname_country');
@@ -161,7 +134,8 @@ const ShopBy = props => {
 
                 optionsResult.push(<li key={index} className='list-none'>
                     <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
-                        {label} <span className='text-[12px]'>({count})</span>
+                        {label}
+                         {/* <span className='text-[12px]'>({count})</span> */}
                     </Link>
                 </li>)
             });
@@ -451,4 +425,4 @@ const ShopBy = props => {
     );
 };
 
-export default ShopBy;
+export default ShowMore;

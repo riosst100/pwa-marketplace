@@ -150,13 +150,11 @@ export const useShopBy = props => {
         }
         
         const rawData = queryResponse?.products?.aggregations;
-        if (!rawData) {
+        if (!rawData.length) {
             return null;
         }
 
         let options = rawData.find(item => item.attribute_code === shopby).options;
-        
-        // let options = rawData[0].options;
 
         const mappingData = options.reduce((acc, item) => {
             let firstLetter = item.label.charAt(0).toUpperCase();
@@ -182,7 +180,7 @@ export const useShopBy = props => {
         }
         
         const rawData = queryResponse?.products?.aggregations;
-        if (!rawData) {
+        if (!rawData.length) {
             return null;
         }
 
