@@ -20,6 +20,7 @@ import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSet
 import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/trainsSets';
 import SetsData from '@riosst100/pwa-marketplace/src/components/SetsData/setsData';
 import FilterContent from '@riosst100/pwa-marketplace/src/components/FilterContent/filterContent';
+import ShowMore from '@riosst100/pwa-marketplace/src/components/ShowMore/showMore';
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -40,6 +41,7 @@ const Category = props => {
 
     const query = new URLSearchParams(location.search);
     const shopby = query.get('shopby') || null;
+    const show_more = query.get('show_more') || null;
     const filterby = query.get('filterby') || null;
     const showSubcategory = query.get('show_subcategory') || null;
 
@@ -125,7 +127,12 @@ const Category = props => {
                 isLoading={loading} /> : shopby == "card" ? <ShopByCard
                 categoryId={uid}
                 shopby={shopby}
-                isLoading={loading} /> : (shopby && shopby != "gauge" ? (
+                isLoading={loading} /> : (show_more ? (
+                    <ShowMore
+                    categoryId={uid}
+                    shopby={show_more}
+                    isLoading={loading} />
+                ) : shopby && shopby != "gauge" ? (
                     <ShopBy
                     categoryId={uid}
                     shopby={shopby}
