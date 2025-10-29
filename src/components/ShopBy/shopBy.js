@@ -37,7 +37,7 @@ import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
-import defaultClasses from '@riosst100/pwa-marketplace/src/components/ShowMore/shopBy.module.css';
+import defaultClasses from './shopBy.module.css';
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 import { ShopByShimmer } from '@riosst100/pwa-marketplace/src/components/ShopBy';
 import CustomSortBy from '@riosst100/pwa-marketplace/src/components/CustomSortBy';
