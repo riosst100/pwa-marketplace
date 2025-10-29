@@ -22,14 +22,20 @@ const SubCategory = props => {
     
     normalizedData && normalizedData.length && normalizedData.map(({ text, path }, index) => {
         if (index < maxSubCategory) {
-            subCategory.push(
+            const isActive = index == 0 ? true : false;
+
+            const item = isActive ? (
+                <span className={classes.item}><b>{text}</b></span>
+            ) : (
                 <Link
                     key={index}
                     to={resourceUrl(path)}
                 >
                     <li className={classes.item}>{text}</li>
                 </Link>
-            )
+            );
+
+            subCategory.push(item)
         }
     });
 

@@ -163,12 +163,6 @@ const CategoryContent = props => {
         <FilterModal filters={filters} />
     ) : null;
 
-    // console.log('filters')
-    // console.log(filters)
-
-    // console.log('shouldShowFilterButtons')
-    // console.log(shouldShowFilterButtons)
-
     const sidebar = shouldShowFilterButtons ? (
         <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
     ) : shouldShowFilterShimmer ? (
@@ -289,7 +283,7 @@ const CategoryContent = props => {
 
     const currentFilter = activeFilters && activeFilters.length ? activeFilters[activeFilters.length - 1].label : '';
 
-    let title = activeFilters && activeFilters.length ? (
+    let title = category && !category.children.length && activeFilters && activeFilters.length ? (
         activeFilters.length > 1 ? 
             activeFilters[activeFilters.length - 1].label
          : currentFilter

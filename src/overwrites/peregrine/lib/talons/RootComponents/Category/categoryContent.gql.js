@@ -29,6 +29,11 @@ export const GET_CATEGORY_CONTENT = gql`
                 name
                 description
                 url_key
+                default_top_filter {
+                    attribute_code
+                    label
+                    value
+                }
                 url_path
                 hide_filters
                 allowed_filters {

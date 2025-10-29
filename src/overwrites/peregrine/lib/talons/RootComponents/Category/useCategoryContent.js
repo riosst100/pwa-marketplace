@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { useLazyQuery, useQuery } from '@apollo/client';
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import DEFAULT_OPERATIONS from './categoryContent.gql';
 import {
     getFiltersFromSearch,
@@ -176,6 +176,57 @@ export const useCategoryContent = props => {
             : null;
 
     const filters = [];
+
+    const history = useHistory();
+    const location = useLocation();
+
+    const setQueryParam = ({ history, location, parameter, replace, value }) => {
+        const { search } = location;
+        const queryParams = new URLSearchParams(search);
+
+        queryParams.set(parameter, value);
+        const destination = { search: queryParams.toString() };
+
+        if (replace) {
+            history.replace(destination);
+        } else {
+            history.push(destination);
+        }
+    };
+
+    const setDefaultSubcategoryAndTopFilter = useCallback(
+        (value, searchParam, replace = false) => {
+            // Update the query parameter.
+            setQueryParam({
+                history,
+                location,
+                parameter: searchParam,
+                replace,
+                value: value
+            });
+        },
+        [history, location]
+    );
+
+    useEffect(() => {
+        const { search } = location;
+
+        if (category && category.default_top_filter) {
+            const defaultTopFilter = category.default_top_filter;
+
+            const attrCode = defaultTopFilter.attribute_code;
+            const label = defaultTopFilter.label;
+            const value = defaultTopFilter.value;
+
+            if (!search.includes(attrCode)) {
+                setDefaultSubcategoryAndTopFilter(
+                    label + ',' + value, 
+                    attrCode + '[filter]', 
+                    true
+                );
+            }
+        }
+    }, [category, location, setDefaultSubcategoryAndTopFilter]);
 
     // console.log('rawFilters')
     // console.log(rawFilters)
