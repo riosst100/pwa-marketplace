@@ -15,9 +15,27 @@ const OrderConfirmationPage = props => {
     const { data, orderNumber } = props;
     const { formatMessage } = useIntl();
 
-    const talonProps = useOrderConfirmationPage({
-        data
-    });
+    // If data is not available (e.g., after external redirect without snapshot),
+    // render a minimal confirmation page.
+    const hasData =
+        data &&
+        data.cart &&
+        Array.isArray(data.cart.shipping_addresses) &&
+        data.cart.shipping_addresses.length > 0;
+
+    const talonProps = hasData
+        ? useOrderConfirmationPage({ data })
+        : { flatData: {
+              city: '',
+              country: '',
+              email: '',
+              firstname: '',
+              lastname: '',
+              postcode: '',
+              region: '',
+              shippingMethod: '',
+              street: []
+          }, isSignedIn: true };
 
     const { flatData, isSignedIn } = talonProps;
 
@@ -33,7 +51,7 @@ const OrderConfirmationPage = props => {
         street
     } = flatData;
 
-    const streetRows = street.map((row, index) => {
+    const streetRows = (street || []).map((row, index) => {
         return (
             <span key={index} className={classes.addressStreet}>
                 {row}
@@ -51,6 +69,13 @@ const OrderConfirmationPage = props => {
                 behavior: 'smooth'
             });
         }
+        // Best-effort cleanup of stored snapshot after successful view
+        try {
+            if (orderNumber) {
+                const key = `orderConfirmationSnapshot:${orderNumber}`;
+                globalThis.localStorage && globalThis.localStorage.removeItem(key);
+            }
+        } catch (_) {}
     }, []);
 
     const createAccountForm = !isSignedIn ? (
@@ -109,42 +134,46 @@ const OrderConfirmationPage = props => {
                         </Link>
                     </div>
                 </div>
-                <div className={classes.detailsGrid}>
-                    <div className={classes.card}>
-                        <div
-                            data-cy="OrderConfirmationPage-shippingInfoHeading"
-                            className={classes.cardHeading}
-                        >
-                            <FormattedMessage
-                                id={'global.shippingInformation'}
-                                defaultMessage={'Shipping Information'}
-                            />
+                {hasData ? (
+                    <>
+                        <div className={classes.detailsGrid}>
+                            <div className={classes.card}>
+                                <div
+                                    data-cy="OrderConfirmationPage-shippingInfoHeading"
+                                    className={classes.cardHeading}
+                                >
+                                    <FormattedMessage
+                                        id={'global.shippingInformation'}
+                                        defaultMessage={'Shipping Information'}
+                                    />
+                                </div>
+                                <div className={classes.shippingInfo}>
+                                    <span className={classes.email}>{email}</span>
+                                    <span className={classes.name}>{nameString}</span>
+                                    {streetRows}
+                                    <span className={classes.addressAdditional}>
+                                        {additionalAddressString}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={classes.card}>
+                                <div
+                                    data-cy="OrderConfirmationPage-shippingMethodHeading"
+                                    className={classes.cardHeading}
+                                >
+                                    <FormattedMessage
+                                        id={'global.shippingMethod'}
+                                        defaultMessage={'Shipping Method'}
+                                    />
+                                </div>
+                                <div className={classes.shippingMethod}>{shippingMethod}</div>
+                            </div>
                         </div>
-                        <div className={classes.shippingInfo}>
-                            <span className={classes.email}>{email}</span>
-                            <span className={classes.name}>{nameString}</span>
-                            {streetRows}
-                            <span className={classes.addressAdditional}>
-                                {additionalAddressString}
-                            </span>
+                        <div className={classes.itemsReview}>
+                            <ItemsReview data={data} />
                         </div>
-                    </div>
-                    <div className={classes.card}>
-                        <div
-                            data-cy="OrderConfirmationPage-shippingMethodHeading"
-                            className={classes.cardHeading}
-                        >
-                            <FormattedMessage
-                                id={'global.shippingMethod'}
-                                defaultMessage={'Shipping Method'}
-                            />
-                        </div>
-                        <div className={classes.shippingMethod}>{shippingMethod}</div>
-                    </div>
-                </div>
-                <div className={classes.itemsReview}>
-                    <ItemsReview data={data} />
-                </div>
+                    </>
+                ) : null}
                 <div
                     data-cy="OrderConfirmationPage-additionalText"
                     className={classes.additionalText}
@@ -181,6 +210,6 @@ OrderConfirmationPage.propTypes = {
         additionalText: string,
         sidebarContainer: string
     }),
-    data: object.isRequired,
+    data: object,
     orderNumber: string
 };
