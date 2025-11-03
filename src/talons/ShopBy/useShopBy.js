@@ -154,7 +154,12 @@ export const useShopBy = props => {
             return null;
         }
 
-        let options = rawData.find(item => item.attribute_code === shopby).options;
+        let filter = rawData.find(item => item.attribute_code === shopby);
+        if (!filter) {
+            return null;
+        }
+        
+        let options = filter.options;
 
         const mappingData = options.reduce((acc, item) => {
             let firstLetter = item.label.charAt(0).toUpperCase();
@@ -184,7 +189,12 @@ export const useShopBy = props => {
             return null;
         }
 
-        let options = rawData.find(item => item.attribute_code === shopby).options;
+        let filter = rawData.find(item => item.attribute_code === shopby);
+        if (!filter) {
+            return null;
+        }
+        
+        let options = filter.options;
 
         // const filteredSets = [];
 

@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDropdown } from '@magento/peregrine/lib/hooks/useDropdown';
@@ -6,6 +6,7 @@ import { useAwaitQuery } from '@magento/peregrine/lib/hooks/useAwaitQuery';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './websiteSwitcher.gql';
+import { useCartContext } from '@magento/peregrine/lib/context/cart';
 
 const storage = new BrowserPersistence();
 
@@ -161,6 +162,13 @@ export const useWebsiteSwitcher = (props = {}) => {
         [pathname, fetchRouteData, internalRoutes]
     );
 
+    const apolloClient = useApolloClient();
+
+    const [
+        { cartId },
+        { createCart, removeCart, getCartDetails }
+    ] = useCartContext();
+
     const handleSwitchWebsite = useCallback(
         // Change store view code and currency to be used in Apollo link request headers
         async (storeCode, websiteCode) => {
@@ -190,13 +198,16 @@ export const useWebsiteSwitcher = (props = {}) => {
 
             const newPath = pathName ? `/${pathName}${newSearchParams}` : (accessBaseWebsite ? `/${pathName}${accessBaseWebsite}` : '');
 
+            await apolloClient.clearCacheData(apolloClient, 'cart');
+            await removeCart();
+
             if (newWebsiteCode) {
                 globalThis.location.assign(`/${newWebsiteCode}${newPath || ''}`);
             } else {
                 globalThis.location.assign(`${newPath || ''}`);
             }
         },
-        [availableStores, getPathname, searchParams]
+        [availableStores, getPathname, searchParams, apolloClient, removeCart]
     );
 
     const handleTriggerClick = useCallback(() => {

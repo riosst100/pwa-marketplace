@@ -25,7 +25,7 @@ const SubCategory = props => {
             const isActive = index == 0 ? true : false;
 
             const item = isActive ? (
-                <span className={classes.item}><b>{text}</b></span>
+                <span key={index} className={classes.item}><b>{text}</b></span>
             ) : (
                 <Link
                     key={index}
