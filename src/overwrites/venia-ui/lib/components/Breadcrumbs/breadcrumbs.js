@@ -26,7 +26,9 @@ const Breadcrumbs = props => {
 
     const talonProps = useBreadcrumbs({ categoryId });
 
-    const DELIMITER = <ArrowRight2 size={13} className='inline-flex text-gray-200' />
+    const location = useLocation(); // ✅ dipindah ke atas sebelum conditional return
+
+    const DELIMITER = <ArrowRight2 size={13} className='inline-flex text-gray-200' />;
 
     const {
         currentCategory,
@@ -39,13 +41,15 @@ const Breadcrumbs = props => {
 
     // For all links generate a fragment like "/ Text"
     const links = useMemo(() => {
-        return normalizedData.map(({ text, path }) => {
+        return normalizedData.map(({ text, path }, index) => {
             if (text == "dCollectible Card Games") {
                 return '';
             }
-            
+
+            console.log('index', index);
+
             return (
-                <Fragment key={text}>
+                <Fragment key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <Link
                         className={classes.link}
@@ -74,14 +78,11 @@ const Breadcrumbs = props => {
         );
     }
 
-    const filterBreadcrumbsElement = [];
+    let filterBreadcrumbsElement = []; // ✅ pakai let agar bisa di-push
 
     const lastIndex = currentFilter ? currentFilter.length - 1 : 0;
-    // const filterpath = ;
 
-    const { search } = useLocation();
-
-    // const previousSearch = useRef(search);
+    const { search } = location;
 
     const removeShopbyParam = (url) => {
         const urlParts = url.split("?"); // Pisahkan URL sebelum dan sesudah tanda tanya
@@ -98,78 +99,72 @@ const Breadcrumbs = props => {
 
         // Gabungkan URL dasar dengan query string yang telah dimodifikasi
         return newQueryString ? `${baseUrl}?${newQueryString}` : baseUrl;
-    }
+    };
 
     const params = removeShopbyParam(search);
-    
+
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
         currentProduct ? (
             filterBreadcrumbsElement.push(
-                <>
-                <span className={classes.divider}>{DELIMITER}</span>
-                <Link
-                    key={index}
-                    className={classes.link}
-                    to={resourceUrl('/'+currentCategoryPath)}
-                    onClick={handleClick}
-                >
-                    {filter.label}
-                </Link>
-                </>
+                <span key={index}>
+                    <span className={classes.divider}>{DELIMITER}</span>
+                    <Link
+                        className={classes.link}
+                        to={resourceUrl('/' + currentCategoryPath)}
+                        onClick={handleClick}
+                    >
+                        {filter.label}
+                    </Link>
+                </span>
             )
         ) : (
             customPage ? (
                 filterBreadcrumbsElement.push(
-                    <>
-                    <span className={classes.divider}>{DELIMITER}</span>
-                    <Link
-                        key={index}
-                        className={classes.link}
-                        to={resourceUrl('/'+currentCategoryPath+params)}
-                        onClick={handleClick}
-                    >
-                        {filter.label}
-                    </Link>
-                    </>
+                    <span key={index}>
+                        <span className={classes.divider}>{DELIMITER}</span>
+                        <Link
+                            className={classes.link}
+                            to={resourceUrl('/' + currentCategoryPath + params)}
+                            onClick={handleClick}
+                        >
+                            {filter.label}
+                        </Link>
+                    </span>
                 )
             ) : filterBreadcrumbsElement.push(
                 index == lastIndex ?
-                <>
-                    <span className={classes.divider}>{DELIMITER}</span>
-                    <span key={index} className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                </> : <>
-                    <span className={classes.divider}>{DELIMITER}</span>
-                    <Link
-                        key={index}
-                        className={classes.link}
-                        to={resourceUrl('/'+currentCategoryPath+params)}
-                        onClick={handleClick}
-                    >
-                        {filter.label}
-                    </Link>
-                    </>
+                    <span key={index}>
+                        <span className={classes.divider}>{DELIMITER}</span>
+                        <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
+                    </span> : <span key={index}>
+                        <span className={classes.divider}>{DELIMITER}</span>
+                        <Link
+                            className={classes.link}
+                            to={resourceUrl('/' + currentCategoryPath + params)}
+                            onClick={handleClick}
+                        >
+                            {filter.label}
+                        </Link>
+                    </span>
             )
         );
     });
 
-    // If we have a "currentProduct" it means we're on a PDP so we want the last
-    // category text to be a link. If we don't have a "currentProduct" we're on
-    // a category page so it should be regular text.
     const currentCategoryLink = currentCategory == "dCollectible Card Games" ? '' : (customPage || currentProduct || currentFilter && currentFilter.length ? (
         <>
-        <span className={classes.divider}>{DELIMITER}</span>
-        <Link
-            className={classes.link}
-            to={'/'+resourceUrl(currentCategoryPath)}
-            onClick={handleClick}
-        >
-            {currentCategory}
-        </Link>
+            <span className={classes.divider}>{DELIMITER}</span>
+            <Link
+                className={classes.link}
+                to={'/' + resourceUrl(currentCategoryPath)}
+                onClick={handleClick}
+            >
+                {currentCategory}
+            </Link>
         </>
     ) : (
         <>
-        <span className={classes.divider}>{DELIMITER}</span>
-        <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{currentCategory}</span>
+            <span className={classes.divider}>{DELIMITER}</span>
+            <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{currentCategory}</span>
         </>
     ));
 
@@ -186,7 +181,7 @@ const Breadcrumbs = props => {
             <span className={classes.text}>{customPage}</span>
         </Fragment>
     ) : null;
-    
+
     return (
         <div className={classes.root} aria-live="polite" aria-busy="false">
             <Link className={classes.link} to="/">

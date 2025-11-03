@@ -34,7 +34,10 @@ export const useFilterSidebar = props => {
 
     const allActiveFilters = getFiltersFromSearch(search);
 
-    const { data: introspectionData } = useQuery(getFilterInputsQuery);
+    const { data: introspectionData } = useQuery(getFilterInputsQuery, {
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
+    });
 
     // const {
     //     called: subFilterItemsCalled,

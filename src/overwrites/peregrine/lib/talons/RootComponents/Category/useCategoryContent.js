@@ -120,6 +120,7 @@ export const useCategoryContent = props => {
         return masterAttributes;
     }, [masterAttributesData]);
     
+    
 
     useEffect(() => {
         if (categoryId) {
@@ -132,6 +133,10 @@ export const useCategoryContent = props => {
             }
     
             const filters = getFiltersFromSearch(search);
+
+            // console.log('masterAttributes',masterAttributes)
+            // console.log('filters',filters)
+
     
             // Construct the filter arg object.
             const newFilters = {};
@@ -140,6 +145,8 @@ export const useCategoryContent = props => {
                     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
                 }
             });
+
+            // console.log('newFilters',newFilters)
 
             getFilters({
                 variables: {
