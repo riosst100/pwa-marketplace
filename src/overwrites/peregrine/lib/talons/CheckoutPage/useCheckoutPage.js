@@ -295,6 +295,9 @@ export const useCheckoutPage = (props = {}) => {
     // When true, we intentionally hide the OrderConfirmationPage (orderNumber)
     // to allow external payment (Xendit) to complete first.
     const [suppressOrderConfirmation, setSuppressOrderConfirmation] = useState(false);
+    // Support returning from external payment with orderNumber in URL
+    const [externalOrderNumber, setExternalOrderNumber] = useState(null);
+    const [externalOrderDetails, setExternalOrderDetails] = useState(null);
 
     const handlePlaceOrder = useCallback(async () => {
         // Fetch order details and then use an effect to actually place the
@@ -352,6 +355,17 @@ export const useCheckoutPage = (props = {}) => {
                     try {
                         // Prevent success page from rendering; we'll redirect to Xendit first
                         setSuppressOrderConfirmation(true);
+                        // Persist a snapshot of order details for rendering confirmation after redirect
+                        try {
+                            if (orderDetailsData) {
+                                const key = `orderConfirmationSnapshot:${orderNumber}`;
+                                const payload = JSON.stringify(orderDetailsData);
+                                globalThis.localStorage && globalThis.localStorage.setItem(key, payload);
+                            }
+                        } catch (e) {
+                            // eslint-disable-next-line no-console
+                            console.warn('Unable to persist order confirmation snapshot', e);
+                        }
                         const res = await xenditCreateInvoice({
                             variables: { orderId: orderNumber }
                         });
@@ -417,6 +431,33 @@ export const useCheckoutPage = (props = {}) => {
         removeCart,
         isPlacingOrder
     ]);
+
+    // On first load, check for orderNumber in querystring to render confirmation
+    useEffect(() => {
+        try {
+            const { location } = globalThis;
+            if (!location) return;
+            const params = new URLSearchParams(location.search || '');
+            const qsOrder = params.get('orderNumber');
+            if (!qsOrder) return;
+
+            setExternalOrderNumber(qsOrder);
+            // Attempt to load the previously saved snapshot
+            try {
+                const key = `orderConfirmationSnapshot:${qsOrder}`;
+                const raw = globalThis.localStorage && globalThis.localStorage.getItem(key);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    setExternalOrderDetails(parsed);
+                }
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.warn('Failed to restore order confirmation snapshot', e);
+            }
+        } catch (_) {
+            // ignore
+        }
+    }, []);
 
     useEffect(async () => {
         await setCheckoutState(false);
@@ -517,11 +558,11 @@ export const useCheckoutPage = (props = {}) => {
         isGuestCheckout: !isSignedIn,
         isLoading,
         isUpdating,
-        orderDetailsData,
+        orderDetailsData: externalOrderDetails || orderDetailsData,
         orderDetailsLoading,
         orderNumber: suppressOrderConfirmation
             ? null
-            : (placeOrderData && placeOrderData.placeOrder.order.order_number) || null,
+            : (externalOrderNumber || (placeOrderData && placeOrderData.placeOrder.order.order_number) || null),
         placeOrderLoading,
         placeOrderButtonClicked,
         setCheckoutStep,
