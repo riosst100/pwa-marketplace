@@ -6,7 +6,6 @@ import useFavoriteSellerList from '@riosst100/pwa-marketplace/src/talons/Favorit
 import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/category.module.css';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
-// import Pagination from 'riosst100/pwa-marketplace/src/components/CustomPagination';
 import React, { Fragment, Suspense, useMemo, useRef } from 'react';
 
 const FavoriteSeller = (props) => {

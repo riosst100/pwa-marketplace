@@ -84,5 +84,6 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/MagentoRoute/useMagentoRoute.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/MagentoRoute/useMagentoRoute.js',
     [`@magento/peregrine/lib/talons/ProductOptions/useOption.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useOption.js',
     [`@magento/peregrine/lib/talons/ProductOptions/useTile.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useTile.js',
-    [`@magento/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js'
+    [`@magento/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js',
+    [`@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js'
 };

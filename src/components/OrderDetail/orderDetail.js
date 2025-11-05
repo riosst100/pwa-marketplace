@@ -1,79 +1,113 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
 import { Printer } from 'iconsax-react';
-// import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
 import ItemsOrdered from './components/itemsOrdered';
 import RMAList from './components/rmaList';
+import { useLocation } from 'react-router-dom';
 
-const OrderDetail = () => {
+const OrderDetail = (props) => {
+    const printRef = useRef(null);
     const { formatMessage } = useIntl();
+    const location = useLocation();
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleTextRMADetail',
         defaultMessage: 'Order Detail'
     });
 
-    // const dataTabs =
-    //     [
-    //         {
-    //             id: 'items-ordered',
-    //             title: 'Items Ordered',
-    //             content: <ItemsOrdered />
-    //         },
-    //         {
-    //             id: 'invoices',
-    //             title: 'Invoices',
-    //             content: <><h2>invoices</h2></>
-    //         },
-    //         {
-    //             id: 'order-shipments',
-    //             title: 'Order Shipments',
-    //             content: <><h2>Order shipments</h2></>
-    //         }
-    //     ];
+    // Retrieve order data from props or location state
+    const order = props.order || location.state?.order;
+    // Extract order data
+    const invoiceNumber = order?.invoices?.[0]?.number || '-';
+    const orderDate = order?.order_date
+        ? new Date(order.order_date.replace(' ', 'T')).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+        : '-';
+    const status = order?.status || '-';
+    const shippingMethod = order?.shipping_method || '-';
+    const trackingNumber = order?.shipments?.[0]?.tracking?.[0]?.number || '-';
+    const shippingAddress = order?.shipping_address;
+    const billingAddress = order?.billing_address;
+    const paymentMethod = order?.payment_methods?.[0]?.type || '-';
+
+    // Format address helper
+    const formatAddress = addr => {
+        if (!addr) return '-';
+        return [
+            `${addr.firstname} ${addr.lastname}`,
+            ...(addr.street || []),
+            `${addr.city}${addr.region_id ? ', ' + addr.region_id : ''}${addr.postcode ? ', ' + addr.postcode : ''}`,
+            addr.country_code,
+            addr.telephone ? `T: ${addr.telephone}` : ''
+        ].filter(Boolean).join('\n');
+    };
+
+        const handlePrint = useCallback(() => {
+            const styleId = 'order-detail-print-style';
+            let style = document.getElementById(styleId);
+            if (!style) {
+                style = document.createElement('style');
+                style.id = styleId;
+                style.type = 'text/css';
+                style.media = 'print';
+                style.appendChild(document.createTextNode(`
+                    @page { size: A3; margin: 0; }
+                    @media print {
+                        body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        body * { visibility: hidden !important; }
+                        .print-area, .print-area * { visibility: visible !important; }
+                        .print-area { position: relative; left: 0; top: -20px; width: 100%;}
+                        .no-print { display: none !important; }
+                    }
+                `));
+                document.head.appendChild(style);
+            }
+            window.print();
+            setTimeout(() => {
+            }, 500);
+        }, []);
 
     return (
-        <div className='relative grid gap-y-md'>
+        <div className='print-area relative grid gap-y-md' ref={printRef}>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
             <div aria-live="polite" className="text-xl font-medium text-left">
-                {PAGE_TITLE} - DEV123123123
+                {PAGE_TITLE} - #{order?.number || '-'}
             </div>
             <div className='block relative'>
                 <div className='flex gap-2 mb-4 flex-col'>
-                    <div class="box box-order-shipping-method flex gap-4">
-                        <p class="box-title block min-w-[90px] font-semibold text-[14px]">
+                    <div className="box box-order-shipping-method flex gap-4">
+                        <p className="box-title block min-w-[90px] font-semibold text-[14px]">
                             <span>Invoice</span>
                         </p>
-                        <div class="box-content text-[14px]">
-                            INV/20240705/MPL/4007072581
+                        <div className="box-content text-[14px]">
+                            {invoiceNumber || '-'}
                         </div>
                     </div>
-                    <div class="box box-order-shipping-method flex gap-4 text-[14px]">
-                        <p class="box-title block min-w-[90px] font-semibold">
+                    <div className="box box-order-shipping-method flex gap-4 text-[14px]">
+                        <p className="box-title block min-w-[90px] font-semibold">
                             <span>Order Date</span>
                         </p>
-                        <div class="box-content text-[14px]">
-                            February 23, 2024
+                        <div className="box-content text-[14px]">
+                            {orderDate}
                         </div>
                     </div>
-                    <div class="box box-order-shipping-method flex gap-4 text-[14px]">
-                        <p class="box-title block min-w-[90px] font-semibold self-center">
+                    <div className="box box-order-shipping-method flex gap-4 text-[14px]">
+                        <p className="box-title block min-w-[90px] font-semibold self-center">
                             <span>Status</span>
                         </p>
-                        <div class="box-content text-[14px]">
+                        <div className="box-content text-[14px]">
                             <div className='p-1 bg-[#F1EFF6] rounded-md flex items-center px-5'>
                                 <p className='text-[14px] text-blue-700 flex justify-between'>
                                     <span className='font-medium block text-blue-700'>
-                                        Processing
+                                        {status}
                                     </span>
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col md_flex-row gap-x-4 justify-end'>
+                <div className='flex flex-col md_flex-row gap-x-4 justify-end no-print'>
                     <Button
                         priority='high'
                         classes={{
@@ -83,6 +117,8 @@ const OrderDetail = () => {
                             "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
                             "border-gray-900 focus-visible_outline-none hover_bg-gray-900 min-h-[40px]"
                         )}
+                        onClick={handlePrint}
+                        aria-label={formatMessage({ id: 'order.printInvoices', defaultMessage: 'Print Invoices' })}
                     >
                         <span className='flex gap-x-3 justify-center group-hover_!text-white'>
                             <Printer
@@ -99,15 +135,7 @@ const OrderDetail = () => {
                     </Button>
                 </div>
             </div>
-
-            {/* <Tabs
-                data={dataTabs}
-                tabContentWrapperClassName='!p-0'
-                hasContent
-                tabWrapperClassName='xl_gap-x-[60px]'
-                rootClassName="mb-0"
-            /> */}
-            <div class="block block-order-details-view">
+            <div className="block block-order-details-view">
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
                     {
                         formatMessage({
@@ -116,11 +144,9 @@ const OrderDetail = () => {
                         })
                     }
                 </div>
-
-                <ItemsOrdered />
+                <ItemsOrdered order={order} />
             </div>
-
-            <div class="block block-order-details-view">
+            <div className="block block-order-details-view">
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
                     {
                         formatMessage({
@@ -129,11 +155,9 @@ const OrderDetail = () => {
                         })
                     }
                 </div>
-
                 <RMAList />
             </div>
-
-            <div class="block block-order-details-view">
+            <div className="block block-order-details-view">
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
                     {
                         formatMessage({
@@ -142,63 +166,55 @@ const OrderDetail = () => {
                         })
                     }
                 </div>
-                <div class="block-content flex flex-col gap-y-4 rounded-md border border-gray-100 px-4 py-6 justify-between gap-x-10">
-                    <div class="box box-order-shipping-method flex gap-4">
-                        <strong class="box-title block min-w-[140px]">
+                <div className="block-content flex flex-col gap-y-4 rounded-md border border-gray-100 px-4 py-6 justify-between gap-x-10">
+                    <div className="box box-order-shipping-method flex gap-4">
+                        <strong className="box-title block min-w-[140px]">
                             <span>Shipping Method</span>
                         </strong>
-                        <div class="box-content">
-                            Flat Rate - Fixed
+                        <div className="box-content">
+                            {shippingMethod}
                         </div>
                     </div>
-                    <div class="box box-order-shipping-method flex gap-4">
-                        <strong class="box-title block min-w-[140px]">
+                    <div className="box box-order-shipping-method flex gap-4">
+                        <strong className="box-title block min-w-[140px]">
                             <span>Tracking Number</span>
                         </strong>
-                        <div class="box-content">
-                            TX8971239123
+                        <div className="box-content">
+                            {trackingNumber}
                         </div>
                     </div>
-                    <div class="box box-order-shipping-address flex gap-4">
-                        <strong class="box-title block min-w-[140px]"><span>Shipping Address</span></strong>
-                        <div class="box-content">
-                            <div className=' whitespace-pre-wrap'>
-                                Veronica Costello{'\n'}
-                                6146 Honey Bluff Parkway{'\n'}
-                                Calder, Michigan, 49628-7978{'\n'}
-                                United States{'\n'}
-                                T: <a href="tel:(555) 229-3326">(555) 229-3326</a>
+                    <div className="box box-order-shipping-address flex gap-4">
+                        <strong className="box-title block min-w-[140px]"><span>Shipping Address</span></strong>
+                        <div className="box-content">
+                            <div className='whitespace-pre-wrap'>
+                                {formatAddress(shippingAddress)}
                             </div>
                         </div>
                     </div>
-                    <div class="box box-order-billing-method flex gap-4">
-                        <strong class="box-title block min-w-[140px]">
+                    <div className="box box-order-billing-method flex gap-4">
+                        <strong className="box-title block min-w-[140px]">
                             <span>Payment Method</span>
                         </strong>
-                        <div class="box-content">
-                            <dl class="payment-method checkmemo">
-                                <dt class="title">Check / Money order</dt>
+                        <div className="box-content">
+                            <dl className="payment-method checkmemo">
+                                <dt className="title">{paymentMethod}</dt>
                             </dl>
                         </div>
                     </div>
-                    <div class="box box-order-billing-address flex gap-4">
-                        <strong class="box-title block min-w-[140px]">
+                    <div className="box box-order-billing-address flex gap-4">
+                        <strong className="box-title block min-w-[140px]">
                             <span>Billing Address</span>
                         </strong>
-                        <div class="box-content">
+                        <div className="box-content">
                             <div className='whitespace-pre-wrap'>
-                                Veronica Costello{'\n'}
-                                6146 Honey Bluff Parkway{'\n'}
-                                Calder, Michigan, 49628-7978{'\n'}
-                                United States{'\n'}
-                                T: <a href="tel:(555) 229-3326">(555) 229-3326</a>
+                                {formatAddress(billingAddress)}
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>           
         </div>
-    )
-}
+    );
+};
 
 export default OrderDetail;
