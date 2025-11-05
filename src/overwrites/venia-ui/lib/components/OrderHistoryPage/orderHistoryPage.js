@@ -10,7 +10,7 @@ import { Form } from 'informed';
 
 import { useToasts } from '@magento/peregrine/lib/Toasts';
 import OrderHistoryContextProvider from '@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryContext';
-import { useOrderHistoryPage } from '@magento/peregrine/lib/talons/OrderHistoryPage/useOrderHistoryPage';
+import { useOrderHistoryPage } from '@riosst100/pwa-marketplace/src/talons/OrderHistoryPage/useOrderHistoryPage';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Button from '@magento/venia-ui/lib/components/Button';
@@ -24,6 +24,7 @@ import OrderRow from './orderRow';
 import ResetButton from './resetButton';
 import { SearchNormal } from 'iconsax-react';
 import cn from 'classnames';
+import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
 
 const errorIcon = (
     <Icon
@@ -46,7 +47,8 @@ const OrderHistoryPage = props => {
         isLoadingWithoutData,
         orders,
         pageInfo,
-        searchText
+        searchText,
+        pageControl
     } = talonProps;
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
@@ -205,6 +207,12 @@ const OrderHistoryPage = props => {
                     <span className={classes.pageInfo}>{pageInfoLabel}</span>
                 </div>
                 {pageContents}
+                {/* Pagination Controls */}
+                <div className="mt-4">
+                    {pageControl?.totalPages > 1 ? (
+                        <Pagination pageControl={pageControl} />
+                    ) : null}
+                </div>
                 {loadMoreButton}
             </div>
         </OrderHistoryContextProvider >
