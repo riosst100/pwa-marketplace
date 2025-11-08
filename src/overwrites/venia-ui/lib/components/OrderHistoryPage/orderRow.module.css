@@ -101,14 +101,14 @@
 }
 
 .orderStatusBadge {
-    composes: border from global;
+    /* composes: border from global;
     composes: border-solid from global;
-    composes: border-subtle from global;
+    composes: border-subtle from global; */
     composes: font-bold from global;
     composes: justify-self-start from global;
     composes: px-xs from global;
     composes: py-1 from global;
-    composes: rounded-md from global;
+    /* composes: rounded-md from global; */
     composes: text-2xs from global;
 }
 

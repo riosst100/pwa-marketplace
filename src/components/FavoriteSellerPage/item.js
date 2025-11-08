@@ -23,8 +23,6 @@ const Item = ({ sellerItem, refetchFavoriteSellerList }) => {
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
 
-    console.log(sellerItem.seller)
-
     const handleRemoveFromFavorite = async () => {
         try {
             await remove([sellerItem.seller.seller_id]);
