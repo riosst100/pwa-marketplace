@@ -20,6 +20,7 @@ const CustomerOrdersFragment = gql`
             }
             items {
                 id
+                product_image_url
                 product_name
                 product_sale_price {
                     currency

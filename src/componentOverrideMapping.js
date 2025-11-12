@@ -16,6 +16,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/store/actions/cart/asyncActions.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/store/actions/cart/asyncActions.js',
     [`@magento/peregrine/lib/context/cart.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/context/cart.js',
     [`@magento/peregrine/lib/talons/CheckoutPage/useCheckoutPage.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CheckoutPage/useCheckoutPage.js',
+    [`@magento/peregrine/lib/talons/CheckoutPage/PaymentInformation/paymentMethods.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CheckoutPage/PaymentInformation/paymentMethods.gql.js',
     [`@magento/peregrine/lib/talons/SignIn/signIn.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/signIn.gql.js',
     [`@magento/peregrine/lib/talons/SearchPage/searchPage.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SearchPage/searchPage.gql.js',
     [`@magento/peregrine/lib/talons/SignIn/useSignIn.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/SignIn/useSignIn.js',
@@ -85,5 +86,8 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/ProductOptions/useOption.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useOption.js',
     [`@magento/peregrine/lib/talons/ProductOptions/useTile.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useTile.js',
     [`@magento/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js',
-    [`@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js'
+    [`@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js',
+    // Added overrides to fix TypeError in useOrderRow and to ensure required GQL queries are present
+    [`@magento/peregrine/lib/talons/OrderHistoryPage/useOrderRow.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/useOrderRow.js',
+    [`@magento/peregrine/lib/talons/OrderHistoryPage/orderRow.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderRow.gql.js'
 };
