@@ -60,15 +60,11 @@ const RMACreate = () => {
             // Set default values when checked true
             let defaults = {};
             if (checked) {
-                const cfg = rmaConfigData && rmaConfigData.lofmpRmaConfigurations;
-                const firstReason = cfg && cfg.reasons && cfg.reasons.length > 0 ? cfg.reasons[0].id : null;
-                const firstCondition = cfg && cfg.conditions && cfg.conditions.length > 0 ? cfg.conditions[0].id : null;
-                const firstResolution = cfg && cfg.resolutions && cfg.resolutions.length > 0 ? cfg.resolutions[0].id : null;
                 defaults = {
                     qty_requested: current.qty_requested != null ? current.qty_requested : 1,
-                    reason_id: current.reason_id != null ? current.reason_id : (firstReason != null ? firstReason : null),
-                    condition_id: current.condition_id != null ? current.condition_id : (firstCondition != null ? firstCondition : null),
-                    resolution_id: current.resolution_id != null ? current.resolution_id : (firstResolution != null ? firstResolution : null)
+                    reason_id: '',
+                    condition_id: '',
+                    resolution_id: ''
                 };
             }
             return {
@@ -81,6 +77,20 @@ const RMACreate = () => {
             };
         });
     };
+
+
+    // Check if at least one item is checked and all checked items have required fields
+    const checkedItems = Object.values(itemReturnState).filter(state => state && state.checked);
+    const isAllCheckedItemsValid =
+        checkedItems.length > 0 &&
+        checkedItems.every(state => {
+            return (
+                state.qty_requested &&
+                state.reason_id !== undefined && state.reason_id !== null && state.reason_id !== '' && state.reason_id !== 0 && state.reason_id !== "" &&
+                state.condition_id !== undefined && state.condition_id !== null && state.condition_id !== '' && state.condition_id !== 0 && state.condition_id !== "" &&
+                state.resolution_id !== undefined && state.resolution_id !== null && state.resolution_id !== '' && state.resolution_id !== 0 && state.resolution_id !== ""
+            );
+        });
 
     // Build input mutation sesuai struktur backend
     const buildRmaInput = () => {
@@ -151,16 +161,19 @@ const RMACreate = () => {
             const message = 'RMA request created successfully!';
             setSubmitSuccess(message);
             addToast({
-                type: 'info',
-                icon: <CheckCircleIcon size={18} />,
+                type: 'success',
+                icon: <CheckCircleIcon size={18} />, 
                 message,
                 dismissable: true,
                 timeout: 4000
             });
-            // Redirect to RMA list after brief delay (optional immediate)
-            setTimeout(() => {
-                history.push('/return');
-            }, 400); // small delay for user feedback
+            // Redirect to RMA detail page after brief delay
+            const rmaId = payload.rma_id || (payload.rma && payload.rma.id);
+            if (rmaId) {
+                setTimeout(() => {
+                    history.push(`/return/view/${rmaId}`);
+                }, 400);
+            }
         } else {
             const message = (payload && payload.message) || 'Failed to create RMA.';
             setSubmitError(message);
@@ -176,104 +189,79 @@ const RMACreate = () => {
     const { formatMessage } = useIntl();
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleTextRMACreate',
-        defaultMessage: 'New Return'
+        defaultMessage: 'New Return For Order'
     });
 
-    const dummyChat = [
-        {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-    ]
+    // const dummyChat = [
+    //     {
+    //         "message": "May I help you",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "Yes",
+    //         "type": "buyer",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "can i get a discount",
+    //         "type": "buyer",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "you can redeem this code 'JunePlay'",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "or this code 'collectfest'",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "May I help you",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "Yes",
+    //         "type": "buyer",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "can i get a discount",
+    //         "type": "buyer",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "you can redeem this code 'JunePlay'",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    //     {
+    //         "message": "or this code 'collectfest'",
+    //         "type": "seller",
+    //         "timeStamp": "03-06-2024 2:59 pm"
+    //     },
+    // ]
 
     return (
         <div className='relative grid gap-y-md'>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
             <div aria-live="polite" className="text-xl font-medium text-left">
-                {PAGE_TITLE} {order ? `- ${order.number || order.increment_id}` : ''}
+                {PAGE_TITLE} {order ? `- #${order.number || order.increment_id}` : ''}
             </div>
             <div className='block relative'>
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4">
                     {
                         formatMessage({
                             id: 'RMA.requestReturnInformation',
-                            defaultMessage: 'Request Return Information'
+                            defaultMessage: 'Order Information'
                         })
                     }
                 </div>
                 <div className='rounded-md border border-gray-100 px-4 py-6 flex flex-col md_flex-row justify-between gap-x-10'>
                     <div className='flex flex-col gap-y-4 w-full mb-4 md_0 md_w-6/12'>
-                        <div className='block p-2 -ml-2 -mr-2 bg-[#F1EFF6] rounded-md'>
-                            <p className='text-[13px] text-blue-700 flex justify-between'>
-                                <span className='font-medium block'>
-                                    {
-                                        formatMessage({
-                                            id: 'RMA.Status',
-                                            defaultMessage: 'Status Order'
-                                        })
-                                    }
-                                </span>
-                                <span className='font-medium block text-blue-700'>
-                                    {order?.status}
-                                </span>
-                            </p>
-                        </div>
-                        <div className='block'>
-                            <p className='text-[13px] text-colorDefault flex justify-between'>
-                                <span className='font-medium block'>
-                                    {formatMessage({ id: 'RMA.RMANumber', defaultMessage: 'RMA' })}
-                                </span>
-                                <span className='font-normal block'>
-                                    {order ? order.increment_id || order.number : '-'}
-                                </span>
-                            </p>
-                        </div>
                         <div className='block'>
                             <p className='text-[13px] text-colorDefault flex justify-between'>
                                 <span className='font-medium block'>
@@ -329,8 +317,11 @@ const RMACreate = () => {
                 </div>
             </div>
             <div className=' flex flex-col'>
-                <div aria-live="polite" className="text-lg font-medium text-left mb-4">
-                    Items
+                <div aria-live="polite" className="text-lg font-medium text-left mb-1">
+                    Select Items to Return
+                </div>
+                <div className="text-[13px] text-gray-500 mb-3">
+                    Please check the items you want to return.
                 </div>
                 <div className='border-t border-gray-100 py-4 flex flex-col gap-y-4'>
                     {order && order.items && order.items.length > 0 ? (
@@ -351,7 +342,26 @@ const RMACreate = () => {
                     )}
                 </div>
             </div>
-            <div className=' flex flex-col mb-10'>
+            <div className='flex justify-end flex-row mb-4'>
+                <Button
+                    priority='high'
+                    onClick={handleSubmit}
+                    disabled={createRmaLoading || !isAllCheckedItemsValid}
+                    className={cn(
+                        'px-6 py-2 rounded-full text-white border flex items-center gap-2',
+                        createRmaLoading || !isAllCheckedItemsValid
+                            ? 'bg-gray-400 border-gray-400 cursor-not-allowed'
+                            : 'bg-blue-700 border-blue-700 hover_bg-blue-700 hover_border-blue-700',
+                        'focus-visible_outline-none'
+                    )}
+                >
+                    {createRmaLoading && (
+                        <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    )}
+                    {createRmaLoading ? 'Submitting...' : 'Submit Return Request'}
+                </Button>
+            </div>
+            {/* <div className=' flex flex-col mb-10'>
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4">
                     Messages
                 </div>
@@ -381,26 +391,7 @@ const RMACreate = () => {
                         </Button>
                     </div>
                 </div>
-                <div className='flex justify-end flex-row gap-4 mt-6 mb-4'>
-                    <Button
-                        priority='high'
-                        onClick={handleSubmit}
-                        disabled={createRmaLoading}
-                        className={cn(
-                            'px-6 py-2 rounded-full text-white border flex items-center gap-2',
-                            createRmaLoading
-                                ? 'bg-gray-400 border-gray-400 cursor-not-allowed'
-                                : 'bg-blue-700 border-blue-700 hover_bg-blue-700 hover_border-blue-700',
-                            'focus-visible_outline-none'
-                        )}
-                    >
-                        {createRmaLoading && (
-                            <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        )}
-                        {createRmaLoading ? 'Submitting...' : 'Submit RMA Request'}
-                    </Button>
-                </div>
-            </div>
+            </div> */}
             <style jsx="true">
                 {`
                     .chat-container::-webkit-scrollbar {

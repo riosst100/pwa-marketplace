@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useCallback } from 'react';
+import React, { useMemo, useRef, useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Image from '@magento/venia-ui/lib/components/Image';
@@ -8,70 +8,57 @@ import ChatContent from '../LiveChat/chatContent';
 import cn from 'classnames';
 import { Send, Printer } from 'iconsax-react';
 import useRmaPage from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
+import { useToasts } from '@magento/peregrine/lib/Toasts';
+import { CheckCircle as CheckCircleIcon } from 'react-feather';
 
 const RMADetail = () => {
     const { formatMessage } = useIntl();
     const { urlKey } = useParams();
     const rmaId = urlKey;
-    const { rmaDetail, rmaDetailLoading, rmaDetailError } = useRmaPage({ rmaId });
+    const {
+        rmaDetail,
+        rmaDetailLoading,
+        rmaDetailError,
+        confirmShipping,
+        confirmShippingLoading,
+        confirmShippingError,
+        confirmShippingData,
+        refetchRmaDetail,
+        sendRmaMessage,
+        sendRmaMessageLoading,
+        sendRmaMessageError,
+        sendRmaMessageData
+    } = useRmaPage({ rmaId });
+    const [, { addToast }] = useToasts();
+    // State untuk input chat
+    const [chatInput, setChatInput] = useState('');
+    const [chatSending, setChatSending] = useState(false);
+    // Handler kirim pesan chat
+    const handleSendChat = useCallback(async () => {
+        if (!chatInput.trim()) return;
+        setChatSending(true);
+        const input = {
+            rma_id: rmaId,
+            text: chatInput.trim()
+        };
+        const { data, error } = await sendRmaMessage(input);
+        setChatSending(false);
+        if (error || !data?.lofmpSendRmaMessage?.success) {
+            addToast({
+                type: 'error',
+                message: (data?.lofmpSendRmaMessage?.message || error?.message || 'Failed to send message'),
+                dismissable: true,
+                timeout: 4000
+            });
+            return;
+        }
+        setChatInput('');
+        if (typeof refetchRmaDetail === 'function') refetchRmaDetail();
+    }, [chatInput, rmaId, sendRmaMessage, addToast, refetchRmaDetail]);
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleTextRMADetail',
         defaultMessage: 'Return Detail'
     });
-    
-    // Dummy chat data retained for development/demo and as a fallback
-    const dummyChat = [
-        {
-            message: 'May I help you',
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: 'Yes',
-            type: 'buyer',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: 'can i get a discount',
-            type: 'buyer',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: "you can redeem this code 'JunePlay'",
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: "or this code 'collectfest'",
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: 'May I help you',
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: 'Yes',
-            type: 'buyer',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: 'can i get a discount',
-            type: 'buyer',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: "you can redeem this code 'JunePlay'",
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        },
-        {
-            message: "or this code 'collectfest'",
-            type: 'seller',
-            timeStamp: '03-06-2024 2:59 pm'
-        }
-    ];
 
     const chatData = useMemo(() => {
         const messages = (rmaDetail && rmaDetail.messages) ? rmaDetail.messages : [];
@@ -79,7 +66,8 @@ const RMADetail = () => {
         const mapped = messages.map(m => ({
             message: m.text,
             type: email && m.sender_email === email ? 'buyer' : 'seller',
-            timeStamp: m.created_at
+            timeStamp: m.created_at,
+            senderName: m.sender_name || ''
         }));
         return mapped.length > 0 ? mapped : dummyChat;
     }, [rmaDetail]);
@@ -101,7 +89,8 @@ const RMADetail = () => {
             orderDate: rmaDetail.order && rmaDetail.order.created_at ? toDate(rmaDetail.order.created_at) : '',
             dateRequested: rmaDetail.rma_date ? toDate(rmaDetail.rma_date) : '',
             shipping: rmaDetail.shipping_address,
-            items: rmaDetail.items || []
+            items: rmaDetail.items || [],
+            rawStatus: rmaDetail.status_label, 
         };
     }, [rmaDetail]);
     // Use same in-page print approach as OrderDetail: CSS hides everything except .print-area
@@ -129,6 +118,25 @@ const RMADetail = () => {
         window.print();
     }, []);
 
+    // Show toast and refetch on confirm shipping success
+    useEffect(() => {
+        if (
+            confirmShippingData &&
+            confirmShippingData.lofmpRmaShippingConfirm &&
+            confirmShippingData.lofmpRmaShippingConfirm.success
+        ) {
+            const message = confirmShippingData.lofmpRmaShippingConfirm.message || 'Shipping confirmed!';
+            addToast({
+                type: 'success',
+                icon: <CheckCircleIcon size={18} />,
+                message,
+                dismissable: true,
+                timeout: 4000
+            });
+            if (typeof refetchRmaDetail === 'function') refetchRmaDetail();
+        }
+    }, [confirmShippingData, refetchRmaDetail, addToast]);
+
     return (
     <div className='print-area relative grid gap-y-md' ref={printRef}>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
@@ -136,52 +144,68 @@ const RMADetail = () => {
                 {PAGE_TITLE} {formatted.increment_id ? `#${formatted.increment_id}` : ''}
             </div>
             <div className='block relative'>
-                <div className='flex gap-x-4 justify-end mb-2 no-print'>
-                    <Button
-                        priority='high'
-                        classes={{
-                            content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
-                        }}
-                        className={cn(
-                            "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
-                            "border-gray-900 focus-visible_outline-none hover_bg-gray-900"
-                        )}
-                        onClick={handlePrint}
-                    >
-                        <span className='flex gap-x-3 justify-center group-hover_!text-white'>
-                            <Printer
-                                size="24"
-                                className=''
-                            />
-                            {
-                                formatMessage({
-                                    id: 'RMA.printRMAPackingSlip',
-                                    defaultMessage: 'Print RMA Packing Slip'
-                                })
-                            }
-                        </span>
-                    </Button>
+                {(formatted.rawStatus === 'Approved' || formatted.rawStatus === 'approved') && (
+                    <div className='flex flex-col gap-y-2 mb-2 no-print'>
+                        <div className='flex gap-x-4 justify-end'>
+                            <Button
+                                priority='high'
+                                classes={{
+                                    content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
+                                }}
+                                className={cn(
+                                    "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
+                                    "border-gray-900 focus-visible_outline-none hover_bg-gray-900"
+                                )}
+                                onClick={handlePrint}
+                            >
+                                <span className='flex gap-x-3 justify-center group-hover_!text-white'>
+                                    <Printer
+                                        size="24"
+                                        className=''
+                                    />
+                                    {
+                                        formatMessage({
+                                            id: 'RMA.printRMAPackingSlip',
+                                            defaultMessage: 'Print RMA Packing Slip'
+                                        })
+                                    }
+                                </span>
+                            </Button>
 
-                    <Button
-                        priority='high'
-                        classes={{
-                            content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
-                        }}
-                        className={cn(
-                            "bg-blue-600 px-6 py-2 rounded-md text-white border ",
-                            "border-blue-600 hover_bg-blue-700 hover_border-blue-700 focus-visible_outline-none"
+                            <Button
+                                priority='high'
+                                classes={{
+                                    content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
+                                }}
+                                className={cn(
+                                    "bg-blue-600 px-6 py-2 rounded-md text-white border ",
+                                    "border-blue-600 hover_bg-blue-700 hover_border-blue-700 focus-visible_outline-none"
+                                )}
+                                onClick={async () => {
+                                    if (!confirmShippingLoading) await confirmShipping(Number(rmaId));
+                                }}
+                                disabled={confirmShippingLoading}
+                            >
+                                <span className='flex gap-x-3 justify-center'>
+                                    {confirmShippingLoading
+                                        ? formatMessage({ id: 'RMA.confirmShippingLoading', defaultMessage: 'Processing...' })
+                                        : formatMessage({ id: 'RMA.confirmShipping', defaultMessage: 'Confirm Shipping' })
+                                    }
+                                </span>
+                            </Button>
+                        </div>
+                        {confirmShippingError && (
+                            <div className='text-[13px] text-red-600 text-right'>
+                                {confirmShippingError.message}
+                            </div>
                         )}
-                    >
-                        <span className='flex gap-x-3 justify-center'>
-                            {
-                                formatMessage({
-                                    id: 'RMA.confirmShipping',
-                                    defaultMessage: 'Confirm Shipping'
-                                })
-                            }
-                        </span>
-                    </Button>
-                </div>
+                        {confirmShippingData && confirmShippingData.lofmpRmaShippingConfirm && !confirmShippingData.lofmpRmaShippingConfirm.success && (
+                            <div className='text-[13px] text-red-600 text-right'>
+                                {confirmShippingData.lofmpRmaShippingConfirm.message}
+                            </div>
+                        )}
+                    </div>
+                )}
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4">
                     {
                         formatMessage({
@@ -267,13 +291,15 @@ const RMADetail = () => {
                             </p>
                             <p className='text-[13px] text-colorDefault whitespace-pre-wrap'>
                                 {
-                                    `${formatted.shipping.firstname || ''} ${formatted.shipping.lastname || ''}\n` +
-                                    `${formatted.shipping.email || ''}\n` +
-                                    `${formatted.shipping.telephone || ''}\n` +
-                                    `${formatted.shipping.street || ''}\n` +
-                                    `${formatted.shipping.city || ''}\n` +
-                                    `${formatted.shipping.region || ''}\n` +
-                                    `${formatted.shipping.country_id || ''}\n`
+                                    formatted.shipping
+                                        ? `${formatted.shipping.firstname || ''} ${formatted.shipping.lastname || ''}\n` +
+                                          `${formatted.shipping.email || ''}\n` +
+                                          `${formatted.shipping.telephone || ''}\n` +
+                                          `${formatted.shipping.street || ''}\n` +
+                                          `${formatted.shipping.city || ''}\n` +
+                                          `${formatted.shipping.region || ''}\n` +
+                                          `${formatted.shipping.country_id || ''}\n`
+                                        : ''
                                 }
                             </p>
                         </div>
@@ -325,6 +351,10 @@ const RMADetail = () => {
                         <textarea
                             className='w-full focus-visible_outline-none border border-gray-100 p-1 rounded-md'
                             cols={5}
+                            value={chatInput}
+                            onChange={e => setChatInput(e.target.value)}
+                            placeholder={formatMessage({ id: 'RMA.chatPlaceholder', defaultMessage: 'Type your message...' })}
+                            disabled={chatSending || sendRmaMessageLoading}
                         />
                         <Button
                             priority='high'
@@ -335,11 +365,18 @@ const RMADetail = () => {
                                 "bg-blue-600 px-6 py-2 rounded-full text-white border ",
                                 "border-blue-600 hover_bg-blue-700 hover_border-blue-700 focus-visible_outline-none"
                             )}
+                            onClick={handleSendChat}
+                            disabled={chatSending || sendRmaMessageLoading || !chatInput.trim()}
+                            aria-label={formatMessage({ id: 'RMA.sendMessage', defaultMessage: 'Send Message' })}
                         >
-                            <Send
-                                size="24"
-                                className='text-white'
-                            />
+                            {chatSending || sendRmaMessageLoading ? (
+                                <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <Send
+                                    size="24"
+                                    className='text-white'
+                                />
+                            )}
                         </Button>
                     </div>
                 </div>
