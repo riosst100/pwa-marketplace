@@ -1,83 +1,142 @@
-import React from 'react';
+import React, { useMemo, useRef, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Image from '@magento/venia-ui/lib/components/Image';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Button from '@magento/venia-ui/lib/components/Button';
 import ChatContent from '../LiveChat/chatContent';
 import cn from 'classnames';
 import { Send, Printer } from 'iconsax-react';
-import Item from './components/productItem';
+import useRmaPage from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
 
 const RMADetail = () => {
     const { formatMessage } = useIntl();
+    const { urlKey } = useParams();
+    const rmaId = urlKey;
+    const { rmaDetail, rmaDetailLoading, rmaDetailError } = useRmaPage({ rmaId });
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleTextRMADetail',
         defaultMessage: 'Return Detail'
     });
-
-    const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
+    
+    // Dummy chat data retained for development/demo and as a fallback
     const dummyChat = [
         {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'May I help you',
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'Yes',
+            type: 'buyer',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'can i get a discount',
+            type: 'buyer',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: "you can redeem this code 'JunePlay'",
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: "or this code 'collectfest'",
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'May I help you',
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'Yes',
+            type: 'buyer',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: 'can i get a discount',
+            type: 'buyer',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
+            message: "you can redeem this code 'JunePlay'",
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
         },
         {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-    ]
+            message: "or this code 'collectfest'",
+            type: 'seller',
+            timeStamp: '03-06-2024 2:59 pm'
+        }
+    ];
+
+    const chatData = useMemo(() => {
+        const messages = (rmaDetail && rmaDetail.messages) ? rmaDetail.messages : [];
+        const email = rmaDetail && rmaDetail.shipping_address && rmaDetail.shipping_address.email;
+        const mapped = messages.map(m => ({
+            message: m.text,
+            type: email && m.sender_email === email ? 'buyer' : 'seller',
+            timeStamp: m.created_at
+        }));
+        return mapped.length > 0 ? mapped : dummyChat;
+    }, [rmaDetail]);
+
+    const formatted = useMemo(() => {
+        if (!rmaDetail) return {};
+        const toDate = (d) => {
+            if (!d) return '';
+            const iso = d.replace(' ', 'T');
+            const dt = new Date(iso);
+            if (isNaN(dt.getTime())) return d;
+            return dt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        };
+        return {
+            status: rmaDetail.status_label || rmaDetail.status,
+            increment_id: rmaDetail.increment_id || rmaDetail.increment_id,
+            rmaNumber: rmaDetail.increment_id || rmaDetail.rma_id,
+            orderNumber: rmaDetail.order && rmaDetail.order.increment_id ? rmaDetail.order.increment_id : '-',
+            orderDate: rmaDetail.order && rmaDetail.order.created_at ? toDate(rmaDetail.order.created_at) : '',
+            dateRequested: rmaDetail.rma_date ? toDate(rmaDetail.rma_date) : '',
+            shipping: rmaDetail.shipping_address,
+            items: rmaDetail.items || []
+        };
+    }, [rmaDetail]);
+    // Use same in-page print approach as OrderDetail: CSS hides everything except .print-area
+    const printRef = useRef(null);
+    const handlePrint = useCallback(() => {
+        const styleId = 'rma-detail-print-style';
+        let style = document.getElementById(styleId);
+        if (!style) {
+            style = document.createElement('style');
+            style.id = styleId;
+            style.type = 'text/css';
+            style.media = 'print';
+            style.appendChild(document.createTextNode(`
+                @page { size: A4; margin: 0; }
+                @media print {
+                    body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                    body * { visibility: hidden !important; }
+                    .print-area, .print-area * { visibility: visible !important; }
+                    .print-area { position: relative; left: 0; top: -20px; width: 100%; }
+                    .no-print { display: none !important; }
+                }
+            `));
+            document.head.appendChild(style);
+        }
+        window.print();
+    }, []);
 
     return (
-        <div className='relative grid gap-y-md'>
+    <div className='print-area relative grid gap-y-md' ref={printRef}>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
             <div aria-live="polite" className="text-xl font-medium text-left">
-                {PAGE_TITLE} - DEV123123123
+                {PAGE_TITLE} {formatted.increment_id ? `#${formatted.increment_id}` : ''}
             </div>
             <div className='block relative'>
-                <div className='flex gap-x-4 justify-end mb-2'>
+                <div className='flex gap-x-4 justify-end mb-2 no-print'>
                     <Button
                         priority='high'
                         classes={{
@@ -87,6 +146,7 @@ const RMADetail = () => {
                             "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
                             "border-gray-900 focus-visible_outline-none hover_bg-gray-900"
                         )}
+                        onClick={handlePrint}
                     >
                         <span className='flex gap-x-3 justify-center group-hover_!text-white'>
                             <Printer
@@ -138,12 +198,12 @@ const RMADetail = () => {
                                     {
                                         formatMessage({
                                             id: 'RMA.Status',
-                                            defaultMessage: 'Status'
+                                            defaultMessage: 'Status Return'
                                         })
                                     }
                                 </span>
                                 <span className='font-medium block text-blue-700'>
-                                    Pending Approval
+                                    {formatted.status || '-'}
                                 </span>
                             </p>
                         </div>
@@ -158,7 +218,7 @@ const RMADetail = () => {
                                     }
                                 </span>
                                 <span className='font-normal block'>
-                                    DEV123123123-12
+                                    {formatted.rmaNumber || '-'}
                                 </span>
                             </p>
                         </div>
@@ -173,7 +233,7 @@ const RMADetail = () => {
                                     }
                                 </span>
                                 <span className='font-normal block'>
-                                    DEV123123123 at Nov 8, 2024
+                                    {`${formatted.orderNumber || '-'}${formatted.orderDate ? ` at ${formatted.orderDate}` : ''}`}
                                 </span>
                             </p>
                         </div>
@@ -188,7 +248,7 @@ const RMADetail = () => {
                                     }
                                 </span>
                                 <span className='font-normal block'>
-                                    Nov 17, 2024
+                                    {formatted.dateRequested || '-'}
                                 </span>
                             </p>
                         </div>
@@ -206,49 +266,18 @@ const RMADetail = () => {
                                 </span>
                             </p>
                             <p className='text-[13px] text-colorDefault whitespace-pre-wrap'>
-                                John Doe{'\n'}
-                                johndoe@email.com{'\n'}
-                                1233123412{'\n'}
-                                6164 Honey Bluff Parkway{'\n'}
-                                Calder{'\n'}
-                                Michigan{'\n'}
-                                UnitedState{'\n'}
+                                {
+                                    `${formatted.shipping.firstname || ''} ${formatted.shipping.lastname || ''}\n` +
+                                    `${formatted.shipping.email || ''}\n` +
+                                    `${formatted.shipping.telephone || ''}\n` +
+                                    `${formatted.shipping.street || ''}\n` +
+                                    `${formatted.shipping.city || ''}\n` +
+                                    `${formatted.shipping.region || ''}\n` +
+                                    `${formatted.shipping.country_id || ''}\n`
+                                }
                             </p>
                         </div>
                     </div>
-                    {/* <div className='relative flex w-full md_w-6/12 justify-center flex-col mb-10 md_mb-0'>
-                    <Image
-                        alt='product image'
-                        className="relative max-w-[300px]"
-                        src={urlImage}
-                        classes={{
-                            root: ' relative self-center mb-5'
-                        }}
-                    />
-
-                    <p className='text-[16px] font-medium text-colorDefault text-center'>
-                        $60.00
-                    </p>
-
-                    <Link to="/pop-mart-star-wars-series-blind-box-confirmed-figures-designer-art-new-toys-gift.html" className="max-w-[360px] self-center mb-5">
-                        <span className=" text-[13px] block text-center font-medium text-colorDefault w-full">
-                            POP MART Star Wars Series Blind Box Confirmed Figures Designer Art New Toys Gift
-                        </span>
-                    </Link>
-                    <Button
-                        priority='high'
-                        classes={{
-                            content: 'capitalize text-[16px] font-semibold'
-                        }}
-                    >
-                        {
-                            formatMessage({
-                                id: 'Quotes.addToCart',
-                                defaultMessage: 'Add To Cart'
-                            })
-                        }
-                    </Button>
-                </div> */}
                 </div>
             </div>
             <div className=' flex flex-col'>
@@ -256,18 +285,41 @@ const RMADetail = () => {
                     Items
                 </div>
                 <div className='border-t border-gray-100 py-4 flex flex-col gap-y-4'>
-                    {[...Array(2)].map((item) => (
-                        <Item />
+                    {!rmaDetailLoading && formatted.items && formatted.items.length === 0 && (
+                        <div className='text-[13px] text-colorDefault'>No items</div>
+                    )}
+                    {!rmaDetailLoading && formatted.items && formatted.items.map((it, idx) => (
+                        <div key={it.id || idx} className='flex gap-4 items-start'>
+                            <div className='w-[70px] h-[70px] overflow-hidden rounded-md bg-gray-50 flex items-center justify-center'>
+                                {it.image_url ? (
+                                    <img src={it.image_url} alt={it.name} width={70} height={70} />
+                                ) : (
+                                    <div className='text-[10px] text-gray-400'>No Image</div>
+                                )}
+                            </div>
+                            <div className='flex flex-col text-[13px]'>
+                                <span className='font-medium'>{it.name}</span>
+                                <span>SKU : {it.sku || '-'}</span>
+                                <span>Qty : {it.qty_requested || 0}</span>
+                                <span>Reason : {it.reason || '-'}</span>
+                                <span>Resolution : {it.resolution || '-'}</span>
+                                <span>Condition : {it.condition || '-'}</span>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
-            <div className=' flex flex-col mb-10'>
+            <div className=' flex flex-col mb-10 no-print'>
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4">
                     Messages
                 </div>
                 <div className='rounded-md border border-gray-100 p-4 pr-0 pt-0 flex flex-col gap-y-6'>
                     <div className='max-h-[600px] overflow-auto relative chat-container pr-4 pt-4'>
-                        <ChatContent chatData={dummyChat} />
+                        {rmaDetailError ? (
+                            <div className='text-[13px] text-red-600'>Failed to load messages.</div>
+                        ) : (
+                            <ChatContent chatData={chatData} />
+                        )}
                     </div>
                     <div className='flex gap-2 pr-4'>
                         <textarea

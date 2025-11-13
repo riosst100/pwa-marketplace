@@ -14,11 +14,12 @@ import defaultClasses from './orderRow.module.css';
 import cn from 'classnames';
 import { Verify, Shop } from 'iconsax-react';
 import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholderImage';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const OrderRow = props => {
     const { order } = props;
     const { formatMessage } = useIntl();
+    const history = useHistory();
     const {
         invoices,
         items,
@@ -109,22 +110,73 @@ const OrderRow = props => {
         width: 50
     };
 
-    // Helper to resolve a product image by SKU with graceful fallback
-    const getThumbnailForSku = (sku, fallbackLabel) => {
+
+    // Helper to resolve a product image by SKU with graceful fallback, now prefers product_image_url from order.items
+    const getThumbnailForSku = (sku, fallbackLabel, idx) => {
         let url = null;
         let label = fallbackLabel;
-        if (imagesData && typeof imagesData === 'object') {
+        // Prefer product_image_url from order.items if present and is a non-empty string
+        if (items && items[idx] && typeof items[idx].product_image_url === 'string' && items[idx].product_image_url.trim() !== '') {
+            url = items[idx].product_image_url;
+        } else if (imagesData && typeof imagesData === 'object') {
             const byKey = sku && imagesData[sku];
             const byValue = !byKey && sku
                 ? Object.values(imagesData).find(entry => entry?.sku === sku)
                 : null;
             const chosen = byKey || byValue;
-            if (chosen?.thumbnail?.url) {
+            if (chosen?.thumbnail?.url && typeof chosen.thumbnail.url === 'string' && chosen.thumbnail.url.trim() !== '') {
                 url = chosen.thumbnail.url;
                 label = chosen.thumbnail.label || label;
             }
         }
+        // If url is not a non-empty string, fallback to null (will trigger placeholder)
+        if (typeof url !== 'string' || url.trim() === '') {
+            url = null;
+        }
         return { url, label };
+    };
+
+    const showNewReturnButton = status === 'Complete' || derivedStatus === formatMessage({ id: 'orderRow.deliveredText', defaultMessage: 'Delivered' });
+
+    const handleNewReturn = () => {
+        // Inject product_image per item with safe fallbacks (prefer product_image_url from query)
+        let orderWithImages = { ...order };
+        if (orderWithImages.items && Array.isArray(orderWithImages.items)) {
+            orderWithImages = {
+                ...orderWithImages,
+                items: orderWithImages.items.map(it => {
+                    // Start with empty string to avoid undefined passed to Image component downstream
+                    let product_image = '';
+                    // 1) Prefer product_image_url from order items (added by query)
+                    if (typeof it.product_image_url === 'string' && it.product_image_url.trim() !== '') {
+                        product_image = it.product_image_url;
+                    }
+                    // 2) Fallback to imagesData thumbnail url (if available)
+                    else if (
+                        imagesData &&
+                        it.product_sku &&
+                        imagesData[it.product_sku]?.thumbnail?.url &&
+                        typeof imagesData[it.product_sku].thumbnail.url === 'string' &&
+                        imagesData[it.product_sku].thumbnail.url.trim() !== ''
+                    ) {
+                        product_image = imagesData[it.product_sku].thumbnail.url;
+                    }
+
+                    return {
+                        ...it,
+                        // Keep product_image_url as-is, add product_image for RMACreate consumers
+                        product_image
+                    };
+                })
+            };
+        }
+        try {
+            localStorage.setItem('rma_order', JSON.stringify(orderWithImages));
+        } catch (e) {}
+        history.push({
+            pathname: `/return/create/${orderNumber}`,
+            state: { order: orderWithImages }
+        });
     };
 
     return (
@@ -151,18 +203,18 @@ const OrderRow = props => {
                 </div>
             </div>
             <div className='flex flex-col md_flex-row justify-between mb-2.5'>
-                <div className='flex flex-col ml-[14px]'>
+                <div className='flex flex-col ml-[5px]'>
                     <div className='flex flex-row'>
-                        <div className={cn('mr-4 flex flex-col gap-8')}>
+                        <div className={cn('flex flex-col gap-2')}>
                             {items && items.length > 0 && items.map((it, idx) => {
-                                const { url, label } = getThumbnailForSku(it.product_sku, it.product_name);
+                                const { url, label } = getThumbnailForSku(it.product_sku, it.product_name, idx);
                                 return (
                                     <div key={it.id || idx} className={classes.productImage}>
                                         {url ? (
                                             <img
                                                 src={url}
                                                 alt={label}
-                                                width={60}
+                                                width={80}
                                                 className={classes.thumbnail}
                                             />
                                         ) : (
@@ -201,19 +253,33 @@ const OrderRow = props => {
                         </span>
                         <div className="text-lg font-medium">{orderTotalPrice}</div>
                     </div>
-                    <Link 
-                        to={{
-                            pathname: `/order-history/view/${orderNumber}`,
-                            state: { order }
-                        }}
-                    >
-                        <span className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[5px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out">
-                            <FormattedMessage
-                                id={'orderRow.ViewTransactionDetail'}
-                                defaultMessage={'View Order Detail'}
-                            />
-                        </span>
-                    </Link>
+                    <div className="flex flex-row gap-2 w-full justify-end items-center">
+                        {showNewReturnButton && (
+                            <button
+                                type="button"
+                                className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[5px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out"
+                                onClick={handleNewReturn}
+                            >
+                                <FormattedMessage
+                                    id={'orderRow.newReturn'}
+                                    defaultMessage={'New Return'}
+                                />
+                            </button>
+                        )}
+                        <Link 
+                            to={{
+                                pathname: `/order-history/view/${orderNumber}`,
+                                state: { order }
+                            }}
+                        >
+                            <span className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[5px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out">
+                                <FormattedMessage
+                                    id={'orderRow.ViewTransactionDetail'}
+                                    defaultMessage={'View Order Detail'}
+                                />
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </div>
             

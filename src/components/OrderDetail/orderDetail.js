@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useMemo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Button from '@magento/venia-ui/lib/components/Button';
@@ -6,7 +6,9 @@ import cn from 'classnames';
 import { Printer } from 'iconsax-react';
 import ItemsOrdered from './components/itemsOrdered';
 import RMAList from './components/rmaList';
-import { useLocation } from 'react-router-dom';
+import useRmaPage from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
+import { useLocation, useParams } from 'react-router-dom';
+import useOrderHistoryPage from '@riosst100/pwa-marketplace/src/talons/OrderHistoryPage/useOrderHistoryPage';
 
 const OrderDetail = (props) => {
     const printRef = useRef(null);
@@ -17,8 +19,35 @@ const OrderDetail = (props) => {
         defaultMessage: 'Order Detail'
     });
 
-    // Retrieve order data from props or location state
-    const order = props.order || location.state?.order;
+    // Retrieve order data from props or location state, fallback to fetch by orderNumber param
+    const params = useParams();
+
+    // Support both /order-history/view/:orderNumber and /order/:orderNumber
+    const orderNumberParam = params.orderNumber || params.urlKey || params.id;
+
+    // Keep a stable local state for order to avoid it turning undefined on re-renders
+    const [order, setOrder] = useState(() => props.order || location.state?.order || null);
+
+    // Fallback: fetch order by orderNumber from order history if not found
+    const { orders } = useOrderHistoryPage();
+
+    const fallbackOrder = useMemo(() => {
+        if (!order && orderNumberParam && orders && orders.length > 0) {
+            // order.number might be string or number, so use loose equality
+            return orders.find(o => o.number == orderNumberParam);
+        }
+        return undefined;
+    }, [order, orderNumberParam, orders]);
+    
+    // Populate order state from fallback if needed (once data available)
+    useEffect(() => {
+        if (!order && fallbackOrder) {
+            setOrder(fallbackOrder);
+        }
+    }, [fallbackOrder, order]);
+    // Fetch RMA data for this order
+    const { rmas, isLoadingWithoutData } = useRmaPage({ orderNumber: orderNumberParam });
+
     // Extract order data
     const invoiceNumber = order?.invoices?.[0]?.number || '-';
     const orderDate = order?.order_date
@@ -67,6 +96,18 @@ const OrderDetail = (props) => {
             setTimeout(() => {
             }, 500);
         }, []);
+
+    // Early guard: show skeleton if order still resolving
+    if (!order && !fallbackOrder) {
+        return (
+            <div className='print-area relative grid gap-y-md' ref={printRef}>
+                <StoreTitle>{PAGE_TITLE}</StoreTitle>
+                <div aria-live="polite" className="text-xl font-medium text-left">
+                    {PAGE_TITLE} - #-
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className='print-area relative grid gap-y-md' ref={printRef}>
@@ -146,17 +187,19 @@ const OrderDetail = (props) => {
                 </div>
                 <ItemsOrdered order={order} />
             </div>
-            <div className="block block-order-details-view">
-                <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
-                    {
-                        formatMessage({
-                            id: 'order.rmaInformation',
-                            defaultMessage: 'RMA Information'
-                        })
-                    }
+            {rmas && rmas.length > 0 && (
+                <div className="block block-order-details-view">
+                    <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
+                        {
+                            formatMessage({
+                                id: 'order.rmaInformation',
+                                defaultMessage: 'RMA Information'
+                            })
+                        }
+                    </div>
+                    <RMAList rmas={rmas} isLoadingWithoutData={isLoadingWithoutData} />
                 </div>
-                <RMAList />
-            </div>
+            )}
             <div className="block block-order-details-view">
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
                     {

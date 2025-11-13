@@ -7,8 +7,8 @@ import { shape, string } from 'prop-types';
 import { Form } from 'informed';
 
 import { useToasts } from '@magento/peregrine/lib/Toasts';
-import OrderHistoryContextProvider from '@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryContext';
-import { useOrderHistoryPage } from '@magento/peregrine/lib/talons/OrderHistoryPage/useOrderHistoryPage';
+// import OrderHistoryContextProvider from '@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryContext';
+import { useRmaPage } from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Button from '@magento/venia-ui/lib/components/Button';
@@ -16,9 +16,9 @@ import Icon from '@magento/venia-ui/lib/components/Icon';
 import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import TextInput from '@magento/venia-ui/lib/components/TextInput';
-
+import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
 import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/OrderHistoryPage/orderHistoryPage.module.css';
-import OrderRow from './orderRow';
+import RmaRow from './orderRow';
 import ResetButton from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/OrderHistoryPage/resetButton';
 import { SearchNormal } from 'iconsax-react';
 import cn from 'classnames';
@@ -34,17 +34,21 @@ const errorIcon = (
 );
 
 const RMAList = props => {
-    const talonProps = useOrderHistoryPage();
+    const talonProps = useRmaPage();
     const {
         errorMessage,
-        loadMoreOrders,
+        loadMoreRmas,
         handleReset,
         handleSubmit,
         isBackgroundLoading,
         isLoadingWithoutData,
-        orders,
+        rmas,
         pageInfo,
-        searchText
+        searchText,
+        pageControl,
+        rmaDetailData,
+        rmaDetailLoading,
+        rmaDetailError
     } = talonProps;
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
@@ -61,33 +65,33 @@ const RMAList = props => {
 
     const classes = useStyle(defaultClasses, props.classes);
 
-    const orderRows = useMemo(() => {
-        return orders.map(order => {
-            return <OrderRow key={order.id} order={order} />;
+    const rmaRows = useMemo(() => {
+        return rmas.map(rma => {
+            return <RmaRow key={rma.rma_id} rma={rma} />;
         });
-    }, [orders]);
+    }, [rmas]);
 
     const pageContents = useMemo(() => {
         if (isLoadingWithoutData) {
             return <LoadingIndicator />;
-        } else if (!isBackgroundLoading && searchText && !orders.length) {
+        } else if (!isBackgroundLoading && searchText && !rmas.length) {
             return (
                 <h3 className={classes.emptyHistoryMessage}>
                     <FormattedMessage
-                        id={'orderHistoryPage.invalidOrderNumber'}
-                        defaultMessage={`Order "${searchText}" was not found.`}
+                        id={'rmaPage.invalidOrderNumber'}
+                        defaultMessage={`RMA for Order "${searchText}" was not found.`}
                         values={{
                             number: searchText
                         }}
                     />
                 </h3>
             );
-        } else if (!isBackgroundLoading && !orders.length) {
+        } else if (!isBackgroundLoading && !rmas.length) {
             return (
                 <h3 className={classes.emptyHistoryMessage}>
                     <FormattedMessage
-                        id={'orderHistoryPage.emptyDataMessage'}
-                        defaultMessage={"You don't have any orders yet."}
+                        id={'rmaPage.emptyDataMessage'}
+                        defaultMessage={"You don't have any RMA requests yet."}
                     />
                 </h3>
             );
@@ -95,9 +99,9 @@ const RMAList = props => {
             return (
                 <ul
                     className={classes.orderHistoryTable}
-                    data-cy="OrderHistoryPage-orderHistoryTable"
+                    data-cy="RMAPage-rmaTable"
                 >
-                    {orderRows}
+                    {rmaRows}
                 </ul>
             );
         }
@@ -106,8 +110,8 @@ const RMAList = props => {
         classes.orderHistoryTable,
         isBackgroundLoading,
         isLoadingWithoutData,
-        orderRows,
-        orders.length,
+        rmaRows,
+        rmas.length,
         searchText
     ]);
 
@@ -127,23 +131,19 @@ const RMAList = props => {
         />
     ) : null;
 
-    const loadMoreButton = loadMoreOrders ? (
+    const loadMoreButton = loadMoreRmas ? (
         <Button
             classes={{ root_lowPriority: classes.loadMoreButton }}
             disabled={isBackgroundLoading || isLoadingWithoutData}
-            onClick={loadMoreOrders}
+            onClick={loadMoreRmas}
             priority="low"
         >
             <FormattedMessage
-                id={'orderHistoryPage.loadMore'}
+                id={'rmaPage.loadMore'}
                 defaultMessage={'Load More'}
             />
         </Button>
     ) : null;
-
-    const gotoSelectRMA = () => {
-        history.push('/return/select')
-    }
 
     useEffect(() => {
         if (errorMessage) {
@@ -158,8 +158,7 @@ const RMAList = props => {
     }, [addToast, errorMessage]);
 
     return (
-        <OrderHistoryContextProvider>
-            <div className="grid gap-y-md">
+        <div className="grid gap-y-md">
                 <StoreTitle>{PAGE_TITLE}</StoreTitle>
                 <div aria-live="polite" className="text-xl font-medium text-left">
                     {PAGE_TITLE}
@@ -196,34 +195,16 @@ const RMAList = props => {
                     </Form>
                     <span className={classes.pageInfo}>{pageInfoLabel}</span>
                 </div>
-                <div className='flex justify-end w-full'>
-                    <Button
-                        priority='high'
-                        classes={{
-                            content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
-                        }}
-                        className={cn(
-                            "bg-blue-600 px-6 py-2 rounded-md text-white border ",
-                            "border-blue-600 hover_bg-blue-700 hover_border-blue-700 focus-visible_outline-none"
-                        )}
-                        onClick={gotoSelectRMA}
-                    >
-                        <span className='flex gap-x-3 justify-center'>
-                            {
-                                formatMessage({
-                                    id: 'RMA.newReturn',
-                                    defaultMessage: 'New Return'
-                                })
-                            }
-                        </span>
-                    </Button>
-                </div>
                 {pageContents}
+                <div className="mt-4">
+                    {pageControl?.totalPages > 1 ? (
+                        <Pagination pageControl={pageControl} />
+                    ) : null}
+                </div>
                 {loadMoreButton}
-            </div>
-        </OrderHistoryContextProvider >
-    );
-};
+			</div>
+		);
+}
 
 export default RMAList;
 
