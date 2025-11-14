@@ -12,9 +12,26 @@ const PAGE_SIZE = 5;
 // Custom RMA Page talon with page-based pagination
 export const useRmaPage = (props = {}) => {
     const { rmaId, orderNumber } = props;
-    const { getLofmpRmasQuery, getLofmpRmaDetailQuery, lofmpCreateRmaMutation } = operations;
+    const { getLofmpRmasQuery, getLofmpRmaDetailQuery, lofmpCreateRmaMutation, lofmpRmaShippingConfirmMutation, lofmpSendRmaMessageMutation } = operations;
+
+    // Mutation for sending RMA message
+    const [sendRmaMessageMutation, { data: sendRmaMessageData, error: sendRmaMessageError, loading: sendRmaMessageLoading }] = useMutation(lofmpSendRmaMessageMutation);
+
+    // Handler for sending RMA message
+    const sendRmaMessage = useCallback(async (input) => {
+        try {
+            const { data } = await sendRmaMessageMutation({ variables: { input } });
+            return { data, error: null };
+        } catch (error) {
+            return { data: null, error };
+        }
+    }, [sendRmaMessageMutation]);
+
     // Mutation for creating RMA
     const [createRmaMutation, { data: createRmaData, error: createRmaError, loading: createRmaLoading }] = useMutation(lofmpCreateRmaMutation);
+
+    // Mutation for confirming shipping
+    const [confirmShippingMutation, { data: confirmShippingData, error: confirmShippingError, loading: confirmShippingLoading }] = useMutation(lofmpRmaShippingConfirmMutation);
 
     // Handler for creating RMA
     const createRma = useCallback(async (input) => {
@@ -25,6 +42,16 @@ export const useRmaPage = (props = {}) => {
             return { data: null, error };
         }
     }, [createRmaMutation]);
+
+    // Handler for confirming shipping
+    const confirmShipping = useCallback(async (rma_id) => {
+        try {
+            const { data } = await confirmShippingMutation({ variables: { rma_id } });
+            return { data, error: null };
+        } catch (error) {
+            return { data: null, error };
+        }
+    }, [confirmShippingMutation]);
 
     const [
         ,
@@ -47,7 +74,7 @@ export const useRmaPage = (props = {}) => {
         variables: {
             filter: orderNumber
                 ? { order_number: orderNumber }
-                : (searchText ? { order_increment_id: { match: searchText } } : undefined),
+                : (searchText ? { order_number: searchText } : undefined),
             pageSize,
             currentPage
         },
@@ -58,11 +85,13 @@ export const useRmaPage = (props = {}) => {
     const {
         data: rmaDetailData,
         error: rmaDetailError,
-        loading: rmaDetailLoading
+        loading: rmaDetailLoading,
+        refetch: refetchRmaDetail
     } = useQuery(getLofmpRmaDetailQuery, {
         fetchPolicy: 'cache-and-network',
         variables: { rmaId },
-        skip: !rmaId
+        skip: !rmaId,
+        pollInterval: 3000 // 1 detik auto-refresh
     });
 
     const rmasData = data && data.lofmpRmas ? data.lofmpRmas : undefined;
@@ -135,10 +164,15 @@ export const useRmaPage = (props = {}) => {
         createRmaLoading,
         createRmaError,
         createRmaData,
-        // Detail
+        confirmShipping,
+        confirmShippingLoading,
+        confirmShippingError,
+        confirmShippingData,
         rmaDetail: rmaDetailData ? rmaDetailData.lofmpRmaDetail : undefined,
         rmaDetailLoading,
-        rmaDetailError
+        rmaDetailError,
+        refetchRmaDetail
+        ,sendRmaMessage, sendRmaMessageData, sendRmaMessageError, sendRmaMessageLoading
     };
 };
 

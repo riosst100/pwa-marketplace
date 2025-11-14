@@ -37,8 +37,17 @@ const productItem = (props) => {
         if (onItemCheck) onItemCheck(e.target.checked);
     };
 
-    // Input change handler
+
+    // Input change handler with qty_requested validation
     const handleFieldChange = (field, value) => {
+        if (field === 'qty_requested' && item && item.quantity_ordered) {
+            if (value > item.quantity_ordered) {
+                value = item.quantity_ordered;
+            }
+            if (value < 1) {
+                value = 1;
+            }
+        }
         if (onItemChange) onItemChange(field, value);
     };
 
@@ -89,43 +98,59 @@ const productItem = (props) => {
                 <div className='block w-full lg_w-2/5'>
                     {!!itemState.checked ? (
                         <>
-                            <div className='flex flex-col mb-2.5' onChange={e => handleFieldChange('qty_requested', parseFloat(e.target.value))}>
+                            <div className='flex flex-col mb-2.5'>
                                 <p className='mb-1'>
                                     Qty Return
                                 </p>
                                 <TextField
-                                    value={itemState.qty_requested || ''}
-                                    onChange={e => handleFieldChange('qty_requested', parseFloat(e.target.value))}
+                                    value={
+                                        itemState.qty_requested > item.quantity_ordered
+                                            ? item.quantity_ordered
+                                            : itemState.qty_requested || ''
+                                    }
+                                    onChange={e => {
+                                        let val = parseFloat(e.target.value);
+                                        if (isNaN(val)) val = '';
+                                        if (val > item.quantity_ordered) val = item.quantity_ordered;
+                                        if (val < 1 && val !== '') val = 1;
+                                        handleFieldChange('qty_requested', val);
+                                    }}
                                     type="number"
                                     min={1}
                                     max={item.quantity_ordered}
                                 />
                             </div>
-                            <div className='flex flex-col mb-2.5' onChange={e => handleFieldChange('reason_id', parseInt(e.target.value, 10))}>
+                            <div className='flex flex-col mb-2.5'>
                                 <p className='mb-1'>
                                     Return Reason
                                 </p>
                                 <Select
                                     options={reasonOptions}
                                     className='w-full'
+                                    value={itemState.reason_id !== undefined && itemState.reason_id !== null ? itemState.reason_id : ''}
+                                    onChange={e => handleFieldChange('reason_id', e.target.value)}
                                 />
                             </div>
-                            <div className='flex flex-col mb-2.5' onChange={e => handleFieldChange('condition_id', parseInt(e.target.value, 10))}>
+                            <div className='flex flex-col mb-2.5'>
                                 <p className='mb-1'>
                                     Item Condition
                                 </p>
                                 <Select
                                     options={conditionOptions}
                                     className='w-full'
+                                    value={itemState.condition_id !== undefined && itemState.condition_id !== null ? itemState.condition_id : ''}
+                                    onChange={e => handleFieldChange('condition_id', e.target.value)}
                                 />
                             </div>
-                            <div className='flex flex-col mb-2.5' onChange={e => handleFieldChange('resolution_id', parseInt(e.target.value, 10))}>
+                            <div className='flex flex-col mb-2.5'>
                                 <p className='mb-1'>
                                     Resolution
                                 </p>
                                 <Select
                                     options={resolutionOptions}
                                     className='w-full'
+                                    value={itemState.resolution_id !== undefined && itemState.resolution_id !== null ? itemState.resolution_id : ''}
+                                    onChange={e => handleFieldChange('resolution_id', e.target.value)}
                                 />
                             </div>
                         </>

@@ -28,7 +28,6 @@ const RmaRow = props => {
         rmaDetailError,
         rmaDetailData
     } = rma;
-
     const classes = useStyle(defaultClasses, props.classes);
     // Format date
     const isoFormattedDate = created_at ? created_at.replace(' ', 'T') : '';
@@ -54,6 +53,14 @@ const RmaRow = props => {
         return 'text-blue-700 text-[14px] font-medium py-[5px] border-none';
     }
 
+    // Inject parent rma_id (atau increment_id) ke setiap item agar key unik
+    const itemsWithParentId = Array.isArray(items)
+        ? items.map(it => ({
+            ...it,
+            __rmaParentId: rma_id || increment_id || ''
+        }))
+        : [];
+
     return (
         <li className={classes.root}>
             <div className='flex flex-col md_flex-row md_items-start justify-between mb-2.5'>
@@ -65,7 +72,7 @@ const RmaRow = props => {
                                 {sellerName}
                             </span>
                             <span>|</span>
-                            <span className="text-blue-700 text-[14px]">#{order_increment_id}</span>
+                            <span className="text-blue-700 text-[14px]">#{increment_id}</span>
                         </div>
                     </div>
                 </div>
@@ -81,14 +88,15 @@ const RmaRow = props => {
                 <div className='flex flex-col ml-[14px]'>
                     <div className='flex flex-row'>
                         <div className={cn('mr-4 flex flex-col gap-8')}>
-                            {items && items.length > 0 && items.map((it, idx) => {
+                            {itemsWithParentId.map((it, idx) => {
                                 const thumbnailProps = {
                                     alt: it.name,
                                     classes: { root: classes.thumbnail },
                                     width: 50
                                 };
+                                // Use unique key: parent id + item.id
                                 return (
-                                    <div key={it.id || idx} className={classes.productImage}>
+                                    <div key={`${it.__rmaParentId}-${it.id || idx}`} className={classes.productImage}>
                                         {it.image_url ? (
                                             <img src={it.image_url} alt={it.name} width={70} className={classes.thumbnail} />
                                         ) : (
@@ -99,20 +107,23 @@ const RmaRow = props => {
                             })}
                         </div>
                         <div className='flex flex-col max-w-[375px] gap-8'>
-                            {items && items.length > 0 && items.map((it, idx) => (
-                                <div key={it.id || idx} className='flex flex-col gap-1 pb-2 last_pb-0'>
-                                    <div className={cn(classes.productName, 'text-[14] font-medium')}>
-                                        <span>{it.name}</span>
+                            {itemsWithParentId.map((it, idx) => {
+                                const qty = Number.isFinite(it.qty_requested) ? it.qty_requested : '-';
+                                return (
+                                    <div key={`${it.__rmaParentId}-${it.id || idx}`} className='flex flex-col gap-1 pb-2 last_pb-0'>
+                                        <div className={cn(classes.productName, 'text-[14] font-medium')}>
+                                            <span>{it.name}</span>
+                                        </div>
+                                        <div className="text-[14] text-gray-300">
+                                            <span>Qty Requested : {qty}</span>
+                                            <br />
+                                            <span>
+                                                Price : {it.price ? <Price currencyCode={it.price.currency} value={it.price.value} /> : '-'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="text-[14] text-gray-300">
-                                        <span>Qty : {`${it.qty_requested || 0}`}</span>
-                                        <br />
-                                        <span>
-                                            Price : {it.price ? <Price currencyCode={it.price.currency} value={it.price.value} /> : '-'}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

@@ -42,6 +42,36 @@ const LofmpRmasFragment = gql`
     }
 `;
 
+export const LOFMP_SEND_RMA_MESSAGE = gql`
+    mutation lofmpSendRmaMessage($input: SendMessageInput!) {
+        lofmpSendRmaMessage(input: $input) {
+            created_message {
+                attachments {
+                    id
+                    name
+                    url
+                }
+                created_at
+                id
+                sender_email
+                sender_name
+                text
+            }
+            message
+            success
+        }
+    }
+`;
+
+export const LOFMP_RMA_SHIPPING_CONFIRM = gql`
+    mutation lofmpRmaShippingConfirm($rma_id: Int!) {
+        lofmpRmaShippingConfirm(rma_id: $rma_id) {
+            message
+            success
+        }
+    }
+`;
+
 export const GET_LOFMP_RMA_CONFIGURATIONS = gql`
     query GetLofmpRmaConfigurations {
         lofmpRmaConfigurations {
@@ -166,5 +196,7 @@ export const GET_LOFMP_RMA_DETAIL = gql`
 export default {
     getLofmpRmasQuery: GET_LOFMP_RMAS,
     lofmpCreateRmaMutation: LOFMP_CREATE_RMA,
-    getLofmpRmaDetailQuery: GET_LOFMP_RMA_DETAIL
+    getLofmpRmaDetailQuery: GET_LOFMP_RMA_DETAIL,
+    lofmpRmaShippingConfirmMutation: LOFMP_RMA_SHIPPING_CONFIRM,
+    lofmpSendRmaMessageMutation: LOFMP_SEND_RMA_MESSAGE
 };

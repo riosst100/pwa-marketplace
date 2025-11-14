@@ -12,7 +12,7 @@ import OrderProgressBar from './orderProgressBar';
 import OrderDetails from './OrderDetails';
 import defaultClasses from './orderRow.module.css';
 import cn from 'classnames';
-import { Verify, Shop } from 'iconsax-react';
+import { Verify, Shop, ConvertCard } from 'iconsax-react';
 import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholderImage';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -203,30 +203,25 @@ const OrderRow = props => {
                 </div>
             </div>
             <div className='flex flex-col md_flex-row justify-between mb-2.5'>
-                <div className='flex flex-col ml-[5px]'>
-                    <div className='flex flex-row'>
-                        <div className={cn('flex flex-col gap-2')}>
-                            {items && items.length > 0 && items.map((it, idx) => {
-                                const { url, label } = getThumbnailForSku(it.product_sku, it.product_name, idx);
-                                return (
-                                    <div key={it.id || idx} className={classes.productImage}>
-                                        {url ? (
-                                            <img
-                                                src={url}
-                                                alt={label}
-                                                width={80}
-                                                className={classes.thumbnail}
-                                            />
-                                        ) : (
-                                            <PlaceholderImage alt={it.product_name} classes={{ root: classes.thumbnail }} width={60} />
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <div className='flex flex-col max-w-[375px] gap-8'>
-                            {items && items.length > 0 && items.map((it, idx) => (
-                                <div key={it.id || idx} className='flex flex-col gap-1 pb-2 last_pb-0'>
+                <div className='flex flex-col ml-[5px] gap-y-[20px]'>
+                    {/* Per-item horizontal flex: image + detail */}
+                    {items && items.length > 0 && items.map((it, idx) => {
+                        const { url, label } = getThumbnailForSku(it.product_sku, it.product_name, idx);
+                        return (
+                            <div key={it.id || idx} className='flex flex-row gap-4 mb-2'>
+                                <div className={classes.productImage}>
+                                    {url ? (
+                                        <img
+                                            src={url}
+                                            alt={label}
+                                            width={80}
+                                            className={classes.thumbnail}
+                                        />
+                                    ) : (
+                                        <PlaceholderImage alt={it.product_name} classes={{ root: classes.thumbnail }} width={60} />
+                                    )}
+                                </div>
+                                <div className='flex flex-col gap-1 pb-2 last_pb-0 max-w-[375px]'>
                                     <div className={cn(classes.productName, 'text-[14] font-medium')}>
                                         <span>{it.product_name}</span>
                                     </div>
@@ -238,9 +233,9 @@ const OrderRow = props => {
                                         </span>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
+                        );
+                    })}
                 </div>
                 {/* Right column: bottom-aligned Order Total + CTA */}
                 <div className='flex flex-col items-end gap-2 md_pl-10 md_self-end mr-4 mb-1'>
@@ -254,18 +249,6 @@ const OrderRow = props => {
                         <div className="text-lg font-medium">{orderTotalPrice}</div>
                     </div>
                     <div className="flex flex-row gap-2 w-full justify-end items-center">
-                        {showNewReturnButton && (
-                            <button
-                                type="button"
-                                className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[5px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out"
-                                onClick={handleNewReturn}
-                            >
-                                <FormattedMessage
-                                    id={'orderRow.newReturn'}
-                                    defaultMessage={'New Return'}
-                                />
-                            </button>
-                        )}
                         <Link 
                             to={{
                                 pathname: `/order-history/view/${orderNumber}`,
@@ -279,6 +262,22 @@ const OrderRow = props => {
                                 />
                             </span>
                         </Link>
+                        {showNewReturnButton && (
+                            <div
+                                className={cn(
+                                    "cursor-pointer border border-blue-700 bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700",
+                                    "rounded-full px-[10px] py-[3px] text-[13px] font-medium transition-all duration-300 ease-in-out flex items-center gap-2"
+                                )}
+                                onClick={handleNewReturn}
+                                title={formatMessage({ id: 'orderRow.returnProduct', defaultMessage: 'Return Product' })}
+                            >
+                                <ConvertCard size={20} color="#f26313" />
+                                <FormattedMessage
+                                    id={'orderRow.ReturnItems'}
+                                    defaultMessage={'Return Items'}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
