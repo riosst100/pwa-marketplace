@@ -1,4 +1,6 @@
 module.exports = componentOverrideMapping = {
+    [`@magento/venia-ui/lib/components/CartPage/PriceSummary/priceSummary.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/CartPage/PriceSummary/priceSummary.js',
+    [`@magento/peregrine/lib/talons/CartPage/PriceSummary/priceSummaryFragments.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CartPage/PriceSummary/priceSummaryFragments.gql.js',
     [`@magento/venia-ui/lib/components/Adapter/adapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Adapter/adapter.js',
     [`@magento/venia-ui/lib/components/ToastContainer/toast.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toast.module.css',
     [`@magento/venia-ui/lib/components/ToastContainer/toastContainer.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toastContainer.module.css',
@@ -87,7 +89,6 @@ module.exports = componentOverrideMapping = {
     [`@magento/peregrine/lib/talons/ProductOptions/useTile.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductOptions/useTile.js',
     [`@magento/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/ProductImageCarousel/useProductImageCarousel.js',
     [`@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderHistoryPage.gql.js',
-    // Added overrides to fix TypeError in useOrderRow and to ensure required GQL queries are present
     [`@magento/peregrine/lib/talons/OrderHistoryPage/useOrderRow.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/useOrderRow.js',
     [`@magento/peregrine/lib/talons/OrderHistoryPage/orderRow.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderRow.gql.js'
 };
