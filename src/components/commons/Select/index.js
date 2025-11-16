@@ -5,19 +5,23 @@ const Select = (props) => {
     const {
         wrapperClassname,
         className,
-        options = []
+        options = [],
+        value,
+        onChange
     } = props;
 
     return (
         <div className={cx('flex', wrapperClassname)}>
             <select
                 className={cx('border rounded-md border-gray-100 p-2 focus-visible_outline-none', className)}
+                value={value}
+                onChange={onChange}
             >
                 <option value=''>
                     Choose Option
                 </option>
                 {options.map((item) => (
-                    <option value={item.value}>
+                    <option key={item.value} value={item.value}>
                         {item.label}
                     </option>
                 ))}

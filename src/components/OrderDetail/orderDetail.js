@@ -3,11 +3,11 @@ import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
-import { Printer } from 'iconsax-react';
+import { Printer, ConvertCard } from 'iconsax-react';
 import ItemsOrdered from './components/itemsOrdered';
 import RMAList from './components/rmaList';
 import useRmaPage from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import useOrderHistoryPage from '@riosst100/pwa-marketplace/src/talons/OrderHistoryPage/useOrderHistoryPage';
 
 const OrderDetail = (props) => {
@@ -27,6 +27,45 @@ const OrderDetail = (props) => {
 
     // Keep a stable local state for order to avoid it turning undefined on re-renders
     const [order, setOrder] = useState(() => props.order || location.state?.order || null);
+    const history = useHistory();
+    // Button Return Items: tampil jika status Complete/Delivered
+    const isReturnAllowed = useMemo(() => {
+        if (!order) return false;
+        const status = order.status;
+        if (!status) return false;
+        return (
+            status === 'Complete' ||
+            status.toLowerCase() === 'delivered' // antisipasi backend bisa lowercase
+        );
+    }, [order]);
+
+    // Handler sama seperti orderRow
+    const handleNewReturn = useCallback(() => {
+        if (!order) return;
+        let orderWithImages = { ...order };
+        if (orderWithImages.items && Array.isArray(orderWithImages.items)) {
+            orderWithImages = {
+                ...orderWithImages,
+                items: orderWithImages.items.map(it => {
+                    let product_image = '';
+                    if (typeof it.product_image_url === 'string' && it.product_image_url.trim() !== '') {
+                        product_image = it.product_image_url;
+                    }
+                    return {
+                        ...it,
+                        product_image
+                    };
+                })
+            };
+        }
+        try {
+            localStorage.setItem('rma_order', JSON.stringify(orderWithImages));
+        } catch (e) {}
+        history.push({
+            pathname: `/return/create/${order.number}`,
+            state: { order: orderWithImages }
+        });
+    }, [order, history]);
 
     // Fallback: fetch order by orderNumber from order history if not found
     const { orders } = useOrderHistoryPage();
@@ -149,31 +188,52 @@ const OrderDetail = (props) => {
                     </div>
                 </div>
                 <div className='flex flex-col md_flex-row gap-x-4 justify-end no-print'>
-                    <Button
-                        priority='high'
-                        classes={{
-                            content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
-                        }}
-                        className={cn(
-                            "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
-                            "border-gray-900 focus-visible_outline-none hover_bg-gray-900 min-h-[40px]"
+                    <div className='flex flex-row gap-x-3'>
+                        <Button
+                            priority='high'
+                            classes={{
+                                content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
+                            }}
+                            className={cn(
+                                "bg-white px-6 py-2 rounded-md text-gray-900 hover_!text-white border border-solid",
+                                "border-gray-900 focus-visible_outline-none hover_bg-gray-900 min-h-[40px]"
+                            )}
+                            onClick={handlePrint}
+                            aria-label={formatMessage({ id: 'order.printInvoices', defaultMessage: 'Print Invoices' })}
+                        >
+                            <span className='flex gap-x-3 justify-center group-hover_!text-white'>
+                                <Printer
+                                    size="24"
+                                    className=''
+                                />
+                                {
+                                    formatMessage({
+                                        id: 'order.PrintInvoices',
+                                        defaultMessage: 'Print Invoices'
+                                    })
+                                }
+                            </span>
+                        </Button>
+                        {isReturnAllowed && (
+                            <Button
+                                priority='high'
+                                classes={{
+                                    content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
+                                }}
+                                className={cn(
+                                    "bg-blue-700 px-6 py-2 rounded-md text-white border border-blue-700 min-h-[40px]",
+                                    "transition-all duration-300 ease-in-out flex items-center gap-2"
+                                )}
+                                onClick={handleNewReturn}
+                                aria-label={formatMessage({ id: 'orderRow.returnProduct', defaultMessage: 'Return Product' })}
+                            >
+                                <span className='flex gap-x-3 justify-center'>
+                                    <ConvertCard size={22} color="#fff" />
+                                    {formatMessage({ id: 'orderRow.ReturnItems', defaultMessage: 'Return Items' })}
+                                </span>
+                            </Button>
                         )}
-                        onClick={handlePrint}
-                        aria-label={formatMessage({ id: 'order.printInvoices', defaultMessage: 'Print Invoices' })}
-                    >
-                        <span className='flex gap-x-3 justify-center group-hover_!text-white'>
-                            <Printer
-                                size="24"
-                                className=''
-                            />
-                            {
-                                formatMessage({
-                                    id: 'order.PrintInvoices',
-                                    defaultMessage: 'Print Invoices'
-                                })
-                            }
-                        </span>
-                    </Button>
+                    </div>
                 </div>
             </div>
             <div className="block block-order-details-view">
