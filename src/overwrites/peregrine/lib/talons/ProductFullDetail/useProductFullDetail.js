@@ -1,4 +1,5 @@
 import { useCallback, useState, useMemo } from 'react';
+import { useToasts } from '@magento/peregrine/lib';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from '@apollo/client';
 import { useCartContext } from '@magento/peregrine/lib/context/cart';
@@ -11,6 +12,7 @@ import { isSupportedProductType as isSupported } from '@magento/peregrine/lib/ut
 import { deriveErrorMessage } from '@magento/peregrine/lib/util/deriveErrorMessage';
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import defaultOperations from '@magento/peregrine/lib/talons/ProductFullDetail/productFullDetail.gql';
+import productReviewOperations from './productReview.gql';
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
 import { getOutOfStockVariants } from '@magento/peregrine/lib/util/getOutOfStockVariants';
 
@@ -334,12 +336,60 @@ export const useProductFullDetail = props => {
         isPreview
     } = props;
 
+    const [, { addToast }] = useToasts();
+
+    const { data: productReviewData, loading: loadingProductReview, error: errorProductReview, refetch: refetchProductReviews } = useQuery(
+        productReviewOperations.getProductReviews,
+        {
+            variables: { url_key: product?.url_key },
+            skip: !product?.url_key,
+            fetchPolicy: 'network-only'
+        }
+    );
+
+    // Query for ratings metadata
+    const { data: ratingsMetadataData, loading: loadingRatingsMetadata } = useQuery(
+        productReviewOperations.getProductReviewRatingsMetadata,
+        { fetchPolicy: 'network-only' }
+    );
+    
+    // Mutation for creating review (allow partial data with errors)
+    const [createProductReview, { loading: loadingCreateReview, error: errorCreateReview }] = useMutation(
+        productReviewOperations.createProductReview,
+        { errorPolicy: 'all' }
+    );
+
+    // Handler for submitting review with robust toast handling
+    const handleSubmitReview = async (formValues) => {
+        try {
+            const result = await createProductReview({
+                variables: { input: formValues },
+                errorPolicy: 'all'
+            });
+
+            const gqlErrors = result?.errors || [];
+            const review = result?.data?.createProductReview?.review;
+
+            if (gqlErrors.length > 0 || !review) {
+                const message = gqlErrors[0]?.message || 'Failed to submit review!';
+                addToast({ type: 'error', message });
+                return { success: false, error: gqlErrors };
+            }
+
+            await refetchProductReviews();
+            addToast({ type: 'success', message: 'Review submitted successfully!' });
+            return { success: true };
+        } catch (e) {
+            addToast({ type: 'error', message: e?.message || 'Failed to submit review!' });
+            return { success: false, error: e };
+        }
+    };
+
     const [, { dispatch }] = useEventingContext();
 
     const hasDeprecatedOperationProp = !!(
         addConfigurableProductToCartMutation || addSimpleProductToCartMutation
     );
-
     const operations = mergeOperations(defaultOperations, props.operations);
 
     const productType = product.__typename;
@@ -347,7 +397,7 @@ export const useProductFullDetail = props => {
     const isSupportedProductType = isSupported(productType);
 
     const [{ cartId }] = useCartContext();
-    const [{ isSignedIn }] = useUserContext();
+    const [{ isSignedIn, currentUser }] = useUserContext();
     const { formatMessage } = useIntl();
 
     const { data: storeConfigData } = useQuery(
@@ -718,6 +768,16 @@ export const useProductFullDetail = props => {
         storeConfig: storeConfigData ? storeConfigData.storeConfig : {}
     };
 
+    const defaultNickname = useMemo(() => {
+        if (!currentUser) return '';
+        const first = currentUser.firstname || '';
+        const last = currentUser.lastname || '';
+        const full = `${first} ${last}`.trim();
+        if (full) return full;
+        const email = currentUser.email || '';
+        return email ? email.split('@')[0] : '';
+    }, [currentUser]);
+
     return {
         breadcrumbCategoryId,
         errorMessage: derivedErrorMessage,
@@ -744,6 +804,15 @@ export const useProductFullDetail = props => {
         customAttributes,
         wishlistButtonProps,
         wishlistItemOptions,
-        sellerDetails
+        sellerDetails,
+        productReviewData,
+        loadingProductReview,
+        errorProductReview,
+        ratingsMetadataData,
+        loadingRatingsMetadata,
+        handleSubmitReview,
+        loadingCreateReview,
+        errorCreateReview,
+        defaultNickname
     };
 };
