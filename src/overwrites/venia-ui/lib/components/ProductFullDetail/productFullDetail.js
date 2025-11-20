@@ -57,7 +57,6 @@ const ERROR_FIELD_TO_MESSAGE_MAPPING = {
 
 const ProductDetailsCollapsible = (props) => {
     const { data } = props;
-
     return (
         <>
             {data.map((_data) => (
@@ -99,7 +98,14 @@ const ProductFullDetail = props => {
         productDetails,
         customAttributes,
         wishlistButtonProps,
-        sellerDetails
+        sellerDetails,
+        productReviewData,
+        loadingProductReview,
+        errorProductReview,
+        ratingsMetadataData,
+        loadingRatingsMetadata,
+        handleSubmitReview,
+        defaultNickname
     } = talonProps;
 
     const [, { addToast }] = useToasts();
@@ -493,7 +499,17 @@ const ProductFullDetail = props => {
         {
             id: 'product-reviews',
             title: 'Reviews',
-            content: <ProductReviews className={cn(contentContainerClass, classes.contentContainerTabOverride)} />
+            content: <ProductReviews 
+                className={cn(contentContainerClass, classes.contentContainerTabOverride)}
+                productReviewData={productReviewData}
+                loadingProductReview={loadingProductReview}
+                errorProductReview={errorProductReview}
+                ratingsMetadataData={ratingsMetadataData}
+                loadingRatingsMetadata={loadingRatingsMetadata}
+                handleSubmitReview={handleSubmitReview}
+                defaultNickname={defaultNickname}
+                product={product}
+            />
         }
     ];
 

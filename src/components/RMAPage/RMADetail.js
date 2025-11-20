@@ -69,7 +69,7 @@ const RMADetail = () => {
             timeStamp: m.created_at,
             senderName: m.sender_name || ''
         }));
-        return mapped.length > 0 ? mapped : dummyChat;
+        return mapped.length > 0 ? mapped : [];
     }, [rmaDetail]);
 
     const formatted = useMemo(() => {

@@ -4,98 +4,139 @@ import { Star1 } from 'iconsax-react';
 import Button from '../../Button';
 import ModalFormReview from './modalFormReview';
 
-const productReview = (props) => {
 
-    const { className } = props;
+
+const productReview = (props) => {
+    const {
+        className,
+        productReviewData,
+        loadingProductReview,
+        errorProductReview,
+        ratingsMetadataData,
+        loadingRatingsMetadata,
+        handleSubmitReview,
+        defaultNickname,
+        product
+    } = props;
+
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('All');
+    const [submitting, setSubmitting] = useState(false);
 
-
-    // Dummy reviews data
-    const dummyReviews = {
-        __typename: 'ProductRates',
-        total_count: 6,
-        items: [
-            {
+    let reviewsData = null;
+    if (
+        productReviewData &&
+        productReviewData.products &&
+        productReviewData.products.items &&
+        productReviewData.products.items.length > 0
+    ) {
+        const item = productReviewData.products.items[0];
+        const reviewItems = (item.reviews && item.reviews.items) || [];
+        reviewsData = {
+            __typename: 'ProductRates',
+            total_count: item.review_count || reviewItems.length,
+            items: reviewItems.map((r, idx) => ({
                 __typename: 'ProductRate',
-                id: 1,
-                name: 'John Doe',
-                date: '18 January 2024',
-                rating: 5,
-                comment: 'Got item at a great price. Arrived way quicker than expected, extremely well packaged and exactly as described. Highly recommend the seller.'
-            },
-            {
-                __typename: 'ProductRate',
-                id: 2,
-                name: 'Roger Taylor',
-                date: '25 January 2024',
-                rating: 2,
-                comment: 'Arrived late and packaging was damaged. Not satisfied.'
-            },
-            {
-                __typename: 'ProductRate',
-                id: 3,
-                name: 'Sarah Smith',
-                date: '02 February 2024',
-                rating: 4,
-                comment: 'Good product, but delivery could be faster.'
-            },
-            {
-                __typename: 'ProductRate',
-                id: 4,
-                name: 'Michael Johnson',
-                date: '10 February 2024',
-                rating: 3,
-                comment: 'Average experience, item as described but nothing special.'
-            },
-            {
-                __typename: 'ProductRate',
-                id: 5,
-                name: 'Emily Davis',
-                date: '15 February 2024',
-                rating: 5,
-                comment: 'Excellent service and product quality! Will buy again.'
-            },
-            {
-                __typename: 'ProductRate',
-                id: 6,
-                name: 'David Lee',
-                date: '20 February 2024',
-                rating: 1,
-                comment: 'Item not as described. Very disappointed.'
+                id: idx + 1,
+                name: r.nickname,
+                date: r.created_at,
+                rating: r.average_rating ? Math.round(r.average_rating / 20) : (r.ratings_breakdown && r.ratings_breakdown[0] ? parseInt(r.ratings_breakdown[0].value) : 0),
+                comment: r.text || r.summary || '',
+                summary: r.summary || '',
+                productName: r.product?.name || '',
+                ratings_breakdown: r.ratings_breakdown || []
+            })),
+            page_info: productReviewData.products.page_info || {
+                total_pages: 1,
+                current_page: 1
             }
-        ],
-        page_info: {
-            __typename: 'SearchResultPageInfo',
-            total_pages: 1,
-            page_size: 10,
-            current_page: 1,
-            total_count: 6
-        }
-    };
+        };
+    }
 
+    if (!reviewsData || !reviewsData.items.length) {
+        return (
+            <>
+                <ModalFormReview
+                    open={open}
+                    setOpen={setOpen}
+                    defaultNickname={defaultNickname}
+                    ratingsMetadata={ratingsMetadataData?.productReviewRatingsMetadata?.items || []}
+                    loadingRatingsMetadata={loadingRatingsMetadata}
+                    onSubmit={async (formValues) => {
+                        setSubmitting(true);
+                        const input = {
+                            nickname: formValues.nickname,
+                            summary: formValues.summary,
+                            text: formValues.review,
+                            sku: product?.sku,
+                            ratings: formValues.ratings
+                        };
+                        const result = await handleSubmitReview(input);
+                        setSubmitting(false);
+                        if (result.success) setOpen(false);
+                    }}
+                    submitting={submitting}
+                />
+                <div className={className}>
+                    <div className="flex items-center justify-between mb-6">
+                        <div />
+                        <Button
+                            priority='low'
+                            classes={{
+                                content: 'normal-case font-normal text-base'
+                            }}
+                            onClick={() => setOpen(true)}
+                        >
+                            Write a review
+                        </Button>
+                    </div>
+                    <div className="text-center py-8 text-gray-500">No reviews yet.</div>
+                </div>
+            </>
+        );
+    }
 
-    const totalReviews = dummyReviews.items.length;
+    const totalReviews = reviewsData.items.length;
     const averageRating = totalReviews > 0
-        ? (dummyReviews.items.reduce((sum, item) => sum + item.rating, 0) / totalReviews).toFixed(1)
+        ? (reviewsData.items.reduce((sum, item) => sum + item.rating, 0) / totalReviews).toFixed(1)
         : 0;
 
     const starCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-    dummyReviews.items.forEach(item => {
+    reviewsData.items.forEach(item => {
         if (starCounts[item.rating] !== undefined) {
             starCounts[item.rating]++;
         }
     });
 
     const getPercent = (count) => totalReviews > 0 ? Math.round((count / totalReviews) * 100) : 0;
-    
+
     const filteredReviews = filter === 'All'
-        ? dummyReviews.items
-        : dummyReviews.items.filter(item => item.rating === parseInt(filter));
+        ? reviewsData.items
+        : reviewsData.items.filter(item => item.rating === parseInt(filter));
 
     return (
         <>
-            <ModalFormReview open={open} setOpen={setOpen} />
+            <ModalFormReview
+                open={open}
+                setOpen={setOpen}
+                defaultNickname={defaultNickname}
+                ratingsMetadata={ratingsMetadataData?.productReviewRatingsMetadata?.items || []}
+                loadingRatingsMetadata={loadingRatingsMetadata}
+                onSubmit={async (formValues) => {
+                    setSubmitting(true);
+                    const input = {
+                        nickname: formValues.nickname,
+                        summary: formValues.summary,
+                        text: formValues.review,
+                        sku: product?.sku,
+                        ratings: formValues.ratings
+                    };
+                    const result = await handleSubmitReview(input);
+                    setSubmitting(false);
+                    if (result.success) setOpen(false);
+                }}
+                submitting={submitting}
+            />
             <div className={className}>
                 <div className="w-full flex items-start xs_flex-col lg_flex-row gap-[30px]">
                     <div className="w-full xs_max-w-full lg_max-w-[365px] border border-[#E6E9EA] rounded-md p-6">
@@ -167,7 +208,7 @@ const productReview = (props) => {
                         {/* Reviews List */}
                         <div className='space-y-4 mb-6'>
                             <Review reviews={{
-                                ...dummyReviews,
+                                ...reviewsData,
                                 items: filteredReviews
                             }} />
                         </div>

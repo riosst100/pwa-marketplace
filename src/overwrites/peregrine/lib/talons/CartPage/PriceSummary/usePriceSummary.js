@@ -28,7 +28,8 @@ const flattenData = data => {
         giftCards: data.cart.applied_gift_cards,
         giftOptions: data.cart.prices.gift_options,
         taxes: data.cart.prices.applied_taxes,
-        shipping: data.cart.shipping_addresses
+        shipping: data.cart.shipping_addresses,
+        payment_fees: data.cart.payment_fees
     };
 };
 
@@ -98,9 +99,6 @@ export const usePriceSummary = (props = {}) => {
         await setCheckoutState(true);
 
         await createSellerCart({ initCheckoutSplitCart, sellerUrl });
-
-        // console.log('initCheckoutSplitCartData')
-        // console.log(initCheckoutSplitCartData)
 
         await removeCart();
         await apolloClient.clearCacheData(apolloClient, 'cart');
