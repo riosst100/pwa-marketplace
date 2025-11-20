@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { FormattedMessage } from 'react-intl';
 import { shape, string } from 'prop-types';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './verifyEmail.module.css';
-import { GET_CUSTOMER_INFORMATION } from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/AccountInformationPage/accountInformationPage.gql';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
+import { useHistory } from 'react-router-dom';
+import { useVerifyEmailPage } from '@riosst100/pwa-marketplace/src/talons/VerifyEmailPage/useVerifyEmailPage';
 
+const storage = new BrowserPersistence();
 
 const VerifyEmailPage = props => {
     const classes = useStyle(defaultClasses, props.classes);
-    const { data, loading } = useQuery(GET_CUSTOMER_INFORMATION);
-    const email = data?.customer?.email || '';
+    const email = storage.getItem('confirm_email');
 
-    return (
+    const history = useHistory();
+
+    const { handleResendEmail, shouldShowLoadingIndicator } = useVerifyEmailPage({ email });
+    
+    useEffect(() => {
+        if (!email) {
+            history.push('/');
+        }
+    }, [email, history]);
+
+    return email ? (
         <div className={classes.root}>
             <div className={classes.card}>
                 <h2 className={classes.title}>
@@ -21,30 +33,41 @@ const VerifyEmailPage = props => {
                         defaultMessage={'Please verify your email'}
                     />
                 </h2>
+                {email ?
                 <p className={classes.subtitle}>
                     <FormattedMessage
                         id={'verifyEmail.sentTo'}
                         defaultMessage={'You\'re almost there! We sent an email to'}
                     />
                     <br />
-                    <span className={classes.email}>{loading ? '.......' : email}</span>
-                </p>
+                    <span className={classes.email}>{email}</span>
+                </p> : ''}
                 <p className={classes.instructions}>
                     <FormattedMessage
                         id={'verifyEmail.instructions'}
                         defaultMessage={'Just click on the link in that email to complete your signup. If you don\'t see it, you may need to check your spam folder.'}
                     />
                 </p>
+                {shouldShowLoadingIndicator ? <button
+                    className={classes.resendButton}
+                    type="button"
+                    style={{"opacity":"0.5"}}
+                >
+                    <FormattedMessage
+                        id={'verifyEmail.sendingEmail'}
+                        defaultMessage={'Sending Email...'}
+                    />
+                </button> :
                 <button
                     className={classes.resendButton}
                     type="button"
-                    onClick={() => alert('Resend email logic goes here')}
+                    onClick={handleResendEmail}
                 >
                     <FormattedMessage
                         id={'verifyEmail.resend'}
                         defaultMessage={'Resend Email'}
                     />
-                </button>
+                </button>}
                 <div className={classes.contactHelp}>
                     <FormattedMessage
                         id={'verifyEmail.needHelp'}
@@ -59,7 +82,7 @@ const VerifyEmailPage = props => {
                 </div>
             </div>
         </div>
-    );
+    ) : '';
 };
 
 VerifyEmailPage.propTypes = {

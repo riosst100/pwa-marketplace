@@ -2,48 +2,16 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from '@magento/venia-ui/lib/components/Button';
 import { Message } from '@magento/venia-ui/lib/components/Field';
-
-// Dummy mutation placeholder
-const useDeleteAccount = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-
-    const deleteAccount = async () => {
-        setLoading(true);
-        setError(null);
-        setSuccess(false);
-        // Simulate API call
-        setTimeout(() => {
-            setLoading(false);
-            setSuccess(true);
-        }, 1500);
-    };
-
-    return {
-        loading,
-        error,
-        success,
-        deleteAccount
-    };
-};
+import { useDeleteAccount } from '@riosst100/pwa-marketplace/src/talons/AccountInformationPage/useDeleteAccount';
 
 const DeleteAccount = () => {
     const [confirm, setConfirm] = useState(false);
     const [agreement, setAgreement] = useState(false);
-    const { loading, error, success, deleteAccount } = useDeleteAccount();
+
+    const { loading, error, success, handleDeleteAccount } = useDeleteAccount();
+
     const handleChange = (event) => {
         setAgreement(event.target.checked);
-    }
-    if (success) {
-        return (
-            <Message type="success">
-                <FormattedMessage
-                    id="deleteAccount.success"
-                    defaultMessage="Your account has been deleted."
-                />
-            </Message>
-        );
     }
 
     return (
@@ -91,7 +59,7 @@ const DeleteAccount = () => {
                     <Button
                         priority="high"
                         disabled={loading || !agreement}
-                        onClick={deleteAccount}
+                        onClick={handleDeleteAccount}
                         style={{ marginRight: 8, textTransform: 'none' }}
                     >
                         <FormattedMessage
