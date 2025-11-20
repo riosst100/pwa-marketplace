@@ -92,7 +92,14 @@ module.exports = targets => {
       name: "VerifyEmailPage",
       pattern: "/verify-email",
       path: require.resolve("./components/VerifyEmailPage/index.js"),
-      authed: true,
+      authed: false,
+    },
+    {
+      exact: true,
+      name: "ConfirmEmailPage",
+      pattern: "/confirm-email",
+      path: require.resolve("./components/ConfirmEmailPage/index.js"),
+      authed: false,
     },
     {
       exact: true,

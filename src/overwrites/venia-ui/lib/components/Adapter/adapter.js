@@ -61,8 +61,10 @@ const Adapter = props => {
     useEffect(() => {
         if (!websiteCodeInUrl && getWebsiteByUserIp) {
             setVerifyUserIp(false);
+
+            const search = location.search;
             
-            const query = new URLSearchParams(location.search);
+            const query = new URLSearchParams(search);
             const isAccessBaseWebsite = query.get('access_base_website') || (
                 storage.getItem('access_base_website') || null
             );
