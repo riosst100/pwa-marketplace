@@ -150,7 +150,8 @@ export const useCategoryContent = props => {
 
             getFilters({
                 variables: {
-                    filters: newFilters
+                    filters: newFilters,
+                    category_uid: categoryId
                 }
             });
         }

@@ -84,6 +84,9 @@ const ShopBy = props => {
     //     attributesBlock,
     //     category,
     // } = talonProps;
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     
     const [active, setActive] = useState('all')
     const [activeTab, setActiveTab] = useState('all');

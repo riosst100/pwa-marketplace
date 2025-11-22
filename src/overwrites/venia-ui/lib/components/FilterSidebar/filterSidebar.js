@@ -52,6 +52,8 @@ const FilterSidebar = props => {
                 // const windowScrollY =
                 //     window.scrollY + filterTop - SCROLL_OFFSET;
                 // window.scrollTo(0, windowScrollY);
+
+                window.scrollTo(0, 0);
             }
 
             handleApply(...args);
@@ -88,6 +90,33 @@ const FilterSidebar = props => {
     allowedFilters?.length && allowedFilters.map((val, index) => {
         allowedFiltersArr.push(val.code);
     });
+
+    // const ordering = ['card_artist','card_product_type', 'card_type'];
+    // const sorted = new Map(
+    //     [...filterItems.entries()].sort((a, b) => {
+    //         const keyA = a[0];
+    //         const keyB = b[0];
+
+    //         const matchA = ordering.findIndex(o => keyA.endsWith(o));
+    //         const matchB = ordering.findIndex(o => keyB.endsWith(o));
+
+    //         const orderA = matchA === -1 ? Infinity : matchA;
+    //         const orderB = matchB === -1 ? Infinity : matchB;
+
+    //         // jika dua-duanya tidak match ordering → sort alphabetis
+    //         if (orderA === Infinity && orderB === Infinity) {
+    //             return keyA.localeCompare(keyB);
+    //         }
+
+    //         // urutkan sesuai ordering
+    //         return orderA - orderB;
+    //     })
+    // );
+
+    // // console.log([...sorted.entries()]);
+    // const filterItems = [...sorted.entries()];
+
+    // console.log('filterItems',filterItems)
 
     const filtersList = useMemo(
         () =>

@@ -260,8 +260,6 @@ const FilterList = props => {
     const { pathname, search } = useLocation();
 
     const showMoreItem = useMemo(() => {
-        console.log('itemCountToShow')
-        console.log(itemCountToShow)
         if (items.length <= itemCountToShow) {
             return null;
         }

@@ -142,9 +142,10 @@ const CategoryContent = props => {
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
-    const shouldRenderSidebarContent = useIsInViewport({
-        elementRef: sidebarRef
-    });
+    // const shouldRenderSidebarContent = useIsInViewport({
+    //     elementRef: sidebarRef
+    // });
+    const shouldRenderSidebarContent = true;
 
     const shouldShowFilterButtons = filters && filters.length;
     const shouldShowFilterShimmer = filters === null;

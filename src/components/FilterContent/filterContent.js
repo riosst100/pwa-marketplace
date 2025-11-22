@@ -31,6 +31,10 @@ const FilterContent = props => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const { search } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: {
         sortText: 'All (A-Z)',
