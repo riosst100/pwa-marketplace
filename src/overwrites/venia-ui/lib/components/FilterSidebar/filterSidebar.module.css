@@ -11,7 +11,7 @@
     composes: lg_block from global;
     composes: border from global;
     composes: border-gray-100 from global;
-    composes: shadow-type-1 from global;
+    composes: hover_shadow-type-1 from global;
     composes: rounded-[6px] from global;
     composes: py-2.5 from global;
 
