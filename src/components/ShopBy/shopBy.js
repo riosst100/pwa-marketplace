@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useEffect, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
