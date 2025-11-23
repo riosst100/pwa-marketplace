@@ -19,6 +19,7 @@ import NonSportCardsSets from '@riosst100/pwa-marketplace/src/components/NonSpor
 import LegoSets from '@riosst100/pwa-marketplace/src/components/LegoSets/legoSets';
 import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/trainsSets';
 import SetsData from '@riosst100/pwa-marketplace/src/components/SetsData/setsData';
+import SellerCoupon from '@riosst100/pwa-marketplace/src/components/SellerCoupon'
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -26,8 +27,8 @@ const MESSAGES = new Map().set(
 );
 
 const SellerProducts = props => {
-    const { sellerId, seller } = props;
-
+    const { sellerId, seller, couponData, couponLoading, couponError } = props;
+    console.log("cek coupon data di seller products", couponData)
     const uid = null;
     
     const { formatMessage } = useIntl();
@@ -83,6 +84,7 @@ const SellerProducts = props => {
 
     return (
         <Fragment>
+            <SellerCoupon couponData={couponData} couponError={couponError} couponLoading={couponLoading} />
             {showSubcategory ? (
                 <SubCategoryPage
                 categoryId={uid}

@@ -2,6 +2,17 @@ import { gql } from '@apollo/client';
 import { CheckoutPageFragment } from '@magento/peregrine/lib/talons/CheckoutPage/checkoutPageFragments.gql';
 import { ItemsReviewFragment } from '@magento/peregrine/lib/talons/CheckoutPage/ItemsReview/itemsReviewFragments.gql';
 
+// Local fragment to include seller_url for each item.
+export const ITEM_SELLER_FRAGMENT = gql`
+    fragment ItemSellerFragment on Cart {
+        items {
+            seller {
+                seller_url
+            }
+        }
+    }
+`;
+
 export const CREATE_CART = gql`
     mutation createCart {
         cartId: createEmptyCart
@@ -52,9 +63,11 @@ export const GET_ORDER_DETAILS = gql`
                 }
             }
             ...ItemsReviewFragment
+            ...ItemSellerFragment
         }
     }
     ${ItemsReviewFragment}
+    ${ITEM_SELLER_FRAGMENT}
 `;
 
 export const GET_CHECKOUT_DETAILS = gql`
@@ -63,10 +76,12 @@ export const GET_CHECKOUT_DETAILS = gql`
             id
             ...CheckoutPageFragment
             ...ItemsReviewFragment
+            ...ItemSellerFragment
         }
     }
     ${CheckoutPageFragment}
     ${ItemsReviewFragment}
+    ${ITEM_SELLER_FRAGMENT}
 `;
 
 export const GET_CUSTOMER = gql`
@@ -84,5 +99,6 @@ export default {
     getCheckoutDetailsQuery: GET_CHECKOUT_DETAILS,
     getCustomerQuery: GET_CUSTOMER,
     getOrderDetailsQuery: GET_ORDER_DETAILS,
-    placeOrderMutation: PLACE_ORDER
+    placeOrderMutation: PLACE_ORDER,
+    itemSellerFragment: ITEM_SELLER_FRAGMENT
 };

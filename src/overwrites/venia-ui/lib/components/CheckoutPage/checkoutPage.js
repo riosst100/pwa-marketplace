@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useMemo } from 'react';
+import { useQuery } from '@apollo/client';
 import { shape, string } from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { AlertCircle as AlertCircleIcon } from 'react-feather';
@@ -28,6 +29,7 @@ import ShippingInformation from './ShippingInformation';
 import OrderConfirmationPage from './OrderConfirmationPage';
 import ItemsReview from './ItemsReview';
 import GoogleReCaptcha from '@magento/venia-ui/lib/components/GoogleReCaptcha';
+import { GET_COUPON_CODE_QUERY } from '@riosst100/pwa-marketplace/src/talons/Seller/seller.gql';
 
 import defaultClasses from './checkoutPage.module.css';
 import ScrollAnchor from '@magento/venia-ui/lib/components/ScrollAnchor/scrollAnchor';
@@ -114,6 +116,34 @@ const CheckoutPage = props => {
     const isMobile = windowSize.innerWidth <= 960;
 
     let checkoutContent;
+
+    const sellerUrls = useMemo(() => {
+        if (!cartItems || !cartItems.length) return [];
+        const urls = cartItems
+            .map(item => item?.seller?.seller_url)
+            .filter(Boolean);
+        return Array.from(new Set(urls));
+    }, [cartItems]);
+
+    const sellerUrl = sellerUrls[0] || null;
+
+    const {
+        data: couponData,
+        loading: couponLoading,
+        error: couponError
+    } = useQuery(GET_COUPON_CODE_QUERY, {
+        variables: {
+            sellerUrl,
+            pageSize: 20,
+            currentPage: 1,
+            filters: {
+                is_public: { eq: '1' }
+            }
+        },
+        skip: !sellerUrl,
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first'
+    });
 
     const heading = isGuestCheckout
         ? formatMessage({
@@ -240,7 +270,12 @@ const CheckoutPage = props => {
         const priceAdjustmentsSection =
             checkoutStep === CHECKOUT_STEP.PAYMENT ? (
                 <div className={classes.price_adjustments_container}>
-                    <PriceAdjustments setPageIsUpdating={setIsUpdating} />
+                    <PriceAdjustments
+                        setPageIsUpdating={setIsUpdating}
+                        couponData={couponData}
+                        couponLoading={couponLoading}
+                        couponError={couponError}
+                    />
                 </div>
             ) : null;
 

@@ -13,7 +13,7 @@ export const useSeller = props => {
     const { formatMessage } = useIntl();
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
-    const { getStoreConfigData, getSellerDetailQuery } = operations;
+    const { getStoreConfigData, getSellerDetailQuery, getCouponCodeQuery } = operations;
     const { pathname } = useLocation();
     const [
         ,
@@ -43,6 +43,26 @@ export const useSeller = props => {
             getOtherInfo,
             getProducts
         }
+    });
+
+    const {
+        data: couponData,
+        error: couponError,
+        loading: couponLoading
+    } = useQuery(getCouponCodeQuery, {
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first',
+        variables: {
+            sellerUrl: urlKey,
+            pageSize: 20,
+            currentPage: 1,
+            filters: {
+                is_public: {
+                    eq: '1'
+                }
+            }
+        },
+        skip: !urlKey
     });
 
     const isBackgroundLoading = !!data && loading;
@@ -84,6 +104,9 @@ export const useSeller = props => {
         error,
         loading,
         seller,
-        favoriteSellerButtonProps
+        favoriteSellerButtonProps,
+        couponData,
+        couponError,
+        couponLoading
     };
 };

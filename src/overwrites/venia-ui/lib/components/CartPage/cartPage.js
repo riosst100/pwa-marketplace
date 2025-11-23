@@ -47,7 +47,7 @@ const CartPage = props => {
         shouldShowLoadingIndicator,
         wishlistSuccessProps
     } = talonProps;
-
+    console.log("cek props cart", talonProps)
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
     const [, { addToast }] = useToasts();
