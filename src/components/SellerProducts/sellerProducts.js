@@ -28,7 +28,6 @@ const MESSAGES = new Map().set(
 
 const SellerProducts = props => {
     const { sellerId, seller, couponData, couponLoading, couponError } = props;
-    console.log("cek coupon data di seller products", couponData)
     const uid = null;
     
     const { formatMessage } = useIntl();
@@ -149,3 +148,4 @@ SellerProducts.defaultProps = {
 };
 
 export default SellerProducts;
+
