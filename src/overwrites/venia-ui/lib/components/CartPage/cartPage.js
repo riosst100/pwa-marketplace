@@ -47,7 +47,7 @@ const CartPage = props => {
         shouldShowLoadingIndicator,
         wishlistSuccessProps
     } = talonProps;
-
+    
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
     const [, { addToast }] = useToasts();
@@ -127,3 +127,4 @@ const CartPage = props => {
 };
 
 export default CartPage;
+

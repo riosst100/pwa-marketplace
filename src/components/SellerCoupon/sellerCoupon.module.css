@@ -1,0 +1,110 @@
+.container{
+    margin:16px 0;
+    padding:0 8px;
+}
+.heading{
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 8px;
+    color:#111
+}
+.metaText{
+    color:#666;
+    margin:0;
+}
+.scroller{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    padding:8px 4px 12px;
+    scroll-snap-type:x mandatory;
+}
+.card{
+    position:relative;
+    background:#fff8f1;
+    border:1px solid #ffb891;
+    border-left:none;
+    min-width:260px;
+    max-width:320px;
+    display:flex;
+    align-items:stretch;
+    padding:0 12px 0 24px;
+    scroll-snap-align:start;
+    overflow:hidden;
+    --border-color:#ffb891;
+}
+.perf{
+        position:absolute;
+        inset:0 auto 0 0;
+        width:4px;
+        background:#fff;
+        /* border-top-left-radius:8px;
+        border-bottom-left-radius:8px; */
+        pointer-events:none;
+}
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;bottom:0;left:0px;
+    z-index:9;
+    width:1px;
+    background:repeating-linear-gradient(to bottom,#ffb891 0,#ffb891 0px,transparent 6px,transparent 10px);
+}
+.perf:before{
+        content:"";
+        position:absolute;
+        inset:0;
+        background:
+            radial-gradient(circle at 0 .375rem, transparent 0, transparent .1875rem, var(--border-color) .1875rem, var(--border-color) .25rem, transparent .25rem) repeat-y;
+        background-size:1rem 0.66rem;
+        background-position:0 0;
+}
+.content{
+    flex:1 1 auto;
+    padding:10px 12px 10px 0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.title{
+    color:#f76b1c;
+    font-weight:700;
+    margin-bottom:4px;
+}
+.subtext{
+    color:#444;
+    font-size:13px;
+    margin-bottom:4px;
+}
+.code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-weight:600;
+}
+.expiry{
+    color:#a94442;
+    font-size:12px;
+}
+.actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 0;
+}
+.claimBtn{
+    background: #f76b1c;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:8px 18px;
+    font-weight:600;
+    cursor:pointer;
+}
+.claimBtn:hover{
+    background:#f26313;
+}
+.divider{
+    width:1px;
+    background:repeating-linear-gradient(to bottom,#ffb891 0,#ffb891 5px,transparent 5px,transparent 10px);
+    align-self:stretch;
+    margin:0 12px 0 4px;
+}

@@ -36,7 +36,7 @@ const SellerDetail = props => {
         mapSeller
     });
 
-    const { error, loading, seller, favoriteSellerButtonProps } = talonProps;
+    const { error, loading, seller, favoriteSellerButtonProps, couponData, couponError, couponLoading } = talonProps;
     const history = useHistory();
 
     if (loading && !seller)
@@ -77,7 +77,14 @@ const SellerDetail = props => {
             {
                 id: 'product-tab',
                 title: 'All Products',
-                content: <SellerProducts sellerId={seller?.seller_id} seller={seller} />
+                content: 
+                <SellerProducts 
+                    sellerId={seller?.seller_id} 
+                    seller={seller} 
+                    couponData={couponData}
+                    couponLoading={couponLoading}
+                    couponError={couponError} 
+                />
             },
             {
                 id: 'store-information',
@@ -206,4 +213,5 @@ const SellerDetail = props => {
 }
 
 export default SellerDetail;
+
 

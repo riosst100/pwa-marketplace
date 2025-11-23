@@ -162,7 +162,48 @@ export const GET_SELLER_DETAIL_QUERY = gql`
     }
 `;
 
+export const GET_COUPON_CODE_QUERY = gql`
+    query getSellerCoupons(
+        $sellerUrl: String!
+        $pageSize: Int
+        $currentPage: Int
+        $filters: CouponCodeFilterInput
+        ) {
+        sellerCoupons(
+            sellerUrl: $sellerUrl
+            pageSize: $pageSize
+            currentPage: $currentPage
+            filters: $filters
+        ) {
+            items {
+            code
+            coupon_id
+            couponcode_id
+            created_at
+            description
+            discount_amount
+            expiration_date
+            from_date
+            is_active
+            name
+            seller_id
+            times_used
+            to_date
+            type
+            uses_per_customer
+            }
+            page_info {
+            current_page
+            page_size
+            total_pages
+            }
+            total_count
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
-    getSellerDetailQuery: GET_SELLER_DETAIL_QUERY
+    getSellerDetailQuery: GET_SELLER_DETAIL_QUERY,
+    getCouponCodeQuery: GET_COUPON_CODE_QUERY,
 };
