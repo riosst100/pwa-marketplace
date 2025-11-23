@@ -37,7 +37,6 @@ const SellerDetail = props => {
     });
 
     const { error, loading, seller, favoriteSellerButtonProps, couponData, couponError, couponLoading } = talonProps;
-    console.log("cek coupon data", couponData)
     const history = useHistory();
 
     if (loading && !seller)
@@ -214,4 +213,5 @@ const SellerDetail = props => {
 }
 
 export default SellerDetail;
+
 
