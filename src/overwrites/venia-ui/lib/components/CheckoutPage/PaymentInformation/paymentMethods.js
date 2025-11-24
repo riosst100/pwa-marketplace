@@ -180,7 +180,7 @@ const PaymentMethods = props => {
             <h5 className={classes.cardTitle}>
                 {formatMessage({
                     id: 'checkoutPage.paymentInformation',
-                    defaultMessage: 'Payment Information'
+                    defaultMessage: 'Payment Method'
                 })}
             </h5>
             <RadioGroup

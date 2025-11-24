@@ -2,7 +2,7 @@
     composes: mx-0 from global;
     composes: my-0 from global;
     composes: px-0 from global;
-    composes: py-md from global;
+    /* composes: py-md from global; */
 }
 
 /* prettier-ignore */

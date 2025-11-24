@@ -6,6 +6,7 @@ import { useScrollLock } from '@magento/peregrine';
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Footer from '@magento/venia-ui/lib/components/Footer';
 import Header from '@magento/venia-ui/lib/components/Header';
+import CheckoutHeader from '@riosst100/pwa-marketplace/src/components/CheckoutHeader';
 import defaultClasses from './main.module.css';
 import cn from 'classnames';
 
@@ -21,10 +22,14 @@ const Main = props => {
     useScrollLock(isMasked);
 
     return (
-        <main className={rootClass}>
-            {!isCheckoutPage && <Header />}
-            <div className={cn(pageClass, 'main-content-container pb-16 !min-h-[50vh]')}>{children}</div>
-            {!isCheckoutPage && <Footer />}
+        <main className={rootClass} style={{
+            "minHeight": "100vh",
+            "display": "flex",
+            "flexDirection": "column"
+        }}>
+            {isCheckoutPage ? <CheckoutHeader /> : <Header />}
+            <div style={{"flex": 1}} className={cn(pageClass, isCheckoutPage ? 'max-w-[1000px] main-content-container pb-16 !min-h-[50vh]' : 'max-w-[1300px] main-content-container pb-16 !min-h-[50vh]')}>{children}</div>
+            <Footer />
         </main>
     );
 };

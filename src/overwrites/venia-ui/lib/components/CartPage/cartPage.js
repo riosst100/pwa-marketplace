@@ -14,6 +14,7 @@ import PriceSummary from './PriceSummary';
 import ProductListing from './ProductListing';
 import defaultClasses from './cartPage.module.css';
 import cn from 'classnames';
+import { useHistory } from 'react-router-dom';
 
 const CheckIcon = <Icon size={20} src={Check} />;
 
@@ -45,18 +46,30 @@ const CartPage = props => {
         onAddToWishlistSuccess,
         setIsCartUpdating,
         shouldShowLoadingIndicator,
-        wishlistSuccessProps
+        isProceedToCheckout,
+        setIsProceedToCheckout,
+        wishlistSuccessProps,
+        isGuestCheckout
     } = talonProps;
     
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
     const [, { addToast }] = useToasts();
 
+    const history = useHistory();
+
+    useEffect(() => {
+        if (isGuestCheckout) {
+            history.push('/sign-in');
+        }
+    }, [isGuestCheckout, history]);
+
     useEffect(() => {
         if (wishlistSuccessProps) {
             addToast({ ...wishlistSuccessProps, icon: CheckIcon });
         }
     }, [addToast, wishlistSuccessProps]);
+
 
     if (shouldShowLoadingIndicator) {
         return fullPageLoadingIndicator;
@@ -70,7 +83,9 @@ const CartPage = props => {
         <ProductListing
             onAddToWishlistSuccess={onAddToWishlistSuccess}
             setIsCartUpdating={setIsCartUpdating}
+            isProceedToCheckout={isProceedToCheckout}
             fetchCartDetails={fetchCartDetails}
+            setIsProceedToCheckout={setIsProceedToCheckout}
             isCartUpdating={isCartUpdating}
             hasItems={hasItems}
         />
@@ -93,7 +108,7 @@ const CartPage = props => {
             <StoreTitle>
                 {formatMessage({
                     id: 'cartPage.title',
-                    defaultMessage: 'Cart'
+                    defaultMessage: 'Shopping Cart'
                 })}
             </StoreTitle>
             <div className={cn(classes.heading_container, 'mb-[30px]')}>
@@ -104,7 +119,7 @@ const CartPage = props => {
                 >
                     <FormattedMessage
                         id={'cartPage.heading'}
-                        defaultMessage={'Cart'}
+                        defaultMessage={'Shopping Cart'}
                     />
                 </h1>
                 <div className={classes.stockStatusMessageContainer}>

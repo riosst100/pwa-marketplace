@@ -4,9 +4,9 @@ import { shape, string } from 'prop-types';
 
 import { useAccountTrigger } from '@magento/peregrine/lib/talons/Header/useAccountTrigger';
 import { useStyle } from '@magento/venia-ui/lib/classify';
-
+import Icon from '@magento/venia-ui/lib/components/Icon';
 // import AccountChip from '../AccountChip';
-import { User } from 'iconsax-react';
+import { User as UserIcon } from 'react-feather';
 import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
 import cn from 'classnames';
 
@@ -67,7 +67,7 @@ const AccountTrigger = props => {
                         })}
                         shouldIndicateLoading={true}
                     /> */}
-                    <User size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                    <Icon src={UserIcon} attrs={{ width: 20 }} />
                     {isUserSignedIn ? <span className='text-base font-medium'>
                         {formatMessage({
                             id: 'accountTrigger.myAccount',

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { setCheckoutState } from '@magento/peregrine/lib/store/actions/cart';
 import { useCartContext } from '@magento/peregrine/lib/context/cart';
@@ -55,6 +55,8 @@ export const usePriceSummary = (props = {}) => {
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const { getPriceSummaryQuery, initCheckoutSplitCartMutation, createCartMutation } = operations;
 
+    const { setIsProceedToCheckout } = props;
+
     const apolloClient = useApolloClient();
 
     const [{ cartId }, { createSellerCart, createCart, removeCart }] = useCartContext();
@@ -83,6 +85,12 @@ export const usePriceSummary = (props = {}) => {
     ] = useMutation(initCheckoutSplitCartMutation);
 
     const [fetchCartId] = useMutation(createCartMutation);
+
+    useEffect(() => {
+        if (initCheckoutSplitCartLoading) {
+            setIsProceedToCheckout(true);
+        }
+    }, [initCheckoutSplitCartLoading])
 
     const handleProceedToCheckout = useCallback(async(props) => {
         const { sellerUrl } = props;
@@ -125,6 +133,7 @@ export const usePriceSummary = (props = {}) => {
         hasItems: data && !!data.cart.items.length,
         isCheckout,
         isLoading: !!loading,
+        initCheckoutSplitCartLoading: initCheckoutSplitCartLoading,
         flatData: flattenData(data)
     };
 };

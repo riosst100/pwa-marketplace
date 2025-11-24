@@ -1,5 +1,5 @@
 .counter {
-    composes: absolute from global;
+    /* composes: absolute from global; */
     composes: bg-brand-dark from global;
     composes: font-medium from global;
     composes: leading-tight from global;

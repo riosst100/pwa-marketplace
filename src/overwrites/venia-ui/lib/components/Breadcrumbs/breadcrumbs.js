@@ -106,7 +106,7 @@ const Breadcrumbs = props => {
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
         currentProduct ? (
             filterBreadcrumbsElement.push(
-                <span key={index}>
+                <Fragment key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
                     <Link
                         className={classes.link}
@@ -115,12 +115,12 @@ const Breadcrumbs = props => {
                     >
                         {filter.label}
                     </Link>
-                </span>
+                </Fragment>
             )
         ) : (
             customPage ? (
                 filterBreadcrumbsElement.push(
-                    <span key={index}>
+                    <Fragment key={index}>
                         <span className={classes.divider}>{DELIMITER}</span>
                         <Link
                             className={classes.link}
@@ -129,14 +129,14 @@ const Breadcrumbs = props => {
                         >
                             {filter.label}
                         </Link>
-                    </span>
+                    </Fragment>
                 )
             ) : filterBreadcrumbsElement.push(
                 index == lastIndex ?
-                    <span key={index}>
+                    <Fragment key={index}>
                         <span className={classes.divider}>{DELIMITER}</span>
                         <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{filter.label}</span>
-                    </span> : <span key={index}>
+                    </Fragment> : <Fragment key={index}>
                         <span className={classes.divider}>{DELIMITER}</span>
                         <Link
                             className={classes.link}
@@ -145,13 +145,13 @@ const Breadcrumbs = props => {
                         >
                             {filter.label}
                         </Link>
-                    </span>
+                    </Fragment>
             )
         );
     });
 
     const currentCategoryLink = currentCategory == "dCollectible Card Games" ? '' : (customPage || currentProduct || currentFilter && currentFilter.length ? (
-        <>
+        <Fragment>
             <span className={classes.divider}>{DELIMITER}</span>
             <Link
                 className={classes.link}
@@ -160,12 +160,12 @@ const Breadcrumbs = props => {
             >
                 {currentCategory}
             </Link>
-        </>
+        </Fragment>
     ) : (
-        <>
+        <Fragment>
             <span className={classes.divider}>{DELIMITER}</span>
             <span className={cn(classes.currentCategory, 'text-blue-700 font-medium')}>{currentCategory}</span>
-        </>
+        </Fragment>
     ));
 
     const currentProductNode = currentProduct ? (

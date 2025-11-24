@@ -3,7 +3,9 @@ import { shape, string } from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 
 import AccountTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/accountTrigger';
+
 import CartTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/cartTrigger';
+
 import WishlistTrigger from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/wishlistTrigger';
 import NavTrigger from '@magento/venia-ui/lib/components/Header/navTrigger';
 import SearchTrigger from '@magento/venia-ui/lib/components/Header/searchTrigger';

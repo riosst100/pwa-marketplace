@@ -37,6 +37,8 @@ const ProductListingBySeller = props => {
         setIsCartUpdating,
         fetchCartDetails,
         activeEditItem,
+        setIsProceedToCheckout,
+        isProceedToCheckout,
         setActiveEditItem,
         wishlistConfig,
         isLoading,
@@ -80,7 +82,7 @@ const ProductListingBySeller = props => {
         ));
  
         const priceSummary = hasItems ? (
-            <PriceSummary isUpdating={isCartUpdating} sellerUrl={seller.seller_url} />
+            <PriceSummary isProceedToCheckout={isProceedToCheckout} setIsProceedToCheckout={setIsProceedToCheckout} setIsCartUpdating={setIsCartUpdating} isUpdating={isCartUpdating} sellerUrl={seller.seller_url} />
         ) : null;
         return (
             <Fragment>

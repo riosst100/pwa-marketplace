@@ -5,6 +5,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useCartContext } from '@magento/peregrine/lib/context/cart';
 import { useUserContext } from '@magento/peregrine/lib/context/user';
 
+import { useHistory } from 'react-router-dom';
+
 import { appendOptionsToPayload } from '@magento/peregrine/lib/util/appendOptionsToPayload';
 import { findMatchingVariant } from '@magento/peregrine/lib/util/findMatchingProductVariant';
 import { isProductConfigurable } from '@magento/peregrine/lib/util/isProductConfigurable';
@@ -335,6 +337,16 @@ export const useProductFullDetail = props => {
         product,
         isPreview
     } = props;
+
+    const history = useHistory();
+
+    const handleToastAction = useCallback(
+        (removeToast) => {
+            history.push('/cart');
+            removeToast();
+        },
+        [history]
+    );
 
     const [, { addToast }] = useToasts();
 
@@ -779,6 +791,9 @@ export const useProductFullDetail = props => {
     }, [currentUser]);
 
     return {
+        addToCartResponseData,
+        errorAddingProductToCart,
+        isAddProductLoading,
         breadcrumbCategoryId,
         errorMessage: derivedErrorMessage,
         handleAddToCart,
@@ -813,6 +828,7 @@ export const useProductFullDetail = props => {
         handleSubmitReview,
         loadingCreateReview,
         errorCreateReview,
-        defaultNickname
+        defaultNickname,
+        handleToastAction
     };
 };
