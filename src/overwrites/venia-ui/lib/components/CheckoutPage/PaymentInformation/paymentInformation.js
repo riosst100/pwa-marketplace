@@ -49,7 +49,7 @@ const PaymentInformation = props => {
             <LoadingIndicator classes={{ root: classes.loading }}>
                 <FormattedMessage
                     id={'checkoutPage.loadingPaymentInformation'}
-                    defaultMessage={'Fetching Payment Information'}
+                    defaultMessage={'Fetching Payment Method'}
                 />
             </LoadingIndicator>
         );

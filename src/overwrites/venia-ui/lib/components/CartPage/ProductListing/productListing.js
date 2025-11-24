@@ -31,6 +31,8 @@ const ProductListing = props => {
         setIsCartUpdating,
         fetchCartDetails,
         isCartUpdating,
+        setIsProceedToCheckout,
+        isProceedToCheckout,
         hasItems
     } = props;
 
@@ -50,10 +52,10 @@ const ProductListing = props => {
     if (isLoading) {
         return (
             <LoadingIndicator>
-                <FormattedMessage
+                {/* <FormattedMessage
                     id={'productListing.loading'}
                     defaultMessage={'Fetching Cart...'}
-                />
+                /> */}
             </LoadingIndicator>
         );
     }
@@ -91,8 +93,10 @@ const ProductListing = props => {
                 activeEditItem={activeEditItem}
                 isLoading={isLoading}
                 hasItems={hasItems}
+                setIsProceedToCheckout={setIsProceedToCheckout}
                 key={index}
                 error={error}
+                isProceedToCheckout={isProceedToCheckout}
                 setActiveEditItem={setActiveEditItem}
                 wishlistConfig={wishlistConfig}
                 setIsCartUpdating={setIsCartUpdating} 

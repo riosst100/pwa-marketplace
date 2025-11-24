@@ -2,14 +2,14 @@
     composes: border-t from global;
     composes: border-solid from global;
     composes: border-gray-100 from global;
-    composes: gap-y-16 from global;
+    composes: gap-y-0 from global;
     composes: grid from global;
     composes: leading-normal from global;
-    composes: max-w-site from global;
-    composes: min-h-[15rem] from global;
+    /* composes: max-w-site from global; */
+    /* composes: min-h-[15rem] from global; */
     composes: mx-auto from global;
     composes: my-0 from global;
-    composes: pt-16 from global;
+    /* composes: pt-16 from global; */
     composes: text-sm from global;
     composes: text-subtle from global;
     composes: w-full from global;
@@ -19,12 +19,24 @@
     composes: gap-x-md from global;
     composes: gap-y-lg from global;
     composes: grid from global;
+    composes: py-6 from global;
     composes: grid-cols-1 from global;
     composes: md_grid-cols-1 from global;
     composes: grid-flow-row-dense from global;
     composes: lg_gap-x-sm from global;
     composes: lg_gap-y-md from global;
     composes: lg_grid-cols-4 from global;
+    composes: flex from global;
+    composes: flex-row from global;
+    composes: justify-between from global;
+    composes: w-full from global;
+    composes: w-full from global;
+    composes: mx-[auto] from global;
+    composes: max-w-[1300px] from global;
+    /* composes: py-[10px] from global; */
+    /* composes: px-[15px] from global; */
+
+     /* border-t border-gray-100  px-[15px] py-[10px] mx-[auto] */
 }
 
 .linkGroup {

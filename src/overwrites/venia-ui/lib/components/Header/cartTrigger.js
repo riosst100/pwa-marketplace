@@ -10,7 +10,7 @@ import Icon from '@magento/venia-ui/lib/components/Icon';
 import defaultClasses from './cartTrigger.module.css';
 import { GET_ITEM_COUNT_QUERY } from '@magento/venia-ui/lib/components/Header/cartTrigger.gql';
 import cn from 'classnames';
-import { ShoppingCart } from 'iconsax-react';
+import { ShoppingCart } from 'react-feather';
 import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
 import { Link } from 'react-router-dom';
 
@@ -49,14 +49,16 @@ const CartTrigger = props => {
         <span
             className={cn(
                 classes.counter,
-                'bg-yellow-300 min-w-[18px] min-h-[18px] text-base font-regular leading-[18px] top-[-2px]',
-                '!left-auto right-[3px]'
+                'bg-[#f76b1c] min-w-[18px] min-h-[18px] text-[10px] font-regular leading-[18px] top-[-5px]',
+                '!left-auto right-[-4px] absolute p-0 bg'
             )}
             data-cy="CartTrigger-counter"
         >
             {itemCountDisplay}
         </span>
     ) : null;
+
+    // const ShoppingCartIcon = <Icon src={ShoppingCart} attrs={{ width: 20 }} />;
 
     const cartTrigger = hideCartTrigger ? null : (
         // Because this button behaves differently on desktop and mobile
@@ -67,13 +69,14 @@ const CartTrigger = props => {
                 <Link
                     className={cn(
                         classes.trigger,
-                        'gap-[5px] !min-h-[30px] !h-auto !min-w-[35px] !w-fit !justify-between',
+                        'gap-[5px] !min-h-[30px] !h-auto !min-w-[35px] !w-fit',
                     )}
                     to='/cart'
                 >
                     <span>
                         {/* <Icon src={ShoppingCartIcon} /> */}
-                        <ShoppingCart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                        {/* <ShoppingCart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" /> */}
+                        <Icon src={ShoppingCart} attrs={{ width: 20 }} />
                         {maybeItemCounter}
                     </span>
                 </Link>
@@ -84,7 +87,7 @@ const CartTrigger = props => {
                 className={classes.link}
                 onClick={handleLinkClick}
             >
-                <Icon src={ShoppingCartIcon} />
+                <Icon src={ShoppingCart} attrs={{ width: 20 }} />
                 {maybeItemCounter}
             </button>
         </Fragment>

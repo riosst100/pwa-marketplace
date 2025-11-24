@@ -10,9 +10,9 @@
 }
 
 .page {
-    composes: md_max-w-screen-md from global;
-    composes: lg_max-w-[1300px] from global;
+    /* composes: md_max-w-screen-md from global; */
     composes: mx-auto from global;
+    composes: w-full from global;
     composes: my-0 from global;
     composes: px-[15px] from global;
     min-height: 40rem;

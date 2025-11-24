@@ -50,7 +50,7 @@ const ShippingInformation = props => {
             <LoadingIndicator classes={{ root: classes.loading }}>
                 <FormattedMessage
                     id={'shippingInformation.loading'}
-                    defaultMessage={'Fetching Shipping Information...'}
+                    defaultMessage={'Fetching Shipping Address...'}
                 />
             </LoadingIndicator>
         );
@@ -68,7 +68,7 @@ const ShippingInformation = props => {
                 <h5 className={classes.cardTitle}>
                     <FormattedMessage
                         id={'shippingInformation.cardTitle'}
-                        defaultMessage={'Shipping Information'}
+                        defaultMessage={'Shipping Address'}
                     />
                 </h5>
                 <LinkButton
@@ -100,7 +100,7 @@ const ShippingInformation = props => {
             >
                 <FormattedMessage
                     id={'shippingInformation.editTitle'}
-                    defaultMessage={'Shipping Information'}
+                    defaultMessage={'Shipping Address'}
                 />
             </h3>
             <div className={classes.editWrapper}>

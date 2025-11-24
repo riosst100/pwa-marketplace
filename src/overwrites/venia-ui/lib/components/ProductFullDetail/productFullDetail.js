@@ -38,6 +38,8 @@ import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
 import LinkToOtherStores from '@riosst100/pwa-marketplace/src/components/LinkToOtherStores';
 import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
 import { useLocation } from 'react-router-dom';
+import Icon from '@magento/venia-ui/lib/components/Icon';
+import { ShoppingCart } from 'react-feather';
 
 import { totalListings, lowestPrice } from '@riosst100/pwa-marketplace/src/components/CrossSeller/crossSellerBuy';
 
@@ -57,6 +59,7 @@ const ERROR_FIELD_TO_MESSAGE_MAPPING = {
 
 const ProductDetailsCollapsible = (props) => {
     const { data } = props;
+
     return (
         <>
             {data.map((_data) => (
@@ -99,13 +102,10 @@ const ProductFullDetail = props => {
         customAttributes,
         wishlistButtonProps,
         sellerDetails,
-        productReviewData,
-        loadingProductReview,
-        errorProductReview,
-        ratingsMetadataData,
-        loadingRatingsMetadata,
-        handleSubmitReview,
-        defaultNickname
+        handleToastAction,
+        addToCartResponseData,
+        errorAddingProductToCart,
+        isAddProductLoading,
     } = talonProps;
 
     const [, { addToast }] = useToasts();
@@ -135,59 +135,69 @@ const ProductFullDetail = props => {
             currentProduct={productDetails.name}
         />
     ) : null;
+    
     // Fill a map with field/section -> error.
     const errors = new Map();
-    if (errorMessage) {
-        Object.keys(ERROR_MESSAGE_TO_FIELD_MAPPING).forEach(key => {
-            if (errorMessage.includes(key)) {
-                const target = ERROR_MESSAGE_TO_FIELD_MAPPING[key];
-                const message = ERROR_FIELD_TO_MESSAGE_MAPPING[target];
-                errors.set(target, message);
-            }
-        });
 
-        // Handle cases where a user token is invalid or expired. Preferably
-        // this would be handled elsewhere with an error code and not a string.
-        if (errorMessage.includes('The current user cannot')) {
-            errors.set('form', [
-                new Error(
-                    formatMessage({
-                        id: 'productFullDetail.errorToken',
-                        defaultMessage:
-                            'There was a problem with your cart. Please sign in again and try adding the item once more.'
-                    })
-                )
-            ]);
-        }
+    useEffect(() => {
+        if (errorMessage) {
+            Object.keys(ERROR_MESSAGE_TO_FIELD_MAPPING).forEach(key => {
+                if (errorMessage.includes(key)) {
+                    const target = ERROR_MESSAGE_TO_FIELD_MAPPING[key];
+                    const message = ERROR_FIELD_TO_MESSAGE_MAPPING[target];
+                    errors.set(target, message);
+                }
+            });
 
-        // Handle cases where a cart wasn't created properly.
-        if (
-            errorMessage.includes('Variable "$cartId" got invalid value null')
-        ) {
-            errors.set('form', [
-                new Error(
-                    formatMessage({
-                        id: 'productFullDetail.errorCart',
-                        defaultMessage:
-                            'There was a problem with your cart. Please refresh the page and try adding the item once more.'
-                    })
-                )
-            ]);
-        }
+            addToast({
+                type: 'error',
+                message: 'Desired quantity not available. You already have all of these in your cart.',
+                timeout: 3000
+            });
 
-        // An unknown error should still present a readable message.
-        if (!errors.size) {
-            errors.set('form', [
-                new Error(
-                    formatMessage({
-                        id: 'productFullDetail.errorUnknown',
-                        defaultMessage:
-                            'Could not add item to cart. Please check required options and try again.'
-                    })
-                )
-            ]);
+            // Handle cases where a user token is invalid or expired. Preferably
+            // this would be handled elsewhere with an error code and not a string.
+            // if (errorMessage.includes('The current user cannot')) {
+            //     errors.set('form', [
+            //         new Error(
+            //             formatMessage({
+            //                 id: 'productFullDetail.errorToken',
+            //                 defaultMessage:
+            //                     'There was a problem with your cart. Please sign in again and try adding the item once more.'
+            //             })
+            //         )
+            //     ]);
+            // }
+
+            // Handle cases where a cart wasn't created properly.
+            // if (
+            //     errorMessage.includes('Variable "$cartId" got invalid value null')
+            // ) {
+            //     errors.set('form', [
+            //         new Error(
+            //             formatMessage({
+            //                 id: 'productFullDetail.errorCart',
+            //                 defaultMessage:
+            //                     'There was a problem with your cart. Please refresh the page and try adding the item once more.'
+            //             })
+            //         )
+            //     ]);
+            // }
+
+            // An unknown error should still present a readable message.
+            // if (!errors.size) {
+            //     errors.set('form', [
+            //         new Error(
+            //             formatMessage({
+            //                 id: 'productFullDetail.errorUnknown',
+            //                 defaultMessage:
+            //                     'Could not add item to cart. Please check required options and try again.'
+            //             })
+            //         )
+            //     ]);
+            // }
         }
-    }
+    }, [errorMessage]);
 
     const customAttributesDetails = useMemo(() => {
         const list = [];
@@ -499,17 +509,7 @@ const ProductFullDetail = props => {
         {
             id: 'product-reviews',
             title: 'Reviews',
-            content: <ProductReviews 
-                className={cn(contentContainerClass, classes.contentContainerTabOverride)}
-                productReviewData={productReviewData}
-                loadingProductReview={loadingProductReview}
-                errorProductReview={errorProductReview}
-                ratingsMetadataData={ratingsMetadataData}
-                loadingRatingsMetadata={loadingRatingsMetadata}
-                handleSubmitReview={handleSubmitReview}
-                defaultNickname={defaultNickname}
-                product={product}
-            />
+            content: <ProductReviews className={cn(contentContainerClass, classes.contentContainerTabOverride)} />
         }
     ];
 
@@ -552,16 +552,11 @@ const ProductFullDetail = props => {
         </div>
     ) : null;
 
+    const AlertCircleIcon = <Icon src={ShoppingCart} attrs={{ width: 20 }} />;
+
     const handleAddToCart = async (...args) => {
         try {
             await originalHandleAddToCart(...args);
-            addToast({
-                type: 'success',
-                message: formatMessage({
-                    id: 'productFullDetail.addToCartSuccess',
-                    defaultMessage: 'Product successfully added to cart!'
-                })
-            });
         } catch (e) {
             addToast({
                 type: 'error',
@@ -572,6 +567,39 @@ const ProductFullDetail = props => {
             });
         }
     };
+
+    useEffect(() => {
+        if (
+            addToCartResponseData 
+            && !addToCartResponseData?.addProductsToCart?.user_errors.length 
+            && !isAddProductLoading 
+            && !errorAddingProductToCart
+        ) {
+            addToast({
+                type: 'success',
+                icon: AlertCircleIcon,
+                message: formatMessage({
+                    id: 'productFullDetail.addToCartSuccess',
+                    defaultMessage: '1 item added to cart.'
+                }),
+                timeout: 5000,
+                dismissable: true,
+                hasDismissAction: true,
+                dismissActionText: formatMessage({
+                    id: 'productFullDetail.addToCartContinueShipping',
+                    defaultMessage: 'Continue Shopping'
+                }),
+                actionText: formatMessage({
+                    id: 'productFullDetail.addToCartViewCart',
+                    defaultMessage: 'View Shopping Cart'
+                }),
+                onAction: removeToast =>
+                    handleToastAction(
+                        removeToast
+                    )
+            });
+        }
+    }, [addToCartResponseData, errorAddingProductToCart, isAddProductLoading]);
 
     useEffect(() => {
         const toastRoot = document.getElementById('toast-root');

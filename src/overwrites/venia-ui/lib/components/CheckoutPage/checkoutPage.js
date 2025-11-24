@@ -33,6 +33,7 @@ import { GET_COUPON_CODE_QUERY } from '@riosst100/pwa-marketplace/src/talons/Sel
 
 import defaultClasses from './checkoutPage.module.css';
 import ScrollAnchor from '@magento/venia-ui/lib/components/ScrollAnchor/scrollAnchor';
+import { useHistory } from 'react-router-dom';
 
 const errorIcon = <Icon src={AlertCircleIcon} size={20} />;
 
@@ -85,6 +86,21 @@ const CheckoutPage = props => {
     } = talonProps;
 
     const [, { addToast }] = useToasts();
+
+    const history = useHistory();
+
+    
+    useEffect(() => {
+        if (isGuestCheckout) {
+            history.push('/sign-in');
+        }
+    }, [isGuestCheckout, history]);
+
+    useEffect(() => {
+        if (!isLoading && !isUpdating && !cartItems.length && isCartEmpty) {
+            history.push('/cart');
+        }
+    }, [isCartEmpty, isLoading, isUpdating, cartItems, history]);
 
     useEffect(() => {
         if (hasError) {

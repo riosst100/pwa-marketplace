@@ -108,10 +108,10 @@ const GalleryItem = props => {
             >
                 <div className={cn('item-product relative z-[1]')}>
                     <ProductLabel item={item} />
-                    <Link
+                    <span
                         aria-label={name}
-                        onClick={handleLinkClick}
-                        to={productLink}
+                        // onClick={handleLinkClick}
+                        // to={productLink}
                         className={classes.images}
                     >
                         <Image
@@ -127,17 +127,18 @@ const GalleryItem = props => {
                             widths={IMAGE_WIDTHS}
                         />
                         {ratingAverage}
-                    </Link>
+                    </span>
                 </div>
                 <div className={cn('item-info px-[15px] pb-[20px]')}>
-                    <Link
+                    {/* <Link
                         onClick={handleLinkClick}
                         to={productLink}
                         className={cn(classes.name, 'xs_!no-underline')}
                         data-cy="GalleryItem-name"
-                    >
-                        <span>{name}</span>
-                    </Link>
+                    > */}
+                        <span className={cn(classes.name, 'xs_!no-underline')}
+                        data-cy="GalleryItem-name">{name}</span>
+                    {/* </Link> */}
                     <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
                         <p className='font-medium !text-[#f76b1c] text-[1.1rem] !mb-1 !leading-[14px]'>
                             <Price

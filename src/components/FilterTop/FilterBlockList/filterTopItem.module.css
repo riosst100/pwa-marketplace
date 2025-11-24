@@ -10,5 +10,7 @@
     composes: text-colorDefault from global;
     composes: bg-white from global;
     composes: border-gray-100 from global;
+    composes: hover_shadow-type-1 from global;
+    composes: cursor-pointer from global;
     border-radius: 5px;
 }

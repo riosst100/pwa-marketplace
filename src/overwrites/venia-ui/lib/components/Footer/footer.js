@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { shape, string } from 'prop-types';
 import { useFooter } from '@magento/peregrine/lib/talons/Footer/useFooter';
+import { useLocation } from 'react-router-dom';
 
 import Logo from '@magento/venia-ui/lib/components/Logo';
 import Newsletter from '@magento/venia-ui/lib/components/Newsletter';
@@ -18,6 +19,9 @@ const Footer = props => {
     const { links } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const talonProps = useFooter();
+
+    const location = useLocation();
+    const isCheckoutPage = location.pathname === '/checkout';
 
     const { copyrightText } = talonProps;
     const { formatMessage } = useIntl();
@@ -62,10 +66,16 @@ const Footer = props => {
             data-cy="Footer-root"
             className={cn(
                 classes.root,
-                '!pt-[50px] !px-6 lg_!px-4'
+                // '!pt-[50px] !px-6 lg_!px-4'
             )}
+            style={
+                {
+                    "zIndex": 1,
+                    "position": "relative"
+                }
+            }
         >
-            <div className={classes.links}>
+            {!isCheckoutPage && <div className={classes.links}>
                 {linkGroups}
                 <div>
                     <Newsletter />
@@ -107,8 +117,8 @@ const Footer = props => {
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div className="flex flex-row justify-between py-2 border-t border-gray-100">
+            </div>}
+            <div className={"flex flex-row justify-between py-4 border-t border-gray-100 w-full py-[15px] mx-[auto] flex justify-between items-center" + (isCheckoutPage ? " max-w-[1000px]" : " max-w-[1300px]")}>
                 <p className="text-colorDefault">{copyrightText || null}</p>
                 <ul className="flex flex-row gap-x-2.5">
                     <li data-cy="Footer-terms" className={classes.terms}>

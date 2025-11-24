@@ -45,32 +45,15 @@ const FilterItemRadioGroup = props => {
             // }
             
             return (
-                <>
-                    <FilterItemRadio
-                        key={code}
-                        filterApi={filterApi}
-                        filterState={filterState}
-                        group={group}
-                        item={item}
-                        onApply={onApply}
-                        labels={labels}
-                    />
-                    {/* {subFilter && <FilterBlock
-                        key={subFilter.key}
-                        filterApi={subFilter.filterApi}
-                        filterState={subFilter.filterState}
-                        filterFrontendInput={subFilter.filterFrontendInput}
-                        group={subFilter.group}
-                        allowedSubFilters={newAllowedSubFilters}
-                        subFilterItems={subFilterItems}
-                        isSubFilter={true}
-                        items={subFilter.items}
-                        name={''}
-                        onApply={subFilter.onApply}
-                        initialOpen={true}
-                    />} */}
-                    {/* {subFilterBlock} */}
-                </>
+                <FilterItemRadio
+                    key={index}
+                    filterApi={filterApi}
+                    filterState={filterState}
+                    group={group}
+                    item={item}
+                    onApply={onApply}
+                    labels={labels}
+                />
             );
         });
     }, [filterApi, allowedSubFilters, subFilter, filterState, group, items, labels, onApply,isListExpanded,itemCountToShow]);
@@ -122,7 +105,7 @@ FilterItemRadioGroup.propTypes = {
         })
     ).isRequired,
     onApply: func,
-    labels: instanceOf(Map).isRequired
+    labels: instanceOf(WeakMap).isRequired
 };
 
 export default FilterItemRadioGroup;

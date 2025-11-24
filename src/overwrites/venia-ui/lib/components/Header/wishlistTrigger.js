@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Icon from '@magento/venia-ui/lib/components/Icon';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
-import { Heart } from 'iconsax-react';
-import { darkBlue } from '@riosst100/pwa-marketplace/src/theme/vars';
-import cn from 'classnames';
+import { Heart as HeartIcon } from 'react-feather';
 
 const wishlistTrigger = () => {
     return (
@@ -14,7 +13,8 @@ const wishlistTrigger = () => {
                 className={''}
                 data-cy="wishlistLink"
             >
-                <Heart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" />
+                <Icon src={HeartIcon} attrs={{ width: 20 }} />
+                {/* <Heart size="20" color={darkBlue} className={cn('stroke-0')} variant="Outline" /> */}
             </Link>
         </div>
     )

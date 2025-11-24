@@ -12,7 +12,7 @@ const OrderSummary = props => {
             <h2 aria-live="polite" className="text-[16px] font-medium mb-4">
                 <FormattedMessage
                     id={'checkoutPage.orderSummary'}
-                    defaultMessage={'Summary'}
+                    defaultMessage={'Order Summary'}
                 />
             </h2>
             <PriceSummary isUpdating={props.isUpdating} />

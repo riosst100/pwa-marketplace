@@ -28,9 +28,9 @@ import cn from 'classnames';
  * import PriceSummary from "@magento/venia-ui/lib/components/CartPage/PriceSummary";
  */
 const PriceSummary = props => {
-    const { isUpdating, sellerUrl } = props;
+    const { isUpdating, sellerUrl, setIsProceedToCheckout, isProceedToCheckout } = props;
     const classes = useStyle(defaultClasses, props.classes);
-    const talonProps = usePriceSummary();
+    const talonProps = usePriceSummary({ setIsProceedToCheckout });
 
     const {
         handleProceedToCheckout,
@@ -39,7 +39,8 @@ const PriceSummary = props => {
         hasItems,
         isCheckout,
         isLoading,
-        flatData
+        flatData,
+        initCheckoutSplitCartLoading
     } = talonProps;
     const { formatMessage } = useIntl();
 
@@ -87,7 +88,7 @@ const PriceSummary = props => {
             defaultMessage: 'Estimated Total'
         });
 
-    const proceedToCheckoutButton = !isCheckout ? (
+    const proceedToCheckoutButton = (
         <div className={cn(classes.checkoutButton_container, 'block !mt-6 !min-h-auto')}>
             <Button
                 disabled={isPriceUpdating}
@@ -106,7 +107,24 @@ const PriceSummary = props => {
                 />
             </Button>
         </div>
-    ) : null;
+    );
+
+    const loadingCheckoutButton = (
+        <div className={cn(classes.checkoutButton_container, 'block !mt-6 !min-h-auto')}>
+            <Button
+                disabled={true}
+                priority={'high'}
+                onKeyDown={handleEnterKeyPress}
+                data-cy="PriceSummary-checkoutButton"
+                classes={{
+                    rootClass: 'w-full',
+                    content: 'font-medium text-[16px] capitalize',
+                }}
+            >
+                Loading Checkout...
+            </Button>
+        </div>
+    );
 
     return (
         <div className={cn(classes.root, 'pb-6 px-3')} data-cy="PriceSummary-root">
@@ -207,7 +225,7 @@ const PriceSummary = props => {
                     </ul>
                 </div>
             )}
-            {proceedToCheckoutButton}
+            {isProceedToCheckout ? loadingCheckoutButton : proceedToCheckoutButton}
         </div>
     );
 };

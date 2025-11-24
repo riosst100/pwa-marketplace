@@ -44,7 +44,6 @@ const FilterItemRadio = props => {
             classes={classes}
             id={`item-${group}-${value}`}
             label={title}
-            isSubFilter={isSubFilter}
             value={value}
             onChange={handleOnchange}
             data-cy="FilterDefault-radio"
@@ -74,7 +73,7 @@ FilterItemRadio.propTypes = {
         path: string
     }).isRequired,
     onApply: func,
-    labels: instanceOf(Map).isRequired
+    labels: instanceOf(WeakMap).isRequired
 };
 
 export default FilterItemRadio;

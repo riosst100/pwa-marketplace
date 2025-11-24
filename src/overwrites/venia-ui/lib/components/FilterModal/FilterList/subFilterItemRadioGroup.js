@@ -85,7 +85,7 @@ SubFilterItemRadioGroup.propTypes = {
         })
     ).isRequired,
     onApply: func,
-    labels: instanceOf(Map).isRequired
+    labels: instanceOf(WeakMap).isRequired
 };
 
 export default SubFilterItemRadioGroup;
