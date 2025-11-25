@@ -93,31 +93,31 @@ const CouponCode = props => {
     }
 
     if (data.cart.applied_coupons) {
-        const codes = data.cart.applied_coupons.map(({ code }) => {
-            return (
-                <Fragment key={code}>
-                    <span>{code}</span>
-                    <LinkButton
-                        className={classes.removeButton}
-                        disabled={removingCoupon}
-                        data-cy="CouponCode-removeCouponButton"
-                        onClick={() => {
-                            handleRemoveCoupon(code);
-                        }}
-                        onKeyDown={() => {
-                            handleRemoveCouponOnEnter(code);
-                        }}
-                    >
-                        <FormattedMessage
-                            id={'couponCode.removeButton'}
-                            defaultMessage={'Remove'}
-                        />
-                    </LinkButton>
-                </Fragment>
-            );
-        });
+        // const codes = data.cart.applied_coupons.map(({ code }) => {
+        //     return (
+        //         <Fragment key={code}>
+        //             <span>{code}</span>
+        //             <LinkButton
+        //                 className={classes.removeButton}
+        //                 disabled={removingCoupon}
+        //                 data-cy="CouponCode-removeCouponButton"
+        //                 onClick={() => {
+        //                     handleRemoveCoupon(code);
+        //                 }}
+        //                 onKeyDown={() => {
+        //                     handleRemoveCouponOnEnter(code);
+        //                 }}
+        //             >
+        //                 <FormattedMessage
+        //                     id={'couponCode.removeButton'}
+        //                     defaultMessage={'Remove'}
+        //                 />
+        //             </LinkButton>
+        //         </Fragment>
+        //     );
+        // });
 
-        return <div className={classes.appliedCoupon}>{codes}</div>;
+        return '';
     } else {
         const errorMessage = deriveErrorMessage([
             errors.get('applyCouponMutation')
@@ -160,9 +160,6 @@ const CouponCode = props => {
                         priority={'normal'}
                         type={'submit'}
                         onKeyDown={handleApplyCouponOnEnter}
-                        classes={{
-                            content: 'gap-1.5 grid-flow-col inline-grid items-center justify-center justify-items-center capitalize font-medium'
-                        }}
                     >
                         <FormattedMessage
                             id={'couponCode.apply'}

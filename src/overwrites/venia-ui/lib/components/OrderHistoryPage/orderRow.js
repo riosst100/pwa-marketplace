@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { arrayOf, number, shape, string } from 'prop-types';
 import { ChevronDown, ChevronUp } from 'react-feather';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -17,7 +17,7 @@ import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholder
 import { Link, useHistory } from 'react-router-dom';
 
 const OrderRow = props => {
-    const { order } = props;
+    const { order, setReviewOrder } = props;
     const { formatMessage } = useIntl();
     const history = useHistory();
     const {
@@ -179,9 +179,22 @@ const OrderRow = props => {
         });
     };
 
+    const handleWriteReview = useCallback(( order ) => {
+        console.log('order',order)
+        if (order) {
+            setReviewOrder(order);
+        }
+    }, [setReviewOrder]);
+
+    
+    // ReviewModal
+
     return (
         <li className={classes.root}>
-            <div className='flex flex-col md_flex-row md_items-start justify-between mb-2.5'>
+            <div className='flex flex-col md_flex-row md_items-start justify-between mb-2.5' style={{
+                "borderBottom": "1px solid #e6e9ea",
+                "paddingBottom": "10px"
+            }}>
                 <div className='flex flex-col ml-[14px] mt-[5px]'>
                     <div className="flex gap-x-[15px] flex-col">
                         <div className='flex gap-x-[5px] items-center'>
@@ -202,13 +215,16 @@ const OrderRow = props => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col md_flex-row justify-between mb-2.5'>
-                <div className='flex flex-col ml-[5px] gap-y-[20px]'>
+            <div className='flex flex-col md_flex-column justify-between mb-0'>
+                <div className='flex flex-col ml-[5px] gap-y-[10px]'>
                     {/* Per-item horizontal flex: image + detail */}
                     {items && items.length > 0 && items.map((it, idx) => {
                         const { url, label } = getThumbnailForSku(it.product_sku, it.product_name, idx);
                         return (
-                            <div key={it.id || idx} className='flex flex-row gap-4 mb-2'>
+                            <div key={it.id || idx} className='flex flex-row gap-4 mb-1 justify-between' style={{
+                                "borderBottom": "1px solid #e6e9ea",
+                                "paddingBottom": "10px"
+                            }}>
                                 <div className={classes.productImage}>
                                     {url ? (
                                         <img
@@ -222,15 +238,16 @@ const OrderRow = props => {
                                     )}
                                 </div>
                                 <div className='flex flex-col gap-1 pb-2 last_pb-0 max-w-[375px]'>
-                                    <div className={cn(classes.productName, 'text-[14] font-medium')}>
+                                    <div className={cn(classes.productName, 'text-[14px] font-medium')}>
                                         <span>{it.product_name}</span>
                                     </div>
-                                    <div className="text-[14] text-gray-300">
-                                        <span>Qty : {`${it.quantity_ordered}`}</span>
-                                        <br />
-                                        <span>
-                                            Price : <Price currencyCode={it?.product_sale_price?.currency} value={it?.product_sale_price?.value} />
-                                        </span>
+                                    <div className="text-[12px]">
+                                        <span>x{`${it.quantity_ordered}`}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1 pb-2 last_pb-0 justify-center">
+                                    <div class="text-[14px] text-blue-700">
+                                        <span><Price currencyCode={it?.product_sale_price?.currency} value={it?.product_sale_price?.value} /></span>
                                     </div>
                                 </div>
                             </div>
@@ -238,45 +255,64 @@ const OrderRow = props => {
                     })}
                 </div>
                 {/* Right column: bottom-aligned Order Total + CTA */}
-                <div className='flex flex-col items-end gap-2 md_pl-10 md_self-end mr-4 mb-1'>
-                    <div className="md_text-right">
-                        <span className="text-[14] text-gray-200 block mb-1">
+                <div className='flex flex-col items-end gap-4 md_pl-10 md_self-end mr-4 mb-1 pt-2'>
+                    <div className="md_text-right flex flex-row gap-5 items-center">
+                        <span className="text-[14px] text-gray-200 block mb-1">
                             <FormattedMessage
                                 id={'orderRow.orderTotalText'}
                                 defaultMessage={'Order Total'}
-                            />
+                            />:
                         </span>
-                        <div className="text-lg font-medium">{orderTotalPrice}</div>
+                        <div className="text-lg font-medium text-blue-700">{orderTotalPrice}</div>
                     </div>
                     <div className="flex flex-row gap-2 w-full justify-end items-center">
+                        {showNewReturnButton && (
+                            <>
+                                {/* <ReviewModal order={reviewOrder} /> */}
+                                <span className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[8px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out" onClick={() => handleWriteReview(order)}>
+                                    <FormattedMessage
+                                        id={'orderRow.ViewTransactionDetail'}
+                                        defaultMessage={'Write a Review'}
+                                    />
+                                </span>
+                            </>
+                        )}
                         <Link 
                             to={{
                                 pathname: `/order-history/view/${orderNumber}`,
                                 state: { order }
                             }}
                         >
-                            <span className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[5px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out">
+                            <span className="bg-blue-700 hover:bg-white hover:text-blue-700 hover:border hover:border-blue-700 rounded-full px-[30px] py-[8px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out">
                                 <FormattedMessage
                                     id={'orderRow.ViewTransactionDetail'}
-                                    defaultMessage={'View Order Detail'}
+                                    defaultMessage={'View Order'}
                                 />
                             </span>
                         </Link>
                         {showNewReturnButton && (
-                            <div
-                                className={cn(
-                                    "cursor-pointer border border-blue-700 bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700",
-                                    "rounded-full px-[10px] py-[3px] text-[13px] font-medium transition-all duration-300 ease-in-out flex items-center gap-2"
-                                )}
-                                onClick={handleNewReturn}
-                                title={formatMessage({ id: 'orderRow.returnProduct', defaultMessage: 'Return Product' })}
-                            >
-                                <ConvertCard size={20} color="#f26313" />
-                                <FormattedMessage
-                                    id={'orderRow.ReturnItems'}
-                                    defaultMessage={'Return Items'}
-                                />
-                            </div>
+                            <>
+                                <span className="bg-white border border-blue-700 bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 rounded-full px-[30px] py-[8px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out">
+                                    <FormattedMessage
+                                        id={'orderRow.ReturnItems'}
+                                        defaultMessage={'Return Items'}
+                                    />
+                                </span>
+                                {/* <div
+                                    className={cn(
+                                        "cursor-pointer ",
+                                        "rounded-full px-[10px] py-[3px] text-[13px] font-medium transition-all duration-300 ease-in-out flex items-center gap-2"
+                                    )}
+                                    onClick={handleNewReturn}
+                                    title={formatMessage({ id: 'orderRow.returnProduct', defaultMessage: 'Return Product' })}
+                                >
+                                    <ConvertCard size={20} color="#f26313" />
+                                    <FormattedMessage
+                                        id={'orderRow.ReturnItems'}
+                                        defaultMessage={'Return Items'}
+                                    />
+                                </div> */}
+                            </>
                         )}
                     </div>
                 </div>

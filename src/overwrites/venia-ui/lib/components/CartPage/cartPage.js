@@ -75,10 +75,6 @@ const CartPage = props => {
         return fullPageLoadingIndicator;
     }
 
-    const priceSummary = hasItems ? (
-        <PriceSummary isUpdating={isCartUpdating} />
-    ) : null;
-
     const productListing = hasItems ? (
         <ProductListing
             onAddToWishlistSuccess={onAddToWishlistSuccess}
@@ -132,9 +128,6 @@ const CartPage = props => {
                     {priceAdjustments}
                 </div> */}
                 {/* <div className={classes.summary_container}>
-                    <div className={classes.summary_contents}>
-                        {priceSummary}
-                    </div>
                 </div> */}
             </div>
         </div>

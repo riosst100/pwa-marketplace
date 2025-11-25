@@ -345,7 +345,7 @@ const CheckoutPage = props => {
                         : '')
                 }
             >
-                <OrderSummary isUpdating={isUpdating} />
+                <OrderSummary isUpdating={isUpdating} placeOrderButton={placeOrderButton} />
                 {itemsReview}
             </div>
         );
@@ -430,7 +430,7 @@ const CheckoutPage = props => {
                 {priceAdjustmentsSection}
                 {reviewOrderButton}
                 {orderSummary}
-                {placeOrderButton}
+                {/* {placeOrderButton} */}
                 <GoogleReCaptcha {...recaptchaWidgetProps} />
             </div>
         );
