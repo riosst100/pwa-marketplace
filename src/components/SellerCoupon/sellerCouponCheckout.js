@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import listClasses from './sellerCoupon.module.css';
 import modalClasses from './sellerCouponCheckout.module.css';
+import { SellerCouponCheckoutShimmer } from '@riosst100/pwa-marketplace/src/components/SellerCoupon';
 
 // Reuse day diff logic
 const dayDiff = (toDate) => {
@@ -28,23 +29,26 @@ const getPortalRoot = () => {
 const SellerCouponCheckout = ({
     couponData,
     couponError,
+    setCouponModalOpen,
+    couponModalOpen,
     couponLoading,
+    isCopyAction,
     triggerLabel = 'View Seller Coupons',
     onSelectCoupon,
     onTriggerRender, // optional custom trigger renderer
     autoOpen = false, // auto open modal when mounted
     closeOnClaim = true // close after claiming
 }) => {
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [copied, setCopied] = useState(null);
 
     const items = couponData?.sellerCoupons?.items || [];
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpen = () => setCouponModalOpen(true);
+    const handleClose = () => setCouponModalOpen(false);
 
     useEffect(() => {
-        if (!open) return;
+        if (!couponModalOpen) return;
         const onKey = (e) => {
             if (e.key === 'Escape') {
                 handleClose();
@@ -52,7 +56,7 @@ const SellerCouponCheckout = ({
         };
         document.addEventListener('keydown', onKey);
         return () => document.removeEventListener('keydown', onKey);
-    }, [open]);
+    }, [couponModalOpen]);
 
     const handleClaim = async (item) => {
         try {
@@ -62,29 +66,34 @@ const SellerCouponCheckout = ({
         } catch (_) {
             /* ignore */
         }
+        console.log('item.code',item.code)
         setCopied(item.code);
         setTimeout(() => setCopied(null), 2000);
-        if (onSelectCoupon) onSelectCoupon(item);
-        if (closeOnClaim) handleClose();
+        if (!isCopyAction) {
+            if (onSelectCoupon) onSelectCoupon(item);
+            if (closeOnClaim) handleClose();
+        }
     };
 
     // Auto open behavior
     useEffect(() => {
-        if (autoOpen && !open) {
-            setOpen(true);
+        if (autoOpen && !couponModalOpen) {
+            setCouponModalOpen(true);
         }
-    }, [autoOpen, open]);
+    }, [autoOpen, couponModalOpen]);
 
-    const modal = open ? (
+    console.log('copied',copied)
+
+    const modal = couponModalOpen ? (
         <div className={modalClasses.overlay} role="dialog" aria-modal="true" aria-label="Seller coupons list">
             <div className={modalClasses.backdrop} onClick={handleClose} />
             <div className={modalClasses.dialog}>
                 <div className={modalClasses.header}>
-                    <h2 className={modalClasses.title}>Seller Coupons</h2>
+                    <h2 className={modalClasses.title}>{isCopyAction ? 'Store Coupons' : 'Apply Coupon'}</h2>
                     <button type="button" className={modalClasses.closeBtn} onClick={handleClose} aria-label="Close coupon modal">×</button>
                 </div>
                 <div className={modalClasses.body}>
-                    {couponLoading && <p className={listClasses.metaText}>Loading coupons...</p>}
+                    {couponLoading && <SellerCouponCheckoutShimmer />}
                     {!couponLoading && couponError && <p className={listClasses.metaText}>Failed to load coupons.</p>}
                     {!couponLoading && !couponError && !items.length && <p className={listClasses.metaText}>No coupons available.</p>}
                     {!couponLoading && !couponError && items.length > 0 && (
@@ -108,14 +117,22 @@ const SellerCouponCheckout = ({
                                         </div>
                                         <div className={listClasses.divider} aria-hidden="true" />
                                         <div className={listClasses.actions}>
-                                            <button
+                                            {isCopyAction ? <button
                                                 type="button"
-                                                className={listClasses.claimBtn}
+                                                className={copied === item.code ? listClasses.claimedBtn : listClasses.claimBtn}
                                                 onClick={() => handleClaim(item)}
                                                 aria-label={`Claim coupon ${item.code}`}
                                             >
                                                 {copied === item.code ? 'Copied' : 'Claim'}
-                                            </button>
+                                            </button> : 
+                                            <button
+                                                type="button"
+                                                className={copied === item.code ? listClasses.claimedBtn : listClasses.claimBtn}
+                                                onClick={() => handleClaim(item)}
+                                                aria-label={`Apply coupon ${item.code}`}
+                                            >
+                                                {copied === item.code ? 'Applied' : 'Apply'}
+                                            </button>}
                                         </div>
                                     </div>
                                 );
@@ -128,20 +145,20 @@ const SellerCouponCheckout = ({
     ) : null;
 
     const trigger = onTriggerRender
-        ? onTriggerRender({ open, setOpen, handleOpen })
+        ? onTriggerRender({ couponModalOpen, setCouponModalOpen, handleOpen })
         : (
             <button
                 type="button"
                 className={modalClasses.triggerBtn}
                 onClick={handleOpen}
                 aria-haspopup="dialog"
-                aria-expanded={open}
+                aria-expanded={couponModalOpen}
             >
                 {triggerLabel}
             </button>
         );
 
-    return <>{onTriggerRender ? trigger : trigger}{open ? ReactDOM.createPortal(modal, getPortalRoot()) : null}</>;
+    return <>{onTriggerRender ? trigger : trigger}{couponModalOpen ? ReactDOM.createPortal(modal, getPortalRoot()) : null}</>;
 };
 
 export default SellerCouponCheckout;

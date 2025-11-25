@@ -1,2 +1,31 @@
 .root {
+    composes: gap-xs from global;
+    composes: grid from global;
+    composes: grid-cols-1 from global;
+}
+
+.coupon_container {
+    composes: border from global;
+    composes: p-4 from global;
+    composes: pb-6 from global;
+    composes: border-gray-100 from global;
+    composes: rounded-md from global;
+}
+
+.loading {
+    composes: root from '@magento/venia-ui/lib/components/LoadingIndicator/indicator.module.css';
+
+    composes: text-center from global;
+}
+
+.heading {
+    composes: border-0 from global;
+
+    composes: lg_border from global;
+}
+
+.cardTitle {
+    composes: font-medium from global;
+    composes: text-[16px] from global;
+    composes: mb-4 from global;
 }

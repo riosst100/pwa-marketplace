@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import {
     Search as SearchIcon,
@@ -25,6 +25,7 @@ import ResetButton from './resetButton';
 import { SearchNormal } from 'iconsax-react';
 import cn from 'classnames';
 import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
+import { ReviewModal } from './Reviews'
 
 const errorIcon = (
     <Icon
@@ -52,6 +53,8 @@ const OrderHistoryPage = props => {
     } = talonProps;
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
+    const [reviewOrder, setReviewOrder] = useState(null);
+
     const PAGE_TITLE = formatMessage({
         id: 'orderHistoryPage.pageTitleText',
         defaultMessage: 'My Orders'
@@ -73,7 +76,7 @@ const OrderHistoryPage = props => {
 
     const orderRows = useMemo(() => {
         return orders.map(order => {
-            return <OrderRow key={order.id} order={order} />;
+            return <OrderRow setReviewOrder={setReviewOrder} key={order.id} order={order} />;
         });
     }, [orders]);
 
@@ -163,8 +166,32 @@ const OrderHistoryPage = props => {
         }
     }, [addToast, errorMessage]);
 
+    console.log('reviewOrder',reviewOrder)
+
     return (
         <OrderHistoryContextProvider>
+            <ReviewModal
+                // open={open}
+                setReviewOrder={setReviewOrder}
+                reviewOrder={reviewOrder}
+                // defaultNickname={defaultNickname}
+                // ratingsMetadata={ratingsMetadataData?.productReviewRatingsMetadata?.items || []}
+                // loadingRatingsMetadata={loadingRatingsMetadata}
+                // onSubmit={async (formValues) => {
+                //     setSubmitting(true);
+                //     const input = {
+                //         nickname: formValues.nickname,
+                //         summary: formValues.summary,
+                //         text: formValues.review,
+                //         sku: product?.sku,
+                //         ratings: formValues.ratings
+                //     };
+                //     const result = await handleSubmitReview(input);
+                //     setSubmitting(false);
+                //     if (result.success) setOpen(false);
+                // }}
+                // submitting={submitting}
+            />
             <div className={classes.root}>
                 <StoreTitle>{PAGE_TITLE}</StoreTitle>
                 <div aria-live="polite" className="text-xl font-medium text-left">

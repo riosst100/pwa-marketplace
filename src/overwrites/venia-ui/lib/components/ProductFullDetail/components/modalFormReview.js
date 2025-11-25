@@ -9,17 +9,17 @@ import StarRating from './starInput';
 
 import { primary900 } from '@riosst100/pwa-marketplace/src/theme/vars';
 
-const modalFormReview = (props) => {
-    const { open, setOpen, ratingsMetadata = [], loadingRatingsMetadata, onSubmit, submitting, defaultNickname } = props;
+const ModalFormReview = (props) => {
+    const { reviewOrder, setReviewOrder, ratingsMetadata = [], loadingRatingsMetadata, onSubmit, submitting, defaultNickname } = props;
 
     const [formState, setFormState] = useState({ nickname: defaultNickname || '' });
 
     useEffect(() => {
-        if (open && defaultNickname && !formState.nickname) {
+        if (reviewOrder && defaultNickname && !formState.nickname) {
             setFormState(prev => ({ ...prev, nickname: defaultNickname }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open, defaultNickname]);
+    }, [reviewOrder, defaultNickname]);
 
     // ratings: [{ id, value_id }]
     const [ratings, setRatings] = useState([]);
@@ -45,7 +45,7 @@ const modalFormReview = (props) => {
     return (
         <>
             <Modal
-                open={open}
+                reviewOrder={reviewOrder}
                 className="modal_form_review !p-[30px] md_min-w-[650px]"
             >
                 <div className='form_review-container'>
@@ -53,7 +53,7 @@ const modalFormReview = (props) => {
                         <div className='text-lg text-black font-medium'>
                             Write Review
                         </div>
-                        <button onClick={() => { setOpen(!open) }} >
+                        <button onClick={() => { setReviewOrder(!reviewOrder) }} >
                             <X size={24} color={primary900} />
                         </button>
                     </div>
@@ -145,7 +145,7 @@ const modalFormReview = (props) => {
                                 classes={{
                                     content: 'capitalize text-[16px] font-medium'
                                 }}
-                                onClick={() => setOpen(false)}
+                                onClick={() => setReviewOrder(false)}
                                 type="button"
                             >
                                 Cancel
@@ -168,4 +168,4 @@ const modalFormReview = (props) => {
     );
 };
 
-export default modalFormReview;
+export default ModalFormReview;

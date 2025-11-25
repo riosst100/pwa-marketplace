@@ -190,6 +190,8 @@
     grid-column: 1 / span 1;
     composes: m-auto from global;
     text-transform: capitalize;
+    composes: w-full from global;
+    composes: mt-4 from global;
 }
 .place_order_button:hover,
 .place_order_button:focus,

@@ -19,6 +19,14 @@
     padding:8px 4px 12px;
     scroll-snap-type:x mandatory;
 }
+.viewAllCard {
+    position:relative;
+    display:flex;
+    align-items:stretch;
+    padding:0 12px 0 24px;
+    scroll-snap-align:start;
+    overflow:hidden;
+}
 .card{
     position:relative;
     background:#fff8f1;
@@ -89,6 +97,20 @@
     align-items:center;
     justify-content:center;
     padding:10px 0;
+}
+.viewAllBtn {
+    color:#f76b1c;
+    padding:8px 18px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:underline;
+}
+.claimedBtn {
+    color: #a19791;
+    border:none;
+    border-radius:6px;
+    padding:8px 18px;
+    cursor:pointer;
 }
 .claimBtn{
     background: #f76b1c;

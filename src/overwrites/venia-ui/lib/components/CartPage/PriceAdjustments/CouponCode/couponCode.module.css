@@ -2,6 +2,7 @@
 .entryForm,
 .entryFormError {
     composes: gap-x-sm from global;
+    composes: pb-2 from global;
     composes: grid from global;
     composes: grid-cols-autoLast from global;
 }
@@ -14,6 +15,7 @@
         /* switch to rows. */
         grid-template-columns: unset;
         grid-template-rows: 1fr 1fr;
+        composes: pb-2 from global;
     }
 }
 

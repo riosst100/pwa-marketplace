@@ -104,8 +104,6 @@ export const usePriceSummary = (props = {}) => {
         //     }
         // });
 
-        await setCheckoutState(true);
-
         await createSellerCart({ initCheckoutSplitCart, sellerUrl });
 
         await removeCart();
@@ -114,6 +112,8 @@ export const usePriceSummary = (props = {}) => {
         await createCart({
             fetchCartId
         });
+
+        await setCheckoutState(true);
         
         history.push('/checkout');
     }, [history, setCheckoutState, createSellerCart, fetchCartId, createCart, apolloClient, removeCart, cartId, initCheckoutSplitCart, initCheckoutSplitCartData]);

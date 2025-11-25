@@ -10,6 +10,7 @@ import GiftCardSummary from './giftCardSummary';
 import GiftOptionsSummary from './giftOptionsSummary';
 import ShippingSummary from './shippingSummary';
 import TaxSummary from './taxSummary';
+import Shimmer from '@magento/venia-ui/lib/components/Shimmer';
 import cn from 'classnames';
 
 /**
@@ -74,9 +75,10 @@ const PriceSummary = props => {
 
     const isPriceUpdating = isUpdating || isLoading;
     const priceClass = isPriceUpdating ? classes.priceUpdating : classes.price;
-    const totalPriceClass = isPriceUpdating
-        ? classes.priceUpdating
-        : classes.totalPrice;
+    const totalPriceClass = classes.totalPrice;
+    // const totalPriceClass = isPriceUpdating
+    //     ? classes.priceUpdating
+    //     : classes.totalPrice;
 
     const totalPriceLabel = isCheckout
         ? formatMessage({
@@ -88,7 +90,7 @@ const PriceSummary = props => {
             defaultMessage: 'Estimated Total'
         });
 
-    const proceedToCheckoutButton = (
+    const proceedToCheckoutButton = !isCheckout && (
         <div className={cn(classes.checkoutButton_container, 'block !mt-6 !min-h-auto')}>
             <Button
                 disabled={isPriceUpdating}
@@ -127,8 +129,15 @@ const PriceSummary = props => {
     );
 
     return (
-        <div className={cn(classes.root, 'pb-6 px-3')} data-cy="PriceSummary-root">
+        <div className={cn(classes.root, isCheckout ? 'pb-0 px-3' : 'pb-6 px-3')} data-cy="PriceSummary-root">
             {isCheckout && (
+                isPriceUpdating ? <>
+                    <Shimmer width="100%" height="20px" />
+                    <Shimmer width="100%" height="20px" />
+                    <Shimmer width="100%" height="20px" />
+                    <Shimmer width="100%" height="20px" />
+                    <Shimmer width="100%" height="20px" />
+                </> : 
                 <div>
                     <ul>
                         <li className={classes.lineItems}>

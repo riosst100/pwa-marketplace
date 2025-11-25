@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import Review from '@riosst100/pwa-marketplace/src/components/ProductReviewItem';
 import { Star1 } from 'iconsax-react';
 import Button from '../../Button';
-import ModalFormReview from './modalFormReview';
-
-
 
 const productReview = (props) => {
     const {
@@ -56,29 +53,9 @@ const productReview = (props) => {
     if (!reviewsData || !reviewsData.items.length) {
         return (
             <>
-                <ModalFormReview
-                    open={open}
-                    setOpen={setOpen}
-                    defaultNickname={defaultNickname}
-                    ratingsMetadata={ratingsMetadataData?.productReviewRatingsMetadata?.items || []}
-                    loadingRatingsMetadata={loadingRatingsMetadata}
-                    onSubmit={async (formValues) => {
-                        setSubmitting(true);
-                        const input = {
-                            nickname: formValues.nickname,
-                            summary: formValues.summary,
-                            text: formValues.review,
-                            sku: product?.sku,
-                            ratings: formValues.ratings
-                        };
-                        const result = await handleSubmitReview(input);
-                        setSubmitting(false);
-                        if (result.success) setOpen(false);
-                    }}
-                    submitting={submitting}
-                />
+                
                 <div className={className}>
-                    <div className="flex items-center justify-between mb-6">
+                    {/* <div className="flex items-center justify-between mb-6">
                         <div />
                         <Button
                             priority='low'
@@ -89,8 +66,8 @@ const productReview = (props) => {
                         >
                             Write a review
                         </Button>
-                    </div>
-                    <div className="text-center py-8 text-gray-500">No reviews yet.</div>
+                    </div> */}
+                    <div className="text-center py-8 text-gray-600 text-[14px]">No reviews yet.</div>
                 </div>
             </>
         );
