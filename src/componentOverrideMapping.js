@@ -1,5 +1,6 @@
 module.exports = componentOverrideMapping = {
     ['@magento/peregrine/lib/talons/Header/useCartTrigger.js']: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/useCartTrigger.js',
+    ['@magento/peregrine/lib/talons/CartPage/useCartPage.js']: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CartPage/useCartPage.js',
     [`@magento/venia-ui/lib/components/CartPage/PriceSummary/priceSummary.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/CartPage/PriceSummary/priceSummary.js',
     [`@magento/peregrine/lib/talons/CartPage/PriceSummary/priceSummaryFragments.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CartPage/PriceSummary/priceSummaryFragments.gql.js',
     [`@magento/venia-ui/lib/components/Adapter/adapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Adapter/adapter.js',
