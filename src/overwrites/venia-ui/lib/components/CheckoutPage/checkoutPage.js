@@ -84,7 +84,7 @@ const CheckoutPage = props => {
         toggleAddressBookContent,
         toggleSignInContent
     } = talonProps;
-
+    
     const [, { addToast }] = useToasts();
 
     const history = useHistory();
@@ -301,7 +301,12 @@ const CheckoutPage = props => {
         // Show ItemsReview from the beginning, not only at the REVIEW step
         const itemsReview = (
             <div className={classes.items_review_container}>
-                <ItemsReview />
+                <ItemsReview
+                    isPreorder={cartItems?.[0]?.is_preorder}
+                    preOrderDeposit={cartItems?.[0]?.pre_order_deposit}
+                    preOrderPaymentType={cartItems?.[0]?.pre_order_payment_type}
+                    releaseDate={cartItems?.[0]?.product?.release_date} 
+                />
             </div>
         );
 

@@ -6,6 +6,9 @@ export const ProductListingFragment = gql`
         # eslint-disable-next-line @graphql-eslint/require-id-when-available
         items {
             uid
+            is_preorder
+            pre_order_payment_type
+            pre_order_deposit
             # eslint-disable-next-line @graphql-eslint/require-id-when-available
             seller {
                 seller_name
@@ -17,6 +20,7 @@ export const ProductListingFragment = gql`
                 name
                 sku
                 url_key
+                release_date
                 thumbnail {
                     url
                 }

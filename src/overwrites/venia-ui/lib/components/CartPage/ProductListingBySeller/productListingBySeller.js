@@ -80,7 +80,46 @@ const ProductListingBySeller = props => {
                 wishlistConfig={wishlistConfig}
             />
         ));
- 
+        // Helpers for currency + subtotal formatting
+        const aggregateSubtotal = items => {
+            let total = 0;
+            let currency = null;
+            for (const it of items) {
+                const priceObj = it?.prices?.price;
+                if (priceObj) {
+                    if (!currency) currency = priceObj.currency;
+                    const unit = Number(priceObj.value) || 0;
+                    const qty = Number(it?.quantity) || 0;
+                    total += unit * qty;
+                }
+            }
+            return { total, currency };
+        };
+
+        const formatMoney = (value, currency) => {
+            if (value == null || !isFinite(value)) return '-';
+            if (!currency) return value.toFixed(2);
+            try {
+                const locale = currency === 'IDR' ? 'id-ID' : (currency === 'SGD' ? 'en-SG' : 'en-US');
+                const opts = currency === 'IDR'
+                    ? { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }
+                    : { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 };
+                let formatted = new Intl.NumberFormat(locale, opts).format(value);
+                if (currency === 'SGD') {
+                    formatted = 'SGD ' + formatted
+                        .replace(/^S?\$/,'')
+                        .replace(/^SGD\s*/,'')
+                        .trim();
+                }
+                return formatted;
+            } catch (e) {
+                return currency + ' ' + value.toFixed(2);
+            }
+        };
+
+        const { total: subtotalValue, currency: detectedCurrency } = aggregateSubtotal(items);
+        const displayCurrency = detectedCurrency || seller.seller_currency || 'SGD';
+        const formattedSubtotal = formatMoney(subtotalValue, displayCurrency);
         const priceSummary = hasItems ? (
             <PriceSummary isProceedToCheckout={isProceedToCheckout} setIsProceedToCheckout={setIsProceedToCheckout} setIsCartUpdating={setIsCartUpdating} isUpdating={isCartUpdating} sellerUrl={seller.seller_url} />
         ) : null;
@@ -103,13 +142,7 @@ const ProductListingBySeller = props => {
                         {productComponents}
                         <div className={classes.subtotalContainer}>
                             <div className={classes.subtotalLabel}>Subtotal:</div>
-                            <div className={classes.subtotalAmount}>
-                                {seller.seller_currency || 'SGD'} {items.reduce((total, item) => {
-                                    const itemPrice = item?.prices?.price?.value || 0;
-                                    const quantity = item?.quantity || 0;
-                                    return total + (itemPrice * quantity);
-                                }, 0).toFixed(2)}
-                            </div>
+                            <div className={classes.subtotalAmount}>{formattedSubtotal}</div>
                         </div>
                         <div className={classes.summary_container}>
                             <div className={classes.summary_contents}>
