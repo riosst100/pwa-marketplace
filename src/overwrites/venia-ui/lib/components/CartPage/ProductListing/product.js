@@ -30,7 +30,6 @@ const HeartIcon = <Heart size="16" color="#909090" />;
 
 const Product = props => {
     const { item } = props;
-
     const { formatMessage } = useIntl();
     const talonProps = useProduct({
         operations: {
@@ -123,8 +122,49 @@ const Product = props => {
                     </Link>
                     <div className='flex flex-col'>
                         <div className={cn(classes.name, 'text-[14px] font-normal max-w-[260px]')} data-cy="Product-name">
+                            {item.is_preorder && (
+                                <span className="inline-flex items-center gap-1 px-2 py-[2px] mb-3 rounded-full bg-blue-600 text-white border border-blue-700 text-[11px] font-medium">
+                                    Preorder
+                                </span>
+                            )}
+                            <br/>
                             <Link to={itemLink}>{name}</Link>
                         </div>
+                        {item.is_preorder && (
+                            <div className="mt-2 flex flex-col gap-1" aria-label="Preorder information">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <span className="text-[11px] text-amber-800">
+                                        Release: {(() => {
+                                            const rd = item?.product?.release_date;
+                                            if (!rd) return '-';
+                                            const d = new Date(rd);
+                                            if (isNaN(d.getTime())) return rd;
+                                            const dd = String(d.getDate()).padStart(2, '0');
+                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                            const yyyy = d.getFullYear();
+                                            return `${dd}/${mm}/${yyyy}`;
+                                        })()}
+                                    </span>
+                                    {item.pre_order_payment_type === 'deposit' && item.pre_order_deposit != null && (
+                                        <span className="text-[11px] text-amber-800">
+                                            {(() => {
+                                                const raw = item.pre_order_deposit;
+                                                const n = typeof raw === 'number' ? raw : Number.parseFloat(String(raw).replace(/[^0-9.-]/g,''));
+                                                if (!Number.isFinite(n)) {
+                                                    return `Deposit: ${raw}`;
+                                                }
+                                                let str = n.toString();
+                                                if (str.includes('.')) {
+                                                    str = str.replace(/\.0+$/,'');
+                                                    str = str.replace(/\.(\d*[1-9])0+$/,'.$1');
+                                                }
+                                                return `Deposit: ${str}%`;
+                                            })()}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                         <ProductOptions
                             options={options}
                             classes={{

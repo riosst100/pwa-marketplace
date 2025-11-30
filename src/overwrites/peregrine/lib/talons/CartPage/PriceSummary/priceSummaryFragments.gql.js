@@ -22,6 +22,9 @@ export const PriceSummaryFragment = gql`
         items {
             uid
             quantity
+            is_preorder
+            pre_order_payment_type
+            pre_order_deposit
         }
         ...ShippingSummaryFragment
         prices {

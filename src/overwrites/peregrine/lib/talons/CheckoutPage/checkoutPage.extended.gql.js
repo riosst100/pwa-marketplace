@@ -13,6 +13,20 @@ export const ITEM_SELLER_FRAGMENT = gql`
     }
 `;
 
+// Extend items to include preorder fields used in ItemsReview/item.js overwrite
+export const ITEM_PREORDER_FRAGMENT = gql`
+    fragment ItemPreorderFragment on Cart {
+        items {
+            is_preorder
+            pre_order_payment_type
+            pre_order_deposit
+            product {
+                release_date
+            }
+        }
+    }
+`;
+
 export const CREATE_CART = gql`
     mutation createCart {
         cartId: createEmptyCart
@@ -64,10 +78,12 @@ export const GET_ORDER_DETAILS = gql`
             }
             ...ItemsReviewFragment
             ...ItemSellerFragment
+            ...ItemPreorderFragment
         }
     }
     ${ItemsReviewFragment}
     ${ITEM_SELLER_FRAGMENT}
+    ${ITEM_PREORDER_FRAGMENT}
 `;
 
 export const GET_CHECKOUT_DETAILS = gql`
@@ -77,11 +93,13 @@ export const GET_CHECKOUT_DETAILS = gql`
             ...CheckoutPageFragment
             ...ItemsReviewFragment
             ...ItemSellerFragment
+            ...ItemPreorderFragment
         }
     }
     ${CheckoutPageFragment}
     ${ItemsReviewFragment}
     ${ITEM_SELLER_FRAGMENT}
+    ${ITEM_PREORDER_FRAGMENT}
 `;
 
 export const GET_CUSTOMER = gql`
@@ -100,5 +118,6 @@ export default {
     getCustomerQuery: GET_CUSTOMER,
     getOrderDetailsQuery: GET_ORDER_DETAILS,
     placeOrderMutation: PLACE_ORDER,
-    itemSellerFragment: ITEM_SELLER_FRAGMENT
+    itemSellerFragment: ITEM_SELLER_FRAGMENT,
+    itemPreorderFragment: ITEM_PREORDER_FRAGMENT
 };

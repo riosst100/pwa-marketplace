@@ -7,7 +7,9 @@ const Select = (props) => {
         className,
         options = [],
         value,
-        onChange
+        onChange,
+        showPlaceholder = true,
+        placeholder = 'Choose Option'
     } = props;
 
     return (
@@ -17,9 +19,11 @@ const Select = (props) => {
                 value={value}
                 onChange={onChange}
             >
-                <option value=''>
-                    Choose Option
-                </option>
+                {showPlaceholder && (
+                    <option value=''>
+                        {placeholder}
+                    </option>
+                )}
                 {options.map((item) => (
                     <option key={item.value} value={item.value}>
                         {item.label}

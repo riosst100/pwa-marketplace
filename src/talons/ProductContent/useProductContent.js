@@ -27,7 +27,8 @@ export const useProductContent = props => {
         getCategoryContentQuery,
         getProductFiltersByCategoryQuery,
         getCategoryAvailableSortMethodsQuery,
-        getStoreConfigQuery
+        getStoreConfigQuery,
+        getPaymentTypesQuery
     } = operations;
 
     const placeholderItems = Array.from({ length: pageSize }).fill(null);
@@ -35,6 +36,13 @@ export const useProductContent = props => {
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
         fetchPolicy: 'cache-and-network'
     });
+
+    const { data: paymentTypeData, loading: paymentTypeLoading } = useQuery(
+        getPaymentTypesQuery,
+        {
+            fetchPolicy: 'cache-and-network'
+        }
+    );
 
     const virtualCategoryFilters = useMemo(() => {
         if (storeConfigData) {
@@ -161,6 +169,8 @@ export const useProductContent = props => {
         ? sortData.products.sort_fields.options
         : null;
 
+    const paymentTypeOptions = paymentTypeData?.getPaymentType || [];
+
     useEffect(() => {
         if (!categoryLoading && categoryData.categories.items.length > 0) {
             dispatch({
@@ -187,6 +197,8 @@ export const useProductContent = props => {
         parent,
         attributesBlock,
         category,
-        virtualCategoryFilters
+        virtualCategoryFilters,
+        paymentTypeOptions,
+        paymentTypeLoading
     };
 };

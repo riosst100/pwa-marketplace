@@ -579,7 +579,7 @@ export const useProductFullDetail = props => {
 
     const handleAddToCart = useCallback(
         async formValues => {
-            const { quantity } = formValues;
+            const { quantity, preorder } = formValues;
 
             /*
                 @deprecated in favor of general addProductsToCart mutation. Will support until the next MAJOR.
@@ -636,14 +636,12 @@ export const useProductFullDetail = props => {
                     product: {
                         sku: product.sku,
                         quantity
-                    },
-                    entered_options: [
-                        {
-                            uid: product.uid,
-                            value: product.name
-                        }
-                    ]
+                    }
                 };
+
+                if (preorder && Object.keys(preorder).length) {
+                    variables.product.preorder = preorder;
+                }
 
                 if (selectedOptionsArray.length) {
                     variables.product.selected_options = selectedOptionsArray;

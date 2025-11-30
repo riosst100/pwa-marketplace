@@ -15,8 +15,8 @@ import defaultClasses from './itemsReview.module.css';
  * @param {Object} props.data an optional static data object to render instead of making a query for data.
  */
 const ItemsReview = props => {
-    const { classes: propClasses } = props;
-
+    const { classes: propClasses, isPreorder, preOrderDeposit, preOrderPaymentType, releaseDate } = props;
+    
     const classes = useStyle(defaultClasses, propClasses);
 
     const talonProps = useItemsReview({
@@ -38,6 +38,12 @@ const ItemsReview = props => {
             {...item}
             isHidden={!showAllItems && index >= 2}
             configurableThumbnailSource={configurableThumbnailSource}
+            // Forward explicit preorder values from parent if provided
+            is_preorder={typeof isPreorder !== 'undefined' ? isPreorder : item.is_preorder}
+            pre_order_payment_type={typeof preOrderPaymentType !== 'undefined' ? preOrderPaymentType : item.pre_order_payment_type}
+            pre_order_deposit={typeof preOrderDeposit !== 'undefined' ? preOrderDeposit : item.pre_order_deposit}
+            // release_date may come from parent or item.product
+            release_date={typeof releaseDate !== 'undefined' ? releaseDate : (item?.product?.release_date)}
         />
     ));
 

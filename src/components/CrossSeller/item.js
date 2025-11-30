@@ -9,7 +9,7 @@ import logoImage from './logo_seller.png';
 
 const Item = ({ sellerName, sales, price, condition }) => {
     return (
-        <div className='flex flex-col items-center text-center lg_text-left md_text-left lg_flex-row md_flex-row bg-white rounded-lg border border-gray-100 p-[15px] gap-y-4'>
+        <div className='flex flex-col items-center text-center justify-around lg_text-left md_text-left lg_flex-row md_flex-row bg-white rounded-lg border border-gray-100 p-[15px] gap-y-4'>
             <div className='seller_info-container flex flex-row gap-x-[15px] lg_w-1/3 md_w-1/3'>
                 <div className='flex flex-col gap-y-[15px]'>
                     <div className='seller_summary-wrapper flex flex-row gap-x-2.5 items-center'>
@@ -41,16 +41,15 @@ const Item = ({ sellerName, sales, price, condition }) => {
                     onSubmit={() => { }}
                     className="flex flex-col gap-x-7 gap-y-7 items-center lg_flex-row md_flex-row"
                 >
-                    <QuantityStepper min={1} />
                     <Button
-                        data-cy="addToCartButton"
+                        data-cy="viewProductButton"
                         classes={{
                             content: 'normal-case font-medium text-[16px]'
                         }}
                         priority="high"
                         type="button"
                     >
-                        Add To Cart
+                        View Product
                     </Button>
                 </Form>
             </div>

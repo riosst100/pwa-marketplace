@@ -89,10 +89,20 @@ export const GET_STORE_CONFIG_DATA = gql`
     }
 `;
 
+export const GET_PAYMENT_TYPES = gql`
+    query getPaymentTypeOptions {
+        getPaymentType {
+            label
+            value
+        }
+    }
+`;
+
 
 export default {
     getCategoryContentQuery: GET_CATEGORY_CONTENT,
     getProductFiltersByCategoryQuery: GET_PRODUCT_FILTERS_BY_CATEGORY,
     getCategoryAvailableSortMethodsQuery: GET_CATEGORY_AVAILABLE_SORT_METHODS,
-    getStoreConfigQuery: GET_STORE_CONFIG_DATA
+    getStoreConfigQuery: GET_STORE_CONFIG_DATA,
+    getPaymentTypesQuery: GET_PAYMENT_TYPES
 };

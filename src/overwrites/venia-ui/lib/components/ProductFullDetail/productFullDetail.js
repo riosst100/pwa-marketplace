@@ -1,4 +1,5 @@
 import React, { useState, useMemo, Fragment, Suspense, useRef, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Form } from 'informed';
@@ -26,6 +27,7 @@ import RichText from '@magento/venia-ui/lib/components/RichText';
 import { Star1, Verify, Sms, Message, Shop, ArrowUp2 } from 'iconsax-react';
 import { Link } from "react-router-dom";
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
+import { GET_PAYMENT_TYPES } from '@riosst100/pwa-marketplace/src/talons/ProductContent/productContent.gql.js';
 
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
 const Options = React.lazy(() => import('@magento/venia-ui/lib/components/ProductOptions'));
@@ -112,9 +114,16 @@ const ProductFullDetail = props => {
 
     const { formatMessage } = useIntl();
 
+    const { data: paymentTypeData } = useQuery(GET_PAYMENT_TYPES, {
+        fetchPolicy: 'cache-and-network'
+    });
+
+    const paymentTypeOptions = paymentTypeData?.getPaymentType || [];
+
     const classes = useStyle(defaultClasses, props.classes);
 
     const [hoveredMedia, setHoveredMedia] = useState(null);
+    const [selectedPaymentType, setSelectedPaymentType] = useState(null);
 
     const options = isProductConfigurable(product) ? (
         <Suspense fallback={<ProductOptionsShimmer />}>
@@ -220,62 +229,6 @@ const ProductFullDetail = props => {
             pagebuilder: pagebuilder
         };
     }, [customAttributes, productDetails.sku, formatMessage]);
-
-    const cartCallToActionText =
-        !isEverythingOutOfStock || !isOutOfStock ? (
-            <FormattedMessage
-                id="productFullDetail.addItemToCart"
-                defaultMessage="Add to Cart"
-            />
-        ) : (
-            <FormattedMessage
-                id="productFullDetail.itemOutOfStock"
-                defaultMessage="Out of Stock"
-            />
-        );
-    // Error message for screen reader
-    const cartActionContent = isSupportedProductType ? (
-        <section className={cn(classes.actButton, 'justify-between flex gap-x-[20px] px-[15px] py-0')}>
-           <RFQ
-                disabled={isAddToCartDisabled}
-                classes={{ rfqButton: cn(classes.rfqButton, "w-full") }}
-            />
-            <Button
-                data-cy="ProductFullDetail-addToCartButton"
-                disabled={isAddToCartDisabled}
-                aria-disabled={isAddToCartDisabled}
-                aria-label={
-                    isEverythingOutOfStock
-                        ? formatMessage({
-                            id: 'productFullDetail.outOfStockProduct',
-                            defaultMessage:
-                                'This item is currently out of stock'
-                        })
-                        : ''
-                }
-                classes={{
-                    rootClass: '!px-0 !py-3',
-                    content: 'w-full normal-case font-medium text-[14px]'
-                }}
-                priority="high"
-                type="submit"
-            >
-                {cartCallToActionText}
-            </Button>
-        </section>
-    ) : (
-        <div className={classes.unavailableContainer}>
-            <Info />
-            <p>
-                <FormattedMessage
-                    id={'productFullDetail.unavailableProduct'}
-                    defaultMessage={
-                        'This product is currently unavailable for purchase.'
-                    }
-                />
-            </p>
-        </div>
-    );
 
     const shortDescription = productDetails.shortDescription ? (
         <RichText
@@ -392,7 +345,6 @@ const ProductFullDetail = props => {
             const code = attr.attribute_metadata?.code || "";
             return useSuffix ? code.endsWith(key) : code === key;
         });
-
         if (!attr) return "";
 
         if (attr.selected_attribute_options?.attribute_option?.length) {
@@ -403,6 +355,12 @@ const ProductFullDetail = props => {
         return attr.entered_attribute_value?.value || "";
     };
 
+    const preOrder = getAttributeValue(customAttributesDetails, "card_pre_orders", true);
+    const preOrderDate = getAttributeValue(customAttributesDetails, "pre_order_date", true);
+    const preOrderDeposite = getAttributeValue(customAttributesDetails, "pre_order_deposit", true);
+    const preOrderNote = getAttributeValue(customAttributesDetails, "pre_order_notes", true);
+    const preOrderPaymentType = getAttributeValue(customAttributesDetails, "pre_order_payment_type", true);
+    const releaseDate = getAttributeValue(customAttributesDetails, "release_date", true);
     const setNameValue = getAttributeValue(customAttributesDetails, "card_set", true);
     const cardNameValue = getAttributeValue(customAttributesDetails, "card_name", true);
     const cardNumberValue = getAttributeValue(customAttributesDetails, "card_number", true);
@@ -410,6 +368,104 @@ const ProductFullDetail = props => {
     const featureValue = getAttributeValue(customAttributesDetails, "card_feature", true);
     const conditionValue = getAttributeValue(customAttributesDetails, "card_condition", true);
     const foilValue = getAttributeValue(customAttributesDetails, "card_foil", true);
+
+    const isPreOrderProduct = typeof preOrder === 'string'
+        ? preOrder.trim().toLowerCase() === 'pre orders'
+        : !!(preOrder && preOrder.is_preorder);
+
+    const parsePreOrderClosingDate = (value) => {
+        if (!value) return null;
+
+        const parsed = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(parsed.getTime())) return null;
+
+        // Normalise to end of day for fairness
+        parsed.setHours(23, 59, 59, 999);
+        return parsed;
+    };
+
+    const preOrderClosingDateObj = parsePreOrderClosingDate(preOrderDate);
+    const isPreOrderClosed =
+        isPreOrderProduct &&
+        preOrderClosingDateObj !== null &&
+        new Date().getTime() > preOrderClosingDateObj.getTime();
+
+    const cartCallToActionText =
+        isPreOrderClosed
+            ? (
+                <FormattedMessage
+                    id="productFullDetail.preOrderClosed"
+                    defaultMessage="Pre Order Closed"
+                />
+            )
+            : isPreOrderProduct
+                ? (
+                    <FormattedMessage
+                        id="productFullDetail.preOrderNow"
+                        defaultMessage="Pre Order Now"
+                    />
+                )
+                : !isEverythingOutOfStock || !isOutOfStock
+                    ? (
+                        <FormattedMessage
+                            id="productFullDetail.addItemToCart"
+                            defaultMessage="Add to Cart"
+                        />
+                    )
+                    : (
+                        <FormattedMessage
+                            id="productFullDetail.itemOutOfStock"
+                            defaultMessage="Out of Stock"
+                        />
+                    );
+
+    // Error message for screen reader
+    const cartActionContent = isSupportedProductType ? (
+        <section className={cn(classes.actButton, 'justify-between flex gap-x-[20px] px-[15px] py-0')}>
+           <RFQ
+                disabled={isAddToCartDisabled || isPreOrderClosed}
+                classes={{ rfqButton: cn(classes.rfqButton, "w-full") }}
+            />
+            <Button
+                data-cy="ProductFullDetail-addToCartButton"
+                disabled={isAddToCartDisabled || isPreOrderClosed}
+                aria-disabled={isAddToCartDisabled || isPreOrderClosed}
+                aria-label={
+                    isPreOrderClosed
+                        ? 'Pre order closing date has passed'
+                        : isPreOrderProduct
+                            ? ''
+                            : isEverythingOutOfStock
+                        ? formatMessage({
+                            id: 'productFullDetail.outOfStockProduct',
+                            defaultMessage:
+                                'This item is currently out of stock'
+                        })
+                        : ''
+                }
+                classes={{
+                    rootClass: '!px-0 !py-3',
+                    content: 'w-full normal-case font-medium text-[14px]'
+                }}
+                priority="high"
+                type="submit"
+            >
+                {cartCallToActionText}
+            </Button>
+        </section>
+    ) : (
+        <div className={classes.unavailableContainer}>
+            <Info />
+            <p>
+                <FormattedMessage
+                    id={'productFullDetail.unavailableProduct'}
+                    defaultMessage={
+                        'This product is currently unavailable for purchase.'
+                    }
+                />
+            </p>
+        </div>
+    );
     const ExpandableSection = ({ children, maxHeight = 480 }) => {
     const [expanded, setExpanded] = useState(false);
     const [showButton, setShowButton] = useState(false);
@@ -554,9 +610,33 @@ const ProductFullDetail = props => {
 
     const AlertCircleIcon = <Icon src={ShoppingCart} attrs={{ width: 20 }} />;
 
-    const handleAddToCart = async (...args) => {
+    const handleAddToCart = async formValues => {
         try {
-            await originalHandleAddToCart(...args);
+            const parseDepositNumber = (value) => {
+                if (value === null || value === undefined) return undefined;
+                if (typeof value === 'number') return value;
+                const numeric = Number.parseFloat(value.toString().replace(/[^0-9.-]/g, ''));
+                return Number.isFinite(numeric) ? numeric : undefined;
+            };
+
+            let preorderPayload;
+            if (selectedPaymentType) {
+                preorderPayload = {
+                    pre_order_payment_type: selectedPaymentType
+                };
+                if (selectedPaymentType === 'deposit') {
+                    const dep = parseDepositNumber(preOrderDeposite);
+                    if (dep !== undefined) {
+                        preorderPayload.pre_order_deposit = dep;
+                    }
+                }
+            }
+
+            const nextValues = {
+                ...formValues,
+                preorder: preorderPayload
+            };
+            await originalHandleAddToCart(nextValues);
         } catch (e) {
             addToast({
                 type: 'error',
@@ -697,7 +777,6 @@ const ProductFullDetail = props => {
                                             </p>
                                         </div>
                                         <AuctionDetail className="auction_detail-container" />
-                                        <PreorderDetail className={'preorder_detail-container'} />
                                         <small className='shipping-calculation-notes text-gray-200 text-xs'>
                                             Shipping is calculated on checkout
                                         </small>
@@ -743,6 +822,17 @@ const ProductFullDetail = props => {
                                             />
                                         </Suspense>
                                     </div>
+                                    <PreorderDetail 
+                                        preOrder={preOrder}
+                                        preOrderDate={preOrderDate}
+                                        preOrderDeposite={preOrderDeposite}
+                                        preOrderNote={preOrderNote}
+                                        preOrderPaymentType={preOrderPaymentType}
+                                        releaseDate={releaseDate}    
+                                        className={'preorder_detail-container'}
+                                        paymentTypeOptions={paymentTypeOptions}
+                                        onPaymentTypeChange={setSelectedPaymentType}
+                                    />
                                     <div className='product_actions-wrapper'>
                                         {cartActionContent}
                                     </div>
