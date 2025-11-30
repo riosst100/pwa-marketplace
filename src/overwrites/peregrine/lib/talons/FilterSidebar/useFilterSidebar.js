@@ -189,11 +189,11 @@ export const useFilterSidebar = props => {
             },
             {
                 'label': 'Preorder',
-                'value': 'lof_preorder',
+                'value': 'card_pre_orders',
                 'path': '',
                 'options': [
-                    {'value':'0','label':'No','title':'No'},
-                    {'value':'1','label':'Yes','title':'Yes'}
+                    {'value':'0','label':'','title':''},
+                    {'value':'1','label':'Pre Orders','title':'Pre Orders'}
                 ]
             },
             {

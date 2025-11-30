@@ -13,14 +13,22 @@ const CustomAttributes = props => {
     const { customAttributes, showLabels } = props;
     const classes = useStyle(defaultClasses, props.classes);
 
+    const systemAttributes = [
+        'term_and_conditions',
+        'sale',
+        'sku'
+    ];
+
     const list = useMemo(
         () =>
             customAttributes.reduce((previousAttribute, currentAttribute) => {
+                console.log('currentAttribute',currentAttribute)
+                const attrCode = currentAttribute.attribute_metadata?.code;
                 const usedInComponents =
                     currentAttribute.attribute_metadata?.used_in_components ||
                     [];
                 // Visible on front attributes only
-                if (usedInComponents.includes(IS_VISIBLE_ON_FRONT)) {
+                if (!systemAttributes.includes(attrCode) && usedInComponents.includes(IS_VISIBLE_ON_FRONT)) {
                     const attributeContent = (
                         <li
                             key={currentAttribute.attribute_metadata.uid}
@@ -38,7 +46,7 @@ const CustomAttributes = props => {
 
                 return previousAttribute;
             }, []),
-        [classes, customAttributes, showLabels]
+        [classes, customAttributes, showLabels, systemAttributes]
     );
 
     if (list.length === 0) {

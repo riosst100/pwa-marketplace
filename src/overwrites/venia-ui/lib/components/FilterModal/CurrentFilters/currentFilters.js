@@ -20,7 +20,7 @@ const CurrentFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                const customAttributeLandingPage = ['bricks_categories','sc_sports_categories','card_game', 'sc_baseball_release','auction','special_price','lof_preorder','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
+                const customAttributeLandingPage = ['bricks_categories','sc_sports_categories','card_game', 'sc_baseball_release','auction','special_price','lof_preorder','card_pre_orders','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
 
                 if (!customAttributeLandingPage.includes(group)) {
                     elements.push(

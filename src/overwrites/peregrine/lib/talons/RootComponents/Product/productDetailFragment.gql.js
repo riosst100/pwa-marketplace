@@ -116,6 +116,11 @@ export const ProductDetailsFragment = gql`
             pre_order_date
         }
         term_and_conditions
+        custom_table_metadata {
+            mainAttrCode
+            mainAttrVal
+            mainAttrLabel
+        }
         shipping_policy
         return_policy
         small_image {

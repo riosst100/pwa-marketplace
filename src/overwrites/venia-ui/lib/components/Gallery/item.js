@@ -140,7 +140,7 @@ const GalleryItem = props => {
                         data-cy="GalleryItem-name">{name}</span>
                     {/* </Link> */}
                     <div data-cy="GalleryItem-price" className={cn(classes.price, 'mb-2.5 pt-2.5')}>
-                        <p className='font-medium !text-[#f76b1c] text-[1.1rem] !mb-1 !leading-[14px]'>
+                        <p className='font-medium !text-[#f76b1c] !mb-1'>
                             <Price
                                 value={priceSource.value}
                                 currencyCode={priceSource.currency}
@@ -154,16 +154,8 @@ const GalleryItem = props => {
                         </p> */}
                     </div>
 
-                    <div data-cy="GalleryItem-Rating" className={cn('flex gap-[5px] items-center mb-2')}>
-                        <Star />
-                        <span className='text-[12px] leading-normal'>
-                            {rating_summary}
-                        </span>
-                    </div>
-
                     <div data-cy="GalleryItem-Seller" className={cn('flex gap-[5px] items-center')}>
-                        <Verify size={17} className='text-blue-700' variant="Bold" />
-                        <span className='text-[12px] text-gray-300 leading-normal'>
+                        <span className='text-[12px] text-gray-400 leading-normal'>
                             {seller}
                         </span>
                     </div>

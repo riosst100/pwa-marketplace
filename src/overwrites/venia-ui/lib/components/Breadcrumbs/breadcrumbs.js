@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom';
 const Breadcrumbs = props => {
     const classes = useStyle(defaultClasses, props.classes);
 
-    const { categoryId, currentProduct, customPage, currentFilter } = props;
+    const { categoryId, currentProduct, customPage, currentFilter, currentProductCustomTableMetadata, customAttributesDetails } = props;
 
     const talonProps = useBreadcrumbs({ categoryId });
 
@@ -102,6 +102,25 @@ const Breadcrumbs = props => {
     };
 
     const params = removeShopbyParam(search);
+
+    if (currentProductCustomTableMetadata) {
+        const mainAttrCode = currentProductCustomTableMetadata.mainAttrCode;
+        const mainAttrVal = currentProductCustomTableMetadata.mainAttrVal;
+        const mainAttrLabel = currentProductCustomTableMetadata.mainAttrLabel;
+
+        filterBreadcrumbsElement.push(
+            <Fragment>
+                <span className={classes.divider}>{DELIMITER}</span>
+                <Link
+                    className={classes.link}
+                    to={resourceUrl('/' + currentCategoryPath + '?' + mainAttrCode + '[filter]=' + mainAttrLabel + ',' + mainAttrVal)}
+                    onClick={handleClick}
+                >
+                    {mainAttrLabel}
+                </Link>
+            </Fragment>
+        )
+    }
 
     currentFilter && currentFilter.length && currentFilter.map((filter, index) => {
         currentProduct ? (

@@ -18,10 +18,10 @@ const LinkToOtherStores = (props) => {
             'product_link': 'https://tokopedia.com',
             'stores': 'Tokopedia'
         },
-        {
-            'product_link': 'https://lazada.sg',
-            'stores': 'Lazada'
-        }
+        // {
+        //     'product_link': 'https://lazada.sg',
+        //     'stores': 'Lazada'
+        // }
     ];
 
     const getLogo = (stores) => {
