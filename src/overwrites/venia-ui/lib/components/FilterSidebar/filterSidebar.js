@@ -125,7 +125,7 @@ const FilterSidebar = props => {
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
 
-                const hideFilters = ['card_game','bricks_categories','sc_sports_categories','trains','trains_locomotives','trains_supplies_type','lof_preorder','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
+                const hideFilters = ['card_game','bricks_categories','sc_sports_categories','trains','trains_locomotives','trains_supplies_type','lof_preorder','card_pre_orders','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
                 if (!allowedFiltersArr?.length || filterState.size && allowedFiltersArr.length || !filterState.size && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
                     if (!hideFilters.includes(group) && groupName && !group.includes('card_release') && !group.includes('card_set') && !group.includes('sc_set_name')) {
                     

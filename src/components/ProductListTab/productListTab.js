@@ -37,7 +37,7 @@ const ProductListTab = props => {
         },
         {
             'label': 'Pre Order',
-            'value': 'lof_preorder'
+            'value': 'card_pre_orders'
         },
         // {
         //     'label': 'Auction',

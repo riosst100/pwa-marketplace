@@ -719,6 +719,7 @@ export const useProductFullDetail = props => {
         price_range: product?.price_range,
         sku: productSku,
         publish_status: product.publish_status,
+        custom_table_metadata: product.custom_table_metadata,
         term_and_conditions: product.term_and_conditions,
         link_to_other_stores: product.link_to_other_stores,
         shipping_policy: product.shipping_policy,

@@ -74,11 +74,11 @@
 }
 
 .name {
-    composes: font-medium from global;
+    /* composes: font-medium from global; */
     composes: text-base from global;
     composes: mb-1 from global;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: normal;
@@ -87,13 +87,14 @@
 .name,
 .price {
     composes: text-colorDefault from global;
-    composes: text-[14px] from global;
-    composes: font-medium from global;
+    /* composes: text-[14px] from global; */
+    /* composes: font-medium from global; */
     min-height: 1rem;
 }
 
 .price {
     padding-top: 2.5;
+    composes: font-medium from global;
 }
 
 .unavailableContainer {

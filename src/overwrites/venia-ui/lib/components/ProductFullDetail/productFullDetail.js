@@ -142,6 +142,7 @@ const ProductFullDetail = props => {
         <Breadcrumbs
             categoryId={breadcrumbCategoryId}
             currentProduct={productDetails.name}
+            currentProductCustomTableMetadata={productDetails.custom_table_metadata}
         />
     ) : null;
     
@@ -766,7 +767,7 @@ const ProductFullDetail = props => {
                                                 data-cy="ProductFullDetail-productPrice"
                                                 className={cn(
                                                     classes.productPrice,
-                                                    'text-[32px] font-medium leading-[32px] mb-0',
+                                                    'text-[24px] font-medium leading-[32px] mb-0',
                                                 )}
                                             >
                                                 <Price
@@ -780,7 +781,7 @@ const ProductFullDetail = props => {
                                         <small className='shipping-calculation-notes text-gray-200 text-xs'>
                                             Shipping is calculated on checkout
                                         </small>
-                                        <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
+                                        {/* <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
                                             <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
                                                 <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
                                                     <div class="flex items-center justify-center gap-[5px] relative">
@@ -791,7 +792,7 @@ const ProductFullDetail = props => {
                                                     </div>
                                                 </Link>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                                 <FormError
@@ -837,6 +838,46 @@ const ProductFullDetail = props => {
                                         {cartActionContent}
                                     </div>
                                 </section>
+                            </div>
+                            <div className={cn('product_otherlink-section', 'border border-[lightgray] rounded-[10px] mb-[15px] p-4')}>
+                                <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
+                                            <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
+                                                <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
+                                                    <div class="flex items-center justify-center gap-[5px] relative">
+                                                        <p>Sold by</p>
+                                                        <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                                            {sellerDetails ? sellerDetails.name : ''}
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col xs_items-center md_items-start gap-[6px] relative'>
+                                            <div className="gap-x-[10px] gap-y-1 flex xs_flex-col md_flex-row xs_items-center md_items-start relative">
+                                                <div class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
+                                                    <div class="flex items-center justify-center gap-[5px] relative">
+                                                        <div className='flex flex-wrap items-start gap-4 relative'>
+                                                            <Link to='#' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
+                                                                <div class="flex items-center justify-center gap-[10px] relative">
+                                                                    <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                                                        Send Message
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                            <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
+                                                                <div class="flex items-center justify-center gap-[10px] relative">
+                                                                    <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                                                    <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
+                                                                        Visit Store
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                             </div>
                             <div className={cn('product_otherlink-section', 'border border-[lightgray] rounded-[10px] mb-[15px]')}>
                                 <LinkToOtherStores productDetails={productDetails} />
