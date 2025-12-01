@@ -1,4 +1,5 @@
 module.exports = componentOverrideMapping = {
+    ['@magento/peregrine/lib/talons/CreateAccount/useCreateAccount.js']: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CreateAccount/useCreateAccount.js',
     ['@magento/peregrine/lib/talons/CheckoutPage/PaymentInformation/usePaymentMethods.js']: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CheckoutPage/PaymentInformation/usePaymentMethods.js',
     ['@magento/venia-ui/lib/components/CartPage/PriceAdjustments/CouponCode/couponCode.js']: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/CartPage/PriceAdjustments/CouponCode/couponCode.js',
     ['@magento/peregrine/lib/talons/Header/useCartTrigger.js']: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/useCartTrigger.js',

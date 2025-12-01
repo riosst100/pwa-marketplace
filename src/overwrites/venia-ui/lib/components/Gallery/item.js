@@ -129,7 +129,7 @@ const GalleryItem = props => {
                         {ratingAverage}
                     </span>
                 </div>
-                <div className={cn('item-info px-[15px] pb-[20px]')}>
+                <div className={cn('item-info px-[15px] pb-[15px]')}>
                     {/* <Link
                         onClick={handleLinkClick}
                         to={productLink}
