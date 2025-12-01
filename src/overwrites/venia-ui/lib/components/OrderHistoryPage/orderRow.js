@@ -1,9 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { arrayOf, number, shape, string } from 'prop-types';
 import { ChevronDown, ChevronUp } from 'react-feather';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Price from '@magento/venia-ui/lib/components/Price';
 import { useOrderRow } from '@magento/peregrine/lib/talons/OrderHistoryPage/useOrderRow';
+import { COMPLETE_PREORDER } from '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/OrderHistoryPage/orderRow.gql';
+import { useCartContext } from '@magento/peregrine/lib/context/cart';
+import { useToasts } from '@magento/peregrine/lib/Toasts';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Icon from '@magento/venia-ui/lib/components/Icon';
@@ -19,6 +23,8 @@ import { Link, useHistory } from 'react-router-dom';
 const OrderRow = props => {
     const { order, setReviewOrder } = props;
     const { formatMessage } = useIntl();
+    const [{ cartId }] = useCartContext();
+    const [, { addToast }] = useToasts();
     const history = useHistory();
     const {
         invoices,
@@ -29,7 +35,7 @@ const OrderRow = props => {
         status,
         total
     } = order;
-
+   
     const { grand_total: grandTotal } = total;
     const { currency, value: orderTotal } = grandTotal;
 
@@ -47,7 +53,12 @@ const OrderRow = props => {
     const hasInvoice = !!invoices.length;
     const hasShipment = !!shipments.length;
     let derivedStatus;
-    if (status === 'Complete') {
+    if (status === 'Canceled') {
+        derivedStatus = formatMessage({
+            id: 'orderRow.canceledText',
+            defaultMessage: 'Canceled'
+        });
+    } else if (status === 'Complete') {
         derivedStatus = formatMessage({
             id: 'orderRow.deliveredText',
             defaultMessage: 'Delivered'
@@ -101,6 +112,9 @@ const OrderRow = props => {
         );
 
     const badgeStatusStyle = () => {
+        if (status === 'Canceled') {
+            return 'text-red-600 text-[14px] font-medium py-[5px] border-none';
+        }
         return 'text-blue-700 text-[14px] font-medium py-[5px] border-none';
     }
 
@@ -137,6 +151,58 @@ const OrderRow = props => {
     };
 
     const showNewReturnButton = status === 'Complete' || derivedStatus === formatMessage({ id: 'orderRow.deliveredText', defaultMessage: 'Delivered' });
+
+    // Find a preorder item eligible for completion (deposit type)
+    const preorderItem = useMemo(() => {
+        if (!Array.isArray(items)) return null;
+        return items.find(it => it && it.is_preorder && String(it.pre_order_payment_type).toLowerCase() === 'deposit');
+    }, [items]);
+
+    const [completePreorder, { loading: completingPreorder }] = useMutation(COMPLETE_PREORDER);
+
+    const handleCompletePreorder = async () => {
+        try {
+            const targetItem = preorderItem || (Array.isArray(items) && items.length ? items[0] : null);
+            if (!targetItem) {
+                console.warn('No eligible preorder item found to complete preorder');
+                return;
+            }
+
+            const input = {
+                cartId: cartId || '',
+                item_id: String(targetItem.id || ''),
+                order_reference: String(orderNumber || ''),
+                product_name: String(targetItem.product_name || ''),
+                qty: Number(targetItem.quantity_ordered || 1)
+            };
+
+            const { data: result } = await completePreorder({ variables: { input } });
+            const payload = result?.completePreorder;
+            if (payload?.success) {
+                addToast({
+                    type: 'success',
+                    message: payload.message || formatMessage({ id: 'orderRow.completePreorder.success', defaultMessage: 'Preorder completed successfully.' }),
+                    dismissable: true,
+                    timeout: 5000
+                });
+                history.push('/cart');
+            } else {
+                addToast({
+                    type: 'error',
+                    message: payload?.message || formatMessage({ id: 'orderRow.completePreorder.failed', defaultMessage: 'Failed to complete preorder.' }),
+                    dismissable: true,
+                    timeout: 7000
+                });
+            }
+        } catch (e) {
+            addToast({
+                type: 'error',
+                message: e?.message || formatMessage({ id: 'orderRow.completePreorder.error', defaultMessage: 'Something went wrong completing preorder.' }),
+                dismissable: true,
+                timeout: 7000
+            });
+        }
+    };
 
     const handleNewReturn = () => {
         // Inject product_image per item with safe fallbacks (prefer product_image_url from query)
@@ -180,7 +246,6 @@ const OrderRow = props => {
     };
 
     const handleWriteReview = useCallback(( order ) => {
-        console.log('order',order)
         if (order) {
             setReviewOrder(order);
         }
@@ -276,6 +341,22 @@ const OrderRow = props => {
                                     />
                                 </span>
                             </>
+                        )}
+                        {preorderItem && (
+                        <button
+                            type="button"
+                            onClick={handleCompletePreorder}
+                            disabled={completingPreorder}
+                            aria-busy={completingPreorder}
+                            aria-disabled={completingPreorder}
+                            className={`bg-blue-700 rounded-full px-[30px] py-[8px] text-[13px] font-medium text-white transition-all duration-300 ease-in-out ${completingPreorder ? 'opacity-60 cursor-not-allowed pointer-events-none bg-gray-200 text-white' : ''}`}
+                        >
+                            {completingPreorder ? (
+                                <FormattedMessage id={'orderRow.completingPreorder'} defaultMessage={'Complete Loading...'} />
+                            ) : (
+                                <FormattedMessage id={'orderRow.completePreorder'} defaultMessage={'Complete Preorder'} />
+                            )}
+                        </button>
                         )}
                         <Link 
                             to={{

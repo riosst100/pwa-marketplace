@@ -76,8 +76,6 @@ const ReviewModal = (props) => {
         // if (onSubmit) {
         //     onSubmit({ ...formState, ratings });
         // }
-        console.log('formState',formState)
-        console.log('e',e)
         setSubmitting(true);
         const input = {
             nickname: formState.nickname,
@@ -119,24 +117,18 @@ const ReviewModal = (props) => {
         return { url, label };
     };
 
-    console.log('ratings',ratings)
-
     const ratingStars = useMemo(() => {
-        console.log('ratingsMetadata22',ratingsMetadata)
         if (!ratingsMetadata) {
             return '';
         }
 
         // Find value (1-5) for selected value_id
         const selectedValue = ratings && ratingsMetadata.values.find(v => v.value_id === ratings) || '';
-        console.log('selectedValue',selectedValue)
 
         let starButtons = [];
 
         [1,2,3,4,5].map(star => {
             const valObj = ratingsMetadata.values.find(v => v.value === String(star));
-            console.log('String(star)',String(star))
-            console.log('valObj',valObj)
             if (valObj) {
                 starButtons.push(
                     <button
