@@ -20,6 +20,9 @@ const CustomerOrdersFragment = gql`
             }
             items {
                 id
+                is_preorder
+                pre_order_deposit
+                pre_order_payment_type
                 product_image_url
                 product_name
                 product_sale_price {
@@ -112,6 +115,17 @@ export const GET_CUSTOMER_ORDERS = gql`
     ${CustomerOrdersFragment}
 `;
 
+export const COMPLETE_PREORDER = gql`
+    mutation CompletePreorder($input: CompletePreorderInput!) {
+        completePreorder(input: $input) {
+            cart_id
+            message
+            success
+        }
+    }
+`;
+
 export default {
-    getCustomerOrdersQuery: GET_CUSTOMER_ORDERS
+    getCustomerOrdersQuery: GET_CUSTOMER_ORDERS,
+    completePreorderMutation: COMPLETE_PREORDER
 };
