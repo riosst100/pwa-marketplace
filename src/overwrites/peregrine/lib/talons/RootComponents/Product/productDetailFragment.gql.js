@@ -17,6 +17,10 @@ export const ProductDetailsFragment = gql`
             city
             country
         }
+        related_products {
+            uid
+            name
+        }
         description {
             html
         }
@@ -76,38 +80,6 @@ export const ProductDetailsFragment = gql`
         }
         publish_status
         sku
-        auction_data {
-            is_auction
-            status
-            customer_id
-            starting_price
-            reserve_price
-            days
-            min_qty
-            max_qty
-            start_auction_time
-            stop_auction_time
-            auction_status
-            increment_opt
-            increment_price
-            auto_auction_opt
-            featured_auction
-            buy_it_now
-            max_amount
-            min_amount
-            current_time_stamp
-            continue_time
-            limit_bids
-            time_zone
-            stop_auction_utc_time
-            start_auction_utc_time
-            today_time
-            start_auction_time_stamp
-            stop_auction_time_stamp
-            new_auction_start
-            customer_name
-            max_bids
-        }
         preorder {
             is_preorder
             pre_order_payment_type
