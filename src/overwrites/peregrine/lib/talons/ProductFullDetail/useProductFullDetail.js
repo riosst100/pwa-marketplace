@@ -720,6 +720,7 @@ export const useProductFullDetail = props => {
         sku: productSku,
         publish_status: product.publish_status,
         custom_table_metadata: product.custom_table_metadata,
+        related_products: product.related_products,
         term_and_conditions: product.term_and_conditions,
         link_to_other_stores: product.link_to_other_stores,
         shipping_policy: product.shipping_policy,
