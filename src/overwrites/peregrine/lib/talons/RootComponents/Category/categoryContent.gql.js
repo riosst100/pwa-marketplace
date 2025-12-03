@@ -43,6 +43,7 @@ export const GET_CATEGORY_CONTENT = gql`
                 allowed_filters {
                     code
                 }
+                prefixes
                 custom_subcategory {
                     name
                     path

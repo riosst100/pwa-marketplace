@@ -22,7 +22,6 @@ const CustomAttributes = props => {
     const list = useMemo(
         () =>
             customAttributes.reduce((previousAttribute, currentAttribute) => {
-                console.log('currentAttribute',currentAttribute)
                 const attrCode = currentAttribute.attribute_metadata?.code;
                 const usedInComponents =
                     currentAttribute.attribute_metadata?.used_in_components ||

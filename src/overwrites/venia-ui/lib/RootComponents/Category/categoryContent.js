@@ -165,7 +165,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} />
+        <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} prefixes={category ? category.prefixes : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;

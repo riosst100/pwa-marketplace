@@ -141,9 +141,9 @@ export const useCategoryContent = props => {
             // Construct the filter arg object.
             const newFilters = {};
             filters.forEach((values, key) => {
-                if (masterAttributes.includes(key)) {
+                // if (masterAttributes.includes(key)) {
                     newFilters[key] = getFilterInput(values, filterTypeMap.get(key));
-                }
+                // }
             });
 
             // console.log('newFilters',newFilters)

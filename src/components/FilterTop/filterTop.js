@@ -95,13 +95,6 @@ const FilterTop = props => {
         [handleApply, filterRef]
     );
 
-    // const allowedFiltersArr = [];
-
-    // allowedFilters.length && allowedFilters.map((val, index) => {
-    //     allowedFiltersArr.push(val.code);
-    // });
-    // const allowedFiltersArr = ['card_rarity','card_print_version','card_set', 'card_product_type'];
-
     const filtersList = useMemo(
         () =>
             Array.from(filterItems, ([group, items], iteration) => {

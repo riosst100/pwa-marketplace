@@ -19,6 +19,7 @@ import RichContent from '@magento/venia-ui/lib/components/RichContent/richConten
 import QuantityStepper from '../QuantityStepper';
 import { ProductOptionsShimmer } from '@magento/venia-ui/lib/components/ProductOptions';
 import CustomAttributes from './CustomAttributes';
+import ProductCardDetails from './ProductCardDetails';
 import defaultClasses from './productFullDetail.module.css';
 import cn from 'classnames';
 import Tabs from '@riosst100/pwa-marketplace/src/components/commons/Tabs';
@@ -102,6 +103,7 @@ const ProductFullDetail = props => {
         selectedMedia,
         productDetails,
         customAttributes,
+        productDetailsAttributes,
         wishlistButtonProps,
         sellerDetails,
         handleToastAction,
@@ -231,6 +233,28 @@ const ProductFullDetail = props => {
         };
     }, [customAttributes, productDetails.sku, formatMessage]);
 
+    const productCardDetailsAttributes = useMemo(() => {
+        const list = [];
+        const pagebuilder = [];
+        if (Array.isArray(productDetailsAttributes)) {
+            productDetailsAttributes.forEach(customAttribute => {
+                if (
+                    customAttribute.attribute_metadata.ui_input
+                        .ui_input_type === 'PAGEBUILDER'
+                ) {
+                    pagebuilder.push(customAttribute);
+                } else {
+                    list.push(customAttribute);
+                }
+            });
+        }
+        // list.unshift(skuAttribute);
+        return {
+            list: list,
+            pagebuilder: pagebuilder
+        };
+    }, [productDetailsAttributes, productDetails.sku, formatMessage]);
+
     const shortDescription = productDetails.shortDescription ? (
         <RichText
             rootClassName="px-0"
@@ -356,19 +380,19 @@ const ProductFullDetail = props => {
         return attr.entered_attribute_value?.value || "";
     };
 
-    const preOrder = getAttributeValue(customAttributesDetails, "card_pre_orders", true);
-    const preOrderDate = getAttributeValue(customAttributesDetails, "pre_order_date", true);
-    const preOrderDeposite = getAttributeValue(customAttributesDetails, "pre_order_deposit", true);
-    const preOrderNote = getAttributeValue(customAttributesDetails, "pre_order_notes", true);
-    const preOrderPaymentType = getAttributeValue(customAttributesDetails, "pre_order_payment_type", true);
-    const releaseDate = getAttributeValue(customAttributesDetails, "release_date", true);
-    const setNameValue = getAttributeValue(customAttributesDetails, "card_set", true);
-    const cardNameValue = getAttributeValue(customAttributesDetails, "card_name", true);
-    const cardNumberValue = getAttributeValue(customAttributesDetails, "card_number", true);
-    const rarityValue = getAttributeValue(customAttributesDetails, "card_rarity", true);
-    const featureValue = getAttributeValue(customAttributesDetails, "card_feature", true);
-    const conditionValue = getAttributeValue(customAttributesDetails, "card_condition", true);
-    const foilValue = getAttributeValue(customAttributesDetails, "card_foil", true);
+    const preOrder = getAttributeValue(productCardDetailsAttributes, "card_pre_orders", true);
+    const preOrderDate = getAttributeValue(productCardDetailsAttributes, "pre_order_date", true);
+    const preOrderDeposite = getAttributeValue(productCardDetailsAttributes, "pre_order_deposit", true);
+    const preOrderNote = getAttributeValue(productCardDetailsAttributes, "pre_order_notes", true);
+    const preOrderPaymentType = getAttributeValue(productCardDetailsAttributes, "pre_order_payment_type", true);
+    const releaseDate = getAttributeValue(productCardDetailsAttributes, "release_date", true);
+    const setNameValue = getAttributeValue(productCardDetailsAttributes, "card_set", true);
+    const cardNameValue = getAttributeValue(productCardDetailsAttributes, "card_name", true);
+    const cardNumberValue = getAttributeValue(productCardDetailsAttributes, "card_number", true);
+    const rarityValue = getAttributeValue(productCardDetailsAttributes, "card_rarity", true);
+    const featureValue = getAttributeValue(productCardDetailsAttributes, "card_feature", true);
+    const conditionValue = getAttributeValue(productCardDetailsAttributes, "card_condition", true);
+    const foilValue = getAttributeValue(productCardDetailsAttributes, "card_foil", true);
 
     const isPreOrderProduct = typeof preOrder === 'string'
         ? preOrder.trim().toLowerCase() === 'pre orders'
@@ -729,7 +753,7 @@ const ProductFullDetail = props => {
                         <section className='right_left-container w-full'>
                             <ExpandableSection>
                                 <div className="text-sm leading-6 leading-[2.5rem]">
-                                    {setNameValue && (
+                                    {/* {setNameValue && (
                                         <p><strong>Set Name:</strong> {setNameValue}</p>
                                     )}
                                     {cardNameValue && (
@@ -749,7 +773,12 @@ const ProductFullDetail = props => {
                                     )}
                                     {foilValue && (
                                         <p><strong>Foil/Non Foil:</strong> {foilValue}</p>
-                                    )}
+                                    )} */}
+                                    {/* <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}> */}
+                                        <ProductCardDetails
+                                            customAttributes={productCardDetailsAttributes.list}
+                                        />
+                                    {/* </div> */}
                                 </div>
                             </ExpandableSection>
                         </section>
