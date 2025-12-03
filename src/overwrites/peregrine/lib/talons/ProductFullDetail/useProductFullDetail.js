@@ -302,12 +302,36 @@ const getCustomAttributes = (product, optionCodes, optionSelections) => {
         });
 
         return item && item.product
-            ? [...item.product.custom_attributes].sort(attributeLabelCompare)
+            ? [...item.product.custom_attributes]
             : [];
     }
 
     return custom_attributes
-        ? [...custom_attributes].sort(attributeLabelCompare)
+        ? [...custom_attributes]
+        : [];
+};
+
+const getProductDetailsAttributes = (product, optionCodes, optionSelections) => {
+    const { product_details, variants } = product;
+    const isConfigurable = isProductConfigurable(product);
+    const optionsSelected =
+        Array.from(optionSelections.values()).filter(value => !!value).length >
+        0;
+
+    if (isConfigurable && optionsSelected) {
+        const item = findMatchingVariant({
+            optionCodes,
+            optionSelections,
+            variants
+        });
+
+        return item && item.product
+            ? [...item.product.product_details]
+            : [];
+    }
+
+    return product_details
+        ? [...product_details]
         : [];
 };
 
@@ -526,6 +550,11 @@ export const useProductFullDetail = props => {
 
     const customAttributes = useMemo(
         () => getCustomAttributes(product, optionCodes, optionSelections),
+        [product, optionCodes, optionSelections]
+    );
+
+    const productDetailsAttributes = useMemo(
+        () => getProductDetailsAttributes(product, optionCodes, optionSelections),
         [product, optionCodes, optionSelections]
     );
 
@@ -817,6 +846,7 @@ export const useProductFullDetail = props => {
             !!storeConfigData.storeConfig.magento_wishlist_general_is_enabled,
         productDetails,
         customAttributes,
+        productDetailsAttributes,
         wishlistButtonProps,
         wishlistItemOptions,
         sellerDetails,
