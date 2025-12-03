@@ -339,7 +339,6 @@ const ShowMore = props => {
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
             {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
-            {/* <ShopByFilters handleActiveFilter={handleActiveFilter} activeFilter={activeFilter} category={category} /> */}
             {availableFilterOption.length ? 
                 <ul className={classes.nav}>
                     {availableFilterOption.map((filter, index) => (

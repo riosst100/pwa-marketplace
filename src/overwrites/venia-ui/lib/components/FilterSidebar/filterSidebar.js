@@ -21,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen, allowedFilters, hideFilters } = props;
+    const { filters, filterCountToOpen, allowedFilters, prefixes, hideFilters } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -116,7 +116,15 @@ const FilterSidebar = props => {
     // // console.log([...sorted.entries()]);
     // const filterItems = [...sorted.entries()];
 
-    // console.log('filterItems',filterItems)
+    const removePrefix = (attrCode) => {
+        if (prefixes) {
+            return prefixes.reduce((s, p) => 
+            s.startsWith(p + "_") ? s.replace(p + "_", "") : s
+            , attrCode);
+        }
+
+        return attrCode;
+    };
 
     const filtersList = useMemo(
         () =>
@@ -124,10 +132,10 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-
-                const hideFilters = ['card_game','bricks_categories','sc_sports_categories','trains','trains_locomotives','trains_supplies_type','lof_preorder','card_pre_orders','auction','special_price','sc_baseball_inserts','sc_baseball_parallel','sale','sc_set_type','sc_brands'];
-                if (!allowedFiltersArr?.length || filterState.size && allowedFiltersArr.length || !filterState.size && allowedFiltersArr.length && allowedFiltersArr.includes(group)) {
-                    if (!hideFilters.includes(group) && groupName && !group.includes('card_release') && !group.includes('card_set') && !group.includes('sc_set_name')) {
+                
+                if (!allowedFiltersArr.length || allowedFiltersArr.length && allowedFiltersArr.includes(removePrefix(group))) {
+                    console.log('removePrefix(group)',removePrefix(group))
+                    // if (!hideFilters.includes(group) && groupName && !group.includes('card_release') && !group.includes('card_set') && !group.includes('sc_set_name')) {
                     
                     // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
                         let subFilter = null;
@@ -177,7 +185,7 @@ const FilterSidebar = props => {
                                 initialOpen={true}
                             />
                         );
-                    }
+                    // }
                 }
             }),
         [
@@ -254,6 +262,7 @@ FilterSidebar.propTypes = {
         root: string,
         root_open: string
     }),
+    prefixes: [],
     filters: arrayOf(
         shape({
             attribute_code: string,
