@@ -5,6 +5,7 @@ import useFieldState from '@magento/peregrine/lib/hooks/hook-wrappers/useInforme
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import defaultClasses from './filterTopItemGroup.module.css';
 import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTop/CurrentTopFilters/currentTopFilter';
+import { useLocation } from 'react-router-dom';
 
 const FilterTopItemGroup = props => {
     const { customFiltersData, setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
@@ -14,6 +15,9 @@ const FilterTopItemGroup = props => {
     const currentGroup = group;
     const { removeItem } = filterApi;
     const activeFilters = [];
+
+    const location = useLocation();
+    const { pathname } = location
 
     // Current Filters
     const filterElements = useMemo(() => {
@@ -41,11 +45,19 @@ const FilterTopItemGroup = props => {
     }, [originalFilterState, removeItem, onApply]);
 
     const radioItems = useMemo(() => {
+        let selected = items.find(item => pathname.includes(item.value));
+        if (!selected) {
+            selected = items[0];
+        }
+
+        const selectedOption = selected ? selected.value : null;
+
         return items.map(item => {
             const code = `item-${group}-${item.value}`;
             return (
                 <FilterTopItem
                     key={code}
+                    selectedOption={selectedOption}
                     setFilterBy={setFilterBy}
                     filterBy={filterBy}
                     filterApi={filterApi}
@@ -59,7 +71,7 @@ const FilterTopItemGroup = props => {
                 />
             );
         });
-    }, [filterApi, filterState, group, items, labels, onApply]);
+    }, [pathname, filterApi, filterState, group, items, labels, onApply]);
 
     const fieldValue = useMemo(() => {
         if (filterState) {
@@ -87,7 +99,9 @@ const FilterTopItemGroup = props => {
                     
 
     const customFilterData = useMemo(() => {
-        const filtered = customFiltersData.filters.filter(item => item.attribute_code === group);
+        const filterNull = customFiltersData.filters.filter(item => item !== null);
+        // console.log('customFiltersData',customFiltersData)
+        const filtered = filterNull.filter(item => item.attribute_code === group);
         // console.log('filtered ' + group,filtered);
         if (filtered) {
             // console.log('filtered ' + group,filtered);
