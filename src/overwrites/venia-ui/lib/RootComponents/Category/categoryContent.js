@@ -314,7 +314,7 @@ const CategoryContent = props => {
                     <>
                         {/* {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />} */}
                         {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
-                        {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''}
+                        {/* {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''} */}
                     </>
                 {/* ) : ( */}
                     <>

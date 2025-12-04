@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_CUSTOM_FILTERS = gql`
-    query GetCustomFilters($search: String, $filterBy: String, $shopby: String, $category: String, $filters: ProductAttributeFilterInput) {
-        customSubFilters(search: $search, filterBy: $filterBy, shopby: $shopby, category: $category, filters: $filters) {
+    query GetCustomFilters($search: String, $filterBy: String, $shopby: String, $categoryId: String, $category: String, $filters: ProductAttributeFilterInput) {
+        customSubFilters(search: $search, filterBy: $filterBy, shopby: $shopby, categoryId: $categoryId, category: $category, filters: $filters) {
             filter_id
             filters {
                 label

@@ -4,7 +4,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import { Link } from 'react-router-dom';
 
 const FilterTopItem = props => {
-    const { setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
+    const { selectedOption, setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
     const { removeGroup, toggleItem, clear } = filterApi;
     const { title, value } = item;
 
@@ -76,6 +76,7 @@ const FilterTopItem = props => {
 
     // console.log('--filterSearch--')
     // console.log(filterSearch)
+    // console.log('pathname',pathname)
 
     const element = group == "filterby" ? (
         filterBy == value ? (
@@ -84,7 +85,7 @@ const FilterTopItem = props => {
             <span className={classes.item} onClick={() => setFilterBy(value)}>{title}</span>
         )
     ) : group == "category" ? (
-        <Link className={classes.item} to={'/'+value}>{title}</Link>
+        selectedOption == value ? <span className={classes.item}><b>{title}</b></span> : <Link className={classes.item} to={'/'+value}>{title}</Link>
     ) : value == "shopby_all" ? (
         <Link className={classes.item} to={search ? filterSearch + '&show_more=' + group : '?show_more=' + group}>{title}</Link>
     ) : group == "shopby" || group == "shopby_with_all" ? (

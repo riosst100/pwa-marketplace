@@ -78,6 +78,7 @@ export const useFilterTop = props => {
             variables: {
                 filters: newFilters,
                 category: category?.url_path,
+                categoryId: category?.uid,
                 shopby: shopby,
                 filterBy: filterBy,
                 search: search
@@ -183,27 +184,36 @@ export const useFilterTop = props => {
         const frontendInput = new Map();
         const itemsByGroup = new Map();
         const customFiltersMap = [];
+
+        // console.log('customFiltersData',customFiltersData)
         
         if (customFiltersData && customFiltersData.filters) {
-            customFiltersData.filters.map(({ attribute_code, options }, index) => {
+            customFiltersData.filters.map((data, index) => {
 
-                customFiltersMap.push(attribute_code)
-                
+                if (data) {
+                    // console.log(data)
+                    const { attribute_code, options } = data;
 
-                const items = [];
+                    // console.log(attribute_code)
 
-                names.set(attribute_code, '');
-                frontendInput.set(attribute_code, null);
+                    customFiltersMap.push(attribute_code)
+                    
 
-                // add filter key permutations
-                keys.add(`${attribute_code}[filter]`);
+                    const items = [];
 
-                // add items
-                for (const { label, value, path } of options) {
-                    items.push({ title: stripHtml(label), value, path });
+                    names.set(attribute_code, '');
+                    frontendInput.set(attribute_code, null);
+
+                    // add filter key permutations
+                    keys.add(`${attribute_code}[filter]`);
+
+                    // add items
+                    for (const { label, value, path } of options) {
+                        items.push({ title: stripHtml(label), value, path });
+                    }
+
+                    itemsByGroup.set(attribute_code, items);
                 }
-
-                itemsByGroup.set(attribute_code, items);
             })
         }
 
