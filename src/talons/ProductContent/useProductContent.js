@@ -87,7 +87,8 @@ export const useProductContent = props => {
                 variables: {
                     categoryIdFilter: {
                         eq: categoryId
-                    }
+                    },
+                    category_uid: categoryId
                 }
             });
         }

@@ -3,8 +3,12 @@ import { gql } from '@apollo/client';
 export const GET_PRODUCT_FILTERS_BY_CATEGORY = gql`
     query getProductFiltersByCategory(
         $categoryIdFilter: FilterEqualTypeInput!
+        $category_uid: String
     ) {
-        products(filter: { category_uid: $categoryIdFilter }) {
+        products(
+            filter: { category_uid: $categoryIdFilter }
+            category_uid: $category_uid
+        ) {
             aggregations {
                 label
                 count
