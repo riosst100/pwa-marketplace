@@ -63,8 +63,9 @@ export const GET_FILTER_INPUTS = gql`
 export const GET_PRODUCT_FILTERS_BY_CATEGORY = gql`
     query getProductMainFiltersByCategory(
         $filters: ProductAttributeFilterInput!
+        $category_uid: String
     ) {
-        products(filter: $filters) {
+        products(filter: $filters category_uid: $category_uid) {
             aggregations {
                 label
                 count
