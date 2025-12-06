@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
 
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
-import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
+import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import { Link } from 'react-router-dom';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import defaultClasses from '@riosst100/pwa-marketplace/src/components/ShopBy/shopBy.module.css';
@@ -18,10 +18,6 @@ import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySea
 import { useCustomSort } from '@riosst100/pwa-marketplace/src/hooks/useCustomSort';
 import { useShowMore } from '@riosst100/pwa-marketplace/src/talons/ShowMore/useShowMore';
 
-const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
-const FilterSidebar = React.lazy(() =>
-    import('@magento/venia-ui/lib/components/FilterSidebar')
-);
 const FilterTop = React.lazy(() =>
     import('@riosst100/pwa-marketplace/src/components/FilterTop')
 );
@@ -30,33 +26,7 @@ const ShowMore = props => {
     const {
         categoryId,
         shopby
-    //     data,
-    //     isLoading,
-    //     pageControl,
-    //     sortProps,
-    //     pageSize
     } = props || {};
-    // const [currentSort] = sortProps;
-
-    // const talonProps = useCategoryContent({
-    //     categoryId,
-    //     data,
-    //     pageSize
-    // });
-
-    // const {
-    //     availableSortMethods,
-    //     categoryName,
-    //     categoryDescription,
-    //     filters,
-    //     items,
-    //     children,
-    //     parent,
-    //     totalCount,
-    //     totalPagesFromData,
-    //     attributesBlock,
-    //     category,
-    // } = talonProps;
     
     const [active, setActive] = useState('all')
     const [activeTab, setActiveTab] = useState('all');
@@ -71,11 +41,6 @@ const ShowMore = props => {
     }});
 
     const [currentSort] = sortProps;
-
-    // const [sortBy, setSortBy] = useState({
-    //     sortText: 'All (A-Z)',
-    //     value: 'all'
-    // });
 
 
     const classes = useStyle(defaultClasses);
@@ -188,13 +153,6 @@ const ShowMore = props => {
         setSearchQuery('')
     }
 
-    // let availableSortBy = [
-    //     {
-    //         'label': 'All (A-Z)',
-    //         'value': 'all'
-    //     }
-    // ];
-
     let availableSortBy = [
         {
             'label': 'All (A-Z)',
@@ -202,7 +160,6 @@ const ShowMore = props => {
         }
     ];
     
-    // const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
     const title = pageInfo ? pageInfo.label : '';
 
     let availableFilterOption = [];
@@ -318,9 +275,6 @@ const ShowMore = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
-                if (label == "Singles") {
-                    isSingles = true;
-                }
                 if (key == "bricks_categories" || key == "sc_sports_categories" || key == "card_game" || key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands") {
                     activeFilters.push(
                         {
@@ -338,7 +292,7 @@ const ShowMore = props => {
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
-            {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
+            {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} />}
             {availableFilterOption.length ? 
                 <ul className={classes.nav}>
                     {availableFilterOption.map((filter, index) => (

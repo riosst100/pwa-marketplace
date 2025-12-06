@@ -38,7 +38,7 @@ const MegaMenuItem = props => {
 
     const classes = useStyle(defaultClasses, props.classes);
     const categoryUrl = resourceUrl(
-        `/${category.url_path}${categoryUrlSuffix || ''}`
+        `/${category.children.length ? category.children[0].url_path : category.url_path}${categoryUrlSuffix || ''}`
     );
 
     const talonProps = useMegaMenuItem({
@@ -130,7 +130,11 @@ const MegaMenuItem = props => {
                 )}
                 data-cy="MegaMenu-MegaMenuItem-link"
                 to={categoryUrl}
-                onClick={onNavigate}
+                onClick={e => {
+                    handleClickOutside(e);
+                    handleCloseSubMenu();
+                    onNavigate();
+                }}
             >
                 {category.name}
                 {/* {maybeDownArrowIcon} */}

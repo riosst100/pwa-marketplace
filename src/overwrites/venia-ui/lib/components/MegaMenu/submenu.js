@@ -85,27 +85,6 @@ const Submenu = props => {
         );
     });
 
-    // const shopByItems2 = [
-    //     {
-    //         name: 'Shop By Franchise',
-    //         items: [
-    //             {
-    //                 name: 'Hasbro',
-    //                 url: '/'
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         name: 'Shop By Franchise',
-    //         items: [
-    //             {
-    //                 name: 'Hasbro',
-    //                 url: '/'
-    //             }
-    //         ]
-    //     }
-    // ];
-
     const shopBy = shopByItems.map((shopBy, index) => {
         const keyboardProps =
             index === shopByItems.length - 1 ? talonProps.keyboardProps : {};

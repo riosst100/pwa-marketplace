@@ -1,8 +1,7 @@
-import React, { useEffect, Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
-import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
 import { useCategoryContent } from '@magento/peregrine/lib/talons/RootComponents/Category';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -24,15 +23,8 @@ import defaultClasses from './category.module.css';
 import NoProductsFound from './NoProductsFound';
 import cn from 'classnames';
 import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
-import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
-import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
-
-import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
-import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
-import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
-import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -73,38 +65,12 @@ const CategoryContent = props => {
         parent,
         totalCount,
         totalPagesFromData,
-        attributesBlock,
         category,
         virtualCategoryFilters
     } = talonProps;
 
-    useEffect(() => {
-        if (category) {
-            const urlKey = category.url_key;
-            if (urlKey == "collectible-game") {
-                // history.replace('/games/collectible-game/magic-the-gathering.html')
-            }
-
-            if (urlKey == "sport-cards") {
-                // history.replace('/cards/sport-cards/baseball.html')
-            }
-
-            if (urlKey == "non-sports-cards") {
-                // history.replace('/cards/non-sports-cards/comics.html')
-            }
-
-            if (urlKey == "lego") {
-                // history.replace('/lego/lego-sets.html')
-            }
-        }
-    }, [category]);
-
     const [activeLetter, setActiveLetter] = useState('all')
     const [activeTab, setActiveTab] = useState('all');
-
-    const handleActiveLetter = (val) => {
-        setActiveLetter(val);
-    }
 
     const galleryItems = [];
 
@@ -142,9 +108,6 @@ const CategoryContent = props => {
 
     const sidebarRef = useRef(null);
     const classes = useStyle(defaultClasses, props.classes);
-    // const shouldRenderSidebarContent = useIsInViewport({
-    //     elementRef: sidebarRef
-    // });
     const shouldRenderSidebarContent = true;
 
     const shouldShowFilterButtons = filters && filters.length;
@@ -165,7 +128,7 @@ const CategoryContent = props => {
     ) : null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar hideFilters={category && category.hide_filters ? true : false} children={children} filters={filters} allowedFilters={category ? category.allowed_filters : []} prefixes={category ? category.prefixes : []} />
+        <FilterSidebar children={children} filters={filters} prefixes={category ? category.prefixes : []} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -310,15 +273,8 @@ const CategoryContent = props => {
                     </h1>
                     {categoryDescriptionElement}
                 </div>
-                {/* {activeFilters.size <= 0 && category && category.custom_landing_page ? ( */}
                     <>
-                        {/* {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />} */}
-                        {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
-                        {/* {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''} */}
-                    </>
-                {/* ) : ( */}
-                    <>
-                        <FilterTop shopby={shopby} filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
+                        <FilterTop shopby={shopby} filters={filters} category={category} children={children} />
                         <div className={classes.contentWrapper}>
                             <div ref={sidebarRef} className={classes.sidebar}>
                                 <Suspense fallback={<FilterSidebarShimmer />}>
@@ -366,9 +322,6 @@ CategoryContent.propTypes = {
         categoryInfo: string,
         headerButtons: string
     }),
-    // sortProps contains the following structure:
-    // [{sortDirection: string, sortAttribute: string, sortText: string},
-    // React.Dispatch<React.SetStateAction<{sortDirection: string, sortAttribute: string, sortText: string}]
     sortProps: array,
     pageSize: number
 };

@@ -42,12 +42,6 @@ const Breadcrumbs = props => {
     // For all links generate a fragment like "/ Text"
     const links = useMemo(() => {
         return normalizedData.map(({ text, path }, index) => {
-            if (text == "dCollectible Card Games") {
-                return '';
-            }
-
-            console.log('index', index);
-
             return (
                 <Fragment key={index}>
                     <span className={classes.divider}>{DELIMITER}</span>
@@ -56,7 +50,7 @@ const Breadcrumbs = props => {
                         to={resourceUrl(path)}
                         onClick={handleClick}
                     >
-                        {text}
+                       {text}
                     </Link>
                 </Fragment>
             );

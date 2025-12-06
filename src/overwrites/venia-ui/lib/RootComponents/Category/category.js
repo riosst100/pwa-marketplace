@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { shape, string } from 'prop-types';
 import { useCategory } from '@magento/peregrine/lib/talons/RootComponents/Category';
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -41,9 +41,9 @@ const Category = props => {
 
     const query = new URLSearchParams(location.search);
     const shopby = query.get('shopby') || null;
-    const show_more = query.get('show_more') || null;
-    const filterby = query.get('filterby') || null;
-    const showSubcategory = query.get('show_subcategory') || null;
+    const showMoreGamesOrCategories = query.get('show_more') || null;
+
+    const sidebarFilterShowMore = query.get('filterby') || null;
 
     const talonProps = useCategory({
         id: uid,
@@ -84,72 +84,128 @@ const Category = props => {
             />
         );
     }
+    
+    const categoryContent = useMemo(() => {
+        if (sidebarFilterShowMore) {
+            return (
+                <FilterContent
+                    categoryId={uid}
+                    classes={classes}
+                    data={categoryData}
+                    filterby={sidebarFilterShowMore}
+                    isLoading={loading}
+                    pageControl={pageControl}
+                    sortProps={sortProps}
+                    pageSize={pageSize} 
+                />
+            );
+        }
 
-    const allowedShopby = ['card_artist'];
+        if (showMoreGamesOrCategories) {
+            return (
+                <ShowMore
+                    categoryId={uid}
+                    shopby={showMoreGamesOrCategories}
+                    isLoading={loading}
+                />
+            );
+        }
+        
+        if (
+            shopby == "release_year" 
+            || shopby == "secret_lair" 
+            || shopby == "expansion_sets" 
+            || shopby == "sets" 
+            || shopby == "release"
+        ) {
+            return (
+                <SetsData
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} 
+                />
+
+            );
+        }
+
+        if (
+            shopby == "singles" 
+            || shopby == "lego_set_name" 
+            && parentCategoryUrlKey == "lego"
+        ) {
+            return (
+                <LegoSets
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} 
+                />
+            );
+        }
+
+        if (shopby && parentCategoryUrlKey == "non-sports-cards") {
+            return (
+                <NonSportCardsSets
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} 
+                />
+            );
+        }
+
+        if (
+            shopby == "sc_baseball_players" 
+            || shopby == "sc_baseball_teams" 
+            || shopby == "release" 
+            && parentCategoryUrlKey == "sport-cards"
+        ) {
+            return (
+                <SportCardsSets
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading} 
+                />
+            );
+        }
+
+        if (shopby) {
+            return (
+                <ShopBy
+                    categoryId={uid}
+                    shopby={shopby}
+                    isLoading={loading}
+                />
+            );
+        }
+        return (
+            <CategoryContent
+                categoryId={uid}
+                classes={classes}
+                data={categoryData}
+                shopby={shopby}
+                isLoading={loading}
+                pageControl={pageControl}
+                sortProps={sortProps}
+                pageSize={pageSize}
+            />
+        );
+    }, [
+        uid,
+        classes,
+        categoryData,
+        shopby,
+        loading,
+        pageControl,
+        sortProps,
+        pageSize,
+        sidebarFilterShowMore,
+        showMoreGamesOrCategories,
+        parentCategoryUrlKey
+    ]);
 
     return (
         <Fragment>
             <Meta name="description" content={metaDescription} />
-            {showSubcategory ? (
-                <SubCategoryPage
-                categoryId={uid}
-                isLoading={loading} />
-            ) : (
-                filterby ? (
-                    <FilterContent
-                        categoryId={uid}
-                        classes={classes}
-                        data={categoryData}
-                        filterby={filterby}
-                        isLoading={loading}
-                        pageControl={pageControl}
-                        sortProps={sortProps}
-                        pageSize={pageSize} 
-                    />
-                ) : allowedShopby.includes(shopby) ? <ShopBy
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby == "release_year" || shopby == "secret_lair" || shopby == "expansion_sets" || shopby == "sets" || shopby == "release" ? <SetsData
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby == "singles" || shopby == "lego_set_name" && parentCategoryUrlKey == "lego" ? <LegoSets
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby && parentCategoryUrlKey == "non-sports-cards" ? <NonSportCardsSets
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby == "sc_baseball_players" || shopby == "sc_baseball_teams" || shopby == "release" && parentCategoryUrlKey == "sport-cards" ? <SportCardsSets
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby == "release_year" ? <ShopBySets
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : shopby == "card" ? <ShopByCard
-                categoryId={uid}
-                shopby={shopby}
-                isLoading={loading} /> : (show_more ? (
-                    <ShowMore
-                    categoryId={uid}
-                    shopby={show_more}
-                    isLoading={loading} />
-                ) : shopby && shopby != "gauge" ? (
-                    <ShopBy
-                    categoryId={uid}
-                    shopby={shopby}
-                    isLoading={loading} />
-                ) : (
-                    <CategoryContent
-                    categoryId={uid}
-                    classes={classes}
-                    data={categoryData}
-                    shopby={shopby}
-                    isLoading={loading}
-                    pageControl={pageControl}
-                    sortProps={sortProps}
-                    pageSize={pageSize}
-                    />
-                ))
-            )}
+            {categoryContent}
         </Fragment>
     );
 };

@@ -25,7 +25,6 @@ import Gallery, { GalleryShimmer } from '@magento/venia-ui/lib/components/Galler
 import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
 import SellerMegaMenu from '@riosst100/pwa-marketplace/src/components/SellerMegaMenu';
 import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
-import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
 import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
@@ -86,7 +85,7 @@ const ProductContent = props => {
     const shouldShowFilterShimmer = filters === null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar hideFilters={false} children={[]} filters={filters} allowedFilters={[]} />
+        <FilterSidebar children={[]} filters={filters} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -269,11 +268,10 @@ const ProductContent = props => {
                 </div>
                 <>
                     {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
-                    {!currentFilter && <CustomSubCategory categoryName={category ? category.name : null} customSubCategory={category ? category.custom_subcategory : null} />}
                     {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''}
                     
                 </>
-                <FilterTop shopby={shopby} filters={filters} category={category} children={children} allowedFilters={category ? category.allowed_filters : []} />
+                <FilterTop shopby={shopby} filters={filters} category={category} children={children} />
             </div>
             <div className='w-full flex items-start gap-x-[30px]'>
                 <div className={classes.contentWrapper}>
