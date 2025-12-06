@@ -26,7 +26,6 @@ import { SearchNormal } from 'iconsax-react';
 import cn from 'classnames';
 import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
 import { ReviewModal } from './Reviews'
-import { useCartContext } from '@magento/peregrine/lib/context/cart';
 
 const errorIcon = (
     <Icon
@@ -39,7 +38,7 @@ const errorIcon = (
 const searchIcon = <Icon src={SearchIcon} size={24} />;
 
 const OrderHistoryPage = props => {
-    const talonProps = useOrderHistoryPage();  
+    const talonProps = useOrderHistoryPage();
     const {
         errorMessage,
         loadMoreOrders,
@@ -52,7 +51,6 @@ const OrderHistoryPage = props => {
         searchText,
         pageControl
     } = talonProps;
-
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
     const [reviewOrder, setReviewOrder] = useState(null);
@@ -167,6 +165,8 @@ const OrderHistoryPage = props => {
             });
         }
     }, [addToast, errorMessage]);
+
+    console.log('reviewOrder',reviewOrder)
 
     return (
         <OrderHistoryContextProvider>

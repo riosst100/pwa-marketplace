@@ -9,9 +9,6 @@ import DEFAULT_OPERATIONS from './productContent.gql';
 export const useProductContent = props => {
     const { sellerId, categoryId, data, pageSize = 6 } = props;
 
-    // const categoryId = 'MTI=';
-    // alert(categoryId)
-
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
 
     const {
@@ -22,15 +19,11 @@ export const useProductContent = props => {
     } = operations;
 
     const placeholderItems = Array.from({ length: pageSize }).fill(null);
-
-    // console.log(getStoreConfigQuery)
     
     const { data: storeConfigData } = useQuery(getStoreConfigQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first'
     });
-
-    // return '';
 
     const virtualCategoryFilters = useMemo(() => {
         if (storeConfigData) {
@@ -135,18 +128,9 @@ export const useProductContent = props => {
         filters.push(newFilter);
     });
 
-    const attributesBlock = null;
     const parent = null;
-    // const categoryName = null;
     const categoryDescription = null;
-    
-    // const attributesBlock = categoryData && categoryData.categories.items.length
-    // ? categoryData.categories.items[0].attributes_block
-    // : null;
-    // const parent =
-    // categoryData && categoryData.categories.items.length
-    //     ? categoryData.categories.items[0].parent
-    //     : null;
+
     const totalPagesFromData = data
         ? data.page_info.total_pages
         : null;
@@ -156,27 +140,9 @@ export const useProductContent = props => {
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].name
             : null;
-    // const categoryDescription =
-    //     categoryData && categoryData.categories.items.length
-    //         ? categoryData.categories.items[0].description
-    //         : null;
     const availableSortMethods = sortData
         ? sortData.products.sort_fields.options
         : null;
-
-    // useEffect(() => {
-    //     if (!categoryLoading && categoryData.categories.items.length > 0) {
-    //         dispatch({
-    //             type: 'CATEGORY_PAGE_VIEW',
-    //             payload: {
-    //                 id: categoryData.categories.items[0].uid,
-    //                 name: categoryData.categories.items[0].name,
-    //                 url_key: categoryData.categories.items[0].url_key,
-    //                 url_path: categoryData.categories.items[0].url_path
-    //             }
-    //         });
-    //     }
-    // }, [categoryData, dispatch, categoryLoading]);
 
     return {
         availableSortMethods,
@@ -188,7 +154,6 @@ export const useProductContent = props => {
         totalPagesFromData,
         children,
         parent,
-        attributesBlock,
         category,
         virtualCategoryFilters
     };

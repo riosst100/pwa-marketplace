@@ -50,21 +50,6 @@ const SetsData = props => {
     // Sorting
     const sortProps = useCustomSort({ sortFromSearch: false, defaultSort: defaultSort});
     const [currentSort] = sortProps;
-    // const [sortBy, setSortBy] = useState({
-    //     sortText: 'All (A-Z)',
-    //     value: 'all'
-    // });
-
-    // let availableSortBy = [
-    //     {
-    //         'label': 'All (A-Z)',
-    //         'value': 'all'
-    //     },
-    //     {
-    //         'label': 'By Year',
-    //         'value': 'newest'
-    //     }
-    // ];
 
     const classes = useStyle(defaultClasses);
 
@@ -100,14 +85,7 @@ const SetsData = props => {
         return result;
     }
 
-    let allSetsTitle = "Sets";
     let attributeCode = attributeData ? attributeData.attribute_code : '';
-    let byYearTitle = "By Year";
-    // if (shopby == "singles") {
-    //     attributeCode = "lego_set_name";
-    //     // allSetsTitle = "Singles";
-    //     byYearTitle = "By Year";
-    // }
 
     let newfilterSearchArr = search ? search.split('&') : [];
     newfilterSearchArr = newfilterSearchArr.filter(function(data) {
@@ -258,9 +236,6 @@ const SetsData = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
-                if (label == "Singles") {
-                    isSingles = true;
-                }
                 if (key == "bricks_categories" || key == "sc_sports_categories" || key == "card_game" || key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands") {
                     activeFilters.push(
                         {

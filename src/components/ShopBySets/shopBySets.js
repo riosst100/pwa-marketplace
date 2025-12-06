@@ -179,14 +179,14 @@ const ShopBySets = props => {
     } else if (productType == "artist") {
         title = "By Artist";
     } else if (shopby == "release_year") {
-        title = "By Year";
+        title = "Year";
     }
 
 
     return (
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
-            <Breadcrumbs categoryId={categoryId} customPage={shopby == "secret_lair" ? "Secret Lair" : (shopby == "expansion_sets" ? "Expansion Sets" : (shopby == "release_year" ? "By Year" : "All Set3s"))} />
+            <Breadcrumbs categoryId={categoryId} customPage={shopby == "secret_lair" ? "Secret Lair" : (shopby == "expansion_sets" ? "Expansion Sets" : (shopby == "release_year" ? "Year" : "All Set3s"))} />
             {shopby != "release_year" && productType != "secret_lair" && productType != "expansion_sets" && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>}

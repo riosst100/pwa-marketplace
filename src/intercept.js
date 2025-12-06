@@ -89,20 +89,6 @@ module.exports = targets => {
     },
     {
       exact: true,
-      name: "HelpCenter",
-      pattern: "/help-center",
-      path: require.resolve("./components/HelpCenter/index.js"),
-      authed: false,
-    },
-    {
-      exact: true,
-      name: "HelpCenterQuestionDetail",
-      pattern: "/help-center/question/:questionId",
-      path: require.resolve("./components/HelpCenter/questionDetail.js"),
-      authed: false,
-    },
-    {
-      exact: true,
       name: "VerifyEmailPage",
       pattern: "/verify-email",
       path: require.resolve("./components/VerifyEmailPage/index.js"),

@@ -74,7 +74,7 @@ const ProductContent = props => {
     // console.log(filters)
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar hideFilters={false} children={[]} filters={filters} allowedFilters={[]} />
+        <FilterSidebar children={[]} filters={filters} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;

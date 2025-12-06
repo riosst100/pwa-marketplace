@@ -39,23 +39,7 @@ export const GET_CATEGORY_CONTENT = gql`
                     value
                 }
                 url_path
-                hide_filters
-                allowed_filters {
-                    code
-                }
                 prefixes
-                custom_subcategory {
-                    name
-                    path
-                }
-                attributes_block {
-                    label
-                    code
-                    items {
-                      label
-                      value
-                    }
-                }
                 parent {
                     uid
                     name

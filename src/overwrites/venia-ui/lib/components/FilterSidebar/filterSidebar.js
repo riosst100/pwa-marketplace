@@ -21,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen, allowedFilters, prefixes, hideFilters } = props;
+    const { filters, filterCountToOpen, prefixes } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -33,10 +33,6 @@ const FilterSidebar = props => {
         handleApply,
         handleReset
     } = talonProps;
-
-    // console.log(filters)
-    // console.log('filterCountToOpen'+filterCountToOpen)
-    // console.log('hideFilters'+hideFilters)
 
     const filterRef = useRef();
     const classes = useStyle(defaultClasses, props.classes);
@@ -85,37 +81,6 @@ const FilterSidebar = props => {
         [handleApply, filterRef]
     );
 
-    const allowedFiltersArr = [];
-
-    allowedFilters?.length && allowedFilters.map((val, index) => {
-        allowedFiltersArr.push(val.code);
-    });
-
-    // const ordering = ['card_artist','card_product_type', 'card_type'];
-    // const sorted = new Map(
-    //     [...filterItems.entries()].sort((a, b) => {
-    //         const keyA = a[0];
-    //         const keyB = b[0];
-
-    //         const matchA = ordering.findIndex(o => keyA.endsWith(o));
-    //         const matchB = ordering.findIndex(o => keyB.endsWith(o));
-
-    //         const orderA = matchA === -1 ? Infinity : matchA;
-    //         const orderB = matchB === -1 ? Infinity : matchB;
-
-    //         // jika dua-duanya tidak match ordering → sort alphabetis
-    //         if (orderA === Infinity && orderB === Infinity) {
-    //             return keyA.localeCompare(keyB);
-    //         }
-
-    //         // urutkan sesuai ordering
-    //         return orderA - orderB;
-    //     })
-    // );
-
-    // // console.log([...sorted.entries()]);
-    // const filterItems = [...sorted.entries()];
-
     const removePrefix = (attrCode) => {
         if (prefixes) {
             return prefixes.reduce((s, p) => 
@@ -132,61 +97,26 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
-                
-                if (!allowedFiltersArr.length || allowedFiltersArr.length && allowedFiltersArr.includes(removePrefix(group))) {
-                    console.log('removePrefix(group)',removePrefix(group))
-                    // if (!hideFilters.includes(group) && groupName && !group.includes('card_release') && !group.includes('card_set') && !group.includes('sc_set_name')) {
-                    
-                    // if (!allowedFiltersArr?.length && group != "category_uid" || allowedFiltersArr?.length && allowedFiltersArr.includes(group)) {
-                        let subFilter = null;
-                        // if (group.includes('sc_release') || group.includes('card_release')) {
-                        //     let subGroup = '';
-                        //     if (group.includes('card_release')) {
-                        //         subGroup = group.replace('card_release', 'card_set');
-                        //     }
 
-                        //     if (group.includes('sc_release')) {
-                        //         subGroup = group.replace('sc_release', 'sc_set_name');
-                        //     }
+                let subFilter = null;
 
-                        //     const subBlockState = filterState.get(subGroup);
-                        //     const subFrontendInput = filterFrontendInput.get(subGroup);
-                        //     const subFilterItems = filterItems.get(subGroup);
-
-                        //     subFilter = {
-                        //         key: subGroup,
-                        //         filterApi: filterApi,
-                        //         filterState: subBlockState,
-                        //         filterFrontendInput: subFrontendInput,
-                        //         group: subGroup,
-                        //         isSubFilter: true,
-                        //         items: subFilterItems,
-                        //         name: '',
-                        //         onApply: handleApplyFilter,
-                        //         initialOpen: true
-                        //     };
-
-                        // }
-
-                        return (
-                            <FilterBlock
-                                key={group}
-                                filterApi={filterApi}
-                                filterState={blockState}
-                                allowedSubFilters={[]}
-                                filterFrontendInput={frontendInput}
-                                group={group}
-                                subFilterItems={subFilterItems?.subFilters}
-                                filterItems={filterItems}
-                                subFilter={subFilter}
-                                items={items}
-                                name={groupName}
-                                onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
-                                initialOpen={true}
-                            />
-                        );
-                    // }
-                }
+                return (
+                    <FilterBlock
+                        key={group}
+                        filterApi={filterApi}
+                        filterState={blockState}
+                        allowedSubFilters={[]}
+                        filterFrontendInput={frontendInput}
+                        group={group}
+                        subFilterItems={subFilterItems?.subFilters}
+                        filterItems={filterItems}
+                        subFilter={subFilter}
+                        items={items}
+                        name={groupName}
+                        onApply={group == "category_uid" ? handleCategoryApplyFilter : handleApplyFilter}
+                        initialOpen={true}
+                    />
+                );
             }),
         [
             filterApi,
@@ -235,14 +165,13 @@ const FilterSidebar = props => {
                         <Filter size={15} className='text-gray-900' />
                     </h2>
                 </div>
-                {hideFilters ? <ul className={classes.blocks}>No filters available.</ul> : <>
                 <CurrentFilters
                     filterApi={filterApi}
                     filterNames={filterNames}
                     filterState={filterState}
                     onRemove={handleApplyFilter}
                 />
-                <ul className={classes.blocks}>{filtersList}</ul></>}
+                <ul className={classes.blocks}>{filtersList}</ul>
             </div>
         </aside>
     );

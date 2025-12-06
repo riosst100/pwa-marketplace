@@ -268,10 +268,7 @@ export const useCategoryContent = props => {
 
         filters.push(newFilter);
     });
-
-    const attributesBlock = categoryData && categoryData.categories.items.length
-    ? categoryData.categories.items[0].attributes_block
-    : null;
+    
     const parent =
     categoryData && categoryData.categories.items.length
         ? categoryData.categories.items[0].parent
@@ -317,7 +314,6 @@ export const useCategoryContent = props => {
         totalPagesFromData,
         children,
         parent,
-        attributesBlock,
         category,
         virtualCategoryFilters
     };

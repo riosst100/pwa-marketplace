@@ -1,38 +1,9 @@
 import React, { Fragment, useEffect, Suspense, useMemo, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { array, number, shape, string } from 'prop-types';
-
-import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
-import { useCategoryContent } from '@magento/peregrine/lib/talons/RootComponents/Category';
-
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Breadcrumbs from '@magento/venia-ui/lib/components/Breadcrumbs';
-import FilterModalOpenButton, {
-    FilterModalOpenButtonShimmer
-} from '@magento/venia-ui/lib/components/FilterModalOpenButton';
-import { FilterSidebarShimmer } from '@magento/venia-ui/lib/components/FilterSidebar';
-import Gallery, { GalleryShimmer } from '@magento/venia-ui/lib/components/Gallery';
-import Pagination from '@magento/venia-ui/lib/components/Pagination';
-import ProductSort, { ProductSortShimmer } from '@magento/venia-ui/lib/components/ProductSort';
-import RichContent from '@magento/venia-ui/lib/components/RichContent';
-import Shimmer from '@magento/venia-ui/lib/components/Shimmer';
-import SortedByContainer, {
-    SortedByContainerShimmer
-} from '@magento/venia-ui/lib/components/SortedByContainer';
-import NoProductsFound from '@magento/venia-ui/lib/RootComponents/Category/NoProductsFound';
 import cn from 'classnames';
-import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
-import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
-import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
-
-import BrandSlider from '@riosst100/pwa-marketplace/src/components/BrandSlider';
-import CollectibleGameSets from '@riosst100/pwa-marketplace/src/components/CollectibleGameSets/collectibleGameSets';
 import { useLocation } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
-import CustomSubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/customSubCategory';
-import AlphaFilter from '@riosst100/pwa-marketplace/src/components/AlphaFilter';
-import ShopByFilters from '@riosst100/pwa-marketplace/src/components/ShopByFilters';
-
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import { Link } from 'react-router-dom';
@@ -45,10 +16,6 @@ import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySea
 import { useCustomSort } from '@riosst100/pwa-marketplace/src/hooks/useCustomSort';
 import { useShopBy } from '@riosst100/pwa-marketplace/src/talons/ShopBy/useShopBy';
 
-const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
-const FilterSidebar = React.lazy(() =>
-    import('@magento/venia-ui/lib/components/FilterSidebar')
-);
 const FilterTop = React.lazy(() =>
     import('@riosst100/pwa-marketplace/src/components/FilterTop')
 );
@@ -57,33 +24,8 @@ const ShopBy = props => {
     const {
         categoryId,
         shopby
-    //     data,
-    //     isLoading,
-    //     pageControl,
-    //     sortProps,
-    //     pageSize
     } = props || {};
-    // const [currentSort] = sortProps;
 
-    // const talonProps = useCategoryContent({
-    //     categoryId,
-    //     data,
-    //     pageSize
-    // });
-
-    // const {
-    //     availableSortMethods,
-    //     categoryName,
-    //     categoryDescription,
-    //     filters,
-    //     items,
-    //     children,
-    //     parent,
-    //     totalCount,
-    //     totalPagesFromData,
-    //     attributesBlock,
-    //     category,
-    // } = talonProps;
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -101,12 +43,6 @@ const ShopBy = props => {
     }});
 
     const [currentSort] = sortProps;
-
-    // const [sortBy, setSortBy] = useState({
-    //     sortText: 'All (A-Z)',
-    //     value: 'all'
-    // });
-
 
     const classes = useStyle(defaultClasses);
 
@@ -217,21 +153,13 @@ const ShopBy = props => {
         setSearchQuery('')
     }
 
-    // let availableSortBy = [
-    //     {
-    //         'label': 'All (A-Z)',
-    //         'value': 'all'
-    //     }
-    // ];
-
     let availableSortBy = [
         {
             'label': 'All (A-Z)',
             'value': 'all'
         }
     ];
-    
-    // const title = attributeData ? (attributeData.attribute_code == "sc_baseball_parallel" ? "Parallel Sets" : (attributeData.attribute_code == "sc_baseball_inserts" ? "Insert Sets" : attributeData.label)) : "Shop By"
+
     const title = pageInfo ? pageInfo.label : '';
 
     let availableFilterOption = [];
@@ -347,9 +275,6 @@ const ShopBy = props => {
                 
                 const label = filterArr[0];
                 const optionId = filterArr[1];
-                if (label == "Singles") {
-                    isSingles = true;
-                }
                 if (key == "bricks_categories" || key == "sc_sports_categories" || key == "card_game" || key == "product_line" && urlKey == "brands" || key == "product_line" && urlKey == "franchise" || key == "franchise" && urlKey == "brands" || key == "franchise" && urlKey == "franchise" || key == "brands" && urlKey == "franchise" || key == "brands" && urlKey == "brands") {
                     activeFilters.push(
                         {
@@ -367,7 +292,7 @@ const ShopBy = props => {
         <Fragment>
             <StoreTitle>{title}</StoreTitle>
             <Breadcrumbs categoryId={categoryId} customPage={title} currentFilter={activeFilters} />
-            {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} allowedFilters={category ? category.allowed_filters : []} />}
+            {category?.url_path.includes('model-railway') && <FilterTop shopby={shopby} filters={[]} category={category} children={[]} />}
             {/* <ShopByFilters handleActiveFilter={handleActiveFilter} activeFilter={activeFilter} category={category} /> */}
             {availableFilterOption.length ? 
                 <ul className={classes.nav}>

@@ -6,7 +6,6 @@ import { useIsInViewport } from '@magento/peregrine/lib/hooks/useIsInViewport';
 import { useCategoryContent } from '@magento/peregrine/lib/talons/RootComponents/Category';
 
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import Breadcrumbs from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Breadcrumbs';
 import FilterModalOpenButton, {
     FilterModalOpenButtonShimmer
 } from '@magento/venia-ui/lib/components/FilterModalOpenButton';
@@ -24,8 +23,6 @@ import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/l
 import NoProductsFound from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/RootComponents/Category/NoProductsFound';
 import cn from 'classnames';
 import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
-import SubCategory from '@riosst100/pwa-marketplace/src/components/SubCategory/subCategory';
-import AttributesBlock from '@riosst100/pwa-marketplace/src/components/AttributesBlock/attributesBlock';
 
 import ProductLineSlider from '@riosst100/pwa-marketplace/src/components/ProductLineSlider';
 import BrandMenu from './menu';
@@ -62,7 +59,6 @@ const CategoryContent = props => {
         children,
         totalCount,
         totalPagesFromData,
-        attributesBlock,
         category
     } = talonProps;
 
@@ -187,7 +183,6 @@ const CategoryContent = props => {
                     <BrandInfo />
                 </section>
                 {/* <SubCategory children={children} /> */}
-                <AttributesBlock category={category} attributesBlock={attributesBlock} />
                 <section
                     className={cn(
                         'category_brand-slider my-5 before_absolute before_bg-[#F8F8F8]',

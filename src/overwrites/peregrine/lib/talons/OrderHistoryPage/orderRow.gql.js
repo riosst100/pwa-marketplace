@@ -44,14 +44,3 @@ export default {
     getProductThumbnailsQuery: GET_PRODUCT_THUMBNAILS,
     getConfigurableThumbnailSource: GET_CONFIGURABLE_THUMBNAIL_SOURCE
 };
-
-// Mutation to complete preorder
-export const COMPLETE_PREORDER = gql`
-    mutation CompletePreorder($input: CompletePreorderInput!) {
-        completePreorder(input: $input) {
-            cart_id
-            message
-            success
-        }
-    }
-`;

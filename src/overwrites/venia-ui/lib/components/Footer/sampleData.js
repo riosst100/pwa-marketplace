@@ -10,7 +10,7 @@ const getToKnowUsLinks = new Map()
     .set('About TCG Collective', null)
     .set('Career', '/')
     .set('Contact Us', '/')
-    .set('Help Center', '/help-center')
+    .set('Help Center', '/')
     .set('Intelectual Property Claims', '/');
 
 const aboutLinks = new Map()
