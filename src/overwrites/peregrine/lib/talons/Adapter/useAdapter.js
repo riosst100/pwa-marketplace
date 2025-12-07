@@ -11,6 +11,7 @@ import { CACHE_PERSIST_PREFIX } from '@magento/peregrine/lib/Apollo/constants';
 import getLinks from '@magento/peregrine/lib/Apollo/links';
 import typePolicies from '@magento/peregrine/lib/Apollo/policies';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
+import axios from 'axios';
 
 const isServer = !globalThis.document;
 const storage = new BrowserPersistence();
@@ -47,6 +48,7 @@ export const useAdapter = props => {
     }
 
     const [initialized, setInitialized] = useState(false);
+    const [isMaintenance, setIsMaintenance] = useState(false);
 
     const apiBase = useMemo(
         () => apiUrl || new URL('/graphql', origin).toString(),
@@ -186,13 +188,33 @@ export const useAdapter = props => {
         })();
     }, [apolloClient, initialized]);
 
+    useEffect(() => {
+        if (initialized) return;
+
+        // immediately invoke this async function
+        (async () => {
+            axios.get(apiBase).then((response) => {
+                setIsMaintenance(false)
+            }).catch((error) => {
+                const status = error.response.status;
+                if (status != 200) {
+                    setIsMaintenance(true)
+                } else {
+                    setIsMaintenance(false)
+                }
+            });
+        })();
+    }, [apiBase,initialized]);
+
     return {
         apolloProps,
+        isMaintenance,
         initialized,
         reduxProps,
         routerProps,
         styleProps,
-        urlHasStoreCode
+        urlHasStoreCode,
+        apiBase
     };
 };
 

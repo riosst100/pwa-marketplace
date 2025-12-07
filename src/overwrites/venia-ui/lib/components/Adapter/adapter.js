@@ -7,7 +7,8 @@ import App, { AppContextProvider } from '@magento/venia-ui/lib/components/App';
 import StoreCodeRoute from '@magento/venia-ui/lib/components/StoreCodeRoute';
 import { useWebsiteByIp } from '@riosst100/pwa-marketplace/src/talons/WebsiteByIp/useWebsiteByIp';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
-
+import MaintenancePage from '@riosst100/pwa-marketplace/src/components/MaintenancePage';
+import axios from 'axios';
 
 const storage = new BrowserPersistence();
 
@@ -20,11 +21,33 @@ const Adapter = props => {
         apolloProps,
         initialized,
         reduxProps,
-        routerProps
+        routerProps,
+        isMaintenance,
+        apiBase
     } = talonProps;
 
+    // console.log('isMaintenance',isMaintenance)
 
-  
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         axios.get(apiBase).then((response) => {
+    //             // setIsMaintenance(false)
+    //         }).catch((error) => {
+    //             const status = error.response.status;
+    //             if (status != 200) {
+    //                 console.log('status',status)
+    //                 return <MaintenancePage />;
+    //                 // setIsMaintenance(true)
+    //             }
+    //         });
+    //     };
+    
+    //     fetchData();
+   
+
+    // if (isMaintenance) {
+    //     return <MaintenancePage />;
+    // }
 
     const websiteCodes = [];
     const websiteStores = useMemo(() => ({}), []);
@@ -146,6 +169,10 @@ const Adapter = props => {
     // TODO: Replace with app skeleton. See PWA-547.
     if (!initialized) {
         return null;
+    }
+
+    if (isMaintenance) {
+        return <MaintenancePage />;
     }
 
     const children = props.children || <App />;
