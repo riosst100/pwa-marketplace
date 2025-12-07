@@ -134,8 +134,6 @@ export const useCreateAccount = props => {
 
                 storage.setItem('confirm_email', formValues.customer.email);
 
-                console.log(formValues.customer.email)
-
                 history.push('/verify-email');
 
                 // Get reCaptchaV3 Data for signIn mutation

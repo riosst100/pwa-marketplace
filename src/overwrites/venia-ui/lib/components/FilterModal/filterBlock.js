@@ -90,6 +90,10 @@ const FilterBlock = props => {
         </Form>
     ) : null;
 
+    if (!name) {
+        return '';
+    }
+
     return (
         <li
             className={classes.root}

@@ -15,6 +15,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/StoreCodeRoute/storeCodeRoute.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/StoreCodeRoute/storeCodeRoute.js',
     [`@magento/peregrine/lib/talons/Adapter/useAdapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Adapter/useAdapter.js',
     [`@magento/peregrine/lib/talons/Header/useStoreSwitcher.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/useStoreSwitcher.js',
+    [`@magento/peregrine/lib/talons/Header/useAccountTrigger.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/useAccountTrigger.js',
     [`@magento/peregrine/lib/talons/Header/storeSwitcher.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Header/storeSwitcher.gql.js',
     [`@magento/peregrine/lib/talons/CartPage/ProductListing/productListingFragments.gql.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CartPage/ProductListing/productListingFragments.gql.js',
     [`@magento/peregrine/lib/talons/Region/useRegion.js`]: '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/Region/useRegion.js',
