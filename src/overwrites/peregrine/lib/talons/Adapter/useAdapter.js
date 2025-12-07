@@ -193,7 +193,7 @@ export const useAdapter = props => {
 
         // immediately invoke this async function
         (async () => {
-            axios.get(apiBase).then((response) => {
+            axios.get(apiBase + '?query=%7B%20__schema%20%7B%20queryType%20%7B%20fields%20%7B%20name%20description%20type%20%7B%20name%20kind%20%7D%20%7D%20%7D%20%7D%20%7D').then((response) => {
                 setIsMaintenance(false)
             }).catch((error) => {
                 const status = error.response.status;
