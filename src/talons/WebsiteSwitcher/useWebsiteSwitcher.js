@@ -198,9 +198,6 @@ export const useWebsiteSwitcher = (props = {}) => {
 
             const newPath = pathName ? `/${pathName}${newSearchParams}` : (accessBaseWebsite ? `/${pathName}${accessBaseWebsite}` : '');
 
-            // await apolloClient.clearCacheData(apolloClient, 'cart');
-            // await removeCart();
-
             if (newWebsiteCode) {
                 globalThis.location.assign(`/${newWebsiteCode}${newPath || ''}`);
             } else {
