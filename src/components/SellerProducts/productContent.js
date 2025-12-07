@@ -85,7 +85,7 @@ const ProductContent = props => {
     const shouldShowFilterShimmer = filters === null;
 
     const sidebar = shouldShowFilterButtons ? (
-        <FilterSidebar children={[]} filters={filters} />
+        <FilterSidebar category={category} children={[]} filters={filters} />
     ) : shouldShowFilterShimmer ? (
         <FilterSidebarShimmer />
     ) : null;
@@ -266,11 +266,6 @@ const ProductContent = props => {
                         </span>
                     </h1>
                 </div>
-                <>
-                    {currentFilter && <AlphaFilter isSingles={isSingles} items={items} handleActiveLetter={handleActiveLetter} activeLetter={activeLetter} />}
-                    {shopby != "gauge" && category?.name != "Collectible Card Games" ? <SubCategory parent={parent} children={children} /> : ''}
-                    
-                </>
                 <FilterTop shopby={shopby} filters={filters} category={category} children={children} />
             </div>
             <div className='w-full flex items-start gap-x-[30px]'>

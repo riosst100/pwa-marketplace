@@ -76,7 +76,7 @@ const SellerDetail = props => {
         [
             {
                 id: 'product-tab',
-                title: 'All Products',
+                title: 'Products',
                 content: 
                 <SellerProducts 
                     sellerId={seller?.seller_id} 

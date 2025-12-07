@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLazyQuery, useQuery } from '@apollo/client';
-
+import { useLocation, useHistory } from 'react-router-dom';
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
 
@@ -48,6 +48,8 @@ export const useProductContent = props => {
         }
     );
 
+    
+
     const { data: categoryData, loading: categoryLoading } = useQuery(
         getCategoryContentQuery,
         {
@@ -59,6 +61,9 @@ export const useProductContent = props => {
             }
         }
     );
+
+    console.log('categoryData',categoryData)
+    console.log('categoryId',categoryId)
 
     const [, { dispatch }] = useEventingContext();
 
@@ -94,12 +99,66 @@ export const useProductContent = props => {
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0]
             : null;
+            console.log('categorycategory',category)
     const children =
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].children
             : null;
 
     const filters = [];
+
+    const history = useHistory();
+    const location = useLocation();
+
+    const setQueryParam = ({ history, location, parameter, replace, value }) => {
+        const { search } = location;
+        const queryParams = new URLSearchParams(search);
+
+        queryParams.set(parameter, value);
+        const destination = { search: queryParams.toString() };
+
+        if (replace) {
+            history.replace(destination);
+        } else {
+            history.push(destination);
+        }
+    };
+
+    const setDefaultSubcategoryAndTopFilter = useCallback(
+        (value, searchParam, replace = false) => {
+            // Update the query parameter.
+            setQueryParam({
+                history,
+                location,
+                parameter: searchParam,
+                replace,
+                value: value
+            });
+        },
+        [history, location]
+    );
+
+    console.log('category category',category)
+
+    useEffect(() => {
+        const { search } = location;
+
+        if (category && category.default_top_filter) {
+            const defaultTopFilter = category.default_top_filter;
+
+            const attrCode = defaultTopFilter.attribute_code;
+            const label = defaultTopFilter.label;
+            const value = defaultTopFilter.value;
+
+            if (!search.includes(attrCode)) {
+                setDefaultSubcategoryAndTopFilter(
+                    label + ',' + value, 
+                    attrCode + '[filter]', 
+                    true
+                );
+            }
+        }
+    }, [category, location, setDefaultSubcategoryAndTopFilter]);
 
     rawFilters && rawFilters.map((filter, index) => {
 
