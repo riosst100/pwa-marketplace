@@ -35,6 +35,11 @@ export const GET_CATEGORY_CONTENT = gql`
                 url_key
                 url_path
                 prefixes
+                default_top_filter {
+                    attribute_code
+                    label
+                    value
+                }
                 parent {
                     uid
                     name

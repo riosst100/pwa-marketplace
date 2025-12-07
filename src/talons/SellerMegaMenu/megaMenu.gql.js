@@ -10,9 +10,9 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_MEGA_MENU = gql`
-    query getMegaMenu {
+    query getSellerMegaMenu {
         # eslint-disable-next-line @graphql-eslint/require-id-when-available
-        categoryList {
+        sellerCategories {
             uid
             name
             # eslint-disable-next-line @graphql-eslint/require-id-when-available
@@ -22,22 +22,10 @@ export const GET_MEGA_MENU = gql`
                 name
                 position
                 url_path
-                custom_submenu {
-                    name
-                    attribute {
-                        code
-                        value
-                    }
-                    path
-                }
-                shop_by {
-                    name
-                    code
-                    items {
-                        name
-                        option_id
-                        url_path
-                    }
+                default_top_filter {
+                    attribute_code
+                    label
+                    value
                 }
                 # eslint-disable-next-line @graphql-eslint/require-id-when-available
                 children {
@@ -46,6 +34,11 @@ export const GET_MEGA_MENU = gql`
                     name
                     position
                     url_path
+                    default_top_filter {
+                        attribute_code
+                        label
+                        value
+                    }
                     custom_submenu {
                         name
                         attribute {

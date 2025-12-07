@@ -65,21 +65,7 @@ const SellerMegaMenuItem = props => {
     const arrow = <ArrowDown2 className='ml-2 stroke-current' size="14" color={textPrimary} variant="Outline" />;
 
     const children = useMemo(() => {
-        return category.children.length || category.name == "Lego" ? (
-            <SellerSubmenu
-                isFocused={isFocused}
-                sellerSubMenuState={sellerSubMenuState}
-                items={category.children}
-                seller={seller}
-                parentCategory={category}
-                shopByItems={category.shop_by}
-                mainNavWidth={mainNavWidth}
-                handleCloseSellerSubMenu={handleCloseSellerSubMenu}
-                categoryUrlSuffix={categoryUrlSuffix}
-                onNavigate={onNavigate}
-                arrow={arrow}
-            />
-        ) : null;
+        return null;
     }, [
         category,
         isFocused,
@@ -124,7 +110,6 @@ const SellerMegaMenuItem = props => {
         >
             <Link
                 {...linkAttributes}
-                onKeyDown={handleKeyDown}
                 className={cn(
                     isActive ? classes.sellerMegaMenuLinkActive : classes.sellerMegaMenuLink,
                     titleClassName,
@@ -132,12 +117,9 @@ const SellerMegaMenuItem = props => {
                 )}
                 data-cy="SellerMegaMenu-SellerMegaMenuItem-link"
                 to={'/seller/' + seller?.url_key + categoryUrl}
-                onClick={onNavigate}
             >
                 {category.name}
-                {/* {maybeDownArrowIcon} */}
             </Link>
-            {children}
         </div>
     );
 };

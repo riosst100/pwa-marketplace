@@ -12,7 +12,7 @@ const CurrentFilters = props => {
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
 
-    const defaultTopFilterAttrCode = category.default_top_filter.attribute_code;
+    const defaultTopFilterAttrCode = category && category.default_top_filter ? category.default_top_filter.attribute_code : null;
 
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {

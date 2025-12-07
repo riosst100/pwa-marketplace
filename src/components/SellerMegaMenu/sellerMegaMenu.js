@@ -31,11 +31,10 @@ const SellerMegaMenu = (props) => {
         handleClickOutside
     } = useSellerMegaMenu({ mainNavRef });
     
-    const allowedCategoryUids = props.allowedCategoryUids || ['NTI=', 'NTA=', 'NTM=', 'MjY='];
+    // const allowedCategoryUids = props.allowedCategoryUids || ['NTI=', 'NTA=', 'NTM=', 'MjY='];
 
     const filteredChildren = Array.isArray(megaMenuData?.children)
-        ? megaMenuData.children.filter(c => allowedCategoryUids.includes(c.uid))
-        : [];
+        ? megaMenuData.children : [];
 
     const [mainNavWidth, setMainNavWidth] = useState(0);
     const shouldRenderItems = useIsInViewport({

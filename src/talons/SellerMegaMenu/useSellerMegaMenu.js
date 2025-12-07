@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useInternalLink } from '@magento/peregrine/lib/hooks/useInternalLink';
 
 import { useQuery } from '@apollo/client';
@@ -7,6 +7,7 @@ import { useEventListener } from '@magento/peregrine/lib/hooks/useEventListener'
 
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './megaMenu.gql';
+
 
 /**
  * The useSellerMegaMenu talon complements the SellerMegaMenu component.
@@ -107,8 +108,64 @@ export const useSellerMegaMenu = (props = {}) => {
     );
 
     const megaMenuData = useMemo(() => {
-        return data ? processData(data.categoryList[0]) : {};
+        return data ? processData(data.sellerCategories[0]) : {};
     }, [data, processData]);
+
+    const category = useMemo(() => {
+        return Array.isArray(megaMenuData?.children)
+        ? megaMenuData.children[0]
+        : [];
+    }, [megaMenuData]);
+
+    const history = useHistory();
+
+    const setQueryParam = ({ history, location, parameter, replace, value }) => {
+        const { search } = location;
+        const queryParams = new URLSearchParams(search);
+
+        queryParams.set(parameter, value);
+        const destination = { search: queryParams.toString() };
+
+        if (replace) {
+            history.replace(destination);
+        } else {
+            history.push(destination);
+        }
+    };
+
+    const setDefaultSubcategoryAndTopFilter = useCallback(
+        (value, searchParam, replace = false) => {
+            // Update the query parameter.
+            setQueryParam({
+                history,
+                location,
+                parameter: searchParam,
+                replace,
+                value: value
+            });
+        },
+        [history, location]
+    );
+
+    useEffect(() => {
+        const { search } = location;
+
+        // if (category && category.default_top_filter) {
+        //     const defaultTopFilter = category.default_top_filter;
+
+        //     const attrCode = defaultTopFilter.attribute_code;
+        //     const label = defaultTopFilter.label;
+        //     const value = defaultTopFilter.value;
+
+        //     if (!search.includes(attrCode)) {
+        //         setDefaultSubcategoryAndTopFilter(
+        //             label + ',' + value, 
+        //             attrCode + '[filter]', 
+        //             true
+        //         );
+        //     }
+        // }
+    }, [category, location, setDefaultSubcategoryAndTopFilter]);
 
     const findActiveCategory = useCallback(
         (pathname, category) => {
