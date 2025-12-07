@@ -7,10 +7,12 @@ import CurrentFilter from './currentFilter';
 import defaultClasses from './currentFilters.module.css';
 
 const CurrentFilters = props => {
-    const { filterApi, filterState, onRemove, filterNames } = props;
+    const { category, filterApi, filterState, onRemove, filterNames } = props;
     const { removeItem } = filterApi;
     const classes = useStyle(defaultClasses, props.classes);
     const { formatMessage } = useIntl();
+
+    const defaultTopFilterAttrCode = category.default_top_filter.attribute_code;
 
     // create elements and params at the same time for efficiency
     const filterElements = useMemo(() => {
@@ -20,9 +22,7 @@ const CurrentFilters = props => {
                 const { title, value } = item || {};
                 const key = `${group}::${title}_${value}`;
 
-                const customAttributeLandingPage = ['bricks_categories','sc_sports_categories','card_game', 'sc_baseball_release','auction','special_price','lof_preorder','card_pre_orders','sc_baseball_inserts','sc_baseball_parallel','sc_set_type'];
-
-                if (!customAttributeLandingPage.includes(group)) {
+                if (group != defaultTopFilterAttrCode) {
                     elements.push(
                         <li key={key} className={classes.item}>
                             <CurrentFilter

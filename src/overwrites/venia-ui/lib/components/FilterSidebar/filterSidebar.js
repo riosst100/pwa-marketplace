@@ -21,7 +21,7 @@ const SCROLL_OFFSET = 150;
  * @param {Object} props.filters - filters to display
  */
 const FilterSidebar = props => {
-    const { filters, filterCountToOpen, prefixes } = props;
+    const { filters, category, filterCountToOpen, prefixes } = props;
     const talonProps = useFilterSidebar({ filters });
     const {
         filterApi,
@@ -61,17 +61,6 @@ const FilterSidebar = props => {
 
     const handleCategoryApplyFilter = useCallback(
         (...args) => {
-            // const filterElement = filterRef.current;
-            // if (
-            //     filterElement &&
-            //     typeof filterElement.getBoundingClientRect === 'function'
-            // ) {
-            // const filterTop = filterElement.getBoundingClientRect().top;
-            // const windowScrollY =
-            //     window.scrollY + filterTop - SCROLL_OFFSET;
-            // window.scrollTo(0, windowScrollY);
-            // }
-
             history.push('/' + args[1].path + '.html');
 
             if (args[0] != "category_uid") {
@@ -97,6 +86,7 @@ const FilterSidebar = props => {
                 const blockState = filterState.get(group);
                 const groupName = filterNames.get(group);
                 const frontendInput = filterFrontendInput.get(group);
+
 
                 let subFilter = null;
 
@@ -167,6 +157,7 @@ const FilterSidebar = props => {
                 </div>
                 <CurrentFilters
                     filterApi={filterApi}
+                    category={category}
                     filterNames={filterNames}
                     filterState={filterState}
                     onRemove={handleApplyFilter}
@@ -191,7 +182,6 @@ FilterSidebar.propTypes = {
         root: string,
         root_open: string
     }),
-    prefixes: [],
     filters: arrayOf(
         shape({
             attribute_code: string,

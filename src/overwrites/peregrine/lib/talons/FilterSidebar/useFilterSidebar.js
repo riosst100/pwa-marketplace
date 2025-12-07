@@ -32,23 +32,10 @@ export const useFilterSidebar = props => {
     const history = useHistory();
     const { pathname, search } = useLocation();
 
-    const allActiveFilters = getFiltersFromSearch(search);
-
     const { data: introspectionData } = useQuery(getFilterInputsQuery, {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first'
     });
-
-    // const {
-    //     called: subFilterItemsCalled,
-    //     data: subFilterItems,
-    //     loading: subFilterItemsLoading,
-    //     error: subFilterItemsError
-    // } = useQuery(getSubFiltersQuery,
-    // {
-    //     fetchPolicy: 'cache-and-network',
-    //     nextFetchPolicy: 'cache-first'
-    // });
 
     const subFilterItems = [];
 
@@ -90,7 +77,7 @@ export const useFilterSidebar = props => {
 
         return nextFilters;
     }, [DISABLED_FILTERS, attributeCodes, introspectionData]);
-
+    
     const isBooleanFilter = options => {
         const optionsString = JSON.stringify(options);
         return (
@@ -257,30 +244,6 @@ export const useFilterSidebar = props => {
     }, [closeDrawer]);
 
     const handleApply = useCallback((...args) => {
-        const group = args[0];
-        const item = args[1]; 
-
-        // REMOVE ACTIVE FILTER
-        // if (group.includes('card_release')) {
-        //     const subFilter = group.replace("card_release", "card_set");
-        //     filterApi.removeGroup({ group: subFilter });
-        // }
-
-        // if (group.includes('sc_release')) {
-        //     const subFilter = group.replace("sc_release", "sc_set_name");
-        //     filterApi.removeGroup({ group: subFilter });
-        // }
-
-        // if (group.includes('sc_set_name')) {
-        //     const subFilter = group.replace("sc_set_name", "sc_release");
-        //     filterApi.removeGroup({ group: subFilter });
-        // }
-
-        // if (group.includes('card_set')) {
-        //     const subFilter = group.replace("card_set", "card_release");
-        //     filterApi.removeGroup({ group: subFilter });
-        // }
-
         setIsApplying(true);
         handleClose();
     }, [handleClose]);

@@ -8,6 +8,7 @@ import StoreCodeRoute from '@magento/venia-ui/lib/components/StoreCodeRoute';
 import { useWebsiteByIp } from '@riosst100/pwa-marketplace/src/talons/WebsiteByIp/useWebsiteByIp';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
+
 const storage = new BrowserPersistence();
 
 const Adapter = props => {
@@ -21,6 +22,9 @@ const Adapter = props => {
         reduxProps,
         routerProps
     } = talonProps;
+
+
+  
 
     const websiteCodes = [];
     const websiteStores = useMemo(() => ({}), []);
@@ -58,7 +62,48 @@ const Adapter = props => {
         }
     }, [websiteCodeInUrl])
 
+    const currentWebsiteCode = storage && storage.getItem('website_code') || process.env.WEBSITE_CODE;
+
     useEffect(() => {
+        if (!websiteCodeInUrl) {
+            // history.replace(location.pathname + location.search)
+        } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
+            const storeCodeInUrl = websiteStores[websiteCodeInUrl];
+
+            // await removeCart();
+
+            // alert(storeCodeInUrl)
+
+            // update store/website saat url berubah, misal /id ke /sg
+
+            // issue store view code gk berubah, klo di graphql aman
+
+            // ini update di graphql dan di cookie, tapi di cookie beda klo ga di hardcode
+
+            // ini oke, store di graphql dari sini
+            // storeCodeInUrl = 'id_id_store_view';
+            // console.log('storeCodeInUrl',storeCodeInUrl)
+
+            // await apolloClient.clearCacheData(apolloClient, 'cart');
+            // await removeCart();
+            storage.removeItem('cartId');
+
+            storage.setItem('store_view_code', storeCodeInUrl);
+            storage.setItem('website_code', websiteCodeInUrl);
+            storage.setItem(
+                'store_view_currency',
+                storeCurrencies[storeCodeInUrl]
+            );
+            storage.setItem(
+                'store_view_secure_base_media_url',
+                storeSecureBaseMediaUrl[storeCodeInUrl]
+            );
+
+            // We're required to reload the page as the basename doesn't
+            // change entirely without a full page reload.
+            // history.go(0);
+        }
+
         if (!websiteCodeInUrl && getWebsiteByUserIp) {
             setVerifyUserIp(false);
 
@@ -81,6 +126,8 @@ const Adapter = props => {
                 }
 
                 let storeCodeInUrl = websiteStores[websiteCode];
+
+                storage.removeItem('cartId');
 
                 storage.setItem('store_view_code', storeCodeInUrl);
                 storage.setItem('website_code', websiteCode);
