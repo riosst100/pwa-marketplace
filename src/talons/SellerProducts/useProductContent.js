@@ -62,8 +62,8 @@ export const useProductContent = props => {
         }
     );
 
-    console.log('categoryData',categoryData)
-    console.log('categoryId',categoryId)
+    // console.log('categoryData',categoryData)
+    // console.log('categoryId',categoryId)
 
     const [, { dispatch }] = useEventingContext();
 
@@ -99,7 +99,7 @@ export const useProductContent = props => {
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0]
             : null;
-            console.log('categorycategory',category)
+            // console.log('categorycategory',category)
     const children =
         categoryData && categoryData.categories.items.length
             ? categoryData.categories.items[0].children
@@ -138,7 +138,7 @@ export const useProductContent = props => {
         [history, location]
     );
 
-    console.log('category category',category)
+    // console.log('category category',category)
 
     useEffect(() => {
         const { search } = location;

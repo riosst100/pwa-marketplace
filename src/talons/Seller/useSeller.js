@@ -1,5 +1,6 @@
-import { useQuery } from '@apollo/client';
-import { useEffect, useMemo } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useToasts } from '@magento/peregrine/lib/Toasts/useToasts';
 import { useLocation } from 'react-router-dom';
 import { useAppContext } from '@magento/peregrine/lib/context/app';
 import { useIntl } from 'react-intl';
@@ -13,7 +14,15 @@ export const useSeller = props => {
     const { formatMessage } = useIntl();
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
-    const { getStoreConfigData, getSellerDetailQuery, getCouponCodeQuery } = operations;
+    const {
+        getStoreConfigData,
+        getSellerDetailQuery,
+        getCouponCodeQuery,
+        getCustomerSellerMessages,
+        customerSendMessageMutation,
+        customerReplyMessageMutation,
+        customerDeleteMessageMutation
+    } = operations;
     const { pathname } = useLocation();
     const [
         ,
@@ -26,6 +35,8 @@ export const useSeller = props => {
         fetchPolicy: 'cache-and-network',
         nextFetchPolicy: 'cache-first'
     });
+
+    const [, { addToast }] = useToasts();
 
     const slug = pathname.split('/')[2];
     const productUrlSuffix = storeConfigData?.storeConfig?.product_url_suffix;
@@ -100,6 +111,82 @@ export const useSeller = props => {
         storeConfig: storeConfigData ? storeConfigData.storeConfig : {}
     };
 
+    // Messages state
+    const [messageListVars, setMessageListVars] = useState({
+        pageSize: 500,
+        currentPage: 1,
+        filter: undefined,
+        sort: undefined
+    });
+
+    const {
+        data: messagesData,
+        loading: messagesLoading,
+        error: messagesError,
+        refetch: refetchMessages
+    } = useQuery(getCustomerSellerMessages, {
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'network-only',
+        skip: !storeConfigData,
+        variables: messageListVars,
+        pollInterval: 10000,
+        notifyOnNetworkStatusChange: true
+    });
+
+    const [sendMessage, { loading: sendLoading }] = useMutation(customerSendMessageMutation);
+    const [replyMessage, { loading: replyLoading }] = useMutation(customerReplyMessageMutation);
+    const [deleteMessage, { loading: deleteLoading }] = useMutation(customerDeleteMessageMutation);
+
+    const handleSendMessage = useCallback(async ({ subject, content, seller_url }) => {
+        const input = {
+            subject,
+            content,
+            seller_url
+        };
+        const result = await sendMessage({ variables: { input }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({
+                id: 'messages.messageSent',
+                defaultMessage: 'Message sent successfully.'
+            }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+        return result?.data?.customerSendMessage;
+    }, [sendMessage, refetchMessages, addToast, formatMessage]);
+
+    const handleReplyMessage = useCallback(async ({ message_id, content }) => {
+        const input = {
+            message_id,
+            content
+        };
+        const result = await replyMessage({ variables: { input }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({
+                id: 'messages.replySent',
+                defaultMessage: 'Reply sent successfully.'
+            }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+        return result?.data?.customerReplyMessage;
+    }, [replyMessage, refetchMessages, addToast, formatMessage]);
+
+    const handleDeleteMessage = useCallback(async ({ id }) => {
+        await deleteMessage({ variables: { id }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({
+                id: 'messages.messageDeleted',
+                defaultMessage: 'Message deleted successfully.'
+            }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+    }, [deleteMessage, refetchMessages, addToast, formatMessage]);
+
     return {
         error,
         loading,
@@ -107,6 +194,17 @@ export const useSeller = props => {
         favoriteSellerButtonProps,
         couponData,
         couponError,
-        couponLoading
+        couponLoading,
+        // messages
+        messages: messagesData?.customer?.sellerMessages,
+        messagesLoading,
+        messagesError,
+        setMessageListVars,
+        sendLoading,
+        replyLoading,
+        deleteLoading,
+        handleSendMessage,
+        handleReplyMessage,
+        handleDeleteMessage
     };
 };

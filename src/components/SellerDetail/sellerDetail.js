@@ -1,5 +1,8 @@
-import React, { Fragment, Suspense, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
+import { useToasts } from '@magento/peregrine/lib/Toasts/useToasts';
+import { useUserContext } from '@magento/peregrine/lib/context/user';
 import { useSeller } from '@riosst100/pwa-marketplace/src/talons/Seller/useSeller';
 import ErrorView from '@magento/venia-ui/lib/components/ErrorView';
 import mapSeller from '@riosst100/pwa-marketplace/src/util/mapSeller';
@@ -9,22 +12,15 @@ import SellerProducts from '../SellerProducts';
 import SellerInformation from '../SellerInformation';
 import Reviews from '../SellerReview';
 import {
-    Verify,
     Sms,
-    Message,
-    Heart,
-    Share,
-    BoxTick,
-    Star1,
     Shop,
 } from 'iconsax-react';
 
 import { Share2 } from 'react-feather';
 
 import Image from '@magento/venia-ui/lib/components/Image';
-import Button from '@magento/venia-ui/lib/components/Button';
-import cn from 'classnames';
 import Rating from '@riosst100/pwa-marketplace/src/components/commons/Rating';
+import MessagesModal from '@riosst100/pwa-marketplace/src/components/LiveChat/MessagesModal';
 
 const FavoriteSellerButton = React.lazy(() => import('@riosst100/pwa-marketplace/src/components/FavoriteSeller/AddToListButton'));
 
@@ -36,8 +32,11 @@ const SellerDetail = props => {
         mapSeller
     });
 
-    const { error, loading, seller, favoriteSellerButtonProps, couponData, couponError, couponLoading } = talonProps;
+    const { error, loading, seller, favoriteSellerButtonProps, couponData, couponError, couponLoading, handleSendMessage, messages, messagesLoading, handleReplyMessage, handleDeleteMessage } = talonProps;
     const history = useHistory();
+    const [{ isSignedIn }] = useUserContext();
+    const [, { addToast }] = useToasts();
+    const { formatMessage } = useIntl();
 
     if (loading && !seller)
         return '';
@@ -98,31 +97,24 @@ const SellerDetail = props => {
             }
         ];
 
-    const [openChat, setOpenChat] = useState(false);
-    const toggleChat = () => {
-        setOpenChat(!openChat);
-    }
-
-    const addToFavourite = () => {
-        
-    }
-
-    const getSellerAddressDisplay = (seller) => {
-        let city = seller?.city;
-        let country = seller?.country;
-
-        let result = '';
-        if (city && country) {
-            result = `${city}, ${country}`;
+    const [isMessagesOpen, setIsMessagesOpen] = useState(false);
+    const openMessagesModal = () => {
+        if (!isSignedIn) {
+            addToast({
+                type: 'info',
+                message: formatMessage({
+                    id: 'messages.loginRequired',
+                    defaultMessage: 'Please sign in to your account to send a message to the seller.'
+                }),
+                timeout: 3000
+            });
+            return;
         }
-        if (city && !country) {
-            result = `${city}`;
-        }
-        if (!city && country) {
-            result = `${country}`;
-        }        
-        return result;
-    }
+        setIsMessagesOpen(true);
+    };
+    const closeMessagesModal = () => setIsMessagesOpen(false);
+
+    // Address helper not used currently; removed to keep file lean
 
     return (
         <div className=' py-8'>
@@ -181,7 +173,7 @@ const SellerDetail = props => {
                 
                 {/* Right: action buttons */}
                 <div className='flex xs_flex-wrap items-center xs_justify-center lg_justify-end gap-[10px] xs_mt-4 lg_mt-0 xs_pt-2 lg_pt-0 relative'>
-                    <button className='send-message-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
+                    <button onClick={openMessagesModal} className='send-message-btn flex items-center justify-center gap-[8px] px-[14px] py-[8px] bg-white rounded-[30px] border border-solid border-[#f76b1c] min-w-[44px]'>
                         <Sms color="#f76b1c" size={16} variant='Outline' className='stroke' />
                         <span className='text-[#f76b1c] text-[14px] font-medium whitespace-nowrap md_block xs_hidden'>Send Message</span>
                     </button>
@@ -201,6 +193,16 @@ const SellerDetail = props => {
                     </button>
                 </div>
             </div>
+            <MessagesModal
+                isOpen={isMessagesOpen}
+                onClose={closeMessagesModal}
+                messages={messages}
+                seller={seller}
+                onReply={handleReplyMessage}
+                onDelete={handleDeleteMessage}
+                onSend={handleSendMessage}
+                loading={messagesLoading}
+            />
             <Tabs
                 data={dataTabs}
                 tabContentWrapperClassName='!p-0'

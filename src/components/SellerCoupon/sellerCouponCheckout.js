@@ -66,7 +66,7 @@ const SellerCouponCheckout = ({
         } catch (_) {
             /* ignore */
         }
-        console.log('item.code',item.code)
+        // console.log('item.code',item.code)
         setCopied(item.code);
         setTimeout(() => setCopied(null), 2000);
         if (!isCopyAction) {
@@ -82,7 +82,7 @@ const SellerCouponCheckout = ({
         }
     }, [autoOpen, couponModalOpen]);
 
-    console.log('copied',copied)
+    // console.log('copied',copied)
 
     const modal = couponModalOpen ? (
         <div className={modalClasses.overlay} role="dialog" aria-modal="true" aria-label="Seller coupons list">

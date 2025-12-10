@@ -4,8 +4,9 @@ import cn from 'classnames';
 const chatContent = (props) => {
     const { chatData } = props;
 
-
-        const orderedChatData = [...chatData].reverse();
+        const orderedChatData = Array.isArray(chatData)
+            ? [...chatData]
+            : [];
         const messagesContainerRef = useRef(null);
 
         useEffect(() => {

@@ -1,10 +1,11 @@
 import React, { useState, useMemo, Fragment, Suspense, useRef, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Form } from 'informed';
 import { Info } from 'react-feather';
 import { useToasts } from '@magento/peregrine/lib';
+import { useUserContext } from '@magento/peregrine/lib/context/user';
 
 import Price from '@magento/venia-ui/lib/components/Price';
 import { useProductFullDetail } from '@magento/peregrine/lib/talons/ProductFullDetail/useProductFullDetail';
@@ -43,6 +44,8 @@ import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Colla
 import { useLocation } from 'react-router-dom';
 import Icon from '@magento/venia-ui/lib/components/Icon';
 import { ShoppingCart } from 'react-feather';
+import MessagesModal from '@riosst100/pwa-marketplace/src/components/LiveChat/MessagesModal';
+import SellerOperations from '@riosst100/pwa-marketplace/src/talons/Seller/seller.gql';
 
 import { totalListings, lowestPrice } from '@riosst100/pwa-marketplace/src/components/CrossSeller/crossSellerBuy';
 
@@ -113,6 +116,7 @@ const ProductFullDetail = props => {
     } = talonProps;
 
     const [, { addToast }] = useToasts();
+    const [{ isSignedIn }] = useUserContext();
 
     const { formatMessage } = useIntl();
 
@@ -126,6 +130,89 @@ const ProductFullDetail = props => {
 
     const [hoveredMedia, setHoveredMedia] = useState(null);
     const [selectedPaymentType, setSelectedPaymentType] = useState(null);
+    const [isMessagesOpen, setIsMessagesOpen] = useState(false);
+
+    // Messages GraphQL operations
+    const {
+        getCustomerSellerMessages,
+        customerSendMessageMutation,
+        customerReplyMessageMutation,
+        customerDeleteMessageMutation
+    } = SellerOperations;
+
+    const [messageListVars] = useState({
+        pageSize: 500,
+        currentPage: 1,
+        filter: undefined,
+        sort: undefined
+    });
+
+    const {
+        data: messagesData,
+        loading: messagesLoading,
+        error: messagesError,
+        refetch: refetchMessages
+    } = useQuery(getCustomerSellerMessages, {
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'network-only',
+        variables: messageListVars,
+        pollInterval: 10000,
+        notifyOnNetworkStatusChange: true
+    });
+
+    const [sendMessage] = useMutation(customerSendMessageMutation);
+    const [replyMessage] = useMutation(customerReplyMessageMutation);
+    const [deleteMessage] = useMutation(customerDeleteMessageMutation);
+
+    const handleSendMessage = async ({ subject, content, seller_url }) => {
+        const input = { subject, content, seller_url };
+        const result = await sendMessage({ variables: { input }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({ id: 'messages.messageSent', defaultMessage: 'Message sent successfully.' }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+        return result?.data?.customerSendMessage;
+    };
+
+    const handleReplyMessage = async ({ message_id, content }) => {
+        const input = { message_id, content };
+        const result = await replyMessage({ variables: { input }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({ id: 'messages.replySent', defaultMessage: 'Reply sent successfully.' }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+        return result?.data?.customerReplyMessage;
+    };
+
+    const handleDeleteMessage = async ({ id }) => {
+        await deleteMessage({ variables: { id }, refetchQueries: [{ query: getCustomerSellerMessages, variables: messageListVars }] });
+        addToast({
+            type: 'success',
+            message: formatMessage({ id: 'messages.messageDeleted', defaultMessage: 'Message deleted successfully.' }),
+            timeout: 3000
+        });
+        await refetchMessages({ fetchPolicy: 'network-only' });
+    };
+
+    const openMessagesModal = () => {
+        if (!isSignedIn) {
+            addToast({
+                type: 'info',
+                message: formatMessage({
+                    id: 'messages.loginRequired',
+                    defaultMessage: 'Please sign in to your account to send a message to the seller.'
+                }),
+                timeout: 3000
+            });
+            return;
+        }
+        setIsMessagesOpen(true);
+    };
+    const closeMessagesModal = () => setIsMessagesOpen(false);
 
     const options = isProductConfigurable(product) ? (
         <Suspense fallback={<ProductOptionsShimmer />}>
@@ -886,14 +973,14 @@ const ProductFullDetail = props => {
                                                 <div class="flex items-center justify-center gap-[5px] py-1 relative bg-white">
                                                     <div class="flex items-center justify-center gap-[5px] relative">
                                                         <div className='flex flex-wrap items-start gap-4 relative'>
-                                                            <Link to='#' class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
+                                                            <button type="button" onClick={openMessagesModal} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                                                 <div class="flex items-center justify-center gap-[10px] relative">
                                                                     <Sms color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
                                                                     <div class="relative xs_hidden lg_flex w-fit font-medium text-[#f76b1c] text-[14px] tracking-[0] leading-[20px] whitespace-nowrap">
                                                                         Send Message
                                                                     </div>
                                                                 </div>
-                                                            </Link>
+                                                            </button>
                                                             <Link to={"/seller/"+sellerDetails.url_key} class="flex items-center justify-center gap-[5px] py-1 px-5 relative bg-white rounded-[30px] border border-solid border-[#f76b1c]">
                                                                 <div class="flex items-center justify-center gap-[10px] relative">
                                                                     <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
@@ -951,6 +1038,16 @@ const ProductFullDetail = props => {
                     <CrossSeller/>
                 </div>
             </section>
+            <MessagesModal
+                isOpen={isMessagesOpen}
+                onClose={closeMessagesModal}
+                messages={messagesData?.customer?.sellerMessages}
+                seller={sellerDetails}
+                onReply={handleReplyMessage}
+                onDelete={handleDeleteMessage}
+                onSend={handleSendMessage}
+                loading={messagesLoading}
+            />
         </Fragment>
     );
 };
@@ -1006,3 +1103,5 @@ ProductFullDetail.propTypes = {
 };
 
 export default ProductFullDetail;
+// Messages modal attached at root to avoid layout shifts
+
