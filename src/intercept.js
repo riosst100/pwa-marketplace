@@ -96,6 +96,13 @@ module.exports = targets => {
     },
     {
       exact: true,
+      name: "AboutUs",
+      pattern: "/about-us",
+      path: require.resolve("./components/AboutUs/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
       name: "HelpCenterQuestionDetail",
       pattern: "/help-center/question/:questionId",
       path: require.resolve("./components/HelpCenter/questionDetail.js"),

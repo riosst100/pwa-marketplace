@@ -23,8 +23,13 @@ const Adapter = props => {
         reduxProps,
         routerProps,
         isMaintenance,
+        isCheckingMaintenance,
         apiBase
     } = talonProps;
+
+    if (isCheckingMaintenance) {
+        return null;
+    }
 
     // console.log('isMaintenance',isMaintenance)
 
@@ -89,9 +94,22 @@ const Adapter = props => {
 
     useEffect(() => {
         if (!websiteCodeInUrl) {
-            // history.replace(location.pathname + location.search)
+            history.replace(location.pathname + location.search)
         } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
             const storeCodeInUrl = websiteStores[websiteCodeInUrl];
+
+
+
+            // const search = location.search;
+            
+            // const query = new URLSearchParams(search);
+            // const isAccessBaseWebsite = query.get('access_base_website') || (
+            //     storage.getItem('access_base_website') || null
+            // );
+
+            // routerProps.basename = websiteCodeInUrl != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCodeInUrl : '/';
+
+            // setNewRouterProps(routerProps);
 
             // await removeCart();
 
@@ -109,6 +127,8 @@ const Adapter = props => {
 
             // await apolloClient.clearCacheData(apolloClient, 'cart');
             // await removeCart();
+
+            // klo enabled jd redirect tros
             storage.removeItem('cartId');
 
             storage.setItem('store_view_code', storeCodeInUrl);
@@ -124,7 +144,7 @@ const Adapter = props => {
 
             // We're required to reload the page as the basename doesn't
             // change entirely without a full page reload.
-            // history.go(0);
+            history.go(0);
         }
 
         if (!websiteCodeInUrl && getWebsiteByUserIp) {
@@ -164,7 +184,7 @@ const Adapter = props => {
                 );
             }
         }
-    }, [websiteCodeInUrl, getWebsiteByUserIp])
+    }, [websiteCodeInUrl, getWebsiteByUserIp]);
 
     // TODO: Replace with app skeleton. See PWA-547.
     if (!initialized) {
