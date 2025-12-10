@@ -202,8 +202,98 @@ export const GET_COUPON_CODE_QUERY = gql`
     }
 `;
 
+export const GET_CUSTOMER_SELLER_MESSAGES = gql`
+    query GetCustomerSellerMessages(
+        $pageSize: Int!
+        $currentPage: Int!
+        $filter: SellerMessageFilterInput
+        $sort: SellerMessageSortInput
+    ) {
+        customer {
+            sellerMessages(
+                pageSize: $pageSize
+                currentPage: $currentPage
+                filter: $filter
+                sort: $sort
+            ) {
+                total_count
+                page_info {
+                    current_page
+                    page_size
+                    total_pages
+                }
+                items {
+                    message_id
+                    subject
+                    description
+                    sender_email
+                    sender_name
+                    created_at
+                    status
+                    is_read
+                    sender_id
+                    owner_id
+                    receiver_id
+                    seller_send
+                    details(pageSize: 500, currentPage: 1) {
+                        total_count
+                        items {
+                            content
+                            sender_name
+                            sender_email
+                            receiver_name
+                            is_read
+                            created_at
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
+export const CUSTOMER_SEND_MESSAGE_MUTATION = gql`
+    mutation CustomerSendMessage($input: CustomerMessageInput!) {
+        customerSendMessage(input: $input) {
+            message_id
+            subject
+            description
+            sender_name
+            sender_email
+            created_at
+            status
+        }
+    }
+`;
+
+export const CUSTOMER_REPLY_MESSAGE_MUTATION = gql`
+    mutation CUSTOMER_REPLY_MESSAGE_MUTATION($input: ReplyMessageInput!) {
+        customerReplyMessage(input: $input) {
+            content
+            sender_name
+            sender_email
+            receiver_name
+            is_read
+            created_at
+        }
+    }
+`;
+
+export const CUSTOMER_DELETE_MESSAGE_MUTATION = gql`
+    mutation CustomerDeleteMessage($id: Int!) {
+        customerDeleteMessage(message_id: $id) {
+            message
+            code
+        }
+    }
+`;
+
 export default {
     getStoreConfigData: GET_STORE_CONFIG_DATA,
     getSellerDetailQuery: GET_SELLER_DETAIL_QUERY,
     getCouponCodeQuery: GET_COUPON_CODE_QUERY,
+    getCustomerSellerMessages: GET_CUSTOMER_SELLER_MESSAGES,
+    customerSendMessageMutation: CUSTOMER_SEND_MESSAGE_MUTATION,
+    customerReplyMessageMutation: CUSTOMER_REPLY_MESSAGE_MUTATION,
+    customerDeleteMessageMutation: CUSTOMER_DELETE_MESSAGE_MUTATION,
 };
