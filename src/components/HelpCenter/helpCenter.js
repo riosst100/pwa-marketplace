@@ -2,14 +2,39 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import useHelpCenter from '@riosst100/pwa-marketplace/src/talons/HelpCenter/useHelpCenter';
 import classes from './helpcenter.module.css';
+import Pagination from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Pagination';
+import ArraySearchInput from '@riosst100/pwa-marketplace/src/components/ArraySearchInput';
+import { ChevronUp, ChevronDown, XCircle } from 'react-feather';
+import Icon from '@magento/venia-ui/lib/components/Icon';
 
 const HelpCenter = () => {
-	const { loading, error, data } = useHelpCenter();
+	const [searchQuery, setSearchQuery] = useState('');
+
+	const { loading, error, data, totalPagesFromData, pageControl } = useHelpCenter({ searchQuery });
 	const history = useHistory();
 	const location = useLocation();
 
 	const queryParams = new URLSearchParams(location.search);
 	const activeTag = queryParams.get('tag') || '';
+	const activeCategories = queryParams.get('categories') || '';
+
+	const categoriesCounts = useMemo(() => {
+		if (data) {
+			return data.categories;
+		}
+	}, [data]);
+
+	const handleSetSearchQuery = (query) => {
+		const params = new URLSearchParams(location.search);
+		params.delete('categories');
+		params.delete('tag');
+
+		setSearchQuery(query);
+		
+		history.push({ pathname: location.pathname, search: params.toString() });
+	}
+
+	// console.log('categoriesCounts',categoriesCounts)
 
 	const tagCounts = useMemo(() => {
 		const counts = {};
@@ -56,44 +81,88 @@ const HelpCenter = () => {
 		const params = new URLSearchParams(location.search);
 		if (tag) {
 			params.set('tag', tag);
+			params.delete('categories');
 		} else {
 			params.delete('tag');
 		}
 		history.push({ pathname: location.pathname, search: params.toString() });
 	}, [history, location]);
 
+	const handleRemoveCategories = useCallback(() => {
+		const params = new URLSearchParams(location.search);
+		params.delete('categories');
+		history.push({ pathname: location.pathname, search: params.toString() });
+	}, [history, location]);
+
+	const onSelectTopic = useCallback(topic => {
+		const params = new URLSearchParams(location.search);
+		if (topic) {
+			params.set('categories', topic);
+			params.delete('tag');
+		} else {
+			params.delete('categories');
+		}
+		history.push({ pathname: location.pathname, search: params.toString() });
+	}, [history, location]);
+
 	if (loading) {
-		return <div>Loading Help Center…</div>;
+		// return <div>Loading Help Center…</div>;
 	}
 
 	if (error) {
 		return <div>We\'re sorry, an error has occurred while generating this content.</div>;
 	}
+	
+	const pagination = totalPagesFromData ? (
+        <Pagination pageControl={pageControl} />
+    ) : null;
 
 	return (
 		<div className={classes.container}>
-			<h1 className={classes.title}>User Help Center</h1>
+			<h1 className={classes.title}>Search our help library</h1>
+			<div style={{"width":"100%"}} className="pb-6"><ArraySearchInput searchQuery={searchQuery} placeholder={'Type something like, "question about a charge"'} isOpen={true} setSearchQuery={handleSetSearchQuery} /></div>
 			<div className={classes.grid}>
-			<aside className={classes.sidebar}>
-				<div className={classes.sidebarHeader}>TAGS</div>
-				<div className={classes.tagsWrap}>
-					{Object.keys(tagCounts).length === 0 && (
-						<span className={classes.emptyState}>No tags</span>
-					)}
-					{Object.entries(tagCounts).map(([tag, count]) => (
-						<button
-							key={tag}
-							onClick={() => onSelectTag(tag)}
-							className={`${classes.tagButton} ${activeTag === tag ? classes.tagButtonActive : ''}`}
-						>
-							{tag.toUpperCase()} ({count})
-						</button>
-					))}
-				</div>
+			<aside className={classes.sidebarRoot}>
+				<aside className={classes.sidebar}>
+					<div className={classes.sidebarHeader}>All help topics</div>
+					<div className={classes.tagsWrap}>
+						{categoriesCounts.length ? categoriesCounts.map((data, index) => (
+							<button
+								key={index}
+								onClick={() => onSelectTopic(data.title)}
+								className={`${classes.tagButton} ${activeTag === data.title ? classes.tagButtonActive : ''}`}
+							>
+								{data.title}
+							</button>
+						)) : <span className={classes.emptyState}>No topics.</span>}
+					</div>
+				</aside>
+				{/* <aside className={classes.sidebarTags}>
+					<div className={classes.sidebarHeader}>All help tags</div>
+					<div className={classes.tagsWrap}>
+						{Object.keys(tagCounts).length === 0 && (
+							<span className={classes.emptyState}>No tags.</span>
+						)}
+						{Object.entries(tagCounts).map(([tag, count]) => (
+							<button
+								key={tag}
+								onClick={() => onSelectTag(tag)}
+								className={`${classes.tagButton} ${activeTag === tag ? classes.tagButtonActive : ''}`}
+							>
+								{tag.toUpperCase()}
+							</button>
+						))}
+					</div>
+				</aside> */}
 			</aside>
-			<main className={classes.main}>
+			{loading ? 'Loading..' : <main className={classes.main}>
 				{activeTag && (
-					<h2 className={classes.tagTitle}>Tag : {activeTag}</h2>
+					<h2 className={classes.tagTitle}>Tag: {activeTag}</h2>
+				)}
+				{activeCategories && (
+					<>
+						<div className={classes.tagTitle}>Topic: <b>{activeCategories}</b><span onClick={handleRemoveCategories}><Icon src={XCircle} attrs={{ color: "#b7b7b7",width: 18 }} /></span></div>
+					</>
 				)}
 				{visibleQuestions.map(q => {
 					const isOpen = expandedId === q.question_id;
@@ -103,7 +172,9 @@ const HelpCenter = () => {
 								onClick={() => toggleExpanded(q.question_id)}
 								className={`${classes.questionHeader} ${isOpen ? classes.questionHeaderOpen : ''}`}
 							>
-								<span className={classes.plusIcon}>{isOpen ? '−' : '+'}</span>
+								<span className={classes.plusIcon}>
+									{isOpen ? <Icon src={ChevronUp} attrs={{ width: 20 }} /> : <Icon src={ChevronDown} attrs={{ width: 20 }} />}
+								</span>
 								{q.title}
 							</header>
 							{isOpen && (
@@ -142,7 +213,8 @@ const HelpCenter = () => {
 				{visibleQuestions.length === 0 && (
 					<div className={classes.emptyState}>No questions found.</div>
 				)}
-			</main>
+				{totalPagesFromData && <div className={classes.pagination}>{pagination}</div>}
+			</main>}
 			</div>
 		</div>
 	);

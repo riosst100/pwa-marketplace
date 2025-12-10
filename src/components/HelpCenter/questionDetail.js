@@ -65,7 +65,7 @@ const QuestionDetail = () => {
                                 </p>
                             </div>
                             <div className={classes.tagsLine}>
-                                <strong>TAGS:</strong>
+                                <strong>Topics:</strong>
                                 {Array.isArray(question.tags) ? (
                                     question.tags.map((t, idx) => (
                                         <span key={idx} className={classes.tagPill}>

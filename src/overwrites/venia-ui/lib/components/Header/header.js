@@ -46,8 +46,8 @@ const Header = props => {
     const baseUrl = data?.storeConfig?.base_media_url;
     const imageSource = data?.storeConfig?.header_logo_src;
     const LogoImageSource = `${baseUrl}/logo/${imageSource}`;
-    const IMAGE_HEIGHT = data?.storeConfig?.logo_width || 28;
-    const IMAGE_WIDTH = data?.storeConfig?.logo_height || 190;
+    const IMAGE_HEIGHT = data?.storeConfig?.logo_width || 33;
+    const IMAGE_WIDTH = data?.storeConfig?.logo_height || 230;
     const IMAGE_ALT = data?.storeConfig?.logo_alt || 'TCG Collective';
 
     const classes = useStyle(defaultClasses, props.classes);

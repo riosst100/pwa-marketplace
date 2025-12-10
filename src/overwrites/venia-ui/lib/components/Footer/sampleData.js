@@ -1,46 +1,50 @@
 import { ContactLink } from '@magento/venia-ui/lib/components/ContactPage';
 
+const { location } = globalThis;
+const origin = location.origin;
+
 const accountLinks = new Map()
-    .set('Account', null)
-    .set('Sign In', '/')
-    .set('Register', '/')
-    .set('Tracking Order', '/')
+    .set('Let Us Help You', null)
+    .set('Your Account', '/account-information')
+    .set('Your Orders', '/order-history')
+    .set('Help', '/help-center')
+
+const socialMediaLinks = new Map()
+    .set('Connect With Us', null)
+    .set('Facebook', '/')
+    .set('Twitter', '/')
+    .set('Instagram', '/');
+
+const brandLinks = new Map()
+    .set('Protect and Build Your Brand', null)
+    .set('Sell on TCG Collective', '/')
+    .set('Partners/Affiliates', '/');
 
 const getToKnowUsLinks = new Map()
-    .set('About TCG Collective', null)
-    .set('Career', '/')
-    .set('Contact Us', '/')
-    .set('Help Center', '/help-center')
-    .set('Intelectual Property Claims', '/');
-
-const aboutLinks = new Map()
+    .set('Get to Know Us', null)
     .set('About Us', '/about-us')
-    .set('Our Story', null)
-    .set('Email Signup', null)
-    .set('Give Back', null);
+    .set('Careers', '/career')
+    .set('Contact Us', '/contact-us');
 
 const sitesLinks = new Map()
-    .set('Sites', null)
-    .set('International', '/')
-    .set('Singapore', '/')
-    .set('Malaysia', '/')
-    .set('Indonesia', '/')
-    .set('Thailand', '/')
-    .set('Philippines', '/')
-    .set('Vietnam', '/')
-
-const helpLinks = new Map()
-    .set('Help', null)
-    .set('Customer Service', '/customer-service')
-    .set('Contact Us', {
-        path: '/contact-us',
-        Component: ContactLink
+    .set('Our Stores (Country/Region)', null)
+    .set('Global', {
+        url: origin + '/'
     })
-    .set('Order Status', null)
-    .set('Returns', null);
+    .set('Singapore', {
+        url: origin + '/sg'
+    })
+    .set('Indonesia', {
+        url: origin + '/id'
+    })
+    .set('Malaysia', {
+        url: origin + '/my'
+    })
 
 export const DEFAULT_LINKS = new Map()
     .set('us', getToKnowUsLinks)
+    .set('social-media', socialMediaLinks)
+    .set('brand', brandLinks)
     .set('account', accountLinks)
     .set('sites', sitesLinks);
 
