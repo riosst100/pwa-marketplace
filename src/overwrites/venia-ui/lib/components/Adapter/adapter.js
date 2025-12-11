@@ -73,10 +73,10 @@ const Adapter = props => {
     const match = location && location.pathname.split("/")[1];
     let websiteCodeInUrl = websiteCodes.find((str) => str === match);
 
-    const { getWebsiteByUserIp } = useWebsiteByIp(websiteCodeInUrl);
-    // const getWebsiteByUserIp = {
-        // countryCode: 'SG'
-    // }
+    // const { getWebsiteByUserIp } = useWebsiteByIp(websiteCodeInUrl);
+    const getWebsiteByUserIp = {
+        countryCode: 'SG'
+    }
     
     useEffect(() => {
         if (websiteCodeInUrl) {
@@ -94,7 +94,7 @@ const Adapter = props => {
 
     useEffect(() => {
         if (!websiteCodeInUrl) {
-            history.replace(location.pathname + location.search)
+            // history.replace(location.pathname + location.search)
         } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
             const storeCodeInUrl = websiteStores[websiteCodeInUrl];
 
@@ -144,7 +144,7 @@ const Adapter = props => {
 
             // We're required to reload the page as the basename doesn't
             // change entirely without a full page reload.
-            history.go(0);
+            // history.go(0);
         }
 
         if (!websiteCodeInUrl && getWebsiteByUserIp) {
@@ -157,7 +157,8 @@ const Adapter = props => {
                 storage.getItem('access_base_website') || null
             );
 
-            const websiteCode = getWebsiteByUserIp.countryCode && !isAccessBaseWebsite ? getWebsiteByUserIp.countryCode.toLowerCase() : process.env.WEBSITE_CODE;
+            // const websiteCode = getWebsiteByUserIp.countryCode && !isAccessBaseWebsite ? getWebsiteByUserIp.countryCode.toLowerCase() : process.env.WEBSITE_CODE;
+            const websiteCode = process.env.WEBSITE_CODE;
 
             if (websiteCodes.find((str) => str === websiteCode)) {
                 routerProps.basename = websiteCode != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCode : '/';

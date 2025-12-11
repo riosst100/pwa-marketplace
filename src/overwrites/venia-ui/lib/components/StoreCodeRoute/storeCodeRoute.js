@@ -45,7 +45,7 @@ const StoreCodeRoute = () => {
     // the storage value and refresh so that we start using the new code.
     useEffect(() => {
         if (!websiteCodeInUrl) {
-            // history.replace(location.pathname + location.search)
+            history.replace(location.pathname + location.search)
         } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
             const storeCodeInUrl = websiteStores[websiteCodeInUrl];
 

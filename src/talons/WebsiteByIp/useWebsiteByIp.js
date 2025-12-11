@@ -1,32 +1,33 @@
-import { useState, useMemo, useEffect } from 'react';
-import axios from 'axios';
+// import { useState, useMemo, useEffect } from 'react';
+// import axios from 'axios';
 
 export const useWebsiteByIp = websiteCodeInUrl => {
-    const [websiteByUserIpData, setWebsiteByUserIpData] = useState(null);
+    // const [websiteByUserIpData, setWebsiteByUserIpData] = useState(null);
 
-    useEffect(() => {
-        if (!websiteCodeInUrl) {
-            const fetchData = async () => {
-                axios.get('https://extreme-ip-lookup.com/json/?key=NqwiAPsYZXoA3jwsnP7B').then((response) => {
-                    let data = response.data;
-                    if (data) {
-                        setWebsiteByUserIpData(data)
-                    }
-                }).catch((error) => {
-                });
-            };
+    // useEffect(() => {
+    //     if (!websiteCodeInUrl) {
+    //         const fetchData = async () => {
+    //             axios.get('https://extreme-ip-lookup.com/json/?key=NqwiAPsYZXoA3jwsnP7B').then((response) => {
+    //                 let data = response.data;
+    //                 if (data) {
+    //                     setWebsiteByUserIpData(data)
+    //                 }
+    //             }).catch((error) => {
+    //             });
+    //         };
         
-            fetchData();
-        }
-    }, [websiteCodeInUrl]);
+    //         fetchData();
+    //     }
+    // }, [websiteCodeInUrl]);
 
-    const getWebsiteByUserIp = useMemo(() => {
-        if (websiteByUserIpData) {
-            return websiteByUserIpData;
-        } else {
-            return null;
-        }
-    }, [websiteByUserIpData]);
+    // const getWebsiteByUserIp = useMemo(() => {
+    //     if (websiteByUserIpData) {
+    //         return websiteByUserIpData;
+    //     } else {
+    //         return null;
+    //     }
+    // }, [websiteByUserIpData]);
+    const getWebsiteByUserIp = null;
 
     return {
         getWebsiteByUserIp
