@@ -12,14 +12,44 @@ const WebsiteSwitcherItem = props => {
 
     const { location } = globalThis;
     const href = location.href;
+    const origin = location.origin;
 
-    let match = location && location.pathname.split("/")[1];
-    
+    const websiteCodes = [];
+
+    AVAILABLE_WEBSITES.forEach(store => {
+        websiteCodes.push(store.website_code);
+    });
+
+    const pathname = location.pathname;
+    const search = location.search;
+    const match = location && location.pathname.split("/")[1];
+    let websiteCodeInUrl = websiteCodes.find((str) => str === match);
+
     const websiteCode = option2 != "base" ? option2 : '';
-    if (option2 == "base") {
-        match = match + "/";
+
+    let url = href + websiteCode;
+    
+    
+    if (websiteCodeInUrl && option2 == "base") {
+        websiteCodeInUrl = websiteCodeInUrl + "/";
     }
-    const url = href.replace(match, websiteCode);
+
+    if (websiteCodeInUrl) {
+        url = href.replace(websiteCodeInUrl, websiteCode);
+    }
+
+    if (!websiteCodeInUrl) {
+        if (websiteCode) {
+            url = origin + '/' + websiteCode + pathname + search;
+        }
+    }
+
+    console.log('location',location)
+    console.log('websiteCodes',websiteCodes)
+    console.log('match',match)
+    console.log('href',href)
+    console.log('websiteCodeInUrl',websiteCodeInUrl)
+    console.log('url',url)
 
     // const handleClick = useCallback(() => {
     //     onClick(option, option2);
