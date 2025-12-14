@@ -4,13 +4,14 @@ import { useIntl } from 'react-intl';
 import ModalRFQ from './modalRfq';
 import cn from 'classnames';
 
-const RFQ = ({ disabled, classes: customClasses = {} }) => {
+const RFQ = ({ productId, disabled, classes: customClasses = {} }) => {
+
   const [open, setOpen] = useState(false);
   const { formatMessage } = useIntl();
 
   return (
     <>
-      <ModalRFQ open={open} setOpen={setOpen} />
+      <ModalRFQ open={open} setOpen={setOpen} productId={productId} />
 
       <Button
         data-cy="ProductFullDetail-RFQ"

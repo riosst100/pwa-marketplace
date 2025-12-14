@@ -1,4 +1,4 @@
-import React, { useState, useC } from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from '@magento/venia-ui/lib/components/Button';
 import Modal from '@riosst100/pwa-marketplace/src/components/Modal';
 import { X } from 'react-feather';
@@ -13,35 +13,108 @@ import { useIntl } from 'react-intl';
 import { useDropzone } from "react-dropzone";
 import { DocumentUpload } from 'iconsax-react';
 import cn from 'classnames';
+import { useToasts } from '@magento/peregrine/lib/Toasts/useToasts';
+import { useRFQ } from '@riosst100/pwa-marketplace/src/talons/RFQ/useRFQ';
 
 import "react-datepicker/dist/react-datepicker.css";
 
 const RFQModalForm = (props) => {
 
-    const { open = false, setOpen = () => { } } = props;
+    const { productId, open = false, setOpen = () => { } } = props;
+
     const { formatMessage } = useIntl();
+    const [, { addToast }] = useToasts();
+    const { handleCreateQuickRfq, createState } = useRFQ();
 
     const [startDate, setStartDate] = useState(new Date());
 
-    // Upload FIle
+    // Upload File with remove capability
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const onDrop = useCallback((accepted) => {
+        setUploadedFiles(prev => [...prev, ...accepted]);
+    }, []);
+
     const {
-        acceptedFiles,
         getRootProps,
         getInputProps,
         isDragActive
-    } = useDropzone();
+    } = useDropzone({ onDrop });
 
-    const files = acceptedFiles.map((file) => (
-        <div key={file.path} className='block font-medium mb-1'>
-            {file.path} - {Math.round(file.size / 1000)} kB
+    const handleRemoveFile = useCallback((index) => {
+        setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    }, []);
+
+    const files = uploadedFiles.map((file, idx) => (
+        <div key={(file.path || file.name) + idx} className='flex items-center justify-between gap-2 mb-1'>
+            <span className='block font-medium'>
+                {(file.path || file.name)} - {Math.round(file.size / 1000)} kB
+            </span>
+            <button
+                type='button'
+                className='text-red-600 text-sm underline'
+                onClick={() => handleRemoveFile(idx)}
+            >
+                Remove
+            </button>
         </div>
     ));
+
+    const handleSubmit = useCallback(async values => {
+        console.log('[RFQ] submit values', values);
+        const input = {
+            product_id: productId,
+            quantity: values.quote_qty ? Number(values.quote_qty) : undefined,
+            comment: values.quote_comment,
+            customer_phone: values.phone_number,
+            price_per_product: values.quote_price_per_unit
+                ? Number(values.quote_price_per_unit)
+                : undefined,
+            date_need_quote: startDate ? startDate.toISOString() : undefined,
+            files: uploadedFiles.length
+                ? uploadedFiles.map(file => ({
+                    file_name: (file && (file.name || file.path)) || '',
+                    // Browsers do not expose real file system paths; use name as a stable placeholder
+                    file_path: (file && (file.path || file.name)) || '',
+                    // Ensure a valid MIME string; default if missing
+                    file_type: (file && file.type) ? file.type : 'application/octet-stream'
+                }))
+                : undefined
+        };
+
+            console.log('[RFQ] input payload', input);
+
+        Object.keys(input).forEach(key => input[key] === undefined && delete input[key]);
+
+        try {
+            const result = await handleCreateQuickRfq(input);
+            console.log('[RFQ] mutation result', result);
+            addToast({
+                type: 'success',
+                message: formatMessage({
+                    id: 'productFullDetail.rfqSuccess',
+                    defaultMessage: 'Quote request sent successfully.'
+                }),
+                timeout: 3000
+            });
+            setOpen(false);
+        } catch (error) {
+            console.error('[RFQ] createQuickRfq failed', error);
+            addToast({
+                type: 'error',
+                message: formatMessage({
+                    id: 'productFullDetail.rfqFailed',
+                    defaultMessage: 'Unable to send quote request. Please try again.'
+                }),
+                timeout: 4000
+            });
+        }
+    }, [uploadedFiles, addToast, formatMessage, handleCreateQuickRfq, setOpen, startDate]);
 
     return (
         <>
             <Modal
                 open={open}
-                className='!p-[30px] md_min-w-[550px] modal_bid'
+                className='!p-[20px] md_min-w-[550px] modal_bid'
             >
                 <div className='modal_bid-content'>
                     <div className='header_title-modal flex justify-between mb-4'>
@@ -59,59 +132,71 @@ const RFQModalForm = (props) => {
                         </button>
                     </div>
 
-                    <div className='flex flex-col gap-y-[16px]'>
+                    <div className='flex flex-col gap-y-[8px]'>
                         <Form
                             data-cy="form_bid"
-                            className="flex flex-col gap-y-4"
+                            className="flex flex-col gap-y-2"
                             initialValues={{}}
-                            onSubmit={() => { }}
-                            onChange={() => { }}
+                            onSubmit={handleSubmit}
+                            onChange={values => {
+                                console.log('[RFQ] form change', values);
+                            }}
+                            onSubmitFailure={(errors, values) => {
+                                console.warn('[RFQ] form submit failed', { errors, values });
+                            }}
                         >
-                            <Field
-                                id="quote_price_per_unit_field"
-                                label={
-                                    formatMessage({
-                                        id: 'productFullDetail.QuotePricePerUnit',
-                                        defaultMessage:
-                                            'Quote Price Per Unit'
-                                    })
-                                }
-                            >
-                                <TextInput
-                                    id="quote_price_per_unit"
-                                    field="quote_price_per_unit"
-                                    validate={isRequired}
-                                    validateOnBlur
-                                    mask={value => value && value.trim()}
-                                    maskOnBlur={true}
-                                    data-cy="quote_price_per_unit"
-                                    aria-label={'quote_price_per_unit'}
-                                    placeholder={'10.00'}
-                                />
-                            </Field>
-
-                            <Field
-                                id="quote_qty_field"
-                                label={
-                                    formatMessage({
-                                        id: 'productFullDetail.QuoteQuantity',
-                                        defaultMessage:
-                                            'Quote Quantity'
-                                    })
-                                }
-                            >
-                                <TextInput
-                                    id="quote_qty"
-                                    field="quote_qty"
-                                    validate={isRequired}
-                                    validateOnBlur
-                                    mask={value => value && value.trim()}
-                                    maskOnBlur={true}
-                                    data-cy="quote_qty"
-                                    aria-label={'quote_qty'}
-                                    placeholder={'10'}
-                                />
-                            </Field>
+                        {({ formApi }) => (
+                            <>
+                            <div className="flex flex-col md_flex-row gap-2">
+                                <div className="md_flex-1">
+                                    <Field
+                                        id="quote_price_per_unit_field"
+                                        label={
+                                            formatMessage({
+                                                id: 'productFullDetail.QuotePricePerUnit',
+                                                defaultMessage:
+                                                    'Quote Price Per Unit'
+                                            })
+                                        }
+                                    >
+                                        <TextInput
+                                            id="quote_price_per_unit"
+                                            field="quote_price_per_unit"
+                                            validate={isRequired}
+                                            validateOnBlur
+                                            mask={value => value && value.trim()}
+                                            maskOnBlur={true}
+                                            data-cy="quote_price_per_unit"
+                                            aria-label={'quote_price_per_unit'}
+                                            placeholder={'10.00'}
+                                        />
+                                    </Field>
+                                </div>
+                                <div className="md_flex-1">
+                                    <Field
+                                        id="quote_qty_field"
+                                        label={
+                                            formatMessage({
+                                                id: 'productFullDetail.QuoteQuantity',
+                                                defaultMessage:
+                                                    'Quote Quantity'
+                                            })
+                                        }
+                                    >
+                                        <TextInput
+                                            id="quote_qty"
+                                            field="quote_qty"
+                                            validate={isRequired}
+                                            validateOnBlur
+                                            mask={value => value && value.trim()}
+                                            maskOnBlur={true}
+                                            data-cy="quote_qty"
+                                            aria-label={'quote_qty'}
+                                            placeholder={'10'}
+                                        />
+                                    </Field>
+                                </div>
+                            </div>
 
                             <Field
                                 id="date_need_quote_field"
@@ -149,7 +234,7 @@ const RFQModalForm = (props) => {
                                     maskOnBlur={true}
                                     data-cy="phone_number"
                                     aria-label={'phone_number'}
-                                    placeholder={'10'}
+                                    placeholder={'(123) 456-7890'}
                                 />
                             </Field>
 
@@ -178,7 +263,7 @@ const RFQModalForm = (props) => {
                             <section className="wfp--dropzone">
                                 <div
                                     {...getRootProps({ isDragActive })}
-                                    className='border border-blue-600 rounded-md border-dashed flex flex-col justify-center items-center py-6'
+                                    className='border border-blue-600 rounded-md border-dashed flex flex-col justify-center items-center py-3'
                                 >
                                     <input {...getInputProps()} />
                                     <DocumentUpload
@@ -187,7 +272,7 @@ const RFQModalForm = (props) => {
                                     />
                                     <div className='mt-2 text-blue-600'>Drop files or click here to upload</div>
                                 </div>
-                                {files && (
+                                {files && files.length > 0 && (
                                     <div className="wfp--dropzone__file-list mt-4">
                                         <ul>{files}</ul>
                                     </div>
@@ -201,7 +286,11 @@ const RFQModalForm = (props) => {
                                     classes={{
                                         content: 'capitalize text-[16px] font-medium'
                                     }}
-                                    onClick={() => setOpen(false)}
+                                    type="button"
+                                    onClick={() => {
+                                        console.log('[RFQ] Cancel clicked, closing modal');
+                                        setOpen(false);
+                                    }}
                                 >
                                     {
                                         formatMessage({
@@ -216,22 +305,47 @@ const RFQModalForm = (props) => {
                                     classes={{
                                         content: 'capitalize text-[16px] font-medium'
                                     }}
+                                    type="button"
+                                    onPress={() => {
+                                        console.log('[RFQ] Submit pressed, calling formApi.submitForm()');
+                                        formApi.submitForm();
+                                    }}
+                                    disabled={createState?.loading}
+                                    data-cy="rfq-submit"
                                 >
-                                    {
-                                        formatMessage({
-                                            id: 'productFullDetail.SendRequest',
-                                            defaultMessage:
-                                                'Send Request'
+                                    {createState?.loading
+                                        ? formatMessage({
+                                            id: 'productFullDetail.SendingRequest',
+                                            defaultMessage: 'Sending...'
                                         })
-                                    }
+                                        : formatMessage({
+                                            id: 'productFullDetail.SendRequest',
+                                            defaultMessage: 'Send Request'
+                                        })}
                                 </Button>
                             </div>
+                            </>
+                        )}
                         </Form>
                     </div>
                 </div>
             </Modal>
             <style jsx="true">
                 {`
+                    /* Modal container adjustments to prevent clipping */
+                    .modal_bid-content {
+                        max-height: 90vh;
+                        overflow-y: auto;
+                    }
+                    @media (min-width: 768px) {
+                        .md_min-w-[550px] {
+                            min-width: 550px;
+                        }
+                    }
+                    /* Ensure inner form sections don't overflow */
+                    .wfp--dropzone {
+                        max-width: 100%;
+                    }
                     .react-datepicker__input-container>input:focus-visible,
                     .react-datepicker__input-container>input:focus, 
                     .react-datepicker__input-container>input:active {
@@ -239,6 +353,10 @@ const RFQModalForm = (props) => {
                     }
                     .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
                         left: 25px;
+                    }
+                    /* Keep datepicker within viewport */
+                    .react-datepicker-popper {
+                        z-index: 1000;
                     }
                 `}
             </style>

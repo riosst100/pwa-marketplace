@@ -246,7 +246,7 @@ const OrderRow = props => {
                                     </div>
                                 </div>
                                 <div class="flex flex-col gap-1 pb-2 last_pb-0 justify-center">
-                                    <div class="text-[14px] text-blue-700">
+                                    <div class="text-[14px] text-blue-700 mr-4">
                                         <span><Price currencyCode={it?.product_sale_price?.currency} value={it?.product_sale_price?.value} /></span>
                                     </div>
                                 </div>
