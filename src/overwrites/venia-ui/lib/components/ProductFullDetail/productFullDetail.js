@@ -535,6 +535,7 @@ const ProductFullDetail = props => {
     const cartActionContent = isSupportedProductType ? (
         <section className={cn(classes.actButton, 'justify-between flex gap-x-[20px] px-[15px] py-0')}>
            <RFQ
+                productId={product.id}
                 disabled={isAddToCartDisabled || isPreOrderClosed}
                 classes={{ rfqButton: cn(classes.rfqButton, "w-full") }}
             />

@@ -1,17 +1,10 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState, useCallback } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
-import {
-    Search as SearchIcon,
-    AlertCircle as AlertCircleIcon,
-    ArrowRight as SubmitIcon
-} from 'react-feather';
+import { AlertCircle as AlertCircleIcon } from 'react-feather';
 import { shape, string } from 'prop-types';
 import { Form } from 'informed';
 
 import { useToasts } from '@magento/peregrine/lib/Toasts';
-import OrderHistoryContextProvider from '@magento/peregrine/lib/talons/OrderHistoryPage/orderHistoryContext';
-import { useOrderHistoryPage } from '@magento/peregrine/lib/talons/OrderHistoryPage/useOrderHistoryPage';
-
 import { useStyle } from '@magento/venia-ui/lib/classify';
 import Button from '@magento/venia-ui/lib/components/Button';
 import Icon from '@magento/venia-ui/lib/components/Icon';
@@ -23,7 +16,7 @@ import defaultClasses from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/l
 import OrderRow from './orderRow';
 import ResetButton from '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/OrderHistoryPage/resetButton';
 import { SearchNormal } from 'iconsax-react';
-import cn from 'classnames';
+import { useRFQ } from '@riosst100/pwa-marketplace/src/talons/RFQ/useRFQ';
 
 const errorIcon = (
     <Icon
@@ -33,21 +26,13 @@ const errorIcon = (
         }}
     />
 );
-const searchIcon = <Icon src={SearchIcon} size={24} />;
+// no search icon needed
 
 const QuoteList = props => {
-    const talonProps = useOrderHistoryPage();
-    const {
-        errorMessage,
-        loadMoreOrders,
-        handleReset,
-        handleSubmit,
-        isBackgroundLoading,
-        isLoadingWithoutData,
-        orders,
-        pageInfo,
-        searchText
-    } = talonProps;
+    const { loadRfqList, rfqListState } = useRFQ();
+    const { data: rfqListData, loading: rfqLoading, error: rfqError } = rfqListState || {};
+    const [searchText, setSearchText] = useState('');
+    const [submittedSearch, setSubmittedSearch] = useState('');
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
     const PAGE_TITLE = formatMessage({
@@ -59,43 +44,41 @@ const QuoteList = props => {
         defaultMessage: 'Search by Quote Number'
     });
 
-    const ordersCountMessage = formatMessage(
-        {
-            id: 'orderHistoryPage.ordersCount',
-            defaultMessage: 'You have {count} orders in your history.'
-        },
-        { count: orders.length }
-    );
+    // derive items
+    const rfqItems = rfqListData?.quickrfqList?.items || [];
+    const totalCount = rfqListData?.quickrfqList?.total_count || 0;
+    const pageInfo = rfqListData?.quickrfqList?.page_info || null;
 
     const classes = useStyle(defaultClasses, props.classes);
 
     const orderRows = useMemo(() => {
-        return orders.map(order => {
-            return <OrderRow key={order.id} order={order} />;
+        return rfqItems.map(item => {
+            const key = `${item.quickrfq_id}-${item.update_date || item.create_date}`;
+            return <OrderRow key={key} rfq={item} />;
         });
-    }, [orders]);
+    }, [rfqItems]);
 
     const pageContents = useMemo(() => {
-        if (isLoadingWithoutData) {
+        if (rfqLoading && !rfqItems.length) {
             return <LoadingIndicator />;
-        } else if (!isBackgroundLoading && searchText && !orders.length) {
+        } else if (!rfqLoading && submittedSearch && !rfqItems.length) {
             return (
                 <h3 className={classes.emptyHistoryMessage}>
                     <FormattedMessage
-                        id={'orderHistoryPage.invalidOrderNumber'}
-                        defaultMessage={`Order "${searchText}" was not found.`}
+                        id={'quotesPage.invalidQuoteNumber'}
+                        defaultMessage={`Quote "${submittedSearch}" was not found.`}
                         values={{
-                            number: searchText
+                            number: submittedSearch
                         }}
                     />
                 </h3>
             );
-        } else if (!isBackgroundLoading && !orders.length) {
+        } else if (!rfqLoading && !rfqItems.length) {
             return (
                 <h3 className={classes.emptyHistoryMessage}>
                     <FormattedMessage
-                        id={'orderHistoryPage.emptyDataMessage'}
-                        defaultMessage={"You don't have any orders yet."}
+                        id={'quotesPage.emptyDataMessage'}
+                        defaultMessage={"You don't have any quotes yet."}
                     />
                 </h3>
             );
@@ -112,12 +95,23 @@ const QuoteList = props => {
     }, [
         classes.emptyHistoryMessage,
         classes.orderHistoryTable,
-        isBackgroundLoading,
-        isLoadingWithoutData,
+        rfqLoading,
         orderRows,
-        orders.length,
-        searchText
+        rfqItems.length,
+        submittedSearch
     ]);
+
+    const handleReset = useCallback(() => {
+        setSearchText('');
+        setSubmittedSearch('');
+        loadRfqList({
+            variables: {
+                currentPage: 1,
+                pageSize: 20,
+                filters: {}
+            }
+        });
+    }, [loadRfqList]);
 
     const resetButtonElement = searchText ? (
         <ResetButton onReset={handleReset} />
@@ -128,18 +122,36 @@ const QuoteList = props => {
     );
 
     const pageInfoLabel = pageInfo ? (
-        <FormattedMessage
-            defaultMessage={'Showing {current} of {total}'}
-            id={'orderHistoryPage.pageInfo'}
-            values={pageInfo}
-        />
+        (() => {
+            const currentPage = pageInfo.current_page || 1;
+            const pageSize = pageInfo.page_size || 20;
+            const total = totalCount || 0;
+            const current = Math.min(currentPage * pageSize, total);
+            return (
+                <FormattedMessage
+                    defaultMessage={'Showing {current} of {total}'}
+                    id={'rfqList.pageInfo'}
+                    values={{ current, total }}
+                />
+            );
+        })()
     ) : null;
 
-    const loadMoreButton = loadMoreOrders ? (
+    const loadMoreButton = pageInfo && pageInfo.current_page < Math.ceil((totalCount || 0) / (pageInfo.page_size || 20)) ? (
         <Button
             classes={{ root_lowPriority: classes.loadMoreButton }}
-            disabled={isBackgroundLoading || isLoadingWithoutData}
-            onClick={loadMoreOrders}
+            disabled={rfqLoading}
+            onClick={() =>
+                loadRfqList({
+                    variables: {
+                        currentPage: (pageInfo.current_page || 1) + 1,
+                        pageSize: pageInfo.page_size || 20,
+                        filters: submittedSearch
+                            ? { quickrfq_id: { eq: submittedSearch } }
+                            : {}
+                    }
+                })
+            }
             priority="low"
         >
             <FormattedMessage
@@ -150,20 +162,34 @@ const QuoteList = props => {
     ) : null;
 
     useEffect(() => {
-        if (errorMessage) {
+        // initial load
+        loadRfqList({
+            variables: { currentPage: 1, pageSize: 20, filters: {} }
+        });
+    }, [loadRfqList]);
+
+    useEffect(() => {
+        if (rfqError?.message) {
             addToast({
                 type: 'error',
                 icon: errorIcon,
-                message: errorMessage,
+                message: rfqError.message,
                 dismissable: true,
                 timeout: 10000
             });
         }
-    }, [addToast, errorMessage]);
+    }, [addToast, rfqError]);
+
+    const handleSubmit = useCallback(({ values }) => {
+        const search = values?.search?.trim() || '';
+        setSearchText(search);
+        setSubmittedSearch(search);
+        const filters = search ? { quickrfq_id: { eq: search } } : {};
+        loadRfqList({ variables: { currentPage: 1, pageSize: 20, filters } });
+    }, [loadRfqList]);
 
     return (
-        <OrderHistoryContextProvider>
-            <div className="grid gap-y-md">
+        <div className="grid gap-y-md">
                 <StoreTitle>{PAGE_TITLE}</StoreTitle>
                 <div aria-live="polite" className="text-xl font-medium text-left">
                     {PAGE_TITLE}
@@ -175,8 +201,6 @@ const QuoteList = props => {
                 <div className={classes.filterRow}>
                     <Form className="flex gap-x-1 border border-gray-100 rounded-full px-[15px] w-[calc(100%-120px)] max-w-[450px]" onSubmit={handleSubmit}>
                         <TextInput
-                            // after={resetButtonElement}
-                            // before={searchIcon}
                             field="search"
                             id={classes.search}
                             placeholder={SEARCH_PLACE_HOLDER}
@@ -191,12 +215,11 @@ const QuoteList = props => {
                         ) : (
                             <Button
                                 className="focus-visible_outline-none"
-                                disabled={
-                                    isBackgroundLoading || isLoadingWithoutData
-                                }
+                                disabled={rfqLoading}
                                 priority={'high'}
-                                type="submit"
+                                type="button"
                                 aria-label="submit"
+                                onPress={(_evt, formApi) => formApi.submitForm()}
                             >
                                 {submitIcon}
                             </Button>
@@ -207,7 +230,6 @@ const QuoteList = props => {
                 {pageContents}
                 {loadMoreButton}
             </div>
-        </OrderHistoryContextProvider >
     );
 };
 

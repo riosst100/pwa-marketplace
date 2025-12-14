@@ -1,79 +1,101 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Image from '@magento/venia-ui/lib/components/Image';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import Button from '@magento/venia-ui/lib/components/Button';
 import ChatContent from '../LiveChat/chatContent';
 import cn from 'classnames';
 import { Send } from 'iconsax-react';
+import Price from '@magento/venia-ui/lib/components/Price';
+import { useRFQ } from '@riosst100/pwa-marketplace/src/talons/RFQ/useRFQ';
+import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator';
 
 const quoteDetail = () => {
     const { formatMessage } = useIntl();
+    const { id } = useParams();
+    const location = useLocation();
+    const locationRfq = location && location.state && location.state.rfq ? location.state.rfq : null;
+    const { loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
+    const [messageText, setMessageText] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const [sendError, setSendError] = useState(null);
+    const detailData = rfqDetailState && rfqDetailState.data ? rfqDetailState.data.quickrfqDetail : null;
+    const detailLoading = rfqDetailState ? rfqDetailState.loading : false;
+    const detailError = rfqDetailState ? rfqDetailState.error : null;
     const PAGE_TITLE = formatMessage({
         id: 'Quotes.pageTitleTextQuoteDetail',
         defaultMessage: 'Quote Detail'
     });
 
+    // prefer image from info_buy_request if available; otherwise use placeholder
     const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
-    const dummyChat = [
-        {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "May I help you",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "Yes",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "can i get a discount",
-            "type": "buyer",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "you can redeem this code 'JunePlay'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-        {
-            "message": "or this code 'collectfest'",
-            "type": "seller",
-            "timeStamp": "03-06-2024 2:59 pm"
-        },
-    ]
+
+    useEffect(() => {
+        if (!locationRfq) {
+            const parsedId = id ? parseInt(id, 10) : NaN;
+            if (!isNaN(parsedId)) {
+                const variables = { quickrfqId: parsedId };
+                loadRfqDetail(variables);
+            }
+        }
+    }, [id, locationRfq, loadRfqDetail]);
+
+    // start polling messages every 5s while on detail page; stop on unmount
+    useEffect(() => {
+        if (typeof startDetailPolling === 'function' && typeof stopDetailPolling === 'function') {
+            startDetailPolling(5000);
+            return () => stopDetailPolling();
+        }
+    }, [startDetailPolling, stopDetailPolling]);
+
+    const rfq = locationRfq || detailData || {};
+    const quickrfqIdValue = rfq && rfq.quickrfq_id ? (typeof rfq.quickrfq_id === 'number' ? rfq.quickrfq_id : parseInt(rfq.quickrfq_id, 10)) : (id ? parseInt(id, 10) : null);
+    const [isConverting, setIsConverting] = useState(false);
+    const [convertError, setConvertError] = useState(null);
+    const [convertSuccess, setConvertSuccess] = useState(null);
+    const status = rfq && rfq.status ? rfq.status : '-';
+    const quantity = rfq && rfq.quantity ? rfq.quantity : '-';
+    const pricePerProduct = rfq && rfq.price_per_product ? rfq.price_per_product : null;
+    const productName = rfq && rfq.product_name ? rfq.product_name : '-';
+    const currency = pricePerProduct && pricePerProduct.currency ? pricePerProduct.currency : (rfq && rfq.store_currency_code ? rfq.store_currency_code : '');
+    const unitValue = pricePerProduct && typeof pricePerProduct.value === 'number' ? pricePerProduct.value : null;
+    const qtyNumber = typeof quantity === 'number' ? quantity : (typeof quantity === 'string' ? parseFloat(quantity) : 0);
+    const expectedTotal = unitValue !== null && !isNaN(qtyNumber) ? unitValue * qtyNumber : null;
+    const contactName = rfq && rfq.contact_name ? rfq.contact_name : '-';
+    const email = rfq && rfq.email ? rfq.email : '-';
+    const phone = rfq && rfq.phone ? rfq.phone : '-';
+    const dateNeedQuote = rfq && rfq.date_need_quote ? rfq.date_need_quote : '-';
+
+    const isInitialLoading = detailLoading && !detailData;
+    if (isInitialLoading && !locationRfq) {
+        return <LoadingIndicator />;
+    }
+
+    if (detailError && !locationRfq) {
+        return (
+            <div className="p-4">
+                <div className="text-red-600 text-sm">
+                    {formatMessage({ id: 'Quotes.detailError', defaultMessage: 'Failed to load quote detail.' })}
+                </div>
+            </div>
+        );
+    }
+
+    // map backend messages to ChatContent shape using customer_id
+    const chatData = Array.isArray(rfq && rfq.messages)
+        ? rfq.messages.map(m => ({
+              message: m && m.message ? m.message : '',
+              type: m && m.customer_id === 0 ? 'seller' : 'buyer',
+              timeStamp: m && m.created_at ? m.created_at : ''
+          }))
+        : [];
 
     return (
         <div className='relative grid gap-y-md'>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
             <div aria-live="polite" className="text-xl font-medium text-left">
-                {PAGE_TITLE} - DEV123123123
+                {PAGE_TITLE} - #{id}
             </div>
             <div className='rounded-md border border-gray-100 px-4 py-6 flex flex-col-reverse md_flex-row justify-between gap-x-10'>
                 <div className='flex flex-col gap-y-4 w-full md_w-6/12'>
@@ -88,7 +110,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-medium block text-blue-700'>
-                                Approve
+                                {status}
                             </span>
                         </p>
                     </div>
@@ -103,7 +125,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                4 Units
+                                {quantity} Units
                             </span>
                         </p>
                     </div>
@@ -118,7 +140,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                4 Units
+                                -
                             </span>
                         </p>
                     </div>
@@ -133,7 +155,13 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                $50.00 Per Unit
+                                {unitValue !== null ? (
+                                    <>
+                                        <Price currencyCode={currency} value={unitValue} /> {' '} Per Unit
+                                    </>
+                                ) : (
+                                    '-'
+                                )}
                             </span>
                         </p>
                     </div>
@@ -148,7 +176,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                $55.00 Units
+                                -
                             </span>
                         </p>
                     </div>
@@ -163,7 +191,11 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-medium block'>
-                                $200.00 Units
+                                {expectedTotal !== null ? (
+                                    <Price currencyCode={currency} value={expectedTotal} />
+                                ) : (
+                                    '-'
+                                )} {' '} Units
                             </span>
                         </p>
                     </div>
@@ -178,7 +210,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                $220.00 Units
+                                -
                             </span>
                         </p>
                     </div>
@@ -193,7 +225,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                H20
+                                -
                             </span>
                         </p>
                         <small className='text-[10px] text-gray-600'>
@@ -216,7 +248,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                Gundam Info
+                                -
                             </span>
                         </p>
                     </div>
@@ -231,7 +263,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                2024-08-22
+                                {dateNeedQuote}
                             </span>
                         </p>
                     </div>
@@ -246,7 +278,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                2024-08-30
+                                -
                             </span>
                         </p>
                     </div>
@@ -260,29 +292,56 @@ const quoteDetail = () => {
                             root: ' relative self-center mb-5'
                         }}
                     />
-
                     <p className='text-[16px] font-medium text-colorDefault text-center'>
-                        $60.00
+                        {unitValue !== null ? (
+                            <Price currencyCode={currency} value={unitValue} />
+                        ) : (
+                            '-'
+                        )}
                     </p>
-
-                    <Link to="/pop-mart-star-wars-series-blind-box-confirmed-figures-designer-art-new-toys-gift.html" className="max-w-[360px] self-center mb-5">
-                        <span className=" text-[13px] block text-center font-medium text-colorDefault w-full">
-                            POP MART Star Wars Series Blind Box Confirmed Figures Designer Art New Toys Gift
+                    <div className="max-w-[360px] self-center mb-5 text-center">
+                        <span className=" text-[13px] block font-medium text-colorDefault w-full">
+                            {productName}
                         </span>
-                    </Link>
+                    </div>
                     <Button
                         priority='high'
                         classes={{
                             content: 'capitalize text-[16px] font-medium'
                         }}
+                        disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue)}
+                        aria-busy={isConverting}
+                        onPress={async () => {
+                            const qid = quickrfqIdValue;
+                            if (!qid || isNaN(qid)) return;
+                            try {
+                                setConvertError(null);
+                                setConvertSuccess(null);
+                                setIsConverting(true);
+                                const res = await handleConvertQuickrfqToCart(qid);
+                                const payload = res && res.data && res.data.convertQuickrfqToCart ? res.data.convertQuickrfqToCart : null;
+                                if (payload && payload.status) {
+                                    setConvertSuccess(payload.message || 'Converted to cart.');
+                                } else {
+                                    setConvertError('Failed to convert quote to cart.');
+                                }
+                            } catch (e) {
+                                setConvertError('Failed to convert quote to cart.');
+                            } finally {
+                                setIsConverting(false);
+                            }
+                        }}
                     >
-                        {
-                            formatMessage({
-                                id: 'Quotes.addToCart',
-                                defaultMessage: 'Add To Cart'
-                            })
-                        }
+                        {isConverting
+                            ? formatMessage({ id: 'Quotes.converting', defaultMessage: 'Add To Cart…' })
+                            : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
                     </Button>
+                    {convertError ? (
+                        <div className='text-red-600 text-[12px] mt-2 text-center'>{convertError}</div>
+                    ) : null}
+                    {convertSuccess ? (
+                        <div className='text-green-600 text-[12px] mt-2 text-center'>{convertSuccess}</div>
+                    ) : null}
                 </div>
             </div>
             <div className=' flex flex-col mb-10'>
@@ -291,12 +350,14 @@ const quoteDetail = () => {
                 </div>
                 <div className='rounded-md border border-gray-100 p-4 pr-0 pt-0 flex flex-col gap-y-6'>
                     <div className='max-h-[600px] overflow-auto relative chat-container pr-4 pt-4'>
-                        <ChatContent chatData={dummyChat} />
+                        <ChatContent chatData={chatData} />
                     </div>
                     <div className='flex gap-2 pr-4'>
                         <textarea
                             className='w-full focus-visible_outline-none border border-gray-100 p-1 rounded-md'
                             cols={5}
+                            value={messageText}
+                            onChange={e => setMessageText(e.target.value)}
                         />
                         <Button
                             priority='high'
@@ -304,15 +365,41 @@ const quoteDetail = () => {
                                 content: "flex justify-center gap-x-2.5 items-center text-[14px] font-medium capitalize"
                             }}
                             className={cn(
-                                "bg-blue-600 px-6 py-2 rounded-full text-white border ",
-                                "border-blue-600 hover_bg-blue-700 hover_border-blue-700 focus-visible_outline-none"
+                                "px-6 py-2 rounded-full text-white border focus-visible_outline-none",
+                                isSending
+                                    ? "bg-gray-400 border-gray-400"
+                                    : "bg-blue-600 border-blue-600 hover_bg-blue-700 hover_border-blue-700"
                             )}
+                            disabled={isSending || !(messageText || '').trim()}
+                            aria-busy={isSending}
+                            onPress={async () => {
+                                const qid = quickrfqIdValue;
+                                const msg = (messageText || '').trim();
+                                if (!qid || isNaN(qid) || msg.length === 0) {
+                                    return;
+                                }
+                                try {
+                                    setSendError(null);
+                                    setIsSending(true);
+                                    await handleSendRfqMessage({ quickrfq_id: qid, message: msg });
+                                    setMessageText('');
+                                    await loadRfqDetail({ quickrfqId: qid });
+                                } catch (err) {
+                                    setSendError('Failed to send message.');
+                                } finally {
+                                    setIsSending(false);
+                                }
+                            }}
                         >
-                            <Send
-                                size="24"
-                                className='text-white'
-                            />
+                            {isSending ? (
+                                <span className='text-white text-[14px]'>Sending…</span>
+                            ) : (
+                                <Send size="24" className='text-white' />
+                            )}
                         </Button>
+                        {sendError ? (
+                            <span className='text-red-600 text-[12px] self-center'>{sendError}</span>
+                        ) : null}
                     </div>
                 </div>
             </div>
