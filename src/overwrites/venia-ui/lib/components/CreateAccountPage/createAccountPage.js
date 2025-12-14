@@ -16,15 +16,34 @@ const CreateAccountPage = props => {
     const { formatMessage } = useIntl();
 
     return (
-        <div className={classes.root}>
-            <StoreTitle>
-                {formatMessage({
-                    id: 'createAccountPage.title',
-                    defaultMessage: 'Create an Account'
-                })}
-            </StoreTitle>
-            <div className={cn(classes.contentContainer, '!border !border-gray-100 !rounded-lg')}>
-                <CreateAccount {...createAccountProps} />
+        <div className={classes.signInRootContainer}>
+            <div className={cn(classes.root, '!py-[60px]')}>
+                <StoreTitle>
+                    {formatMessage({
+                        id: 'signInPage.title',
+                        defaultMessage: 'Sign In'
+                    })}
+                </StoreTitle>
+                <div className={cn(classes.leftContentContainer, '')}>
+                    <div class="auth-left">
+                        <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" />
+                        <p style={{
+                            "fontSize": "20px",
+                            "fontWeight": 500
+                        }}>Create an account to start shopping or selling your collectibles.</p>
+                    </div>
+                </div>
+            </div>
+            <div className={classes.root}>
+                <StoreTitle>
+                    {formatMessage({
+                        id: 'createAccountPage.title',
+                        defaultMessage: 'Create an Account'
+                    })}
+                </StoreTitle>
+                <div className={cn(classes.contentContainer, '!border !border-gray-100 !rounded-lg')}>
+                    <CreateAccount {...createAccountProps} />
+                </div>
             </div>
         </div>
     );

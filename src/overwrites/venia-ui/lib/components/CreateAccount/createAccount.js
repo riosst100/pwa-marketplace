@@ -86,12 +86,12 @@ const CreateAccount = props => {
             initialValues={initialValues}
             onSubmit={handleSubmit}
         >
-            <h2 data-cy="CreateAccount-title" className={classes.title}>
+            {/* <h2 data-cy="CreateAccount-title" className={classes.title}>
                 <FormattedMessage
                     id={'createAccount.createAccountText'}
                     defaultMessage={'Sign Up'}
                 />
-            </h2>
+            </h2> */}
             <FormError errors={Array.from(errors.values())} />
             <div className='grid grid-cols-2 gap-6'>
                 <Field
@@ -257,7 +257,7 @@ const CreateAccount = props => {
                 {/* {cancelButton} */}
             </div>
             <div className='block'>
-                <span className='text-xs font-normal'>
+                <span className='text-sm font-normal'>
                     <FormattedMessage
                         id={'createAccount.alreadyHaveAccount'}
                         defaultMessage={"Already have an account ?"}
@@ -266,7 +266,7 @@ const CreateAccount = props => {
                 {' '}
                 <Link
                     to={'/sign-in'}
-                    className='text-xs font-normal text-blue-700 underline'
+                    className='text-sm font-normal text-blue-700 underline'
                 >
                     <FormattedMessage
                         id={'createAccount.SignIn'}

@@ -47,6 +47,8 @@ import { ShoppingCart } from 'react-feather';
 import MessagesModal from '@riosst100/pwa-marketplace/src/components/LiveChat/MessagesModal';
 import SellerOperations from '@riosst100/pwa-marketplace/src/talons/Seller/seller.gql';
 
+import AgeVerificationModal from '@riosst100/pwa-marketplace/src/components/AgeVerification/ageVerificationModal';
+
 import { totalListings, lowestPrice } from '@riosst100/pwa-marketplace/src/components/CrossSeller/crossSellerBuy';
 
 // Correlate a GQL error message to a field. GQL could return a longer error
@@ -809,6 +811,7 @@ const ProductFullDetail = props => {
         <Fragment>
             {breadcrumbs}
             {productPreviewMessages}
+            {/* <AgeVerificationModal /> */}
             <Form
                 className={classes.root}
                 data-cy="ProductFullDetail-root"

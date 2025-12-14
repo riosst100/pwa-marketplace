@@ -15,3 +15,13 @@
 .contentContainer {
     composes: rounded-lg from global;
 }
+
+.leftContentContainer {
+    text-align: left;
+}
+
+.signInRootContainer {
+    justify-content: space-around;
+    display: flex;
+    align-items: normal;
+}
