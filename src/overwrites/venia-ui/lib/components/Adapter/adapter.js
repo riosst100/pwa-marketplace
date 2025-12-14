@@ -147,6 +147,8 @@ const Adapter = props => {
             // history.go(0);
         }
 
+        console.log('currentWebsiteCode',currentWebsiteCode)
+
         if (!websiteCodeInUrl && getWebsiteByUserIp) {
             setVerifyUserIp(false);
 
@@ -185,7 +187,7 @@ const Adapter = props => {
                 );
             }
         }
-    }, [websiteCodeInUrl, getWebsiteByUserIp]);
+    }, [websiteCodeInUrl, currentWebsiteCode]);
 
     // TODO: Replace with app skeleton. See PWA-547.
     if (!initialized) {

@@ -1,6 +1,17 @@
 .root {
     composes: gap-y-md from global;
     composes: grid from global;
+    /* composes: justify-center from global; */
+    composes: px-0 from global;
+    composes: py-md from global;
+    composes: text-center from global;
+    grid-template-columns: minmax(auto, 80%);
+    justify-content: right;
+}
+
+.leftContent {
+    composes: gap-y-md from global;
+    composes: grid from global;
     composes: justify-center from global;
     composes: px-0 from global;
     composes: py-md from global;
@@ -10,4 +21,14 @@
 
 .header {
     composes: font-serif from global;
+}
+
+.leftContentContainer {
+    text-align: left;
+}
+
+.rootContainer {
+    justify-content: space-around;
+    display: flex;
+    align-items: normal;
 }

@@ -44,13 +44,6 @@ const WebsiteSwitcherItem = props => {
         }
     }
 
-    console.log('location',location)
-    console.log('websiteCodes',websiteCodes)
-    console.log('match',match)
-    console.log('href',href)
-    console.log('websiteCodeInUrl',websiteCodeInUrl)
-    console.log('url',url)
-
     // const handleClick = useCallback(() => {
     //     onClick(option, option2);
     // }, [option, option2, onClick]);

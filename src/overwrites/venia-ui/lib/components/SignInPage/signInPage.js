@@ -16,15 +16,28 @@ const SignInPage = props => {
     const { formatMessage } = useIntl();
 
     return (
-        <div className={cn(classes.root, '!py-[60px]')}>
-            <StoreTitle>
-                {formatMessage({
-                    id: 'signInPage.title',
-                    defaultMessage: 'Sign In'
-                })}
-            </StoreTitle>
-            <div className={cn(classes.contentContainer, 'border border-gray-100 rounded-lg')}>
-                <SignIn {...signInProps} />
+        <div className={classes.signInRootContainer}>
+            <div className={cn(classes.root, '!py-[60px]')}>
+                <StoreTitle>
+                    {formatMessage({
+                        id: 'signInPage.title',
+                        defaultMessage: 'Sign In'
+                    })}
+                </StoreTitle>
+                <div className={cn(classes.leftContentContainer, '')}>
+                    <div class="auth-left">
+                        <img src="https://img.freepik.com/premium-vector/sign-concept-illustration_114360-125.jpg" width="50%" />
+                        <p style={{
+                            "fontSize": "20px",
+                            "fontWeight": 500
+                        }}>Sign in to start shopping or sell your collectibles.</p>
+                    </div>
+                </div>
+            </div>
+            <div className={cn(classes.root, '!py-[60px]')}>
+                <div className={cn(classes.contentContainer, 'border border-gray-100 rounded-lg')}>
+                    <SignIn {...signInProps} />
+                </div>
             </div>
         </div>
     );

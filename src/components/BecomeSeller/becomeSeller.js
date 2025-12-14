@@ -25,6 +25,9 @@ import Postcode from '@magento/venia-ui/lib/components/Postcode';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
+import { BrowserPersistence } from '@magento/peregrine/lib/util';
+
+const storage = new BrowserPersistence();
 
 const BecomeSeller = props => {
     const talonProps = useBecomeSeller({
@@ -46,6 +49,9 @@ const BecomeSeller = props => {
     } = talonProps;
     const { formatMessage } = useIntl();
     const classes = useStyle(defaultClasses, props.classes);
+
+    const websiteCountry = storage.getItem('website_code') && storage.getItem('website_code') != "base" ? '/' + storage.getItem('website_code') : '';
+    const sellerDashboardUrl = process.env.MAGENTO_BACKEND_URL ? process.env.MAGENTO_BACKEND_URL + websiteCountry : '';
 
     const submitButton = (
         <Button
@@ -89,12 +95,12 @@ const BecomeSeller = props => {
             onSubmit={handleSubmit}
             onChange={handleChange}
         >
-            <h2 data-cy="BecomeSeller-title" className="capitalize text-lg font-medium mb-[70px]">
+            {/* <h2 data-cy="BecomeSeller-title" className="capitalize text-lg font-medium mb-[70px]">
                 <FormattedMessage
                     id={'becomeSeller.becomeSellerText'}
                     defaultMessage={'Register as Seller'}
                 />
-            </h2>
+            </h2> */}
             <FormError errors={Array.from(errors.values())} />
             <h3 className='text-[16px] leading-5 font-medium text-left mb-[30px]'>
                 <FormattedMessage
@@ -416,22 +422,19 @@ const BecomeSeller = props => {
                 {submitButton}
             </div>
             <div className='block'>
-                <span className='text-xs font-normal'>
+                <span className='text-sm font-normal'>
                     <FormattedMessage
                         id={'createAccount.alreadyHaveAccount'}
-                        defaultMessage={"Already have an account ?"}
+                        defaultMessage={"Already have an seller account?"}
                     />
                 </span>
                 {' '}
-                <Link
-                    to={'/sign-in'}
-                    className='text-xs font-normal text-blue-700 underline'
-                >
+                <a href={sellerDashboardUrl + "/lofmarketplace/seller/login"} className='text-sm font-normal text-blue-700 underline'>
                     <FormattedMessage
                         id={'createAccount.SignInAsSeller'}
-                        defaultMessage={"Sign in as seller now "}
+                        defaultMessage={"Sign In to Seller Dashboard"}
                     />
-                </Link>
+                </a>
             </div>
         </Form>
     ) : '';
