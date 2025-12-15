@@ -31,8 +31,6 @@ const quoteDetail = () => {
     // prefer image from info_buy_request if available; otherwise use placeholder
     const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
 
-    // Ensure we always pass a valid Int quickrfqId: prefer rfq.quickrfq_id, fallback to route param id
-    // Ensure we always pass a valid Int quickrfqId: prefer route param id, fallback to detailData.quickrfq_id
     useEffect(() => {
         if (!locationRfq) {
             const fromParam = urlKey ? parseInt(urlKey, 10) : NaN;
@@ -69,10 +67,20 @@ const quoteDetail = () => {
     const unitValue = pricePerProduct && typeof pricePerProduct.value === 'number' ? pricePerProduct.value : null;
     const qtyNumber = typeof quantity === 'number' ? quantity : (typeof quantity === 'string' ? parseFloat(quantity) : 0);
     const expectedTotal = unitValue !== null && !isNaN(qtyNumber) ? unitValue * qtyNumber : null;
+    // admin suggested fields
+    const adminQtyRaw = rfq && rfq.admin_quantity != null ? rfq.admin_quantity : null;
+    const adminQtyNumber = typeof adminQtyRaw === 'number' ? adminQtyRaw : (typeof adminQtyRaw === 'string' ? parseFloat(adminQtyRaw) : null);
+    const adminPrice = rfq && rfq.admin_price ? rfq.admin_price : null;
+    const adminCurrency = adminPrice && adminPrice.currency ? adminPrice.currency : currency;
+    const adminUnitValue = adminPrice && typeof adminPrice.value === 'number' ? adminPrice.value : null;
+    const adminTotal = adminUnitValue !== null && adminQtyNumber !== null && !isNaN(adminQtyNumber) ? adminUnitValue * adminQtyNumber : null;
     const contactName = rfq && rfq.contact_name ? rfq.contact_name : '-';
     const email = rfq && rfq.email ? rfq.email : '-';
     const phone = rfq && rfq.phone ? rfq.phone : '-';
     const dateNeedQuote = rfq && rfq.date_need_quote ? rfq.date_need_quote : '-';
+    const couponCode = rfq && rfq.coupon_code ? rfq.coupon_code : '-';
+    const sellerName = rfq && rfq.seller_name ? rfq.seller_name : '-';
+    const expiryDate = rfq && rfq.expiry ? rfq.expiry : '-';
 
     const isInitialLoading = detailLoading && !detailData;
     if (isInitialLoading && !locationRfq) {
@@ -147,7 +155,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {adminQtyNumber !== null && !isNaN(adminQtyNumber) ? adminQtyNumber : '-'} Units
                             </span>
                         </p>
                     </div>
@@ -183,7 +191,13 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {adminUnitValue !== null ? (
+                                    <>
+                                        <Price currencyCode={adminCurrency} value={adminUnitValue} /> {' '} Per Unit
+                                    </>
+                                ) : (
+                                    '-'
+                                )}
                             </span>
                         </p>
                     </div>
@@ -217,7 +231,11 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {adminTotal !== null ? (
+                                    <Price currencyCode={adminCurrency} value={adminTotal} />
+                                ) : (
+                                    '-'
+                                )} {' '} Units
                             </span>
                         </p>
                     </div>
@@ -232,7 +250,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {couponCode}
                             </span>
                         </p>
                         <small className='text-[10px] text-gray-600'>
@@ -255,7 +273,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {sellerName}
                             </span>
                         </p>
                     </div>
@@ -285,7 +303,7 @@ const quoteDetail = () => {
                                 }
                             </span>
                             <span className='font-normal block'>
-                                -
+                                {expiryDate}
                             </span>
                         </p>
                     </div>
