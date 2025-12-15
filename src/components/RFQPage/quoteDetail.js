@@ -13,7 +13,7 @@ import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator'
 
 const quoteDetail = () => {
     const { formatMessage } = useIntl();
-    const { id } = useParams();
+    const { urlKey } = useParams();
     const location = useLocation();
     const locationRfq = location && location.state && location.state.rfq ? location.state.rfq : null;
     const { loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
@@ -31,15 +31,20 @@ const quoteDetail = () => {
     // prefer image from info_buy_request if available; otherwise use placeholder
     const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
 
+    // Ensure we always pass a valid Int quickrfqId: prefer rfq.quickrfq_id, fallback to route param id
+    // Ensure we always pass a valid Int quickrfqId: prefer route param id, fallback to detailData.quickrfq_id
     useEffect(() => {
         if (!locationRfq) {
-            const parsedId = id ? parseInt(id, 10) : NaN;
-            if (!isNaN(parsedId)) {
-                const variables = { quickrfqId: parsedId };
-                loadRfqDetail(variables);
+            const fromParam = urlKey ? parseInt(urlKey, 10) : NaN;
+            const fromData = detailData && detailData.quickrfq_id
+                ? (typeof detailData.quickrfq_id === 'number' ? detailData.quickrfq_id : parseInt(detailData.quickrfq_id, 10))
+                : NaN;
+            const finalId = !isNaN(fromParam) ? fromParam : fromData;
+            if (!isNaN(finalId)) {
+                loadRfqDetail({ quickrfqId: finalId });
             }
         }
-    }, [id, locationRfq, loadRfqDetail]);
+    }, [urlKey, detailData, locationRfq, loadRfqDetail]);
 
     // start polling messages every 5s while on detail page; stop on unmount
     useEffect(() => {
@@ -50,7 +55,9 @@ const quoteDetail = () => {
     }, [startDetailPolling, stopDetailPolling]);
 
     const rfq = locationRfq || detailData || {};
-    const quickrfqIdValue = rfq && rfq.quickrfq_id ? (typeof rfq.quickrfq_id === 'number' ? rfq.quickrfq_id : parseInt(rfq.quickrfq_id, 10)) : (id ? parseInt(id, 10) : null);
+    const quickrfqIdValue = rfq && rfq.quickrfq_id
+        ? (typeof rfq.quickrfq_id === 'number' ? rfq.quickrfq_id : parseInt(rfq.quickrfq_id, 10))
+        : (urlKey ? parseInt(urlKey, 10) : null);
     const [isConverting, setIsConverting] = useState(false);
     const [convertError, setConvertError] = useState(null);
     const [convertSuccess, setConvertSuccess] = useState(null);
@@ -95,7 +102,7 @@ const quoteDetail = () => {
         <div className='relative grid gap-y-md'>
             <StoreTitle>{PAGE_TITLE}</StoreTitle>
             <div aria-live="polite" className="text-xl font-medium text-left">
-                {PAGE_TITLE} - #{id}
+                {PAGE_TITLE} - #{quickrfqIdValue}
             </div>
             <div className='rounded-md border border-gray-100 px-4 py-6 flex flex-col-reverse md_flex-row justify-between gap-x-10'>
                 <div className='flex flex-col gap-y-4 w-full md_w-6/12'>
