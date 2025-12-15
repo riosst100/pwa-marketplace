@@ -70,6 +70,11 @@ export const GET_QUICK_RFQ_LIST_QUERY = gql`
 export const GET_QUICK_RFQ_DETAIL_QUERY = gql`
     query getQuickRfqDetail($quickrfqId: Int!) {
         quickrfqDetail(quickrfq_id: $quickrfqId) {
+            admin_price {
+                currency
+                value
+            }
+            admin_quantity
             attachment
             attachments {
                 created_at
@@ -84,8 +89,11 @@ export const GET_QUICK_RFQ_DETAIL_QUERY = gql`
             cart_id
             comment
             contact_name
+            coupon_code
             create_date
+            date_need_quote
             email
+            expiry
             info_buy_request
             messages {
                 created_at
@@ -103,12 +111,17 @@ export const GET_QUICK_RFQ_DETAIL_QUERY = gql`
             }
             product_id
             product_name
+            product_sku
             quantity
             quickrfq_id
+            seller_id
+            seller_name
             status
             store_currency_code
             store_id
             update_date
+            user_id
+            user_name
             website_id
         }
     }
