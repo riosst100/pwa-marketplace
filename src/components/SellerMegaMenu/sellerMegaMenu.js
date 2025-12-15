@@ -16,6 +16,8 @@ const SellerMegaMenu = (props) => {
     const { rootClassName, seller, sellerMegaMenuItemClassname, titleClassName } = props
     const mainNavRef = useRef(null);
 
+    const sellerUrl = seller.url_key;
+
     const classes = useStyle(defaultClasses, props.classes);
     // const rootClass = cn(classes.sellerMegaMenu, rootClassName);
     const rootClass = cn('flex items-end gap-[40px] px-[30px] py-0 rounded-[6px] border border-solid border-gray-100 xs_hidden xl_flex flex-grow justify-self-center', rootClassName);
@@ -29,7 +31,7 @@ const SellerMegaMenu = (props) => {
         categoryUrlSuffix,
         handleNavigate,
         handleClickOutside
-    } = useSellerMegaMenu({ mainNavRef });
+    } = useSellerMegaMenu({ mainNavRef, sellerUrl });
     
     // const allowedCategoryUids = props.allowedCategoryUids || ['NTI=', 'NTA=', 'NTM=', 'MjY='];
 
