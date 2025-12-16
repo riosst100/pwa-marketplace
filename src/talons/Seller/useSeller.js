@@ -154,7 +154,10 @@ export const useSeller = props => {
             }),
             timeout: 3000
         });
-        history.push('/messages');
+        if (result) {
+            var messageId = result?.data?.customerSendMessage.message_id;
+            history.push('/messages?id=' + messageId);
+        }
         return result?.data?.customerSendMessage;
     }, [sendMessage, refetchMessages, addToast, formatMessage]);
 

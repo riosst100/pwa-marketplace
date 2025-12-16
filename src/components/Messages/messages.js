@@ -8,6 +8,8 @@ import defaultClasses from './messages.module.css';
 import cn from 'classnames';
 import React, { useMemo, useState, useEffect } from 'react';
 import ChatContent from '@riosst100/pwa-marketplace/src/components/LiveChat/chatContent';
+import { Link } from "react-router-dom";
+import { Star1, Verify, Sms, Message, Shop, ArrowUp2 } from 'iconsax-react';
 
 const Messages = props => {
     const { 
@@ -61,29 +63,32 @@ const Messages = props => {
         }, [messages, seller]);
     
         const sortedThreads = useMemo(() => {
-            return [...threads].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            return [...threads].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         }, [threads]);
+
+        const { location } = globalThis;
+
+        const query = new URLSearchParams(location.search);
+        
+
+        // console.log('query',query)
+        // console.log('messageId',messageId)
     
         useEffect(() => {
-            if (!isComposing && sortedThreads?.length) {
-                const latest = sortedThreads[sortedThreads.length - 1];
-                if (!selectedThread) {
-                    setSelectedThread(latest);
-                } else {
-                    const stillThere = sortedThreads.find(t => t.message_id === selectedThread.message_id);
-                    if (!stillThere) {
-                        setSelectedThread(latest);
-                    } else {
-                        // Replace with the fresh thread data so new details from polling appear
-                        setSelectedThread(stillThere);
-                        if (selectLatestAfterSend) {
-                            setSelectedThread(latest);
-                            setSelectLatestAfterSend(false);
-                        }
-                    }
+            const messageId = query.get('id') || null;
+            console.log('query',query)
+        console.log('messageId',messageId)
+    
+            if (messageId && sortedThreads?.length) {
+                const selectedThread = sortedThreads.find(t => t.message_id == messageId);
+                console.log('sortedThreads',sortedThreads)
+                console.log('selectedThread',selectedThread)
+                if (selectedThread) {
+                    console.log('selectedThread',selectedThread)
+                    setSelectedThread(selectedThread);
                 }
             }
-        }, [sortedThreads, isComposing, selectedThread, selectLatestAfterSend]);
+        }, [sortedThreads, query]);
     
         // Tandai sudah pernah load minimal sekali untuk mencegah flicker
         useEffect(() => {
@@ -165,6 +170,9 @@ const Messages = props => {
             setSelectLatestAfterSend(true);
         };
 
+
+        
+
     return (
         <>
             <div className={cn(classes.leftContent, '')}>
@@ -176,124 +184,99 @@ const Messages = props => {
                 </StoreTitle>
                 <div className={cn(classes.leftContentContainer, 'border !border-gray-100 lg_rounded-md !rounded-lg')}>
                     <div class="auth-left">
-                        <div className='px-3 py-2 border-b font-medium flex items-center justify-between'>
+                        <div className='text-[16px] px-3 py-3 border-gray-100 border-b font-medium flex items-center justify-between'>
                             <span>{formatMessage({ id: 'messages.sidebar.title', defaultMessage: 'Messages' })}</span>
-                            <button
-                                type='button'
-                                onClick={() => {
-                                    setIsComposing(true);
-                                    setSelectedThread(null);
-                                }}
-                                className='text-[12px] px-2 py-1 rounded border border-[#FF6E26] text-[#FF6E26] hover:bg-[#FF6E26] hover:text-white'
-                            >
-                                {formatMessage({ id: 'messages.compose.newMessage', defaultMessage: 'Send New Message' })}
-                            </button>
                         </div>
                         <div className='max-h-[420px] overflow-y-auto'>
-                            {(!isComposing && !hasLoadedOnce && loading && sortedThreads.length === 0) ? (
+                            {(!hasLoadedOnce && loading) ? (
                                 <div className='p-3 text-sm text-gray-500'>{formatMessage({ id: 'messages.loading', defaultMessage: 'Loading…' })}</div>
+                            ) :  !sortedThreads || sortedThreads.length === 0 ? (
+                                <div className={cn(classes.noMessages, 'text-sm text-gray-500')}>{formatMessage({ id: 'messages.detail.noMessages', defaultMessage: 'No messages yet.' })}</div>
                             ) : (
-                                sortedThreads.map(t => (
-                                    <button
-                                        key={t.message_id}
-                                        onClick={() => setSelectedThread(t)}
-                                        className={cn('w-full text-left px-3 py-2 border-b hover:bg-gray-50',
-                                            selectedThread?.message_id === t.message_id && 'bg-gray-100')}
-                                    >
-                                        <div className='flex items-center justify-between gap-2'>
-                                            <div className='text-[13px] font-semibold line-clamp-1'>{t.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
-                                            {/* <div className='text-[12px] flex-shrink-0'>
-                                                {renderStatusBadge(t.status)}
-                                            </div> */}
-                                        </div>
-                                        <div className='text-[11px] text-gray-500 mt-1'>{formatMessage({ id: 'messages.createdAt', defaultMessage: 'Created:' })} {new Date(t.created_at).toLocaleString()}</div>
-                                    </button>
-                                ))
+                                sortedThreads && sortedThreads.length && sortedThreads.map(t => 
+                                    // console.log('fffff',t)
+                                    <div>
+                                        <hr className="!border-gray-100" style={{"width": "100%"}} />
+                                        <button
+                                            key={t.message_id}
+                                            onClick={() => setSelectedThread(t)}
+                                            className={cn('w-full text-left px-3 py-2 border-b hover:bg-gray-50',
+                                                selectedThread?.message_id === t.message_id && 'bg-gray-100')}
+                                        >
+                                            <div className='flex items-center justify-between gap-2'>
+                                                <div style={{"color": "#f76b1c"}}className='text-[12px] font-semibold line-clamp-1'>{t.seller ? t.seller.name : 'Unknown Seller' }</div>
+                                                {/* <div className='text-[12px] flex-shrink-0'>
+                                                    {renderStatusBadge(t.status)}
+                                                </div> */}
+                                            </div>
+                                            <div className='flex items-center justify-between gap-2'>
+                                                <div className='text-[12px] line-clamp-1'>Subject: {t.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
+                                                {/* <div className='text-[12px] flex-shrink-0'>
+                                                    {renderStatusBadge(t.status)}
+                                                </div> */}
+                                            </div>
+                                            <div className='text-[11px] text-gray-500 mt-1'>
+                                                {t.details.total_count ? t.details.items[t.details.items.length-1].content : t.description}
+                                            </div>
+                                            <div className='text-[10px] text-gray-500 mt-2'>{new Date(t.created_at).toLocaleString()}</div>
+                                        </button>
+                                    </div>
+                                )
                             )}
                         </div>
                     </div>
                 </div>
             </div>
             <div className={classes.root}>
-                <div className="lg_border-2 lg_border-solid lg_border-subtle lg_rounded-md !border !border-gray-100 p-6 !rounded-lg">
+                <div style={{"padding": "20px"}} className="lg_border-2 lg_border-solid lg_border-subtle lg_rounded-md !border !border-gray-100 p-6 !rounded-lg">
                     {/* Compose new message (shown only when composing OR when no thread exists) */}
-                        {(isComposing || sortedThreads.length === 0) && (
-                            <form onSubmit={handleSubmitNewMessage} className='mb-3 rounded-[6px] p-1 flex flex-col gap-2'>
-                                <div className='text-[13px] font-semibold flex items-center justify-between'>
-                                    <span>{formatMessage({ id: 'messages.compose.header', defaultMessage: 'Create New Message' })}</span>
-                                    {(sortedThreads.length > 0) && (
-                                        <button
-                                            type='button'
-                                            onClick={() => setIsComposing(false)}
-                                            className='text-[12px] px-2 py-1 !border-gray-100 rounded border text-gray-600 hover:bg-gray-50'
-                                        >
-                                            {formatMessage({ id: 'messages.compose.cancel', defaultMessage: 'Cancel' })}
-                                        </button>
-                                    )}
-                                </div>
-                                <input
-                                    type='text'
-                                    className='border border-gray-100 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
-                                    placeholder={formatMessage({ id: 'messages.compose.subjectPlaceholder', defaultMessage: 'Subject' })}
-                                    value={newSubject}
-                                    onChange={(e) => setNewSubject(e.target.value)}
-                                />
-                                <textarea
-                                    rows={3}
-                                    className='border border-gray-100 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
-                                    placeholder={formatMessage({ id: 'messages.compose.contentPlaceholder', defaultMessage: 'Write a message to the seller…' })}
-                                    value={newContent}
-                                    onChange={(e) => setNewContent(e.target.value)}
-                                />
-                                <div className='flex justify-end'>
-                                    <button
-                                        type='submit'
-                                        className={cn('px-4 py-2 rounded-[6px] text-white disabled:opacity-50 disabled:cursor-not-allowed', isSendingNew ? 'bg-gray-500 text-gray-700' : 'bg-[#FF6E26]')}
-                                        disabled={isSendingNew}
-                                        aria-busy={isSendingNew}
-                                    >
-                                        {isSendingNew
-                                            ? formatMessage({ id: 'messages.compose.sending', defaultMessage: 'Send Message...' })
-                                            : formatMessage({ id: 'messages.compose.send', defaultMessage: 'Send Message' })}
-                                    </button>
-                                </div>
-                            </form>
-                        )}
-                        {!isComposing && sortedThreads.length > 0 && (
+                        {sortedThreads.length > 0 && (
                         <div className='flex items-center justify-between mb-2'>
-                            <div>
-                                <div className='text-[14px] font-semibold'>{selectedThread?.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
-                                {/* <div className='text-[12px] text-gray-600 flex items-center gap-2'>
-                                    <span>{formatMessage({ id: 'messages.detail.status', defaultMessage: 'Status:' })}</span>
-                                    {selectedThread && renderStatusBadge(selectedThread.status)}
-                                </div> */}
-                            </div>
                             {selectedThread && (
-                                <button
-                                    onClick={handleDeleteThread}
-                                    disabled={isDeleting}
-                                    className='text-[12px] px-3 py-1 rounded border text-red-600 border-red-300 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
-                                >
-                                    {isDeleting && (
-                                        <span className='w-3 h-3 border-2 border-red-200 border-t-red-500 rounded-full animate-spin' aria-hidden='true'></span>
-                                    )}
-                                    {isDeleting
-                                        ? formatMessage({ id: 'messages.detail.deleting', defaultMessage: 'Deleting...' })
-                                        : formatMessage({ id: 'messages.detail.delete', defaultMessage: 'Delete Message' })}
-                                </button>
+                                <>
+                                    <div style={{"textAlign": "left"}}>
+                                        {selectedThread.seller && <Link to={"/seller/"+selectedThread.seller.url_key}>
+                                            {/* <div class="flex items-center justify-center gap-[10px] relative">
+                                                <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#f76b1c]' />
+                                                <div class="relative xs_hidden lg_flex w-fit text-[12px] text-[#f76b1c] text-[14px] tracking-[0] leading-[15px] whitespace-nowrap">
+                                                    Visit Store
+                                                </div>
+                                            </div> */}
+                                            <div style={{"color": "#f76b1c"}}className='text-[14px] font-semibold line-clamp-1'>{selectedThread.seller ? selectedThread.seller.name : 'Unknown Seller' }</div>
+                                        </Link>}
+                                        <div className='mt-3 mb-1 text-[12px]'>Subject: {selectedThread?.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
+                                        {/* <div className='text-[12px] text-gray-600 flex items-center gap-2'>
+                                            <span>{formatMessage({ id: 'messages.detail.status', defaultMessage: 'Status:' })}</span>
+                                            {selectedThread && renderStatusBadge(selectedThread.status)}
+                                        </div> */}
+                                    </div>
+                                    <button
+                                        onClick={handleDeleteThread}
+                                        disabled={isDeleting}
+                                        className='text-[12px] px-3 py-1 rounded border text-red-600 border-red-300 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
+                                    >
+                                        {isDeleting && (
+                                            <span className='w-3 h-3 border-2 border-red-200 border-t-red-500 rounded-full animate-spin' aria-hidden='true'></span>
+                                        )}
+                                        {isDeleting
+                                            ? formatMessage({ id: 'messages.detail.deleting', defaultMessage: 'Deleting...' })
+                                            : formatMessage({ id: 'messages.detail.delete', defaultMessage: 'Delete Message' })}
+                                    </button>
+                                </>
                             )}
                         </div>
                         )}
-                        {!isComposing && sortedThreads.length > 0 && (
-                        <div className='!border-gray-100 border rounded-[6px] p-3 flex-1 min-h-[320px]'>
-                            {selectedThread ? (
+                        {sortedThreads.length > 0 && selectedThread ? (
+                            <div className='!border-gray-100 border rounded-[6px] p-3 flex-1 min-h-[320px]'>
                                 <ChatContent chatData={chatData} />
-                            ) : (
-                                <div className='text-sm text-gray-500'>{formatMessage({ id: 'messages.detail.selectPrompt', defaultMessage: 'Select a message to view the conversation.' })}</div>
-                            )}
-                        </div>
+                            </div>
+                        ) : (
+                            <div className={classes.noConversationContainer}>
+                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-message-illustration-svg-download-png-8593289.png" style={{"width":"20%"}}/>
+                                <div className='text-sm text-gray-500'>{formatMessage({ id: 'messages.detail.noConversation', defaultMessage: 'Select a message to view the conversation.' })}</div>
+                            </div>
                         )}
-                        {!isComposing && sortedThreads.length > 0 && selectedThread && (
+                        {sortedThreads.length > 0 && selectedThread && (
                         <form onSubmit={handleSubmitReply} className='mt-3 flex gap-2'>
                             {(() => {
                                 const statusNum = Number(selectedThread.status);

@@ -173,7 +173,7 @@ const MessagesModal = ({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-[18px] font-semibold'>{formatMessage({ id: 'messages.titleWithSeller', defaultMessage: 'Start Conversation With ' })} {seller?.name}</h3>
+                    <h3 className='text-[18px] font-semibold'>Send Message</h3>
                     <button onClick={onClose} aria-label='Close' className='text-gray-600 text-[30px] hover:text-black'>×</button>
                 </div>
                 <div className='flex gap-4'>
@@ -184,7 +184,7 @@ const MessagesModal = ({
                         
                         <form onSubmit={handleSubmitNewMessage} className='mb-3 rounded-[6px] p-1 flex flex-col gap-2'>
                             <div className='text-[13px] font-semibold flex items-center justify-between'>
-                                <span>{formatMessage({ id: 'messages.compose.header', defaultMessage: 'Create New Message' })}</span>
+                                <span>Send Message to {seller?.name}</span>
                                 {/* {(sortedThreads.length > 0) && (
                                     <button
                                         type='button'
@@ -217,7 +217,7 @@ const MessagesModal = ({
                                     aria-busy={isSendingNew}
                                 >
                                     {isSendingNew
-                                        ? formatMessage({ id: 'messages.compose.sending', defaultMessage: 'Send Message...' })
+                                        ? formatMessage({ id: 'messages.compose.sending', defaultMessage: 'Sending Message...' })
                                         : formatMessage({ id: 'messages.compose.send', defaultMessage: 'Send Message' })}
                                 </button>
                             </div>

@@ -223,6 +223,10 @@ export const GET_CUSTOMER_SELLER_MESSAGES = gql`
                     total_pages
                 }
                 items {
+                    seller {
+                        name
+                        url_key
+                    }
                     message_id
                     subject
                     description
