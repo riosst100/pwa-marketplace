@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import cn from 'classnames';
-import { ArrowSquareDown } from 'iconsax-react';
+import { Messages3 } from 'iconsax-react';
 import ChatContent from './chatContent';
 import { Send } from 'iconsax-react';
 import Button from '@magento/venia-ui/lib/components/Button';
@@ -71,68 +71,38 @@ const liveChat = (props) => {
     const { open, setOpen, chatData } = props;
     const [{ isSignedIn }] = useUserContext();
 
-    const dataTabs =
-        [
-            {
-                id: isSignedIn ? 'login-chat' : 'guest-chat',
-                title: isSignedIn ? 'Login Chat' : 'Guest Chat',
-                content: <ChatContentComponent chatData={chatData} />
-            },
-            {
-                id: !isSignedIn ? 'login-chat' : 'guest-chat',
-                title: !isSignedIn ? 'Login Chat' : 'Guest Chat',
-                content: isSignedIn ? <ChatContentComponent chatData={chatData} /> : <LoginComponent />
-            }
-        ];
-
     return (
         <>
             <div
                 className={cn(
-                    'bg-white flex flex-col w-full max-w-[380px] h-[520px] fixed right-6 animate-anima-slide-up z-50 shadow-type-1',
-                    open ? 'animate-anima-slide-up bottom-0' : 'animate-anima-slide-down bottom-[-468px]'
+                    'flex flex-col w-full max-w-[150px] fixed z-50',
+                    'bottom-[30px] right-[30px]'
                 )}
             >
-                <div
-                    className='bg-darkblue-900 p-4 rounded-t-md cursor-pointer flex justify-between items-center'
-                    onClick={() => setOpen(!open)}
+                <Link
+                    className='bg-darkblue-900 p-4 px-6 rounded-[40px] cursor-pointer flex justify-between items-center'
+                    to={'/messages'}
                 >
                     <span className='text-white font-medium'>
                         <FormattedMessage
-                            id={'chat.ChatWith'}
+                            id={'chat.messageButton'}
                             defaultMessage={
-                                'Chat with Gundam Info'
+                                'Messages'
                             }
                         />
                     </span>
                     <span>
-                        <ArrowSquareDown
-                            size="14"
+                        <Messages3
+                            size="24"
                             className={
                                 cn(
-                                    'transition-all text-white',
-                                    open ? 'rotate-180' : '',
+                                    'transition-all text-white'
                                 )
                             }
                         />
                     </span>
 
-                </div>
-                <div
-                    className={cn(
-                        'border border-gray-100 p-4 w-full h-full flex flex-col gap-3',
-                        'max-h-[468px]'
-                    )}
-                >
-                    <Tabs
-                        data={dataTabs}
-                        tabContentWrapperClassName='!p-0 h-full'
-                        hasContent
-                        tabWrapperClassName='justify-around'
-                        rootClassName="mb-0"
-                        tabTitleClassName="pt-0 pb-2 text-[12px]"
-                    />
-                </div>
+                </Link>
             </div>
             <style jsx="true">
                 {`

@@ -169,172 +169,59 @@ const MessagesModal = ({
             }}
         >
             <div
-                className='bg-white rounded-[6px] shadow-lg w-full max-w-[960px] p-5'
+                className='bg-white rounded-[6px] shadow-lg w-full max-w-[500px] p-5'
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-[18px] font-semibold'>{formatMessage({ id: 'messages.titleWithSeller', defaultMessage: 'Conversation with' })} {seller?.name}</h3>
+                    <h3 className='text-[18px] font-semibold'>{formatMessage({ id: 'messages.titleWithSeller', defaultMessage: 'Start Conversation With ' })} {seller?.name}</h3>
                     <button onClick={onClose} aria-label='Close' className='text-gray-600 text-[30px] hover:text-black'>×</button>
                 </div>
                 <div className='flex gap-4'>
-                    {/* Sidebar list thread (shown only when there are threads) */}
-                    {sortedThreads.length > 0 && (
-                        <div className='w-[320px] border rounded-[6px] overflow-hidden'>
-                            <div className='px-3 py-2 border-b font-medium flex items-center justify-between'>
-                                <span>{formatMessage({ id: 'messages.sidebar.title', defaultMessage: 'Messages' })}</span>
-                                <button
-                                    type='button'
-                                    onClick={() => {
-                                        setIsComposing(true);
-                                        setSelectedThread(null);
-                                    }}
-                                    className='text-[12px] px-2 py-1 rounded border border-[#FF6E26] text-[#FF6E26] hover:bg-[#FF6E26] hover:text-white'
-                                >
-                                    {formatMessage({ id: 'messages.compose.newMessage', defaultMessage: 'Create New Message' })}
-                                </button>
-                            </div>
-                            <div className='max-h-[420px] overflow-y-auto'>
-                                {(!isComposing && !hasLoadedOnce && loading && sortedThreads.length === 0) ? (
-                                    <div className='p-3 text-sm text-gray-500'>{formatMessage({ id: 'messages.loading', defaultMessage: 'Loading…' })}</div>
-                                ) : (
-                                    sortedThreads.map(t => (
-                                        <button
-                                            key={t.message_id}
-                                            onClick={() => setSelectedThread(t)}
-                                            className={cn('w-full text-left px-3 py-2 border-b hover:bg-gray-50',
-                                                selectedThread?.message_id === t.message_id && 'bg-gray-100')}
-                                        >
-                                            <div className='flex items-center justify-between gap-2'>
-                                                <div className='text-[13px] font-semibold line-clamp-1'>{t.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
-                                                <div className='text-[12px] flex-shrink-0'>
-                                                    {renderStatusBadge(t.status)}
-                                                </div>
-                                            </div>
-                                            <div className='text-[11px] text-gray-500 mt-1'>{formatMessage({ id: 'messages.createdAt', defaultMessage: 'Created:' })} {new Date(t.created_at).toLocaleString()}</div>
-                                        </button>
-                                    ))
-                                )}
-                            </div>
-                        </div>
-                    )}
 
                     {/* Detail percakapan */}
                     <div className='flex-1 flex flex-col'>
                         {/* Compose new message (shown only when composing OR when no thread exists) */}
-                        {(isComposing || sortedThreads.length === 0) && (
-                            <form onSubmit={handleSubmitNewMessage} className='mb-3 border rounded-[6px] p-3 flex flex-col gap-2'>
-                                <div className='text-[13px] font-semibold flex items-center justify-between'>
-                                    <span>{formatMessage({ id: 'messages.compose.header', defaultMessage: 'Create New Message' })}</span>
-                                    {(sortedThreads.length > 0) && (
-                                        <button
-                                            type='button'
-                                            onClick={() => setIsComposing(false)}
-                                            className='text-[12px] px-2 py-1 rounded border text-gray-600 hover:bg-gray-50'
-                                        >
-                                            {formatMessage({ id: 'messages.compose.cancel', defaultMessage: 'Cancel' })}
-                                        </button>
-                                    )}
-                                </div>
-                                <input
-                                    type='text'
-                                    className='border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
-                                    placeholder={formatMessage({ id: 'messages.compose.subjectPlaceholder', defaultMessage: 'Subject' })}
-                                    value={newSubject}
-                                    onChange={(e) => setNewSubject(e.target.value)}
-                                />
-                                <textarea
-                                    rows={3}
-                                    className='border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
-                                    placeholder={formatMessage({ id: 'messages.compose.contentPlaceholder', defaultMessage: 'Write a message to the seller…' })}
-                                    value={newContent}
-                                    onChange={(e) => setNewContent(e.target.value)}
-                                />
-                                <div className='flex justify-end'>
+                        
+                        <form onSubmit={handleSubmitNewMessage} className='mb-3 rounded-[6px] p-1 flex flex-col gap-2'>
+                            <div className='text-[13px] font-semibold flex items-center justify-between'>
+                                <span>{formatMessage({ id: 'messages.compose.header', defaultMessage: 'Create New Message' })}</span>
+                                {/* {(sortedThreads.length > 0) && (
                                     <button
-                                        type='submit'
-                                        className={cn('px-4 py-2 rounded-[6px] text-white disabled:opacity-50 disabled:cursor-not-allowed', isSendingNew ? 'bg-gray-500 text-gray-700' : 'bg-[#FF6E26]')}
-                                        disabled={isSendingNew}
-                                        aria-busy={isSendingNew}
+                                        type='button'
+                                        onClick={() => setIsComposing(false)}
+                                        className='text-[12px] px-2 py-1 rounded border text-gray-600 hover:bg-gray-50'
                                     >
-                                        {isSendingNew
-                                            ? formatMessage({ id: 'messages.compose.sending', defaultMessage: 'Send Message...' })
-                                            : formatMessage({ id: 'messages.compose.send', defaultMessage: 'Send Message' })}
+                                        {formatMessage({ id: 'messages.compose.cancel', defaultMessage: 'Cancel' })}
                                     </button>
-                                </div>
-                            </form>
-                        )}
-                        {!isComposing && sortedThreads.length > 0 && (
-                        <div className='flex items-center justify-between mb-2'>
-                            <div>
-                                <div className='text-[14px] font-semibold'>{selectedThread?.subject || formatMessage({ id: 'messages.noSubject', defaultMessage: 'No Subject' })}</div>
-                                <div className='text-[12px] text-gray-600 flex items-center gap-2'>
-                                    <span>{formatMessage({ id: 'messages.detail.status', defaultMessage: 'Status:' })}</span>
-                                    {selectedThread && renderStatusBadge(selectedThread.status)}
-                                </div>
+                                )} */}
                             </div>
-                            {selectedThread && (
+                            <input
+                                type='text'
+                                className='border border-gray-100 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
+                                placeholder={formatMessage({ id: 'messages.compose.subjectPlaceholder', defaultMessage: 'Subject' })}
+                                value={newSubject}
+                                onChange={(e) => setNewSubject(e.target.value)}
+                            />
+                            <textarea
+                                rows={3}
+                                className='border border-gray-100 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26]'
+                                placeholder={formatMessage({ id: 'messages.compose.contentPlaceholder', defaultMessage: 'Write a message to the seller…' })}
+                                value={newContent}
+                                onChange={(e) => setNewContent(e.target.value)}
+                            />
+                            <div className='flex justify-end'>
                                 <button
-                                    onClick={handleDeleteThread}
-                                    disabled={isDeleting}
-                                    className='text-[12px] px-3 py-1 rounded border text-red-600 border-red-300 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
+                                    type='submit'
+                                    className={cn('px-4 py-2 rounded-[6px] text-white disabled:opacity-50 disabled:cursor-not-allowed', isSendingNew ? 'bg-gray-500 text-gray-700' : 'bg-[#FF6E26]')}
+                                    disabled={isSendingNew}
+                                    aria-busy={isSendingNew}
                                 >
-                                    {isDeleting && (
-                                        <span className='w-3 h-3 border-2 border-red-200 border-t-red-500 rounded-full animate-spin' aria-hidden='true'></span>
-                                    )}
-                                    {isDeleting
-                                        ? formatMessage({ id: 'messages.detail.deleting', defaultMessage: 'Deleting...' })
-                                        : formatMessage({ id: 'messages.detail.delete', defaultMessage: 'Delete Message' })}
+                                    {isSendingNew
+                                        ? formatMessage({ id: 'messages.compose.sending', defaultMessage: 'Send Message...' })
+                                        : formatMessage({ id: 'messages.compose.send', defaultMessage: 'Send Message' })}
                                 </button>
-                            )}
-                        </div>
-                        )}
-                        {!isComposing && sortedThreads.length > 0 && (
-                        <div className='border rounded-[6px] p-3 flex-1 min-h-[320px]'>
-                            {selectedThread ? (
-                                <ChatContent chatData={chatData} />
-                            ) : (
-                                <div className='text-sm text-gray-500'>{formatMessage({ id: 'messages.detail.selectPrompt', defaultMessage: 'Select a message to view the conversation.' })}</div>
-                            )}
-                        </div>
-                        )}
-                        {!isComposing && sortedThreads.length > 0 && selectedThread && (
-                        <form onSubmit={handleSubmitReply} className='mt-3 flex gap-2'>
-                            {(() => {
-                                const statusNum = Number(selectedThread.status);
-                                const isReplyEnabled = statusNum === 1 || statusNum === 2;
-                                const disabledReason = statusNum === 0
-                                    ? formatMessage({ id: 'messages.reply.disabled.closed', defaultMessage: 'Conversation closed' })
-                                    : statusNum === 3
-                                    ? formatMessage({ id: 'messages.reply.disabled.done', defaultMessage: 'Conversation finished' })
-                                    : formatMessage({ id: 'messages.reply.disabled.generic', defaultMessage: 'Cannot send a reply' });
-                                return (
-                                    <>
-                                        <input
-                                            type='text'
-                                            className='flex-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-[#FF6E26] disabled:bg-gray-100 disabled:text-gray-500'
-                                            placeholder={isReplyEnabled ? formatMessage({ id: 'messages.reply.placeholder', defaultMessage: 'Write a reply…' }) : disabledReason}
-                                            value={replyText}
-                                            onChange={(e) => setReplyText(e.target.value)}
-                                            disabled={!isReplyEnabled}
-                                            title={!isReplyEnabled ? disabledReason : undefined}
-                                            aria-disabled={!isReplyEnabled}
-                                        />
-                                        <button
-                                            type='submit'
-                                            disabled={!isReplyEnabled || isReplying}
-                                            title={!isReplyEnabled ? disabledReason : undefined}
-                                            className={cn('px-4 py-2 rounded-[6px] text-white disabled:opacity-50 disabled:cursor-not-allowed', isReplying ? 'bg-gray-500 text-gray-700' : 'bg-[#FF6E26]')}
-                                            aria-busy={isReplying}
-                                        >
-                                            {isReplying
-                                                ? formatMessage({ id: 'messages.reply.sending', defaultMessage: 'Sending...' })
-                                                : formatMessage({ id: 'messages.reply.send', defaultMessage: 'Send' })}
-                                        </button>
-                                    </>
-                                );
-                            })()}
+                            </div>
                         </form>
-                        )}
                     </div>
                 </div>
             </div>

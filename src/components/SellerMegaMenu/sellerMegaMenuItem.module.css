@@ -11,7 +11,8 @@
 
 .sellerMegaMenuLinkActive {
     composes: sellerMegaMenuLink;
-    composes: underline from global;
+    /* composes: underline from global; */
+    font-weight: bold;
 }
 
 .sellerMegaMenuItem_active {

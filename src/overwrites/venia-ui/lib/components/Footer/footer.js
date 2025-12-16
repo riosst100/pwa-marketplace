@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Facebook, Instagram, Twitter, Linkedin } from 'react-feather';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { shape, string } from 'prop-types';
 import { useFooter } from '@magento/peregrine/lib/talons/Footer/useFooter';
 import { useLocation } from 'react-router-dom';
-
+import LiveChat from '@riosst100/pwa-marketplace/src/components/LiveChat';
 import Logo from '@magento/venia-ui/lib/components/Logo';
 import Newsletter from '@magento/venia-ui/lib/components/Newsletter';
 import { useStyle } from '@magento/venia-ui/lib/classify';
@@ -14,11 +14,16 @@ import { DEFAULT_LINKS, LOREM_IPSUM } from './sampleData';
 import resourceUrl from '@magento/peregrine/lib/util/makeUrl';
 import cn from 'classnames';
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
-
+import Button from '@magento/venia-ui/lib/components/Button';
 const Footer = props => {
     const { links } = props;
     const classes = useStyle(defaultClasses, props.classes);
     const talonProps = useFooter();
+
+    const [openChat, setOpenChat] = useState(false);
+    const toggleChat = () => {
+        setOpenChat(!openChat);
+    }
 
     const location = useLocation();
     const isCheckoutPage = location.pathname === '/checkout';
@@ -86,6 +91,10 @@ const Footer = props => {
                 }
             }
         >
+            <LiveChat
+                open={openChat}
+                setOpen={setOpenChat}
+            />
             {!isCheckoutPage && <div className={classes.links} style={{"display":"flex"}}>
                 {linkGroups}
                 {/* <div>

@@ -20,10 +20,11 @@ import DEFAULT_OPERATIONS from './megaMenu.gql';
  */
 export const useSellerMegaMenu = (props = {}) => {
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
-    const { getMegaMenuQuery, getStoreConfigQuery } = operations;
+    const { getSellerMegaMenuQuery, getStoreConfigQuery } = operations;
 
     const location = useLocation();
     const [activeCategoryId, setActiveCategoryId] = useState(null);
+    const [activeCategory, setActiveCategory] = useState(null);
     const [sellerSubMenuState, setSellerSubMenuState] = useState(false);
     const [disableFocus, setDisableFocus] = useState(false);
 
@@ -32,9 +33,11 @@ export const useSellerMegaMenu = (props = {}) => {
         nextFetchPolicy: 'cache-first'
     });
 
-    const { data } = useQuery(getMegaMenuQuery, {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-first'
+    const { sellerUrl } = props;
+
+    const { data } = useQuery(getSellerMegaMenuQuery, {
+        variables: { sellerUrl: sellerUrl },
+        fetchPolicy: 'cache-and-network'
     });
 
     const categoryUrlSuffix = useMemo(() => {
@@ -66,7 +69,7 @@ export const useSellerMegaMenu = (props = {}) => {
 
             const categoryUrlPath = `/${url_path}${categoryUrlSuffix || ''}`;
 
-            return location.pathname === categoryUrlPath;
+            return location.pathname.includes(categoryUrlPath);
         },
         [location.pathname, categoryUrlSuffix]
     );
@@ -119,6 +122,29 @@ export const useSellerMegaMenu = (props = {}) => {
 
     const history = useHistory();
 
+    const setQueryPath = ({ history, location, pathname, replace }) => {
+        // const { pathname } = location;
+        
+        const destination = { pathname: pathname };
+
+        if (replace) {
+            history.replace(destination);
+        }
+    };
+
+    const setDefaultCategory = useCallback(
+        (pathname) => {
+            // Update the query parameter.
+            setQueryPath({
+                history,
+                location,
+                pathname,
+                replace: true
+            });
+        },
+        [history, location]
+    );
+
     const setQueryParam = ({ history, location, parameter, replace, value }) => {
         const { search } = location;
         const queryParams = new URLSearchParams(search);
@@ -147,25 +173,19 @@ export const useSellerMegaMenu = (props = {}) => {
         [history, location]
     );
 
-    useEffect(() => {
-        const { search } = location;
+    const hasCategoryPath = (pathname) => {
+        // const pathname = new URL(url).pathname;
+        const parts = pathname.split("/").filter(Boolean);
 
-        // if (category && category.default_top_filter) {
-        //     const defaultTopFilter = category.default_top_filter;
+        // cari index "seller"
+        const sellerIndex = parts.indexOf("seller");
 
-        //     const attrCode = defaultTopFilter.attribute_code;
-        //     const label = defaultTopFilter.label;
-        //     const value = defaultTopFilter.value;
+        if (sellerIndex === -1) return false;
 
-        //     if (!search.includes(attrCode)) {
-        //         setDefaultSubcategoryAndTopFilter(
-        //             label + ',' + value, 
-        //             attrCode + '[filter]', 
-        //             true
-        //         );
-        //     }
-        // }
-    }, [category, location, setDefaultSubcategoryAndTopFilter]);
+        // seller/<store-name> → minimal 2 segment
+        // kalau lebih dari itu → ada category path
+        return parts.length > sellerIndex + 2;
+    }
 
     const findActiveCategory = useCallback(
         (pathname, category) => {
@@ -182,6 +202,59 @@ export const useSellerMegaMenu = (props = {}) => {
         [isActive]
     );
 
+    useEffect(() => {
+        const activeCategory = findActiveCategory(
+            location.pathname,
+            megaMenuData
+        );
+
+        if (activeCategory) {
+            setActiveCategoryId(activeCategory.path[0]);
+            setActiveCategory(activeCategory);
+        } else {
+            setActiveCategoryId(null);
+            setActiveCategory(null);
+        }
+    }, [findActiveCategory, location.pathname, megaMenuData]);
+
+    useEffect(() => {
+        const { search, pathname } = location;
+
+        if (!hasCategoryPath(pathname) && category && category.url_path) {
+            const url_path = category.url_path;
+            const categoryUrlPath = `/${url_path}${categoryUrlSuffix || ''}`;
+            const newPathname = pathname.replace(/\/+$/, "");
+
+            if (!newPathname.includes(categoryUrlPath)) {
+                setDefaultCategory(
+                    newPathname + categoryUrlPath
+                );
+            }
+        }
+    }, [category, location, setDefaultCategory]);
+
+    useEffect(() => {
+        const { search } = location;
+
+        if (activeCategory && activeCategory.default_top_filter) {
+            const defaultTopFilter = activeCategory.default_top_filter;
+
+            const attrCode = defaultTopFilter.attribute_code;
+            const label = defaultTopFilter.label;
+            const value = defaultTopFilter.value;
+
+            if (!search.includes(attrCode)) {
+                setDefaultSubcategoryAndTopFilter(
+                    label + ',' + value, 
+                    attrCode + '[filter]', 
+                    true
+                );
+            }
+        }
+    }, [activeCategory, location, setDefaultSubcategoryAndTopFilter]);
+
+   
+
     const handleClickOutside = e => {
         if (!props.mainNavRef.current.contains(e.target)) {
             setSellerSubMenuState(false);
@@ -195,18 +268,7 @@ export const useSellerMegaMenu = (props = {}) => {
         setSellerSubMenuState(true);
     }, [setSellerSubMenuState]);
 
-    useEffect(() => {
-        const activeCategory = findActiveCategory(
-            location.pathname,
-            megaMenuData
-        );
-
-        if (activeCategory) {
-            setActiveCategoryId(activeCategory.path[0]);
-        } else {
-            setActiveCategoryId(null);
-        }
-    }, [findActiveCategory, location.pathname, megaMenuData]);
+    
 
     /**
      * Sets next root component to show proper loading effect

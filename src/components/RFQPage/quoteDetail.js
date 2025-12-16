@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
 import Image from '@magento/venia-ui/lib/components/Image';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import Button from '@magento/venia-ui/lib/components/Button';
 import ChatContent from '../LiveChat/chatContent';
 import cn from 'classnames';
@@ -10,16 +10,52 @@ import { Send } from 'iconsax-react';
 import Price from '@magento/venia-ui/lib/components/Price';
 import { useRFQ } from '@riosst100/pwa-marketplace/src/talons/RFQ/useRFQ';
 import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator';
+import { useToasts } from '@magento/peregrine/lib';
+import { useCartContext } from '@magento/peregrine/lib/context/cart';
+import {
+    useApolloClient
+} from '@apollo/client';
 
 const quoteDetail = () => {
+    const history = useHistory();
+
     const { formatMessage } = useIntl();
     const { urlKey } = useParams();
     const location = useLocation();
     const locationRfq = location && location.state && location.state.rfq ? location.state.rfq : null;
-    const { loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
+    const { fetchCartId, addToCartResponseData, isAddProductLoading, errorAddingProductToCart, loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
+
+    const apolloClient = useApolloClient();
+    const [{ createCart, removeCart }] = useCartContext();
+
+    useEffect(async() => {
+        if (
+            addToCartResponseData 
+            && !addToCartResponseData?.addProductsToCart?.user_errors.length 
+            && !isAddProductLoading 
+            && !errorAddingProductToCart
+        ) {
+            try {
+                await removeCart();
+                await apolloClient.clearCacheData(apolloClient, 'cart');
+
+                // masked_cart_id
+                await createCart({ fetchCartId });
+
+                history.push('/checkout');
+            } catch (cleanupErr) {
+                // eslint-disable-next-line no-console
+                console.log(cleanupErr);
+            }
+
+            
+        }
+    }, [history, fetchCartId, apolloClient, removeCart, createCart, addToCartResponseData, errorAddingProductToCart, isAddProductLoading]);
+
     const [messageText, setMessageText] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [sendError, setSendError] = useState(null);
+    
     const detailData = rfqDetailState && rfqDetailState.data ? rfqDetailState.data.quickrfqDetail : null;
     const detailLoading = rfqDetailState ? rfqDetailState.loading : false;
     const detailError = rfqDetailState ? rfqDetailState.error : null;
@@ -27,10 +63,10 @@ const quoteDetail = () => {
         id: 'Quotes.pageTitleTextQuoteDetail',
         defaultMessage: 'Quote Detail'
     });
-
+    
     // prefer image from info_buy_request if available; otherwise use placeholder
     const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
-
+    
     useEffect(() => {
         if (!locationRfq) {
             const fromParam = urlKey ? parseInt(urlKey, 10) : NaN;
@@ -336,26 +372,32 @@ const quoteDetail = () => {
                         }}
                         disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue)}
                         aria-busy={isConverting}
-                        onPress={async () => {
-                            const qid = quickrfqIdValue;
-                            if (!qid || isNaN(qid)) return;
-                            try {
-                                setConvertError(null);
-                                setConvertSuccess(null);
-                                setIsConverting(true);
-                                const res = await handleConvertQuickrfqToCart(qid);
-                                const payload = res && res.data && res.data.convertQuickrfqToCart ? res.data.convertQuickrfqToCart : null;
-                                if (payload && payload.status) {
-                                    setConvertSuccess(payload.message || 'Converted to cart.');
-                                } else {
-                                    setConvertError('Failed to convert quote to cart.');
-                                }
-                            } catch (e) {
-                                setConvertError('Failed to convert quote to cart.');
-                            } finally {
-                                setIsConverting(false);
-                            }
-                        }}
+                        onClick={handleConvertQuickrfqToCart}
+                        // onPress={async () => {
+                        //     const qid = quickrfqIdValue;
+                        //     if (!qid || isNaN(qid)) return;
+                        //     try {
+                        //         setConvertError(null);
+                        //         setConvertSuccess(null);
+                        //         setIsConverting(true);
+                        //         const res = await handleConvertQuickrfqToCart(qid);
+                        //         const payload = res && res.data && res.data.convertQuickrfqToCart ? res.data.convertQuickrfqToCart : null;
+                        //         if (payload && payload.status) {
+                        //             storage.removeItem('cartId');
+
+                        //             console.log('torage.removeItem',storage.getItem('cartId'))
+
+                        //             setConvertSuccess(payload.message || 'Converted to cart.');
+                        //         } else {
+                        //             setConvertError('Failed to convert quote to cart.');
+                        //         }
+                        //     } catch (e) {
+                        //         console.log(e)
+                        //         setConvertError('Failed to convert quote to cart.');
+                        //     } finally {
+                        //         setIsConverting(false);
+                        //     }
+                        // }}
                     >
                         {isConverting
                             ? formatMessage({ id: 'Quotes.converting', defaultMessage: 'Add To Cart…' })

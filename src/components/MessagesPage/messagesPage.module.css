@@ -1,0 +1,35 @@
+.root {
+    composes: gap-y-md from global;
+    composes: grid from global;
+    /* composes: justify-center from global; */
+    composes: px-0 from global;
+    composes: py-md from global;
+    composes: text-center from global;
+    grid-template-columns: minmax(auto, 95%);
+    justify-content: right;
+}
+
+.leftContent {
+    composes: gap-y-md from global;
+    composes: grid from global;
+    composes: justify-center from global;
+    composes: px-0 from global;
+    composes: py-md from global;
+    composes: text-center from global;
+    grid-template-columns: minmax(auto, 50%);
+}
+
+.header {
+    composes: font-serif from global;
+}
+
+.leftContentContainer {
+    text-align: left;
+    width: 30%;
+}
+
+.rootContainer {
+    justify-content: center;
+    display: flex;
+    align-items: normal;
+}

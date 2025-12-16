@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from '@apollo/client';
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useToasts } from '@magento/peregrine/lib/Toasts/useToasts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useAppContext } from '@magento/peregrine/lib/context/app';
 import { useIntl } from 'react-intl';
 
@@ -12,6 +12,8 @@ export const useSeller = props => {
     const { mapSeller } = props;
 
     const { formatMessage } = useIntl();
+
+    const history = useHistory();
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const {
@@ -152,7 +154,7 @@ export const useSeller = props => {
             }),
             timeout: 3000
         });
-        await refetchMessages({ fetchPolicy: 'network-only' });
+        history.push('/messages');
         return result?.data?.customerSendMessage;
     }, [sendMessage, refetchMessages, addToast, formatMessage]);
 

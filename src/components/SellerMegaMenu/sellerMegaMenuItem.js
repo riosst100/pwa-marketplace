@@ -116,7 +116,7 @@ const SellerMegaMenuItem = props => {
                     'flex items-center'
                 )}
                 data-cy="SellerMegaMenu-SellerMegaMenuItem-link"
-                to={'/seller/' + seller?.url_key + categoryUrl}
+                to={isActive ? '#' : '/seller/' + seller?.url_key + categoryUrl}
             >
                 {category.name}
             </Link>

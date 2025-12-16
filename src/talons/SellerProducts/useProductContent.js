@@ -146,17 +146,21 @@ export const useProductContent = props => {
         if (category && category.default_top_filter) {
             const defaultTopFilter = category.default_top_filter;
 
+            // console.log('defaultTopFilter222',defaultTopFilter)
+
             const attrCode = defaultTopFilter.attribute_code;
             const label = defaultTopFilter.label;
             const value = defaultTopFilter.value;
 
-            if (!search.includes(attrCode)) {
-                setDefaultSubcategoryAndTopFilter(
-                    label + ',' + value, 
-                    attrCode + '[filter]', 
-                    true
-                );
-            }
+            // if (!search.includes(attrCode)) {
+            //     console.log('setDefaultSubcategoryAndTopFilter',attrCode)
+
+            //     setDefaultSubcategoryAndTopFilter(
+            //         label + ',' + value, 
+            //         attrCode + '[filter]', 
+            //         true
+            //     );
+            // }
         }
     }, [category, location, setDefaultSubcategoryAndTopFilter]);
 

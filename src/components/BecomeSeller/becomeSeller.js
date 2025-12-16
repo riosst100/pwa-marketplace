@@ -243,8 +243,8 @@ const BecomeSeller = props => {
                     <label className='text-left text-xs font-normal text-gray-400 mt-2'>
                         <FormattedMessage
                             id={'becomeSeller.urlNotes'}
-                            defaultMessage={`Please enter a valid Store URL (Ex: "tcg-collective").
-                                Your Store URL will be https://tcg.com/seller/tcg-collective.html`}
+                            defaultMessage={`Please enter a valid Store URL (Ex: "tcg-store").
+                                Your Store URL will be https://tcgcollective.co/seller/tcg-store`}
                         />
                     </label>
                 </Field>

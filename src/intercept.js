@@ -234,6 +234,13 @@ module.exports = targets => {
       pattern: "/order-history/view/:urlKey",
       path: require.resolve("./components/OrderDetail/orderDetailPage.js"),
       authed: true,
+    },
+    {
+      exact: true,
+      name: "Messages",
+      pattern: "/messages",
+      path: require.resolve("./components/MessagesPage/index.js"),
+      authed: true,
     }
   ];
 

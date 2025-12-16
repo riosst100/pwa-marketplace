@@ -10,9 +10,9 @@ export const GET_STORE_CONFIG_DATA = gql`
 `;
 
 export const GET_MEGA_MENU = gql`
-    query getSellerMegaMenu {
+    query getSellerMegaMenu($sellerUrl: String!) {
         # eslint-disable-next-line @graphql-eslint/require-id-when-available
-        sellerCategories {
+        sellerCategories(sellerUrl: $sellerUrl) {
             uid
             name
             # eslint-disable-next-line @graphql-eslint/require-id-when-available
@@ -79,11 +79,12 @@ export const GET_MEGA_MENU = gql`
                     }
                 }
             }
+            __typename
         }
     }
 `;
 
 export default {
-    getMegaMenuQuery: GET_MEGA_MENU,
+    getSellerMegaMenuQuery: GET_MEGA_MENU,
     getStoreConfigQuery: GET_STORE_CONFIG_DATA
 };
