@@ -166,7 +166,14 @@ export const CONVERT_QUICK_RFQ_TO_CART_MUTATION = gql`
     }
 `;
 
+export const CREATE_CART = gql`
+    mutation createCart {
+        cartId: createEmptyCart
+    }
+`;
+
 export default {
+    createCartMutation: CREATE_CART,
     convertQuickrfqToCartMutation: CONVERT_QUICK_RFQ_TO_CART_MUTATION,
     sendRfqMessageMutation: SEND_RFQ_MESSAGE_MUTATION,
     getQuickRfqDetailQuery: GET_QUICK_RFQ_DETAIL_QUERY,

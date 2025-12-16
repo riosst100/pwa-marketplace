@@ -4,14 +4,23 @@ import { useCallback } from 'react';
 import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import DEFAULT_OPERATIONS from './rfq.gql';
 
+import { useLocation } from 'react-router-dom';
+
 export const useRFQ = props => {
+	const { pathname } = useLocation();
+	const rfqQuoteId = pathname.split('/')[2];
+
+	console.log('rfqQuoteId',rfqQuoteId)
+
 	const operations = mergeOperations(DEFAULT_OPERATIONS, props?.operations);
+
 	const {
 		getQuickRfqListQuery,
 		getQuickRfqDetailQuery,
 		createQuickRfqMutation,
 		sendRfqMessageMutation,
-		convertQuickrfqToCartMutation
+		convertQuickrfqToCartMutation,
+		createCartMutation
 	} = operations;
 
 	const [fetchRfqList, rfqListState] = useLazyQuery(getQuickRfqListQuery, {
@@ -28,7 +37,20 @@ export const useRFQ = props => {
 
 	const [createQuickRfq, createState] = useMutation(createQuickRfqMutation);
 	const [sendRfqMessage, sendMessageState] = useMutation(sendRfqMessageMutation);
-	const [convertQuickrfqToCart, convertState] = useMutation(convertQuickrfqToCartMutation);
+
+	const [fetchCartId] = useMutation(createCartMutation);
+	// const [convertQuickrfqToCart, convertState] = useMutation(convertQuickrfqToCartMutation);
+	
+	const convertState = null;
+
+	const [
+        convertQuickrfqToCart,
+        {
+            data: addToCartResponseData,
+            error: errorAddingProductToCart,
+            loading: isAddProductLoading
+        }
+    ] = useMutation(convertQuickrfqToCartMutation);
 
 	const loadRfqList = useCallback(
 		variables => fetchRfqList({ variables }),
@@ -57,12 +79,15 @@ export const useRFQ = props => {
 		[sendRfqMessage]
 	);
 
-	const handleConvertQuickrfqToCart = useCallback(
-		quickrfqId => convertQuickrfqToCart({ variables: { quickrfqId } }),
-		[convertQuickrfqToCart]
-	);
+	const handleConvertQuickrfqToCart = useCallback(() => {
+		convertQuickrfqToCart({ variables: { quickrfqId: rfqQuoteId } })
+	}, [convertQuickrfqToCart, rfqQuoteId]);
 
 	return {
+		fetchCartId,
+		addToCartResponseData, 
+		isAddProductLoading, 
+		errorAddingProductToCart,
 		loadRfqList,
 		rfqListState,
 		loadRfqDetail,
