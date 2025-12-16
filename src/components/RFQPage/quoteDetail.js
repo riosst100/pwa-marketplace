@@ -26,12 +26,11 @@ const quoteDetail = () => {
     const { fetchCartId, addToCartResponseData, isAddProductLoading, errorAddingProductToCart, loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
 
     const apolloClient = useApolloClient();
-    const [{ createCart, removeCart }] = useCartContext();
+    const [{ cartId }, { createCart, removeCart }] = useCartContext();
 
     useEffect(async() => {
         if (
             addToCartResponseData 
-            && !addToCartResponseData?.addProductsToCart?.user_errors.length 
             && !isAddProductLoading 
             && !errorAddingProductToCart
         ) {
@@ -369,7 +368,7 @@ const quoteDetail = () => {
                         classes={{
                             content: 'capitalize text-[16px] font-medium'
                         }}
-                        disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue) || status === 'Done'}
+                        // disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue) || status === 'Done'}
                         aria-busy={isConverting}
                         onClick={handleConvertQuickrfqToCart}
                     >

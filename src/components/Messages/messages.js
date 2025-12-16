@@ -20,7 +20,6 @@ const Messages = props => {
     onSend,
     loading } = props;
     const classes = useStyle(defaultClasses, props.classes);
-    // const { becomeSellerProps } = useMessages(props);
     const { formatMessage } = useIntl();
     
         const [selectedThread, setSelectedThread] = useState(null);
@@ -69,20 +68,11 @@ const Messages = props => {
         const { location } = globalThis;
 
         const query = new URLSearchParams(location.search);
-        
-
-        // console.log('query',query)
-        // console.log('messageId',messageId)
     
         useEffect(() => {
             const messageId = query.get('id') || null;
-            console.log('query',query)
-        console.log('messageId',messageId)
-    
             if (messageId && sortedThreads?.length) {
                 const selectedThread = sortedThreads.find(t => t.message_id == messageId);
-                console.log('sortedThreads',sortedThreads)
-                console.log('selectedThread',selectedThread)
                 if (selectedThread) {
                     console.log('selectedThread',selectedThread)
                     setSelectedThread(selectedThread);

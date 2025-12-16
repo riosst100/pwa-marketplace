@@ -185,6 +185,7 @@ module.exports = targets => {
       pattern: "/favorite-seller",
       path: require.resolve("./components/FavoriteSellerPage/index.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -192,6 +193,7 @@ module.exports = targets => {
       pattern: "/quotes",
       path: require.resolve("./components/RFQPage/index.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -199,6 +201,7 @@ module.exports = targets => {
       pattern: "/quotes/:urlKey",
       path: require.resolve("./components/RFQPage/quoteDetailPage.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -206,6 +209,7 @@ module.exports = targets => {
       pattern: "/return",
       path: require.resolve("./components/RMAPage/index.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -213,6 +217,7 @@ module.exports = targets => {
       pattern: "/return/select",
       path: require.resolve("./components/RMAPage/RMASelectPage.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -220,6 +225,7 @@ module.exports = targets => {
       pattern: "/return/view/:urlKey",
       path: require.resolve("./components/RMAPage/RMADetailPage.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -227,6 +233,7 @@ module.exports = targets => {
       pattern: "/return/create/:urlKey",
       path: require.resolve("./components/RMAPage/RMACreatePage.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -234,6 +241,7 @@ module.exports = targets => {
       pattern: "/order-history/view/:urlKey",
       path: require.resolve("./components/OrderDetail/orderDetailPage.js"),
       authed: true,
+      redirectTo: "/sign-in"
     },
     {
       exact: true,
@@ -241,6 +249,7 @@ module.exports = targets => {
       pattern: "/messages",
       path: require.resolve("./components/MessagesPage/index.js"),
       authed: true,
+      redirectTo: "/sign-in"
     }
   ];
 
