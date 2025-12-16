@@ -29,6 +29,21 @@
     text-align: left;
 }
 
+.noConversationContainer {
+    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    row-gap: 15px;
+}
+
+.noMessages {
+text-align: center;
+  padding: 60px;
+}
+
 .rootContainer {
     justify-content: space-around;
     display: flex;

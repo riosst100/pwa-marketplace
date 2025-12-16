@@ -41,11 +41,12 @@ import ProductLabel from '@riosst100/pwa-marketplace/src/components/ProductLabel
 import RFQ from '@riosst100/pwa-marketplace/src/components/RFQ';
 import LinkToOtherStores from '@riosst100/pwa-marketplace/src/components/LinkToOtherStores';
 import Collapsible from '@riosst100/pwa-marketplace/src/components/commons/Collapsible';
-import { useLocation } from 'react-router-dom';
 import Icon from '@magento/venia-ui/lib/components/Icon';
 import { ShoppingCart } from 'react-feather';
 import MessagesModal from '@riosst100/pwa-marketplace/src/components/LiveChat/MessagesModal';
 import SellerOperations from '@riosst100/pwa-marketplace/src/talons/Seller/seller.gql';
+
+import { useLocation, useHistory } from 'react-router-dom';
 
 import AgeVerificationModal from '@riosst100/pwa-marketplace/src/components/AgeVerification/ageVerificationModal';
 
@@ -86,6 +87,8 @@ const ProductDetailsCollapsible = (props) => {
 
 const ProductFullDetail = props => {
     const { product } = props;
+
+    const history = useHistory();
 
     const { search } = useLocation();
 
@@ -174,7 +177,10 @@ const ProductFullDetail = props => {
             message: formatMessage({ id: 'messages.messageSent', defaultMessage: 'Message sent successfully.' }),
             timeout: 3000
         });
-        await refetchMessages({ fetchPolicy: 'network-only' });
+        if (result) {
+            var messageId = result?.data?.customerSendMessage.message_id;
+            history.push('/messages?id=' + messageId);
+        }
         return result?.data?.customerSendMessage;
     };
 
