@@ -94,6 +94,7 @@ export const GET_QUICK_RFQ_DETAIL_QUERY = gql`
             date_need_quote
             email
             expiry
+            image_url
             info_buy_request
             messages {
                 created_at
