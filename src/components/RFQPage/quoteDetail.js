@@ -372,12 +372,11 @@ const quoteDetail = () => {
                         aria-busy={isConverting}
                         onClick={handleConvertQuickrfqToCart}
                     >
-                        {formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
-                        {/* {isConverting
+                        {isConverting
                             ? formatMessage({ id: 'Quotes.converting', defaultMessage: 'Add To Cart…' })
                             : status === 'Done'
                                 ? formatMessage({ id: 'Quotes.completed', defaultMessage: 'Completed' })
-                                : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })} */}
+                                : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
                     </Button>
                     {convertError ? (
                         <div className='text-red-600 text-[12px] mt-2 text-center'>{convertError}</div>
