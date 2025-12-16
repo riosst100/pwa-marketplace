@@ -64,8 +64,7 @@ const quoteDetail = () => {
         defaultMessage: 'Quote Detail'
     });
     
-    // prefer image from info_buy_request if available; otherwise use placeholder
-    const urlImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
+    const placeholderImage = 'https://pwa-tcgcollective.local:8255/media/catalog/product/s/-/s-l1600_6__1.jpg?auto=webp&format=pjpg&width=495&height=618.75&fit=cover';
     
     useEffect(() => {
         if (!locationRfq) {
@@ -347,8 +346,8 @@ const quoteDetail = () => {
                 <div className='relative flex w-full md_w-6/12 justify-center flex-col mb-10 md_mb-0'>
                     <Image
                         alt='product image'
-                        className="relative max-w-[300px]"
-                        src={urlImage}
+                        className="relative max-w-[200px]"
+                        src={rfq && rfq.image_url ? rfq.image_url : placeholderImage}
                         classes={{
                             root: ' relative self-center mb-5'
                         }}
@@ -370,38 +369,15 @@ const quoteDetail = () => {
                         classes={{
                             content: 'capitalize text-[16px] font-medium'
                         }}
-                        disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue)}
+                        disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue) || status === 'Done'}
                         aria-busy={isConverting}
                         onClick={handleConvertQuickrfqToCart}
-                        // onPress={async () => {
-                        //     const qid = quickrfqIdValue;
-                        //     if (!qid || isNaN(qid)) return;
-                        //     try {
-                        //         setConvertError(null);
-                        //         setConvertSuccess(null);
-                        //         setIsConverting(true);
-                        //         const res = await handleConvertQuickrfqToCart(qid);
-                        //         const payload = res && res.data && res.data.convertQuickrfqToCart ? res.data.convertQuickrfqToCart : null;
-                        //         if (payload && payload.status) {
-                        //             storage.removeItem('cartId');
-
-                        //             console.log('torage.removeItem',storage.getItem('cartId'))
-
-                        //             setConvertSuccess(payload.message || 'Converted to cart.');
-                        //         } else {
-                        //             setConvertError('Failed to convert quote to cart.');
-                        //         }
-                        //     } catch (e) {
-                        //         console.log(e)
-                        //         setConvertError('Failed to convert quote to cart.');
-                        //     } finally {
-                        //         setIsConverting(false);
-                        //     }
-                        // }}
                     >
                         {isConverting
                             ? formatMessage({ id: 'Quotes.converting', defaultMessage: 'Add To Cart…' })
-                            : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
+                            : status === 'Done'
+                                ? formatMessage({ id: 'Quotes.completed', defaultMessage: 'Completed' })
+                                : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
                     </Button>
                     {convertError ? (
                         <div className='text-red-600 text-[12px] mt-2 text-center'>{convertError}</div>

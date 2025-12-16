@@ -30,15 +30,42 @@ const RFQModalForm = (props) => {
 
     // Upload File with remove capability
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    // Calculate safe raw-size limit to keep base64 payload under 2MB
+    const GRAPHQL_BASE64_LIMIT = 2 * 1024 * 1024;
+    const SAFE_RAW_LIMIT = Math.floor((GRAPHQL_BASE64_LIMIT * 3) / 4) - 8 * 1024;
+    const estimateBase64Size = size => Math.ceil((4 * size) / 3);
+
     const onDrop = useCallback((accepted) => {
-        setUploadedFiles(prev => [...prev, ...accepted]);
-    }, []);
+        const safe = [];
+        const rejected = [];
+        accepted.forEach(f => {
+            const est = estimateBase64Size(f.size || 0);
+            if (est <= GRAPHQL_BASE64_LIMIT) {
+                safe.push(f);
+            } else {
+                rejected.push({ name: f.name || f.path, size: f.size });
+            }
+        });
+        if (safe.length) {
+            setUploadedFiles(prev => [...prev, ...safe]);
+        }
+        if (rejected.length) {
+            addToast({
+                type: 'error',
+                message: formatMessage({
+                    id: 'productFullDetail.rfqFileTooLarge',
+                    defaultMessage: 'One or more files are too large. Max ~1.5MB each.'
+                }),
+                timeout: 4000
+            });
+        }
+    }, [addToast, formatMessage]);
 
     const {
         getRootProps,
         getInputProps,
         isDragActive
-    } = useDropzone({ onDrop });
+    } = useDropzone({ onDrop, maxSize: SAFE_RAW_LIMIT, multiple: true });
 
     const handleRemoveFile = useCallback((index) => {
         setUploadedFiles(prev => prev.filter((_, i) => i !== index));
@@ -59,8 +86,60 @@ const RFQModalForm = (props) => {
         </div>
     ));
 
+    // Helper: convert File to base64 string (without data URL prefix)
+    const toBase64 = useCallback(
+        file =>
+            new Promise((resolve, reject) => {
+                try {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const result = reader.result;
+                        // reader.result is a Data URL: "data:<mime>;base64,<payload>"
+                        const base64 = typeof result === 'string' && result.includes(',')
+                            ? result.split(',')[1]
+                            : '';
+                        resolve(base64);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                } catch (e) {
+                    reject(e);
+                }
+            }),
+        []
+    );
+
     const handleSubmit = useCallback(async values => {
-        console.log('[RFQ] submit values', values);
+        // console.log('[RFQ] submit values', values);
+        // Prepare base64 conversions if any files were uploaded
+        let filesPayload = undefined;
+        if (uploadedFiles && uploadedFiles.length) {
+            // Hard guard: abort if any file would exceed limit after base64 encoding
+            const oversize = uploadedFiles.find(f => estimateBase64Size(f.size || 0) > GRAPHQL_BASE64_LIMIT);
+            if (oversize) {
+                addToast({
+                    type: 'error',
+                    message: formatMessage({
+                        id: 'productFullDetail.rfqFileTooLargeSubmit',
+                        defaultMessage: 'A selected file is too large (limit ~1.5MB).' 
+                    }),
+                    timeout: 4000
+                });
+                return;
+            }
+            try {
+                const base64List = await Promise.all(
+                    uploadedFiles.map(file => toBase64(file))
+                );
+                filesPayload = uploadedFiles.map((file, i) => ({
+                    file_name: (file && (file.name || file.path)) || '',
+                    file_type: (file && file.type) ? file.type : 'application/octet-stream',
+                    base64: base64List[i] || ''
+                }));
+            } catch (e) {
+                console.error('[RFQ] file base64 conversion failed', e);
+            }
+        }
         const input = {
             product_id: productId,
             quantity: values.quote_qty ? Number(values.quote_qty) : undefined,
@@ -70,24 +149,16 @@ const RFQModalForm = (props) => {
                 ? Number(values.quote_price_per_unit)
                 : undefined,
             date_need_quote: startDate ? startDate.toISOString() : undefined,
-            files: uploadedFiles.length
-                ? uploadedFiles.map(file => ({
-                    file_name: (file && (file.name || file.path)) || '',
-                    // Browsers do not expose real file system paths; use name as a stable placeholder
-                    file_path: (file && (file.path || file.name)) || '',
-                    // Ensure a valid MIME string; default if missing
-                    file_type: (file && file.type) ? file.type : 'application/octet-stream'
-                }))
-                : undefined
+            files: filesPayload
         };
 
-            console.log('[RFQ] input payload', input);
+            // console.log('[RFQ] input payload', input);
 
         Object.keys(input).forEach(key => input[key] === undefined && delete input[key]);
 
         try {
             const result = await handleCreateQuickRfq(input);
-            console.log('[RFQ] mutation result', result);
+            // console.log('[RFQ] mutation result', result);
             addToast({
                 type: 'success',
                 message: formatMessage({
@@ -108,7 +179,7 @@ const RFQModalForm = (props) => {
                 timeout: 4000
             });
         }
-    }, [uploadedFiles, addToast, formatMessage, handleCreateQuickRfq, setOpen, startDate]);
+    }, [uploadedFiles, addToast, formatMessage, handleCreateQuickRfq, setOpen, startDate, toBase64]);
 
     return (
         <>
@@ -271,6 +342,7 @@ const RFQModalForm = (props) => {
                                         color="#f76b1c"
                                     />
                                     <div className='mt-2 text-blue-600'>Drop files or click here to upload</div>
+                                    <div className='mt-1 text-gray-500 text-xs'>Max size per file ~1.5MB (transport limit 2MB)</div>
                                 </div>
                                 {files && files.length > 0 && (
                                     <div className="wfp--dropzone__file-list mt-4">
@@ -288,7 +360,7 @@ const RFQModalForm = (props) => {
                                     }}
                                     type="button"
                                     onClick={() => {
-                                        console.log('[RFQ] Cancel clicked, closing modal');
+                                        // console.log('[RFQ] Cancel clicked, closing modal');
                                         setOpen(false);
                                     }}
                                 >
@@ -307,7 +379,7 @@ const RFQModalForm = (props) => {
                                     }}
                                     type="button"
                                     onPress={() => {
-                                        console.log('[RFQ] Submit pressed, calling formApi.submitForm()');
+                                        // console.log('[RFQ] Submit pressed, calling formApi.submitForm()');
                                         formApi.submitForm();
                                     }}
                                     disabled={createState?.loading}
