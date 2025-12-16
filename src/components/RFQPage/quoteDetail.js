@@ -26,12 +26,11 @@ const quoteDetail = () => {
     const { fetchCartId, addToCartResponseData, isAddProductLoading, errorAddingProductToCart, loadRfqDetail, rfqDetailState, handleSendRfqMessage, startDetailPolling, stopDetailPolling, handleConvertQuickrfqToCart } = useRFQ();
 
     const apolloClient = useApolloClient();
-    const [{ createCart, removeCart }] = useCartContext();
+    const [{ cartId }, { createCart, removeCart }] = useCartContext();
 
     useEffect(async() => {
         if (
             addToCartResponseData 
-            && !addToCartResponseData?.addProductsToCart?.user_errors.length 
             && !isAddProductLoading 
             && !errorAddingProductToCart
         ) {
@@ -369,15 +368,16 @@ const quoteDetail = () => {
                         classes={{
                             content: 'capitalize text-[16px] font-medium'
                         }}
-                        disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue) || status === 'Done'}
+                        // disabled={isConverting || !quickrfqIdValue || isNaN(quickrfqIdValue) || status === 'Done'}
                         aria-busy={isConverting}
                         onClick={handleConvertQuickrfqToCart}
                     >
-                        {isConverting
+                        {formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
+                        {/* {isConverting
                             ? formatMessage({ id: 'Quotes.converting', defaultMessage: 'Add To Cart…' })
                             : status === 'Done'
                                 ? formatMessage({ id: 'Quotes.completed', defaultMessage: 'Completed' })
-                                : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })}
+                                : formatMessage({ id: 'Quotes.addToCart', defaultMessage: 'Add To Cart' })} */}
                     </Button>
                     {convertError ? (
                         <div className='text-red-600 text-[12px] mt-2 text-center'>{convertError}</div>
