@@ -47,8 +47,7 @@ import MessagesModal from '@riosst100/pwa-marketplace/src/components/LiveChat/Me
 import SellerOperations from '@riosst100/pwa-marketplace/src/talons/Seller/seller.gql';
 
 import { useLocation, useHistory } from 'react-router-dom';
-
-import AgeVerificationModal from '@riosst100/pwa-marketplace/src/components/AgeVerification/ageVerificationModal';
+import AgeVerification from '@riosst100/pwa-marketplace/src/components/AgeVerification'
 
 import { totalListings, lowestPrice } from '@riosst100/pwa-marketplace/src/components/CrossSeller/crossSellerBuy';
 
@@ -818,7 +817,7 @@ const ProductFullDetail = props => {
         <Fragment>
             {breadcrumbs}
             {productPreviewMessages}
-            {/* <AgeVerificationModal /> */}
+            <AgeVerification />
             <Form
                 className={classes.root}
                 data-cy="ProductFullDetail-root"

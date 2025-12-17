@@ -1,12 +1,76 @@
+.modal label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Birthday selects */
+.birthday {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.birthday select {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btnUnder {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btnOver {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btnUnder {
+  background: #ef4444;
+}
+
+.btnOver {
+  background: #22c55e;
+}
+
+.btnOver:hover {
+  opacity: 0.9;
+}
+
+.btnUnder:hover {
+  opacity: 0.9;
+}
+
 .overlay{
     position:fixed;
     inset:0;
-    z-index:1000;
     display:flex;
-    align-items:flex-start;
-    justify-content:center;
     padding:5vh 24px;
-    font-family:inherit
+    font-family:inherit;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 .backdrop{
     position:absolute;
@@ -19,8 +83,7 @@
     background:#fff;
     border-radius:12px;
     box-shadow:0 8px 32px rgba(0,0,0,.25);
-    width:clamp(320px,80vw,370px);
-    max-height:90vh;
+    width:clamp(320px,80vw,500px);
     display:flex;
     flex-direction:column
 }
@@ -52,8 +115,12 @@
     color:#222
 }
 .body{
-    padding:16px 20px;
-    overflow:auto
+    padding: 20px 50px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    flex-wrap: wrap;
 }
 .triggerBtn{
     background:#f76b1c;

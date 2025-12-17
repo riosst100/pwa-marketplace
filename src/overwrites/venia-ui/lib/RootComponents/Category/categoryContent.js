@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useEffect, Suspense, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { array, number, shape, string } from 'prop-types';
 
@@ -25,6 +25,7 @@ import cn from 'classnames';
 import ProductListTab, { ProductListTabShimmer } from '@riosst100/pwa-marketplace/src/components/ProductListTab';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getFiltersFromSearch } from '@magento/peregrine/lib/talons/FilterModal/helpers';
+import AgeVerification from '@riosst100/pwa-marketplace/src/components/AgeVerification'
 
 const FilterModal = React.lazy(() => import('@magento/venia-ui/lib/components/FilterModal'));
 const FilterSidebar = React.lazy(() =>
@@ -259,6 +260,7 @@ const CategoryContent = props => {
 
     return (
         <Fragment>
+            <AgeVerification />
             <Breadcrumbs categoryId={categoryId} customPage={shopby == "gauge" ? title : ''} currentFilter={activeFilters} />
             <StoreTitle>{title}</StoreTitle>
             <article className={classes.root} data-cy="CategoryContent-root">
