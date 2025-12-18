@@ -30,6 +30,7 @@ import { Star1, Verify, Sms, Message, Shop, ArrowUp2 } from 'iconsax-react';
 import { Link } from "react-router-dom";
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 import { GET_PAYMENT_TYPES } from '@riosst100/pwa-marketplace/src/talons/ProductContent/productContent.gql.js';
+import ProductFAQ from './components/productFAQ';
 
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
 const Options = React.lazy(() => import('@magento/venia-ui/lib/components/ProductOptions'));
@@ -87,7 +88,7 @@ const ProductDetailsCollapsible = (props) => {
 
 const ProductFullDetail = props => {
     const { product } = props;
-
+    
     const history = useHistory();
 
     const { search } = useLocation();
@@ -410,7 +411,7 @@ const ProductFullDetail = props => {
             }, []),
         [customAttributesDetails.list]
     );
-
+    
     const ProductTNC = () => (
         <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <p>{customAttributesList.map((data, index) => {
@@ -441,21 +442,7 @@ const ProductFullDetail = props => {
         </div>
     )
 
-    const ProductFAQ = () => (
-        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
-            {customAttributesList.map((data, index) => {
-                if (data.code == "faq") {
-                    return (
-                        <RichText
-                            rootClassName="px-0"
-                            content={data.value}
-                        />
-                    );
-                }
-            })}
-
-        </div>
-    )
+    
 
     
     const getAttributeValue = (customAttributesDetails, key, useSuffix = false) => {
@@ -694,7 +681,11 @@ const ProductFullDetail = props => {
         {
             id: 'product-faq',
             title: 'FAQ',
-            content: <ProductFAQ />
+            content: (
+                <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
+                    <ProductFAQ productId={product?.id} />
+                </div>
+            )
         },
         {
             id: 'product-reviews',
