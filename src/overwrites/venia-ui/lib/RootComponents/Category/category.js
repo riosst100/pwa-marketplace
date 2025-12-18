@@ -21,6 +21,7 @@ import TrainsSets from '@riosst100/pwa-marketplace/src/components/TrainsSets/tra
 import SetsData from '@riosst100/pwa-marketplace/src/components/SetsData/setsData';
 import FilterContent from '@riosst100/pwa-marketplace/src/components/FilterContent/filterContent';
 import ShowMore from '@riosst100/pwa-marketplace/src/components/ShowMore/showMore';
+import AgeVerification from '@riosst100/pwa-marketplace/src/components/AgeVerification'
 
 const MESSAGES = new Map().set(
     'NOT_FOUND',
@@ -205,6 +206,7 @@ const Category = props => {
     return (
         <Fragment>
             <Meta name="description" content={metaDescription} />
+            <AgeVerification pageType="CATEGORY" />
             {categoryContent}
         </Fragment>
     );

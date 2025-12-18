@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import modalClasses from './ageVerificationModal.module.css';
-// import { AgeVerificationModalShimmer } from '@riosst100/pwa-marketplace/src/components/SellerCoupon';
 import Icon from '@magento/venia-ui/lib/components/Icon';
-// import AccountChip from '../AccountChip';
 import { AlertTriangle } from 'react-feather';
-import cn from 'classnames';
 
 
 // Simple portal root fallback
@@ -41,7 +38,7 @@ const AgeVerificationModal = props => {
             <div className={modalClasses.backdrop} />
             <div className={modalClasses.dialog}>
                 <div className={modalClasses.body}>
-                    <di><Icon src={AlertTriangle} attrs={{ width: 20 }} /></di>
+                    <div><Icon src={AlertTriangle} attrs={{ width: 20 }} /></div>
                     <h2 className={modalClasses.title}>Are you over 18 years old?</h2>
                     <p>You must be at least 18 years old to access this page. Please verify your age.</p>
                     <label>Your Birthday</label>

@@ -31,29 +31,6 @@ const Adapter = props => {
         return null;
     }
 
-    // console.log('isMaintenance',isMaintenance)
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         axios.get(apiBase).then((response) => {
-    //             // setIsMaintenance(false)
-    //         }).catch((error) => {
-    //             const status = error.response.status;
-    //             if (status != 200) {
-    //                 console.log('status',status)
-    //                 return <MaintenancePage />;
-    //                 // setIsMaintenance(true)
-    //             }
-    //         });
-    //     };
-    
-    //     fetchData();
-   
-
-    // if (isMaintenance) {
-    //     return <MaintenancePage />;
-    // }
-
     const websiteCodes = [];
     const websiteStores = useMemo(() => ({}), []);
     const storeCurrencies = useMemo(() => ({}), []);

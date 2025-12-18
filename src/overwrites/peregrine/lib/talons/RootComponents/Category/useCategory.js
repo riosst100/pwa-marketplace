@@ -107,10 +107,6 @@ export const useCategory = props => {
         loading: introspectionLoading
     } = useQuery(getFilterInputsQuery);
 
-    // console.log(introspectionCalled)
-    // console.log(introspectionLoading)
-    // console.log(introspectionData)
-
     // Create a type map we can reference later to ensure we pass valid args
     // to the graphql query.
     // For example: { category_id: 'FilterEqualTypeInput', price: 'FilterRangeTypeInput' }

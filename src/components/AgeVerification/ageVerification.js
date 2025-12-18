@@ -3,10 +3,13 @@ import AgeVerificationModal from '@riosst100/pwa-marketplace/src/components/AgeV
 import { useHistory, useLocation } from 'react-router-dom';
 import { useToasts } from '@magento/peregrine/lib/Toasts';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
+import { useAgeVerification } from '@riosst100/pwa-marketplace/src/talons/AgeVerification/useAgeVerification'
 
 const storage = new BrowserPersistence();
 
-const AgeVerification = props => {
+const AgeVerification = (props) => {
+    const { pageType, product } = props;
+    
     const [modalOpen, setModalOpen] = useState(false);
 
     const [month, setMonth] = useState("");
@@ -21,10 +24,28 @@ const AgeVerification = props => {
 
     const handleClose = () => setModalOpen(false);
 
+    const {
+        error,
+        loading,
+        ageVerificationConfig
+     } = useAgeVerification({ pageType, product });
+
     const months = [
         "January","February","March","April","May","June",
         "July","August","September","October","November","December"
     ];
+
+    const savedAge = storage.getItem('age');
+    
+    useEffect(() => {
+        if (ageVerificationConfig && ageVerificationConfig.status) {
+            if (savedAge && savedAge > 18) {
+                setModalOpen(false);
+            } else {
+                setModalOpen(true);
+            }
+        }
+    }, [loading, setModalOpen, savedAge, ageVerificationConfig]);
 
     const redirectUser = () => {
         const currentPathname = location.pathname;
@@ -81,22 +102,14 @@ const AgeVerification = props => {
         return;
     }, [day, month, year])
 
-    const savedAge = storage.getItem('age');
     
-    useEffect(() => {
-        if (savedAge && savedAge > 18) {
-            setModalOpen(false);
-        } else {
-            setModalOpen(true);
-        }
-    }, [setModalOpen, savedAge]);
 
     return modalOpen ? (
         <AgeVerificationModal
             ageVerificationErrorMessage={ageVerificationErrorMessage}
             modalOpen={modalOpen}
             months={months}
-            setMont={setMonth}
+            setMonth={setMonth}
             setDay={setDay}
             setYear={setYear}
             handleOverAge={handleOverAge}

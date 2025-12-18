@@ -8,6 +8,7 @@ import { StoreTitle, Meta } from '@magento/venia-ui/lib/components/Head';
 import ProductFullDetail from '@magento/venia-ui/lib/components/ProductFullDetail';
 import mapProduct from '@magento/venia-ui/lib/util/mapProduct';
 import ProductShimmer from '@magento/venia-ui/lib/RootComponents/Product/product.shimmer';
+import AgeVerification from '@riosst100/pwa-marketplace/src/components/AgeVerification'
 
 /*
  * As of this writing, there is no single Product query type in the M2.3 schema.
@@ -46,6 +47,7 @@ const Product = props => {
         <Fragment>
             <StoreTitle>{product.name}</StoreTitle>
             <Meta name="description" content={product.meta_description} />
+            <AgeVerification pageType="PRODUCT" product={product} />
             <ProductFullDetail product={product} />
         </Fragment>
     );
