@@ -103,6 +103,20 @@ module.exports = targets => {
     },
     {
       exact: true,
+      name: "PrivacyPolicy",
+      pattern: "/privacy-policy",
+      path: require.resolve("./components/PrivacyPolicy/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
+      name: "TermsOfUse",
+      pattern: "/terms-of-use",
+      path: require.resolve("./components/TermsOfUse/index.js"),
+      authed: false,
+    },
+    {
+      exact: true,
       name: "HelpCenterQuestionDetail",
       pattern: "/help-center/question/:questionId",
       path: require.resolve("./components/HelpCenter/questionDetail.js"),

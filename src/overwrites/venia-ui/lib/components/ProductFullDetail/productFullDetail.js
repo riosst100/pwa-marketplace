@@ -30,6 +30,7 @@ import { Star1, Verify, Sms, Message, Shop, ArrowUp2 } from 'iconsax-react';
 import { Link } from "react-router-dom";
 import Divider from '@riosst100/pwa-marketplace/src/components/Divider';
 import { GET_PAYMENT_TYPES } from '@riosst100/pwa-marketplace/src/talons/ProductContent/productContent.gql.js';
+import ProductFAQ from './components/productFAQ';
 
 const WishlistButton = React.lazy(() => import('@magento/venia-ui/lib/components/Wishlist/AddToListButton'));
 const Options = React.lazy(() => import('@magento/venia-ui/lib/components/ProductOptions'));
@@ -86,7 +87,7 @@ const ProductDetailsCollapsible = (props) => {
 
 const ProductFullDetail = props => {
     const { product } = props;
-
+    
     const history = useHistory();
 
     const { search } = useLocation();
@@ -118,7 +119,7 @@ const ProductFullDetail = props => {
         errorAddingProductToCart,
         isAddProductLoading,
     } = talonProps;
-
+   
     const [, { addToast }] = useToasts();
     const [{ isSignedIn }] = useUserContext();
 
@@ -348,7 +349,7 @@ const ProductFullDetail = props => {
             pagebuilder: pagebuilder
         };
     }, [productDetailsAttributes, productDetails.sku, formatMessage]);
-
+    
     const shortDescription = productDetails.shortDescription ? (
         <RichText
             rootClassName="px-0"
@@ -409,7 +410,7 @@ const ProductFullDetail = props => {
             }, []),
         [customAttributesDetails.list]
     );
-
+    
     const ProductTNC = () => (
         <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
             <p>{customAttributesList.map((data, index) => {
@@ -440,21 +441,7 @@ const ProductFullDetail = props => {
         </div>
     )
 
-    const ProductFAQ = () => (
-        <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
-            {customAttributesList.map((data, index) => {
-                if (data.code == "faq") {
-                    return (
-                        <RichText
-                            rootClassName="px-0"
-                            content={data.value}
-                        />
-                    );
-                }
-            })}
-
-        </div>
-    )
+    
 
     
     const getAttributeValue = (customAttributesDetails, key, useSuffix = false) => {
@@ -474,11 +461,13 @@ const ProductFullDetail = props => {
         return attr.entered_attribute_value?.value || "";
     };
 
-    const preOrder = getAttributeValue(productCardDetailsAttributes, "card_pre_orders", true);
-    const preOrderDate = getAttributeValue(productCardDetailsAttributes, "pre_order_date", true);
-    const preOrderDeposite = getAttributeValue(productCardDetailsAttributes, "pre_order_deposit", true);
-    const preOrderNote = getAttributeValue(productCardDetailsAttributes, "pre_order_notes", true);
-    const preOrderPaymentType = getAttributeValue(productCardDetailsAttributes, "pre_order_payment_type", true);
+    // Prefer preorder info from product props; fallback to productDetails if present
+    const preorderData = (product && product.preorder) || (productDetails && productDetails.preorder) || null;
+    const preOrder = preorderData;
+    const preOrderDate = preorderData?.pre_order_date || "";
+    const preOrderDeposite = preorderData?.pre_order_deposit || "";
+    const preOrderNote = preorderData?.pre_order_notes || "";
+    const preOrderPaymentType = preorderData?.pre_order_payment_type || "";
     const releaseDate = getAttributeValue(productCardDetailsAttributes, "release_date", true);
     const setNameValue = getAttributeValue(productCardDetailsAttributes, "card_set", true);
     const cardNameValue = getAttributeValue(productCardDetailsAttributes, "card_name", true);
@@ -508,6 +497,17 @@ const ProductFullDetail = props => {
         isPreOrderProduct &&
         preOrderClosingDateObj !== null &&
         new Date().getTime() > preOrderClosingDateObj.getTime();
+
+    // Ensure payment type is only set for preorder products
+    useEffect(() => {
+        if (isPreOrderProduct) {
+            if (preOrderPaymentType) {
+                setSelectedPaymentType(preOrderPaymentType);
+            }
+        } else {
+            setSelectedPaymentType(null);
+        }
+    }, [isPreOrderProduct, preOrderPaymentType]);
 
     const cartCallToActionText =
         isPreOrderClosed
@@ -680,7 +680,11 @@ const ProductFullDetail = props => {
         {
             id: 'product-faq',
             title: 'FAQ',
-            content: <ProductFAQ />
+            content: (
+                <div className={cn(contentContainerClass, classes.contentContainerTabOverride)}>
+                    <ProductFAQ productId={product?.id} />
+                </div>
+            )
         },
         {
             id: 'product-reviews',
@@ -740,7 +744,7 @@ const ProductFullDetail = props => {
             };
 
             let preorderPayload;
-            if (selectedPaymentType) {
+            if (isPreOrderProduct && selectedPaymentType) {
                 preorderPayload = {
                     pre_order_payment_type: selectedPaymentType
                 };
@@ -753,9 +757,11 @@ const ProductFullDetail = props => {
             }
 
             const nextValues = {
-                ...formValues,
-                preorder: preorderPayload
+                ...formValues
             };
+            if (preorderPayload) {
+                nextValues.preorder = preorderPayload;
+            }
             await originalHandleAddToCart(nextValues);
         } catch (e) {
             addToast({
@@ -948,17 +954,19 @@ const ProductFullDetail = props => {
                                             />
                                         </Suspense>
                                     </div>
-                                    <PreorderDetail 
-                                        preOrder={preOrder}
-                                        preOrderDate={preOrderDate}
-                                        preOrderDeposite={preOrderDeposite}
-                                        preOrderNote={preOrderNote}
-                                        preOrderPaymentType={preOrderPaymentType}
-                                        releaseDate={releaseDate}    
-                                        className={'preorder_detail-container'}
-                                        paymentTypeOptions={paymentTypeOptions}
-                                        onPaymentTypeChange={setSelectedPaymentType}
-                                    />
+                                    {isPreOrderProduct && (
+                                        <PreorderDetail 
+                                            preOrder={preOrder}
+                                            preOrderDate={preOrderDate}
+                                            preOrderDeposite={preOrderDeposite}
+                                            preOrderNote={preOrderNote}
+                                            preOrderPaymentType={preOrderPaymentType}
+                                            releaseDate={releaseDate}    
+                                            className={'preorder_detail-container'}
+                                            paymentTypeOptions={paymentTypeOptions}
+                                            onPaymentTypeChange={setSelectedPaymentType}
+                                        />
+                                    )}
                                     <div className='product_actions-wrapper'>
                                         {cartActionContent}
                                     </div>

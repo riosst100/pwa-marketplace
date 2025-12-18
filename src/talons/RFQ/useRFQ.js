@@ -10,8 +10,6 @@ export const useRFQ = props => {
 	const { pathname } = useLocation();
 	const rfqQuoteId = pathname.split('/')[2];
 
-	console.log('rfqQuoteId',rfqQuoteId)
-
 	const operations = mergeOperations(DEFAULT_OPERATIONS, props?.operations);
 
 	const {
