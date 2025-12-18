@@ -130,7 +130,7 @@ const Footer = props => {
                 <p className="text-colorDefault">{copyrightText || null}</p>
                 <ul className="flex flex-row gap-x-2.5">
                     <li data-cy="Footer-terms" className={classes.terms}>
-                        <Link to="/" className="text-colorDefault underline">
+                        <Link to="/terms-of-use" className="text-colorDefault underline">
                             <FormattedMessage
                                 id={'footer.termsText'}
                                 defaultMessage={'Terms of Use'}
@@ -139,7 +139,7 @@ const Footer = props => {
                     </li>
                     <Divider className="w-[1px] !h-[20px]" />
                     <li data-cy="Footer-privacy" className={classes.privacy}>
-                        <Link to="/" className="text-colorDefault underline">
+                        <Link to="/privacy-policy" className="text-colorDefault underline">
                             <FormattedMessage
                                 id={'footer.privacyText'}
                                 defaultMessage={'Privacy Policy'}
