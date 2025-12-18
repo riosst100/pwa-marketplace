@@ -119,7 +119,7 @@ const ProductFullDetail = props => {
         errorAddingProductToCart,
         isAddProductLoading,
     } = talonProps;
-
+   
     const [, { addToast }] = useToasts();
     const [{ isSignedIn }] = useUserContext();
 
@@ -349,7 +349,7 @@ const ProductFullDetail = props => {
             pagebuilder: pagebuilder
         };
     }, [productDetailsAttributes, productDetails.sku, formatMessage]);
-
+    
     const shortDescription = productDetails.shortDescription ? (
         <RichText
             rootClassName="px-0"
@@ -475,11 +475,13 @@ const ProductFullDetail = props => {
         return attr.entered_attribute_value?.value || "";
     };
 
-    const preOrder = getAttributeValue(productCardDetailsAttributes, "card_pre_orders", true);
-    const preOrderDate = getAttributeValue(productCardDetailsAttributes, "pre_order_date", true);
-    const preOrderDeposite = getAttributeValue(productCardDetailsAttributes, "pre_order_deposit", true);
-    const preOrderNote = getAttributeValue(productCardDetailsAttributes, "pre_order_notes", true);
-    const preOrderPaymentType = getAttributeValue(productCardDetailsAttributes, "pre_order_payment_type", true);
+    // Prefer preorder info from product props; fallback to productDetails if present
+    const preorderData = (product && product.preorder) || (productDetails && productDetails.preorder) || null;
+    const preOrder = preorderData;
+    const preOrderDate = preorderData?.pre_order_date || "";
+    const preOrderDeposite = preorderData?.pre_order_deposit || "";
+    const preOrderNote = preorderData?.pre_order_notes || "";
+    const preOrderPaymentType = preorderData?.pre_order_payment_type || "";
     const releaseDate = getAttributeValue(productCardDetailsAttributes, "release_date", true);
     const setNameValue = getAttributeValue(productCardDetailsAttributes, "card_set", true);
     const cardNameValue = getAttributeValue(productCardDetailsAttributes, "card_name", true);
@@ -509,6 +511,17 @@ const ProductFullDetail = props => {
         isPreOrderProduct &&
         preOrderClosingDateObj !== null &&
         new Date().getTime() > preOrderClosingDateObj.getTime();
+
+    // Ensure payment type is only set for preorder products
+    useEffect(() => {
+        if (isPreOrderProduct) {
+            if (preOrderPaymentType) {
+                setSelectedPaymentType(preOrderPaymentType);
+            }
+        } else {
+            setSelectedPaymentType(null);
+        }
+    }, [isPreOrderProduct, preOrderPaymentType]);
 
     const cartCallToActionText =
         isPreOrderClosed
@@ -741,7 +754,7 @@ const ProductFullDetail = props => {
             };
 
             let preorderPayload;
-            if (selectedPaymentType) {
+            if (isPreOrderProduct && selectedPaymentType) {
                 preorderPayload = {
                     pre_order_payment_type: selectedPaymentType
                 };
@@ -754,9 +767,11 @@ const ProductFullDetail = props => {
             }
 
             const nextValues = {
-                ...formValues,
-                preorder: preorderPayload
+                ...formValues
             };
+            if (preorderPayload) {
+                nextValues.preorder = preorderPayload;
+            }
             await originalHandleAddToCart(nextValues);
         } catch (e) {
             addToast({
@@ -949,17 +964,19 @@ const ProductFullDetail = props => {
                                             />
                                         </Suspense>
                                     </div>
-                                    <PreorderDetail 
-                                        preOrder={preOrder}
-                                        preOrderDate={preOrderDate}
-                                        preOrderDeposite={preOrderDeposite}
-                                        preOrderNote={preOrderNote}
-                                        preOrderPaymentType={preOrderPaymentType}
-                                        releaseDate={releaseDate}    
-                                        className={'preorder_detail-container'}
-                                        paymentTypeOptions={paymentTypeOptions}
-                                        onPaymentTypeChange={setSelectedPaymentType}
-                                    />
+                                    {isPreOrderProduct && (
+                                        <PreorderDetail 
+                                            preOrder={preOrder}
+                                            preOrderDate={preOrderDate}
+                                            preOrderDeposite={preOrderDeposite}
+                                            preOrderNote={preOrderNote}
+                                            preOrderPaymentType={preOrderPaymentType}
+                                            releaseDate={releaseDate}    
+                                            className={'preorder_detail-container'}
+                                            paymentTypeOptions={paymentTypeOptions}
+                                            onPaymentTypeChange={setSelectedPaymentType}
+                                        />
+                                    )}
                                     <div className='product_actions-wrapper'>
                                         {cartActionContent}
                                     </div>
