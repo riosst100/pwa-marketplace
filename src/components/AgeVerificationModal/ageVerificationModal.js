@@ -38,10 +38,12 @@ const AgeVerificationModal = props => {
             <div className={modalClasses.backdrop} />
             <div className={modalClasses.dialog}>
                 <div className={modalClasses.body}>
-                    <div><Icon src={AlertTriangle} attrs={{ width: 20 }} /></div>
+                    <div><Icon src={AlertTriangle} classes={{
+                            icon: modalClasses.icon
+                        }} attrs={{ width: 40 }} /></div>
                     <h2 className={modalClasses.title}>Are you over 18 years old?</h2>
-                    <p>You must be at least 18 years old to access this page. Please verify your age.</p>
-                    <label>Your Birthday</label>
+                    <p style={{"paddingTop": "10px"}}>You must be at least 18 years old to access this page. Please verify your age.</p>
+                    <label className={modalClasses.formLabel}>Your Birthday:</label>
                     <div className={modalClasses.birthday}>
                         {/* Month */}
                         <select onChange={(e) => setMonth(e.target.value)}>
@@ -67,7 +69,7 @@ const AgeVerificationModal = props => {
                         ))}
                         </select>
                     </div>
-                    {ageVerificationErrorMessage && <div>{ageVerificationErrorMessage}</div>}
+                    {ageVerificationErrorMessage && <div className={modalClasses.error}>{ageVerificationErrorMessage}</div>}
                     <div className={modalClasses.actions}>
                         <button className={modalClasses.btnUnder} onClick={handleUnderAge}>I'm under 18 years old</button>
                         <button className={modalClasses.btnOver} onClick={handleOverAge}>I'm 18 years old</button>

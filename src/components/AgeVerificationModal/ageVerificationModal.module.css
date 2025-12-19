@@ -6,6 +6,13 @@
   text-align: left;
 }
 
+.formLabel {
+  font-weight: 500;
+  padding-top: 30px;
+  font-size: 13px;
+  padding-bottom: 10px;
+}
+
 /* Birthday selects */
 .birthday {
   display: flex;
@@ -28,7 +35,7 @@
 
 .btnUnder {
   flex: 1;
-  padding: 10px;
+  /* padding: 10px; */
   border: none;
   border-radius: 6px;
   color: white;
@@ -38,7 +45,7 @@
 
 .btnOver {
   flex: 1;
-  padding: 10px;
+  /* padding: 10px; */
   border: none;
   border-radius: 6px;
   color: white;
@@ -98,7 +105,7 @@
     font-size:20px;
     font-weight:600;
     margin:0;
-    color:#333
+    color:red;
 }
 .closeBtn{
     background:none;
@@ -110,12 +117,24 @@
     padding:4px 8px;
     border-radius:6px
 }
+.error {
+      color: red;
+    padding: 10px;
+    font-size: 13px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
 .closeBtn:hover{
     background:#f5f5f5;
     color:#222
 }
+.icon {
+  --stroke: red;
+  stroke: red;
+  color: red;
+}
 .body{
-    padding: 20px 50px;
+    padding: 30px 50px;
     overflow: auto;
     display: flex;
     flex-direction: column;
