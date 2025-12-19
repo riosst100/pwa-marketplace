@@ -1,0 +1,150 @@
+.modal label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Birthday selects */
+.birthday {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.birthday select {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btnUnder {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btnOver {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btnUnder {
+  background: #ef4444;
+}
+
+.btnOver {
+  background: #22c55e;
+}
+
+.btnOver:hover {
+  opacity: 0.9;
+}
+
+.btnUnder:hover {
+  opacity: 0.9;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    padding:5vh 24px;
+    font-family:inherit;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.backdrop{
+    position:absolute;
+    inset:0;
+    background: rgba(0, 0, 0, 0.64);
+    backdrop-filter: blur(8px);
+}
+.dialog{
+    position:relative;
+    width:clamp(320px,80vw,500px);
+    display:flex;
+    flex-direction:column
+}
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    border-bottom:1px solid #eee
+}
+.title{
+    font-size:20px;
+    font-weight:600;
+    margin:0;
+    color:#333
+}
+.closeBtn{
+    background:none;
+    border:none;
+    font-size:24px;
+    line-height:1;
+    cursor:pointer;
+    color:#777;
+    padding:4px 8px;
+    border-radius:6px
+}
+.closeBtn:hover{
+    background:#f5f5f5;
+    color:#222
+}
+.body{
+    padding: 20px 50px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.triggerBtn{
+    background:#f76b1c;
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer
+}
+.triggerBtn:hover{
+    background:#f26313
+}
+/* Vertical stack wrapper for existing sellerCoupon card styles */
+.stack{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    padding:4px 2px 12px;
+}
+@media (max-width:640px){
+    .dialog{
+        width:92vw;
+        padding-bottom:8px
+    }
+    .grid{
+        grid-template-columns:repeat(auto-fill,minmax(160px,1fr))
+    }
+}

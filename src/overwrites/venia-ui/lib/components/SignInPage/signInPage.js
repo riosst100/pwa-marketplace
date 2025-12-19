@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -9,37 +9,43 @@ import SignIn from '@magento/venia-ui/lib/components/SignIn';
 import cn from 'classnames';
 
 import defaultClasses from './signInPage.module.css';
+import LoadingRequest from '@riosst100/pwa-marketplace/src/components/LoadingRequest';
 
 const SignInPage = props => {
     const classes = useStyle(defaultClasses, props.classes);
     const { signInProps } = useSignInPage(props);
     const { formatMessage } = useIntl();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
-        <div className={classes.signInRootContainer}>
-            <div className={cn(classes.root, '!py-[60px]')}>
-                <StoreTitle>
-                    {formatMessage({
-                        id: 'signInPage.title',
-                        defaultMessage: 'Sign In'
-                    })}
-                </StoreTitle>
-                <div className={cn(classes.leftContentContainer, '')}>
-                    <div class="auth-left">
-                        <img src="https://img.freepik.com/premium-vector/sign-concept-illustration_114360-125.jpg" width="50%" />
-                        <p style={{
-                            "fontSize": "20px",
-                            "fontWeight": 500
-                        }}>Sign in to start shopping or sell your collectibles.</p>
+        <>
+            <LoadingRequest isLoading={isLoading} />
+            <div className={classes.signInRootContainer}>
+                <div className={cn(classes.root, '!py-[60px]')}>
+                    <StoreTitle>
+                        {formatMessage({
+                            id: 'signInPage.title',
+                            defaultMessage: 'Sign In'
+                        })}
+                    </StoreTitle>
+                    <div className={cn(classes.leftContentContainer, '')}>
+                        <div class="auth-left">
+                            <img src="https://img.freepik.com/premium-vector/sign-concept-illustration_114360-125.jpg" width="50%" />
+                            <p style={{
+                                "fontSize": "20px",
+                                "fontWeight": 500
+                            }}>Sign in to start shopping or sell your collectibles.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className={cn(classes.root, '!py-[60px]')}>
+                    <div className={cn(classes.contentContainer, 'border border-gray-100 rounded-lg')}>
+                        <SignIn setIsLoading={setIsLoading} {...signInProps} />
                     </div>
                 </div>
             </div>
-            <div className={cn(classes.root, '!py-[60px]')}>
-                <div className={cn(classes.contentContainer, 'border border-gray-100 rounded-lg')}>
-                    <SignIn {...signInProps} />
-                </div>
-            </div>
-        </div>
+        </>
     );
 };
 

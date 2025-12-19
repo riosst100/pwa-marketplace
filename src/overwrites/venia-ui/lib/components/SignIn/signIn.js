@@ -27,6 +27,7 @@ const SignIn = props => {
         showCreateAccount,
         showForgotPassword,
         initialValues,
+        setIsLoading,
         showSocialLogin = true,
     } = props;
 
@@ -36,7 +37,8 @@ const SignIn = props => {
         getCartDetailsQuery: GET_CART_DETAILS_QUERY,
         setDefaultUsername,
         showCreateAccount,
-        showForgotPassword
+        showForgotPassword,
+        setIsLoading
     });
 
     const {
