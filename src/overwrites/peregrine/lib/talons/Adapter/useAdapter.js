@@ -32,9 +32,11 @@ export const useAdapter = props => {
     const match = location && location.pathname.split("/")[1];
     let websiteCodeInUrl = websiteCodes.find((str) => str === match);
 
+    let prefix = websiteCodeInUrl ? websiteCodeInUrl + '_' : '';
+
     let isBaseWebsite = false;
 
-    let websiteCode = storage.getItem('website_code');
+    let websiteCode = storage.getItem(prefix + 'website_code');
 
     if (!websiteCodeInUrl) {
         isBaseWebsite = true;
@@ -86,7 +88,7 @@ export const useAdapter = props => {
 
     const clearCacheData = useCallback(
         async (client, cacheType) => {
-            const storeCode = storage.getItem('store_view_code') || 'default';
+            const storeCode = storage.getItem(prefix + 'store_view_code') || 'default';
 
             // Clear current store
             if (cacheType === 'cart') {
@@ -135,11 +137,11 @@ export const useAdapter = props => {
                 }
             }
         },
-        [apolloLink, createApolloClient, createCachePersistor]
+        [apolloLink, prefix, createApolloClient, createCachePersistor]
     );
 
     const apolloClient = useMemo(() => {
-        const storeCode = storage.getItem('store_view_code') || 'default';
+        const storeCode = storage.getItem(prefix + 'store_view_code') || 'default';
         const client = createApolloClient(preInstantiatedCache, apolloLink);
         const persistor = isServer
             ? null
@@ -154,6 +156,7 @@ export const useAdapter = props => {
         apiBase,
         apolloLink,
         clearCacheData,
+        prefix,
         createApolloClient,
         createCachePersistor
     ]);
