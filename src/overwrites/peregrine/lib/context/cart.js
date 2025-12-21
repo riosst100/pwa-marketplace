@@ -66,10 +66,22 @@ const CartContextProvider = props => {
     const [removeSplitCart] = useMutation(REMOVE_SPLIT_CART_MUTATION);
     const fetchCartDetails = useAwaitQuery(CART_DETAILS_QUERY);
 
+    const websiteCodes = [];
+
+    AVAILABLE_WEBSITES.forEach(store => {
+        websiteCodes.push(store.website_code);
+    });
+    
+    const { location } = globalThis;
+    const match = location && location.pathname.split("/")[1];
+    const websiteCodeInUrl = websiteCodes.find((str) => str === match);
+
+    let prefix = websiteCodeInUrl ? websiteCodeInUrl + '_' : '';
+
     // Storage listener to force a state update if cartId changes from another browser tab.
     const storageListener = useCallback(() => {
         const storage = new BrowserPersistence();
-        const currentCartId = storage.getItem('cartId');
+        const currentCartId = storage.getItem(prefix + 'cartId');
         const { cartId } = cartState;
         if (cartId && currentCartId && cartId !== currentCartId) {
             globalThis.location && globalThis.location.reload();

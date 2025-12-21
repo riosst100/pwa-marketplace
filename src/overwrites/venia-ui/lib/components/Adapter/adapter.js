@@ -31,29 +31,6 @@ const Adapter = props => {
         return null;
     }
 
-    // console.log('isMaintenance',isMaintenance)
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         axios.get(apiBase).then((response) => {
-    //             // setIsMaintenance(false)
-    //         }).catch((error) => {
-    //             const status = error.response.status;
-    //             if (status != 200) {
-    //                 console.log('status',status)
-    //                 return <MaintenancePage />;
-    //                 // setIsMaintenance(true)
-    //             }
-    //         });
-    //     };
-    
-    //     fetchData();
-   
-
-    // if (isMaintenance) {
-    //     return <MaintenancePage />;
-    // }
-
     const websiteCodes = [];
     const websiteStores = useMemo(() => ({}), []);
     const storeCurrencies = useMemo(() => ({}), []);
@@ -129,63 +106,67 @@ const Adapter = props => {
             // await removeCart();
 
             // klo enabled jd redirect tros
-            storage.removeItem('cartId');
+            // storage.removeItem('cartId');
 
-            storage.setItem('store_view_code', storeCodeInUrl);
-            storage.setItem('website_code', websiteCodeInUrl);
-            storage.setItem(
-                'store_view_currency',
-                storeCurrencies[storeCodeInUrl]
-            );
-            storage.setItem(
-                'store_view_secure_base_media_url',
-                storeSecureBaseMediaUrl[storeCodeInUrl]
-            );
+            // storage.setItem('store_view_code', storeCodeInUrl);
+            // storage.setItem('website_code', websiteCodeInUrl);
+            // storage.setItem(
+            //     'store_view_currency',
+            //     storeCurrencies[storeCodeInUrl]
+            // );
+            // storage.setItem(
+            //     'store_view_secure_base_media_url',
+            //     storeSecureBaseMediaUrl[storeCodeInUrl]
+            // );
 
             // We're required to reload the page as the basename doesn't
             // change entirely without a full page reload.
             // history.go(0);
         }
 
-        console.log('currentWebsiteCode',currentWebsiteCode)
+        // console.log('currentWebsiteCode',currentWebsiteCode)
 
-        if (!websiteCodeInUrl && getWebsiteByUserIp) {
-            setVerifyUserIp(false);
-
-            const search = location.search;
-            
-            const query = new URLSearchParams(search);
-            const isAccessBaseWebsite = query.get('access_base_website') || (
-                storage.getItem('access_base_website') || null
-            );
-
-            // const websiteCode = getWebsiteByUserIp.countryCode && !isAccessBaseWebsite ? getWebsiteByUserIp.countryCode.toLowerCase() : process.env.WEBSITE_CODE;
+        if (!websiteCodeInUrl) {
             const websiteCode = process.env.WEBSITE_CODE;
+            // if (websiteCode != storage.getItem('website_code')) {
+                setVerifyUserIp(false);
 
-            if (websiteCodes.find((str) => str === websiteCode)) {
-                routerProps.basename = websiteCode != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCode : '/';
+                const search = location.search;
+                
+                const query = new URLSearchParams(search);
+                const isAccessBaseWebsite = query.get('access_base_website') || (
+                    storage.getItem('access_base_website') || null
+                );
 
-                setNewRouterProps(routerProps);
+                // const websiteCode = getWebsiteByUserIp.countryCode && !isAccessBaseWebsite ? getWebsiteByUserIp.countryCode.toLowerCase() : process.env.WEBSITE_CODE;
 
-                if (isAccessBaseWebsite) {
-                    storage.setItem('access_base_website', 1);
+                if (websiteCodes.find((str) => str === websiteCode)) {
+                    routerProps.basename = websiteCode != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCode : '/';
+
+                    setNewRouterProps(routerProps);
+
+                    if (isAccessBaseWebsite) {
+                        storage.setItem('access_base_website', 1);
+                    }
+
+                    let storeCodeInUrl = websiteStores[websiteCode];
+
+                    if (websiteCode != storage.getItem('website_code')) {
+                        storage.removeItem('cartId');
+                    }
+
+                    storage.setItem('store_view_code', storeCodeInUrl);
+                    storage.setItem('website_code', websiteCode);
+                    storage.setItem(
+                        'store_view_currency',
+                        storeCurrencies[storeCodeInUrl]
+                    );
+                    storage.setItem(
+                        'store_view_secure_base_media_url',
+                        storeSecureBaseMediaUrl[storeCodeInUrl]
+                    );
                 }
-
-                let storeCodeInUrl = websiteStores[websiteCode];
-
-                storage.removeItem('cartId');
-
-                storage.setItem('store_view_code', storeCodeInUrl);
-                storage.setItem('website_code', websiteCode);
-                storage.setItem(
-                    'store_view_currency',
-                    storeCurrencies[storeCodeInUrl]
-                );
-                storage.setItem(
-                    'store_view_secure_base_media_url',
-                    storeSecureBaseMediaUrl[storeCodeInUrl]
-                );
-            }
+            // }
         }
     }, [websiteCodeInUrl, currentWebsiteCode]);
 

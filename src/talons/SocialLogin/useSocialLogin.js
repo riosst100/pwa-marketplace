@@ -31,6 +31,7 @@ export const useSocialLogin = props => {
 
     const apolloClient = useApolloClient();
     const [isSigningIn, setIsSigningIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [
         { cartId },
@@ -60,6 +61,7 @@ export const useSocialLogin = props => {
 
     useEffect(async () => {
         if (jwtToken) {
+            setIsLoading(true);
             setIsSigningIn(true);
             try {
                 // Get source cart id (guest cart id).
@@ -124,6 +126,8 @@ export const useSocialLogin = props => {
                     }),
                     timeout: 5000
                 });
+
+                setIsLoading(false);
             } catch (error) {
                 if (process.env.NODE_ENV !== 'production') {
                     console.error(error);
@@ -162,6 +166,7 @@ export const useSocialLogin = props => {
 
     return {
         errors,
+        isLoading,
         // isBusy: isGettingDetails || isSigningIn || recaptchaLoading,
         isBusy: isGettingDetails || isSigningIn,
         setFormApi

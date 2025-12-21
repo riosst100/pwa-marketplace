@@ -475,6 +475,18 @@ export const getCartDetails = payload => {
     };
 };
 
+const websiteCodes = [];
+
+AVAILABLE_WEBSITES.forEach(store => {
+    websiteCodes.push(store.website_code);
+});
+
+const { location } = globalThis;
+const match = location && location.pathname.split("/")[1];
+const websiteCodeInUrl = websiteCodes.find((str) => str === match);
+
+const prefix = websiteCodeInUrl ? websiteCodeInUrl + '_' : '';
+
 export const removeCart = () =>
     async function thunk(dispatch) {
         // Clear the cartId from local storage.
@@ -507,15 +519,15 @@ export async function clearSellerCartId() {
 }
 
 export async function retrieveCartId() {
-    return storage.getItem('cartId');
+    return storage.getItem(prefix + 'cartId');
 }
 
 export async function saveCartId(id) {
-    return storage.setItem('cartId', id);
+    return storage.setItem(prefix + 'cartId', id);
 }
 
 export async function clearCartId() {
-    return storage.removeItem('cartId');
+    return storage.removeItem(prefix + 'cartId');
 }
 
 async function retrieveImageCache() {

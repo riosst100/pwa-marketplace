@@ -82,25 +82,28 @@ const ShowMore = props => {
     if (shopby == 'sc_brands') {
         additionalFilter = '&shopby=release&active_tab=brand';
     }
-
+    
     const setRelases = newAvailableGroups && newAvailableGroups.length && newAvailableGroups.map((group, index) => {
         const optionsResult = [];
 
         if (active === 'all' || active === group) {
             dataResult[group] && dataResult[group].length && dataResult[group].map((option, index) => {
                 const { count, label, value } = option;
+                
+                const attrCodeParam = attributeData.attribute_code + '[filter]';
+                const attrValParam = label + ',' + value;
 
-                const filter = attributeData.attribute_code + '[filter]=' + label + ',' + value;
-                const params = filterSearch ? filterSearch + '&' + filter + additionalFilter : '?' + filter + additionalFilter;
+                const params = new URLSearchParams();
+                params.set(attrCodeParam, attrValParam);
 
                 const categoryUrl = resourceUrl(
-                    `/${category?.url_path}${categoryUrlSuffix || ''}${params}`
+                    `/${category?.url_path}${categoryUrlSuffix || ''}${'?' + params.toString()}`
                 );
 
                 optionsResult.push(<li key={index} className='list-none'>
                     <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
                         {label}
-                         {/* <span className='text-[12px]'>({count})</span> */}
+                        {/* <span className='text-[12px]'>({count})</span> */}
                     </Link>
                 </li>)
             });

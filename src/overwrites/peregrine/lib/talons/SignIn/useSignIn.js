@@ -12,6 +12,8 @@ import DEFAULT_OPERATIONS from '@magento/peregrine/lib/talons/SignIn/signIn.gql'
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 
+import { useToasts } from '@magento/peregrine/lib/Toasts';
+
 const storage = new BrowserPersistence();
 
 export const useSignIn = props => {
@@ -20,7 +22,8 @@ export const useSignIn = props => {
         getCartDetailsQuery,
         setDefaultUsername,
         showCreateAccount,
-        showForgotPassword
+        showForgotPassword,
+        setIsLoading
     } = props;
 
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
@@ -67,11 +70,14 @@ export const useSignIn = props => {
     const fetchUserDetails = useAwaitQuery(getCustomerQuery);
     const fetchCartDetails = useAwaitQuery(getCartDetailsQuery);
 
+    const [, { addToast }] = useToasts();
+
     const formApiRef = useRef(null);
     const setFormApi = useCallback(api => (formApiRef.current = api), []);
 
     const handleSubmit = useCallback(
         async ({ email, password }) => {
+            setIsLoading(true)
             setIsSigningIn(true);
             // handleTriggerClick();
             try {
@@ -135,6 +141,17 @@ export const useSignIn = props => {
                 });
 
                 getCartDetails({ fetchCartId, fetchCartDetails });
+
+                addToast({
+                    type: 'success',
+                    message: formatMessage({
+                        id: 'signIn.signInSuccessToast',
+                        defaultMessage: "You have successfully signed in."
+                    }),
+                    timeout: 5000
+                });
+
+                setIsLoading(false);
             } catch (error) {
                 if (process.env.NODE_ENV !== 'production') {
                     console.error(error);
@@ -157,6 +174,7 @@ export const useSignIn = props => {
             fetchUserDetails,
             getCartDetails,
             fetchCartDetails,
+            setIsLoading,
             dispatch,
             handleTriggerClick
         ]

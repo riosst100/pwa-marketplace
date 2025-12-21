@@ -1,8 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
-import { useCartContext } from '@magento/peregrine/lib/context/cart';
-import { useApolloClient, useQuery } from '@apollo/client';
 
 const storage = new BrowserPersistence();
 
@@ -12,7 +9,6 @@ const storage = new BrowserPersistence();
  * and reloads the page so that they are used in the graphQL headers.
  */
 const StoreCodeRoute = () => {
-    const history = useHistory();
 
     const websiteCodes = [];
     const websiteStores = useMemo(() => ({}), []);
@@ -34,61 +30,32 @@ const StoreCodeRoute = () => {
     // ie `https://example.com/fr/foo/baz.html` => `fr`.
     const { location } = globalThis;
     const match = location && location.pathname.split("/")[1];
+    const defaultWebsiteCode = process.env.WEBSITE_CODE;
     let websiteCodeInUrl = websiteCodes.find((str) => str === match);
 
     // Determine what the current store code is using the configured basename.
-    const currentWebsiteCode = storage && storage.getItem('website_code') || process.env.WEBSITE_CODE;
-
-    
 
     // If we find a store code in the url that is not the current one, update
     // the storage value and refresh so that we start using the new code.
     useEffect(() => {
-        if (!websiteCodeInUrl) {
-            history.replace(location.pathname + location.search)
-        } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
-            const storeCodeInUrl = websiteStores[websiteCodeInUrl];
+        if (websiteCodeInUrl) {
+            let prefix = '';
+            let storeCodeInUrl = websiteStores[websiteCodeInUrl];
 
-            // alert(storeCodeInUrl)
-
-            // update store/website saat url berubah, misal /id ke /sg
-
-            // issue store view code gk berubah, klo di graphql aman
-
-            // ini update di graphql dan di cookie, tapi di cookie beda klo ga di hardcode
-
-            // ini oke, store di graphql dari sini
-            // storeCodeInUrl = 'id_id_store_view';
-            // console.log('storeCodeInUrl',storeCodeInUrl)
-
-            // await apolloClient.clearCacheData(apolloClient, 'cart');
-            // await removeCart();
-            alert('22ok')
-            storage.removeItem('cartId');
-
-            storage.setItem('store_view_code', storeCodeInUrl);
-            storage.setItem('website_code', websiteCodeInUrl);
+            storage.setItem(prefix + 'store_view_code', storeCodeInUrl);
+            storage.setItem(prefix + 'website_code', websiteCodeInUrl);
             storage.setItem(
-                'store_view_currency',
+                prefix + 'store_view_currency',
                 storeCurrencies[storeCodeInUrl]
             );
+
             storage.setItem(
-                'store_view_secure_base_media_url',
+                prefix + 'store_view_secure_base_media_url',
                 storeSecureBaseMediaUrl[storeCodeInUrl]
             );
-
-            // We're required to reload the page as the basename doesn't
-            // change entirely without a full page reload.
-            // history.go(0);
         }
     }, [
-        websiteCodeInUrl,
-        // currentWebsiteCode,
-        history
-        // , apolloClient, removeCart
-        // storeCodeInUrl,
-        // storeCurrencies,
-        // storeSecureBaseMediaUrl
+        websiteCodeInUrl
     ]);
 
     return null;
