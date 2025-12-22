@@ -39,7 +39,18 @@ const StoreCodeRoute = () => {
     // the storage value and refresh so that we start using the new code.
     useEffect(() => {
         if (websiteCodeInUrl) {
-            let prefix = '';
+            const websiteCodes = [];
+
+            AVAILABLE_WEBSITES.forEach(store => {
+                websiteCodes.push(store.website_code);
+            });
+
+            const { location } = globalThis;
+            const match = location && location.pathname.split("/")[1];
+            const websiteCodeInUrl = websiteCodes.find((str) => str === match);
+
+            const prefix = websiteCodeInUrl ? websiteCodeInUrl + '_' : '';
+            
             let storeCodeInUrl = websiteStores[websiteCodeInUrl];
 
             storage.setItem(prefix + 'store_view_code', storeCodeInUrl);
