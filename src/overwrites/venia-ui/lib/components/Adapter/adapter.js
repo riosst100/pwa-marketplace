@@ -71,62 +71,6 @@ const Adapter = props => {
 
     useEffect(() => {
         if (!websiteCodeInUrl) {
-            // history.replace(location.pathname + location.search)
-        } else if (websiteCodeInUrl && websiteCodeInUrl !== currentWebsiteCode) {
-            const storeCodeInUrl = websiteStores[websiteCodeInUrl];
-
-
-
-            // const search = location.search;
-            
-            // const query = new URLSearchParams(search);
-            // const isAccessBaseWebsite = query.get('access_base_website') || (
-            //     storage.getItem('access_base_website') || null
-            // );
-
-            // routerProps.basename = websiteCodeInUrl != process.env.WEBSITE_CODE && !isAccessBaseWebsite ? '/'+websiteCodeInUrl : '/';
-
-            // setNewRouterProps(routerProps);
-
-            // await removeCart();
-
-            // alert(storeCodeInUrl)
-
-            // update store/website saat url berubah, misal /id ke /sg
-
-            // issue store view code gk berubah, klo di graphql aman
-
-            // ini update di graphql dan di cookie, tapi di cookie beda klo ga di hardcode
-
-            // ini oke, store di graphql dari sini
-            // storeCodeInUrl = 'id_id_store_view';
-            // console.log('storeCodeInUrl',storeCodeInUrl)
-
-            // await apolloClient.clearCacheData(apolloClient, 'cart');
-            // await removeCart();
-
-            // klo enabled jd redirect tros
-            // storage.removeItem('cartId');
-
-            // storage.setItem('store_view_code', storeCodeInUrl);
-            // storage.setItem('website_code', websiteCodeInUrl);
-            // storage.setItem(
-            //     'store_view_currency',
-            //     storeCurrencies[storeCodeInUrl]
-            // );
-            // storage.setItem(
-            //     'store_view_secure_base_media_url',
-            //     storeSecureBaseMediaUrl[storeCodeInUrl]
-            // );
-
-            // We're required to reload the page as the basename doesn't
-            // change entirely without a full page reload.
-            // history.go(0);
-        }
-
-        // console.log('currentWebsiteCode',currentWebsiteCode)
-
-        if (!websiteCodeInUrl) {
             const websiteCode = process.env.WEBSITE_CODE;
             // if (websiteCode != storage.getItem('website_code')) {
                 setVerifyUserIp(false);
@@ -168,7 +112,7 @@ const Adapter = props => {
                 }
             // }
         }
-    }, [websiteCodeInUrl, currentWebsiteCode]);
+    }, [websiteCodeInUrl]);
 
     // TODO: Replace with app skeleton. See PWA-547.
     if (!initialized) {
