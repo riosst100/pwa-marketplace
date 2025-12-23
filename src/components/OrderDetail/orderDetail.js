@@ -5,6 +5,7 @@ import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
 import { Printer, ConvertCard } from 'iconsax-react';
 import ItemsOrdered from './components/itemsOrdered';
+import TrackOrder from './components/trackOrder';
 import RMAList from './components/rmaList';
 import useRmaPage from '@riosst100/pwa-marketplace/src/talons/RMAPage/useRmaPage';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
@@ -93,6 +94,7 @@ const OrderDetail = (props) => {
         ? new Date(order.order_date.replace(' ', 'T')).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
         : '-';
     const status = order?.status || '-';
+    const isClosed = (order?.status || '').toLowerCase() === 'closed';
     const shippingMethod = order?.shipping_method || '-';
     const trackingNumber = order?.shipments?.[0]?.tracking?.[0]?.number || '-';
     const shippingAddress = order?.shipping_address;
@@ -236,6 +238,19 @@ const OrderDetail = (props) => {
                     </div>
                 </div>
             </div>
+            {!isClosed && (
+                <div className="block block-order-details-view">
+                    <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
+                        {
+                            formatMessage({
+                                id: 'order.trackOrder',
+                                defaultMessage: 'Track Order'
+                            })
+                        }
+                    </div>
+                    <TrackOrder order={order} />
+                </div>
+            )}
             <div className="block block-order-details-view">
                 <div aria-live="polite" className="text-lg font-medium text-left mb-4 block-title">
                     {
