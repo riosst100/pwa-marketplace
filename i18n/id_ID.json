@@ -546,5 +546,12 @@
     "messages.loginRequired": "Silakan masuk ke akun Anda untuk mengirim pesan ke seller.",
     "messages.messageSent": "Pesan berhasil dikirim.",
     "messages.replySent": "Balasan berhasil dikirim.",
-    "messages.messageDeleted": "Pesan berhasil dihapus."
+    "messages.messageDeleted": "Pesan berhasil dihapus.",
+    "order.track.inTransit": "Sedang Dikirim",
+    "order.track.delivered": "Pesanan Tiba",
+    "order.track.courier": "Kurir",
+    "order.track.waybill": "Resi",
+    "order.track.status": "Status",
+    "order.track.step1": "Langkah 1 dari 2",
+    "order.track.step2": "Langkah 2 dari 2"
 }
