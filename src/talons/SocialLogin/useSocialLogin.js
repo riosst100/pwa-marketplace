@@ -134,6 +134,7 @@ export const useSocialLogin = props => {
                 }
 
                 setIsSigningIn(false);
+                setIsLoading(false);
             }
         }
     }, [

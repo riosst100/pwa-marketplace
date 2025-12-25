@@ -18,6 +18,7 @@ const LoadingRequest = props => {
     const {
         isLoading
     } = props;
+    // const isLoading = true;
 
     const modal = isLoading ? (
         <div className={modalClasses.overlay} role="dialog" aria-modal="true" aria-label="Modal">
@@ -27,7 +28,8 @@ const LoadingRequest = props => {
                     <img src={process.env.MAGENTO_BACKEND_URL + "/media/images/spinner2.gif"} style={{"width":"15%"}} />
                     <div style={{
                         "marginTop": "10px",
-                        "color": "white"
+                        "color": "white",
+                        "fontSize": "14px"
                     }}>Please wait...</div>
                 </div>
             </div>

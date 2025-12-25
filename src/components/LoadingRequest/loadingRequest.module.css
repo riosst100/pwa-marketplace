@@ -75,8 +75,9 @@
 .backdrop{
     position:absolute;
     inset:0;
-    background: rgba(0, 0, 0, 0.64);
-    backdrop-filter: blur(8px);
+    /* background: rgba(0, 0, 0, 0.64); */
+    background: rgb(0 0 0 / 50%);
+    /* backdrop-filter: blur(1px); */
 }
 .dialog{
     position:relative;
@@ -119,6 +120,7 @@
     text-align: center;
     flex-wrap: wrap;
     align-content: center;
+    align-items: center;
 }
 .triggerBtn{
     background:#f76b1c;

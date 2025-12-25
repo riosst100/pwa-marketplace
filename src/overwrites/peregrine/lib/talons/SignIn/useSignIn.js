@@ -158,6 +158,7 @@ export const useSignIn = props => {
                 }
 
                 setIsSigningIn(false);
+                setIsLoading(false);
             }
         },
         [
