@@ -10,6 +10,7 @@ const FilterBlockList = props => {
         name,
         group,
         items,
+        category,
         onApply,
         filterNames,
         originalFilterState,
@@ -29,6 +30,7 @@ const FilterBlockList = props => {
                 filterApi={filterApi}
                 filterState={filterState}
                 group={group}
+                category={category}
                 name={name}
                 originalFilterState={originalFilterState}
                 items={items}

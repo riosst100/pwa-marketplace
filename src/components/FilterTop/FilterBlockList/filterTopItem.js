@@ -4,7 +4,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import { Link } from 'react-router-dom';
 
 const FilterTopItem = props => {
-    const { selectedOption, setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
+    const { pathname, category, selectedOption, setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
     const { removeGroup, toggleItem, clear } = filterApi;
     const { title, value, count } = item;
 
@@ -14,8 +14,6 @@ const FilterTopItem = props => {
 
     const handleOnchange = useCallback(
         e => {
-            // filterApi.clear();
-
             if (group != "category_uid") {
                 removeGroup({ group });
                 // clear();
@@ -28,7 +26,7 @@ const FilterTopItem = props => {
                 onApply(group, item);
             }
         },
-        [group, item, onApply, removeGroup, toggleItem]
+        [filterApi, group, item, onApply, removeGroup, toggleItem]
     );
 
     let filterSearchArr = search ? search.split('&') : [];
@@ -37,46 +35,26 @@ const FilterTopItem = props => {
     if (filterSearchArr) {
         categoryIdFilters = filterSearchArr.filter(function(data) {
             return data && data.includes('cat_id');
-        })
+        });
+
         shopbyFilters = filterSearchArr.filter(function(data) {
             return data && data.includes('shopby');
-        })
+        });
     }
 
-    // console.log(filterSearchArr)
-
-    // const catId = null;
-
-    // const newSearch = (search) => {
-    //     console.log(search)
-
-    //     let filterSearchArr = search ? search.split('&') : [];
-        
-    //     let filterSearch = filterSearchArr.join('&')
-
-    //     if (!filterSearch.includes('?')) {
-    //         filterSearch = '?'+filterSearch;
-    //     }
-
-    //     return result;
-    // }
+    const defaultTopFilter = category.default_top_filter;
+    const defaultTopFilterAttrCode = defaultTopFilter.attribute_code;
 
     let newfilterSearchArr = search ? search.split('&') : [];
     newfilterSearchArr = newfilterSearchArr.filter(function(data) {
-        return !data.includes(group + '%5Bfilter%5D');
+        return data.includes(defaultTopFilterAttrCode);
     });
-
-    // alert(group)
     
     let filterSearch = newfilterSearchArr.join('&')
 
     if (!filterSearch.includes('?')) {
         filterSearch = '?'+filterSearch;
     }
-
-    // console.log('--filterSearch--')
-    // console.log('count',count)
-    // console.log('pathname',pathname)
 
     const element = group == "filterby" ? (
         filterBy == value ? (
@@ -103,7 +81,7 @@ const FilterTopItem = props => {
         activeFilters && activeFilters.includes(value) ? (
             <span className={classes.item}><b>{title}</b></span>
         ) : (
-            count > 0 ? <span className={classes.item} onClick={() =>handleOnchange(value)}>{title}</span> : <span style={{"opacity":"0.5"}} className={classes.item}>{title}</span>
+            count > 0 ? <Link className={classes.item} to={pathname + '?' + group + '[filter]=' + title + ',' + value}>{title}</Link> : <span style={{"opacity":"0.5"}} className={classes.item}>{title}</span>
         )
     )
 

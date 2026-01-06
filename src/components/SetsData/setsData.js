@@ -256,35 +256,11 @@ const SetsData = props => {
             {pageInfo && !pageInfo.hide_title && <h1 className='mx-auto relative block text-xl font-bold text-center pt-10 pb-4'>
                 {title}
             </h1>}
-            {shopby == "secret_lair" ? <>
-                <ul className={classes.nav}>
-                    {availableYears.map((group, index) => (
-                    <li key={index} className={classes.nav_item}>
-                        <button
-                            onClick={() => {
-                                handleActiveYear(group)
-                            }}
-                        >
-                            {activeYear == group ? <b>{group}</b> : group}
-                        </button>
-                    </li>
-                    ))}
-                    <li key={"all"} className={classes.nav_item}>
-                        <button
-                            onClick={() => {
-                                handleActiveYear('')
-                            }}
-                        >
-                            {!activeYear ? <b>All Year</b> : 'All Year'}
-                        </button>
-                    </li>
-                </ul>
-            </> : ''}
             {availableFilters ? <>
                 {availableFilters.map(({code, options}, index) => (
                 <ul className={classes.nav} key={index}>
                     {options.map((value, index) => (
-                        <li key={index} className={classes.nav_item}>
+                        value && <li key={index} className={classes.nav_item}>
                             <button
                                 onClick={() => {
                                     handleSetsFilters(code, value)
