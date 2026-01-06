@@ -93,7 +93,7 @@ const SubmenuColumn = props => {
 
     if (category.custom_submenu && category.custom_submenu.length) {
         childrenItems = category.custom_submenu.map((subCategory, index) => {
-            const { path, isActive, name } = subCategory;
+            const { path, isActive, name, count } = subCategory;
             const categoryUrl = resourceUrl(
                 `/${path}`
             );
@@ -108,7 +108,7 @@ const SubmenuColumn = props => {
 
             result.push(
                 <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
-                    <Link
+                    {count > 0 ? <Link
                         {...keyboardProps}
                         className={isActive ? classes.linkActive : classes.link}
                         data-cy="MegaMenu-SubmenuColumn-link"
@@ -119,7 +119,13 @@ const SubmenuColumn = props => {
                         }}
                     >
                         {name}
-                    </Link>
+                    </Link> : <span
+                        className={classes.link}
+                        style={{"opacity":"0.5"}}
+                        data-cy="MegaMenu-SubmenuColumn-link"
+                    >
+                        {name}
+                    </span>}
                 </li>
             );
 
@@ -134,9 +140,11 @@ const SubmenuColumn = props => {
     // setting keyboardProps if category does not have any sub-category
     const keyboardProps = category.children.length ? {} : props.keyboardProps;
 
+    console.log('category',category)
+
     return (
         <div className={classes.submenuColumn}>
-            <Link
+            {category.count > 0 ? <Link
                 {...keyboardProps}
                 className={classes.link}
                 data-cy="MegaMenu-SubmenuColumn-link"
@@ -147,7 +155,7 @@ const SubmenuColumn = props => {
                 }}
             >
                 <span className={classes.heading}>{category.name}</span>
-            </Link>
+            </Link> : <span className={classes.link}><span className={classes.heading} style={{"opacity":"0.5"}}>{category.name}</span></span>}
             {children}
         </div>
     );

@@ -12,6 +12,7 @@ export const GET_CUSTOM_FILTERS = gql`
                 options {
                     label
                     value
+                    count
                 }
                 position
             }
