@@ -184,17 +184,12 @@ export const useFilterTop = props => {
         const frontendInput = new Map();
         const itemsByGroup = new Map();
         const customFiltersMap = [];
-
-        // console.log('customFiltersData',customFiltersData)
         
         if (customFiltersData && customFiltersData.filters) {
             customFiltersData.filters.map((data, index) => {
 
                 if (data) {
-                    // console.log(data)
                     const { attribute_code, options } = data;
-
-                    // console.log(attribute_code)
 
                     customFiltersMap.push(attribute_code)
                     
@@ -208,8 +203,8 @@ export const useFilterTop = props => {
                     keys.add(`${attribute_code}[filter]`);
 
                     // add items
-                    for (const { label, value, path } of options) {
-                        items.push({ title: stripHtml(label), value, path });
+                    for (const { label, value, count, path } of options) {
+                        items.push({ title: stripHtml(label), value, count, path });
                     }
 
                     itemsByGroup.set(attribute_code, items);

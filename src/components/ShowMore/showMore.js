@@ -101,10 +101,11 @@ const ShowMore = props => {
                 );
 
                 optionsResult.push(<li key={index} className='list-none'>
-                    <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
+                    {count > 0 ? <Link to={categoryUrl} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
+                        {label} <span className='text-[12px]'>({count})</span>
+                    </Link> : <span style={{"opacity":"0.5"}} className="hover_bg-darkblue-900 hover_text-white w-full block text-[14px] py-[2px] px-0">
                         {label}
-                        {/* <span className='text-[12px]'>({count})</span> */}
-                    </Link>
+                    </span>}
                 </li>)
             });
 

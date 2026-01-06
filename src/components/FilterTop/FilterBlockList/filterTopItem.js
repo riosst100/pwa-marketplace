@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const FilterTopItem = props => {
     const { selectedOption, setFilterBy, filterBy, filterApi, group, item, onApply, labels, activeFilters, search } = props;
     const { removeGroup, toggleItem, clear } = filterApi;
-    const { title, value } = item;
+    const { title, value, count } = item;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -75,7 +75,7 @@ const FilterTopItem = props => {
     }
 
     // console.log('--filterSearch--')
-    // console.log(filterSearch)
+    // console.log('count',count)
     // console.log('pathname',pathname)
 
     const element = group == "filterby" ? (
@@ -85,7 +85,9 @@ const FilterTopItem = props => {
             <span className={classes.item} onClick={() => setFilterBy(value)}>{title}</span>
         )
     ) : group == "category" ? (
-        selectedOption == value ? <span className={classes.item}><b>{title}</b></span> : <Link className={classes.item} to={'/'+value}>{title}</Link>
+        selectedOption == value ? <span className={classes.item}><b>{title}</b></span> : (
+            count > 0 ? <Link className={classes.item} to={'/'+value}>{title}</Link> : <span style={{"opacity":"0.5"}} className={classes.item}>{title}</span>
+        )
     ) : value == "shopby_all" ? (
         <Link className={classes.item} to={search ? filterSearch + '&show_more=' + group : '?show_more=' + group}>{title}</Link>
     ) : group == "shopby" || group == "shopby_with_all" ? (
@@ -101,7 +103,7 @@ const FilterTopItem = props => {
         activeFilters && activeFilters.includes(value) ? (
             <span className={classes.item}><b>{title}</b></span>
         ) : (
-            <span className={classes.item} onClick={() =>handleOnchange(value)}>{title}</span>
+            count > 0 ? <span className={classes.item} onClick={() =>handleOnchange(value)}>{title}</span> : <span style={{"opacity":"0.5"}} className={classes.item}>{title}</span>
         )
     )
 
