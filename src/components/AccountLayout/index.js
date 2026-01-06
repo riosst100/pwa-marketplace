@@ -180,7 +180,7 @@ const AccountLayout = (props) => {
 
                             </Link>
                         </li> */}
-                        <li className="list-none">
+                        {/* <li className="list-none">
                             <Link
                                 to="/communications"
                                 className={cn(
@@ -194,7 +194,7 @@ const AccountLayout = (props) => {
                                 />
 
                             </Link>
-                        </li>
+                        </li> */}
                         
 
                     </div>

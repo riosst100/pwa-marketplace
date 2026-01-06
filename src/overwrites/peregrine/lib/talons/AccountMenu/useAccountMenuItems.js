@@ -64,11 +64,11 @@ export const useAccountMenuItems = props => {
         //     id: 'accountMenu.savedPaymentsLink',
         //     url: '/saved-payments'
         // },
-        {
-            name: 'Newsletter',
-            id: 'accountMenu.communicationsLinak',
-            url: '/communications'
-        },
+        // {
+        //     name: 'Newsletter',
+        //     id: 'accountMenu.communicationsLinak',
+        //     url: '/communications'
+        // },
         
     ];
     
