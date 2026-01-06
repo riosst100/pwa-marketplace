@@ -140,8 +140,6 @@ const SubmenuColumn = props => {
     // setting keyboardProps if category does not have any sub-category
     const keyboardProps = category.children.length ? {} : props.keyboardProps;
 
-    console.log('category',category)
-
     return (
         <div className={classes.submenuColumn}>
             {category.count > 0 ? <Link

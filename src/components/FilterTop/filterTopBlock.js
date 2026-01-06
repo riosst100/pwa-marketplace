@@ -21,6 +21,7 @@ const FilterTopBlock = props => {
         group,
         items,
         name,
+        category,
         onApply,
         filterNames,
         customFiltersData,
@@ -43,6 +44,7 @@ const FilterTopBlock = props => {
             setFilterBy={setFilterBy}
             filterBy={filterBy}
             filterApi={filterApi}
+            category={category}
             customFiltersData={customFiltersData}
             filterState={filterState}
             originalFilterState={originalFilterState}

@@ -8,7 +8,7 @@ import CurrentTopFilter from '@riosst100/pwa-marketplace/src/components/FilterTo
 import { useLocation } from 'react-router-dom';
 
 const FilterTopItemGroup = props => {
-    const { customFiltersData, setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
+    const { category, customFiltersData, setFilterBy, filterBy, filterApi, filterState, group, items, onApply, labels, filterNames, originalFilterState, search } = props;
 
     const classes = useStyle(defaultClasses, props.classes);
 
@@ -60,7 +60,9 @@ const FilterTopItemGroup = props => {
                     selectedOption={selectedOption}
                     setFilterBy={setFilterBy}
                     filterBy={filterBy}
+                    category={category}
                     filterApi={filterApi}
+                    pathname={pathname}
                     filterState={filterState}
                     group={group}
                     activeFilters={activeFilters}

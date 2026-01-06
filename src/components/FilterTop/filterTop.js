@@ -7,7 +7,7 @@ import { useStyle } from '@magento/venia-ui/lib/classify';
 import LinkButton from '@magento/venia-ui/lib/components/LinkButton';
 import FilterTopBlock from './filterTopBlock';
 import defaultClasses from './filterTop.module.css';
-import { Filter } from 'iconsax-react';
+import { Category, Filter } from 'iconsax-react';
 import cn from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -110,6 +110,7 @@ const FilterTop = props => {
                             filterBy={filterBy}
                             filterNames={filterNames}
                             filterApi={filterApi}
+                            category={category}
                             customFiltersData={customFiltersData}
                             filterState={blockState}
                             originalFilterState={filterState}
@@ -139,25 +140,7 @@ const FilterTop = props => {
 
     return (
         <div>
-            {/* <div className={classes.root}>
-            {sportCardsSetsFilter.map(({label, value}, index) => 
-                activeSportCardsSetsFilter == value ? <span className={classes.item}><b>{label}</b></span> : <span onClick={() => setActiveSportCardsSetsFilter(value)} className={classes.item}>{label}</span>
-            )}
-            </div>
-            <div className={classes.root}>
-            {activeSportCardsSetsFilter == "base_set" && baseSetFilter.map(({label, value}, index) => 
-                activeBaseSetFilter == value ? <span className={classes.item}><b>{label}</b></span> : <span onClick={() => setActiveBaseSetFilter(value)} className={classes.item}>{label}</span>
-            )}
-            </div> */}
             {filtersList}
-            {/* {activeSportCardsSetsFilter == "inserts_parallel" && (
-                <>
-                    <div className={classes.root}>
-                        <Link to={'?shopby=inserts'} className={classes.item}>Inserts</Link>
-                        <Link to={'?shopby=parallel'} className={classes.item}>Parallel</Link>
-                    </div>
-                </>
-            )} */}
         </div>
     );
 };
