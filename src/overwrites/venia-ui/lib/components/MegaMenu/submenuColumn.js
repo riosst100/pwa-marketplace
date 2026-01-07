@@ -108,7 +108,7 @@ const SubmenuColumn = props => {
 
             result.push(
                 <li key={index} className={cn(classes.submenuChildItem, 'mt-0')}>
-                    {count > 0 ? <Link
+                    {name.includes('More') || count > 0 ? <Link
                         {...keyboardProps}
                         className={isActive ? classes.linkActive : classes.link}
                         data-cy="MegaMenu-SubmenuColumn-link"
@@ -119,13 +119,27 @@ const SubmenuColumn = props => {
                         }}
                     >
                         {name}
-                    </Link> : <span
-                        className={classes.link}
-                        style={{"opacity":"0.5"}}
-                        data-cy="MegaMenu-SubmenuColumn-link"
-                    >
-                        {name}
-                    </span>}
+                    </Link> : (
+                        <span
+                            className={classes.link}
+                            style={{"opacity":"0.5"}}
+                            data-cy="MegaMenu-SubmenuColumn-link"
+                        >
+                            {name}
+                        </span>
+                        // <Link
+                        //     {...keyboardProps}
+                        //     className={isActive ? classes.linkActive : classes.link}
+                        //     data-cy="MegaMenu-SubmenuColumn-link"
+                        //     to={categoryUrl}
+                        //     onClick={() => {
+                        //         handleCloseSubMenu();
+                        //         onNavigate();
+                        //     }}
+                        // >
+                        //     {name}
+                        // </Link>
+                    )}
                 </li>
             );
 
@@ -142,7 +156,7 @@ const SubmenuColumn = props => {
 
     return (
         <div className={classes.submenuColumn}>
-            {category.count > 0 ? <Link
+            {category ? <Link
                 {...keyboardProps}
                 className={classes.link}
                 data-cy="MegaMenu-SubmenuColumn-link"
@@ -153,7 +167,9 @@ const SubmenuColumn = props => {
                 }}
             >
                 <span className={classes.heading}>{category.name}</span>
-            </Link> : <span className={classes.link}><span className={classes.heading} style={{"opacity":"0.5"}}>{category.name}</span></span>}
+            </Link> : (
+                <span className={classes.link}><span className={classes.heading} style={{"opacity":"0.5"}}>{category.name}</span></span>
+            )}
             {children}
         </div>
     );

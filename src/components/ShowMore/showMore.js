@@ -49,6 +49,8 @@ const ShowMore = props => {
 
     const { error, loading, dataResult, categoryUrlSuffix, categoryUrlKey, productType, filteredAvailableGroups, availableGroups, attributeData, alpha, category, pageInfo } = talonProps;
 
+    console.log('loading',loading)
+
     if (loading) {
         return <ShowMoreShimmer />;
     } else if (error) {

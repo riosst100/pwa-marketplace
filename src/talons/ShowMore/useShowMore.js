@@ -254,9 +254,13 @@ export const useShowMore = props => {
             ? categoryData.categories.items[0]
             : null;
 
+    const isLoading = useMemo(() => {
+        return !queryResponse || queryResponse && queryResponse.loading ? true : false;
+    }, [queryResponse]);
+
     return {
         // error,
-        // loading,
+        loading: isLoading,
         dataResult,
     //     collectibleGameSets,
         filteredAvailableGroups,
