@@ -1,0 +1,94 @@
+.root {
+    composes: bg-gray-100 from global;
+    composes: inline-block from global;
+    composes: overflow-hidden from global;
+    composes: pointer-events-none from global;
+    composes: relative from global;
+}
+
+/* TODO @TW: cannot compose */
+.root {
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(230, 233, 234);
+  z-index: 0;
+}
+
+.root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.25) 35%,
+    rgba(255,255,255,0.45) 50%,
+    rgba(255,255,255,0.25) 65%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  animation: shimmerAnimation 1.2s linear infinite;
+  z-index: 1;
+}
+
+
+@keyframes shimmerAnimation {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.root_rectangle {
+    composes: root;
+
+    min-height: 1rem;
+}
+
+.root_button {
+    composes: root from '../Button/button.module.css';
+    composes: root;
+
+    composes: border-0 from global;
+}
+
+.root_checkbox {
+    composes: input_shimmer from '../Checkbox/checkbox.module.css';
+    composes: root;
+
+    composes: border-0 from global;
+}
+
+.root_radio {
+    composes: input_shimmer from '../RadioGroup/radio.module.css';
+    composes: root;
+
+    composes: border-0 from global;
+}
+
+.root_textArea {
+    composes: input_shimmer from '../TextArea/textArea.module.css';
+    composes: root;
+
+    min-height: 6.75rem;
+    composes: border-0 from global;
+}
+
+.root_textInput {
+    composes: input_shimmer from '../TextInput/textInput.module.css';
+    composes: root;
+
+    composes: border-0 from global;
+}
+
+@-webkit-keyframes shimmerAnimation {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}

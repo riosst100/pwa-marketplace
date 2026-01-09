@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import useFieldState from '@magento/peregrine/lib/hooks/hook-wrappers/useInformedFieldStateWrapper';
 import DEFAULT_OPERATIONS from '@magento/peregrine/lib/talons/CheckoutPage/PaymentInformation/paymentMethods.gql';
@@ -7,13 +7,20 @@ import mergeOperations from '@magento/peregrine/lib/util/shallowMerge';
 import { useCartContext } from '@magento/peregrine/lib/context/cart';
 
 export const usePaymentMethods = props => {
+    const { setPageIsUpdating } = props;
+
     const operations = mergeOperations(DEFAULT_OPERATIONS, props.operations);
     const {
         getPaymentMethodsQuery,
         setPaymentMethodOnCartMutation
     } = operations;
 
-    const [setPaymentMethod] = useMutation(setPaymentMethodOnCartMutation);
+    const [setPaymentMethod, {
+        loading: updatePaymentMethodLoading,
+        data: updatePaymentMethodData,
+        error: updatePaymentMethodError,
+        called: updatePaymentMethodCalled
+    }] = useMutation(setPaymentMethodOnCartMutation);
 
     const [{ cartId }] = useCartContext();
 
@@ -41,11 +48,13 @@ export const usePaymentMethods = props => {
         availablePaymentMethods.length > 1
             ? selectedPaymentCode
             : null;
-
-    console.log('availablePaymentMethods.length',availablePaymentMethods.length)
-    console.log('defaultPaymentCode',defaultPaymentCode)
-    console.log('selectedPaymentCode',selectedPaymentCode)
-    console.log('initialSelectedMethod',initialSelectedMethod)
+    useEffect(() => {
+        if (updatePaymentMethodLoading) {
+            setPageIsUpdating(true)
+        } else {
+            setPageIsUpdating(false)
+        }
+    }, [updatePaymentMethodLoading, setPageIsUpdating])
 
     const handlePaymentMethodSelection = useCallback(
         element => {
