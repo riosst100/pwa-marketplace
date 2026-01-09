@@ -10,6 +10,7 @@ module.exports = componentOverrideMapping = {
     [`@magento/venia-ui/lib/components/Adapter/adapter.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Adapter/adapter.js',
     [`@magento/venia-ui/lib/components/ToastContainer/toast.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toast.module.css',
     [`@magento/venia-ui/lib/components/ToastContainer/toastContainer.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/ToastContainer/toastContainer.module.css',
+    [`@magento/venia-ui/lib/components/Shimmer/shimmer.module.css`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Shimmer/shimmer.module.css',
     [`@magento/venia-ui/lib/components/Header/header.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/header.js',
     [`@magento/venia-ui/lib/components/Header/storeSwitcher.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/storeSwitcher.js',
     [`@magento/venia-ui/lib/components/Header/switcherItem.js`]: '@riosst100/pwa-marketplace/src/overwrites/venia-ui/lib/components/Header/switcherItem.js',

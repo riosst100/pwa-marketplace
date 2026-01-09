@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CheckoutPageFragment } from '@magento/peregrine/lib/talons/CheckoutPage/checkoutPageFragments.gql';
+import { CheckoutPageFragment } from './checkoutPageFragments.gql';
 import { ItemsReviewFragment } from '@magento/peregrine/lib/talons/CheckoutPage/ItemsReview/itemsReviewFragments.gql';
 
 // Local fragment to include seller_url for each item.

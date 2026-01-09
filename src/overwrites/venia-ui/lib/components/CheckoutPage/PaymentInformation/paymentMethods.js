@@ -22,14 +22,15 @@ const PaymentMethods = props => {
         onPaymentError,
         onPaymentSuccess,
         resetShouldSubmit,
-        shouldSubmit
+        shouldSubmit,
+        setPageIsUpdating
     } = props;
 
     const { formatMessage } = useIntl();
 
     const classes = useStyle(defaultClasses, propClasses);
 
-    const talonProps = usePaymentMethods({});
+    const talonProps = usePaymentMethods(props);
 
     const {
         availablePaymentMethods,

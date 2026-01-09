@@ -546,6 +546,9 @@ export const useCheckoutPage = (props = {}) => {
         availablePaymentMethods: checkoutData
             ? checkoutData?.cart?.available_payment_methods
             : null,
+        currentSelectedPaymentMethod: checkoutData
+            ? checkoutData?.cart?.selected_payment_method?.code
+            : null,
         cartItems,
         checkoutStep,
         customer,

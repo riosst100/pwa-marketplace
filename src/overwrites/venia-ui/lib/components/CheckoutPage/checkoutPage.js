@@ -82,7 +82,8 @@ const CheckoutPage = props => {
         reviewOrderButtonClicked,
         recaptchaWidgetProps,
         toggleAddressBookContent,
-        toggleSignInContent
+        toggleSignInContent,
+        currentSelectedPaymentMethod
     } = talonProps;
     
     const [, { addToast }] = useToasts();
@@ -273,6 +274,7 @@ const CheckoutPage = props => {
                     resetShouldSubmit={resetReviewOrderButtonClicked}
                     setCheckoutStep={setCheckoutStep}
                     shouldSubmit={reviewOrderButtonClicked}
+                    setPageIsUpdating={setIsUpdating}
                 />
             ) : (
                 <h3 className={classes.payment_information_heading}>
@@ -309,7 +311,7 @@ const CheckoutPage = props => {
                 />
             </div>
         );
-
+        
         // Allow placing order starting from the Payment step (no separate review action)
         const placeOrderButton =
             checkoutStep >= CHECKOUT_STEP.PAYMENT ? (
@@ -320,6 +322,7 @@ const CheckoutPage = props => {
                     className={classes.place_order_button}
                     data-cy="CheckoutPage-placeOrderButton"
                     disabled={
+                        !currentSelectedPaymentMethod ||
                         isUpdating ||
                         placeOrderLoading ||
                         orderDetailsLoading ||

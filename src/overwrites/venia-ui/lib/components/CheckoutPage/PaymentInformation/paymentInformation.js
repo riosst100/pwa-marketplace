@@ -21,7 +21,8 @@ const PaymentInformation = props => {
         resetShouldSubmit,
         setCheckoutStep,
         shouldSubmit,
-        checkoutError
+        checkoutError,
+        setPageIsUpdating
     } = props;
 
     const classes = useStyle(defaultClasses, propClasses);
@@ -63,6 +64,7 @@ const PaymentInformation = props => {
                 onPaymentSuccess={handlePaymentSuccess}
                 resetShouldSubmit={resetShouldSubmit}
                 shouldSubmit={shouldSubmit}
+                setPageIsUpdating={setPageIsUpdating}
             />
         </Form>
     );
