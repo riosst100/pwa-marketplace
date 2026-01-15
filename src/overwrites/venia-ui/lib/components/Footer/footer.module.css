@@ -21,11 +21,12 @@
     composes: grid from global;
     composes: py-6 from global;
     composes: grid-cols-1 from global;
-    composes: md_grid-cols-1 from global;
+    composes: md_grid-cols-3 from global;
+    composes: sm_grid-cols-1 from global;
     composes: grid-flow-row-dense from global;
     composes: lg_gap-x-sm from global;
     composes: lg_gap-y-md from global;
-    composes: lg_grid-cols-4 from global;
+    composes: lg_grid-cols-5 from global;
     composes: flex from global;
     composes: flex-row from global;
     composes: justify-between from global;

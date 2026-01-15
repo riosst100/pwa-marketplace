@@ -82,7 +82,6 @@ const Footer = props => {
             data-cy="Footer-root"
             className={cn(
                 classes.root,
-                // '!pt-[50px] !px-6 lg_!px-4'
             )}
             style={
                 {
@@ -95,36 +94,8 @@ const Footer = props => {
                 open={openChat}
                 setOpen={setOpenChat}
             />
-            {!isCheckoutPage && <div className={classes.links} style={{"display":"flex"}}>
+            {!isCheckoutPage && <div className={classes.links}>
                 {linkGroups}
-                {/* <div>
-                    <Newsletter />
-                </div> */}
-                {/* <div className={classes.callout}>
-                    <span
-                        data-cy="Footer-calloutHeading"
-                        className={classes.calloutHeading}
-                    >
-                        Connect with Us
-                    </span>
-                    <ul className={classes.socialLinks}>
-                        <li>
-                            <Link to="" className="bg-darkblue-900 rounded-full flex justify-center items-center w-[34px] h-[34px]">
-                                <Facebook size={15} color='#FFFFFF' />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="" className="bg-darkblue-900 rounded-full flex justify-center items-center w-[34px] h-[34px]">
-                                <Twitter size={15} color='#FFFFFF' />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="" className="bg-darkblue-900 rounded-full flex justify-center items-center w-[34px] h-[34px]">
-                                <Instagram size={15} color='#FFFFFF' />
-                            </Link>
-                        </li>
-                    </ul>
-                </div> */}
             </div>}
             <div className={"flex flex-row justify-between py-4 border-t border-gray-100 w-full py-[15px] mx-[auto] flex justify-between items-center" + (isCheckoutPage ? " max-w-[1000px]" : " max-w-[1300px]")}>
                 <p className="text-colorDefault">{copyrightText || null}</p>

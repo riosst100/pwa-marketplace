@@ -12,13 +12,13 @@
     composes: font-serif from global;
 }
 
-.contentContainer {
+/* .contentContainer {
     composes: lg_border-2 from global;
     composes: lg_border-solid from global;
     composes: lg_border-subtle from global;
-    /* composes: lg_pb-md from global; */
+    composes: lg_pb-md from global;
     composes: lg_rounded-md from global;
-}
+} */
 
 .leftContentContainer {
     text-align: left;
@@ -28,4 +28,16 @@
     justify-content: space-around;
     display: flex;
     align-items: normal;
+}
+
+.leftPane {
+    flex: 0 0 40%;
+    max-width: 520px;
+    padding-right: 16px;
+}
+
+.rightPane {
+    flex: 1 0 60%;
+    max-width: 960px;
+    padding-left: 16px;
 }

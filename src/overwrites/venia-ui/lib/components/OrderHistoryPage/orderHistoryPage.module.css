@@ -1,6 +1,6 @@
 .root {
     composes: grid from global;
-    composes: gap-y-md from global;
+    /* composes: gap-y-sm from global; */
 }
 
 .heading {
@@ -67,4 +67,40 @@
     composes: root_lowPriority from '@magento/venia-ui/lib/components/Button/button.module.css';
 
     composes: justify-self-center from global;
+}
+
+/* Status tabs */
+.tabsContainer {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+}
+
+.tab {
+    background: #f7f7f8;
+    border: 1px solid #e6e8eb;
+    color: #1b1b1b;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.tabActive {
+    background: #f26313;
+    color: #ffffff;
+    border-color: #f26313;
+    box-shadow: 0 0 0 2px rgba(242, 99, 19, 0.15);
+}
+
+.badge {
+    background: #dadbdd;
+    color: #475569;
+}
+
+.badgeActive {
+    background: #ffffff;
+    color: #f26313;
 }

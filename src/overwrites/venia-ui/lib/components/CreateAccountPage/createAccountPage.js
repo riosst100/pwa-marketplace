@@ -17,7 +17,7 @@ const CreateAccountPage = props => {
 
     return (
         <div className={classes.signInRootContainer}>
-            <div className={cn(classes.root, '!py-[60px]')}>
+            {/* <div className={cn(classes.root, classes.leftPane, '!py-[60px]')}>
                 <StoreTitle>
                     {formatMessage({
                         id: 'signInPage.title',
@@ -26,22 +26,22 @@ const CreateAccountPage = props => {
                 </StoreTitle>
                 <div className={cn(classes.leftContentContainer, '')}>
                     <div class="auth-left">
-                        <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" />
                         <p style={{
                             "fontSize": "20px",
                             "fontWeight": 500
                         }}>Create an account to start shopping or selling your collectibles.</p>
+                        <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" />
                     </div>
                 </div>
-            </div>
-            <div className={classes.root}>
+            </div> */}
+            <div className={cn(classes.root, classes.rightPane)}>
                 <StoreTitle>
                     {formatMessage({
                         id: 'createAccountPage.title',
                         defaultMessage: 'Create an Account'
                     })}
                 </StoreTitle>
-                <div className={cn(classes.contentContainer, '!border !border-gray-100 !rounded-lg')}>
+                <div className={cn(classes.contentContainer)}>
                     <CreateAccount {...createAccountProps} />
                 </div>
             </div>

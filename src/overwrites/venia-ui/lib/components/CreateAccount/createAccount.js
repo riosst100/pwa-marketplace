@@ -15,6 +15,9 @@ import Button from '@magento/venia-ui/lib/components/Button';
 import Checkbox from '@magento/venia-ui/lib/components/Checkbox';
 import Field from '@magento/venia-ui/lib/components/Field';
 import TextInput from '@magento/venia-ui/lib/components/TextInput';
+import Country from '@magento/venia-ui/lib/components/Country';
+import Region from '@magento/venia-ui/lib/components/Region';
+import Postcode from '@magento/venia-ui/lib/components/Postcode';
 import defaultClasses from './createAccount.module.css';
 import FormError from '@magento/venia-ui/lib/components/FormError';
 import Password from '@magento/venia-ui/lib/components/Password';
@@ -93,8 +96,14 @@ const CreateAccount = props => {
                 />
             </h2> */}
             <FormError errors={Array.from(errors.values())} />
-            <div className='grid grid-cols-2 gap-6'>
-                <Field
+            {/* Two fieldsets side-by-side: Personal Information & Address */}
+            <div className={classes.twoColumn}>
+                <fieldset className={classes.fieldset}>
+                    <legend className={classes.legend}>
+                        <FormattedMessage id={'createAccount.personalInformation'} defaultMessage={'Personal Information'} />
+                    </legend>
+                    <div className={classes.sectionGrid}>
+                        <Field
                     id="firstName"
                     label={formatMessage({
                         id: 'createAccount.firstNameText',
@@ -103,145 +112,222 @@ const CreateAccount = props => {
                     classes={{
                         label: "font-normal text-left mb-2 text-[14px] block mb-2"
                     }}
-                >
-                    <TextInput
-                        id="firstName"
-                        field="customer.firstname"
-                        autoComplete="given-name"
-                        validate={isRequired}
-                        validateOnBlur
-                        mask={value => value && value.trim()}
-                        maskOnBlur={true}
-                        data-cy="customer-firstname"
-                        aria-label={formatMessage({
-                            id: 'global.firstNameRequired',
-                            defaultMessage: 'First Name Required'
+                        >
+                            <TextInput
+                                id="firstName"
+                                field="customer.firstname"
+                                autoComplete="given-name"
+                                validate={isRequired}
+                                validateOnBlur
+                                mask={value => value && value.trim()}
+                                maskOnBlur={true}
+                                data-cy="customer-firstname"
+                                aria-label={formatMessage({
+                                    id: 'global.firstNameRequired',
+                                    defaultMessage: 'First Name Required'
+                                })}
+                            />
+                        </Field>
+                        <Field
+                            id="lastName"
+                            label={formatMessage({
+                                id: 'createAccount.lastNameText',
+                                defaultMessage: 'Last Name'
+                            })}
+                            classes={{
+                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            }}
+                        >
+                            <TextInput
+                                id="lastName"
+                                field="customer.lastname"
+                                autoComplete="family-name"
+                                validate={isRequired}
+                                validateOnBlur
+                                mask={value => value && value.trim()}
+                                maskOnBlur={true}
+                                data-cy="customer-lastname"
+                                aria-label={formatMessage({
+                                    id: 'global.lastNameRequired',
+                                    defaultMessage: 'Last Name Required'
+                                })}
+                            />
+                        </Field>
+                        <Field
+                            id="Email"
+                            label={formatMessage({
+                                id: 'createAccount.emailText',
+                                defaultMessage: 'Email'
+                            })}
+                            classes={{
+                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            }}
+                        >
+                            <TextInput
+                                id="EmailField"
+                                field="customer.email"
+                                autoComplete="email"
+                                validate={isRequired}
+                                validateOnBlur
+                                mask={value => value && value.trim()}
+                                maskOnBlur={true}
+                                data-cy="customer-email"
+                                aria-label={formatMessage({
+                                    id: 'global.emailRequired',
+                                    defaultMessage: 'Email Required'
+                                })}
+                            />
+                        </Field>
+                        <Field
+                            id="PhoneNumberField"
+                            label={formatMessage({
+                                id: 'createAccount.phoneNumber',
+                                defaultMessage: 'Phone Number'
+                            })}
+                            classes={{
+                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            }}
+                        >
+                            <TextInput
+                                id="phoneNumber"
+                                field="customer.phoneNumber"
+                                autoComplete="phoneNumber"
+                                // validate={isRequired}
+                                validateOnBlur
+                                mask={value => value && value.trim()}
+                                maskOnBlur={true}
+                                data-cy="customer-phoneNumber"
+                                aria-label={formatMessage({
+                                    id: 'global.phoneNumberRequired',
+                                    defaultMessage: 'Phone Number Required'
+                                })}
+                            />
+                        </Field>
+                        <Password
+                            id="Password"
+                            autoComplete="new-password"
+                            fieldName="password"
+                            isToggleButtonHidden={false}
+                            label={formatMessage({
+                                id: 'createAccount.passwordText',
+                                defaultMessage: 'Password'
+                            })}
+                            validate={combine([
+                                isRequired,
+                                [hasLengthAtLeast, 8],
+                                validatePassword
+                            ])}
+                            validateOnBlur
+                            mask={value => value && value.trim()}
+                            maskOnBlur={true}
+                            data-cy="password"
+                            aria-label={formatMessage({
+                                id: 'global.passwordRequired',
+                                defaultMessage: 'Password Required'
+                            })}
+                        />
+                        <Password
+                            id="ConfirmPassword"
+                            autoComplete="confirm-password"
+                            fieldName="confirmpassword"
+                            isToggleButtonHidden={false}
+                            label={formatMessage({
+                                id: 'createAccount.confirmPassword',
+                                defaultMessage: 'Confirm Password'
+                            })}
+                            validate={combine([
+                                isRequired,
+                                [hasLengthAtLeast, 8],
+                                validatePassword
+                            ])}
+                            validateOnBlur
+                            mask={value => value && value.trim()}
+                            maskOnBlur={true}
+                            data-cy="password"
+                            aria-label={formatMessage({
+                                id: 'global.confirmPasswordRequired',
+                                defaultMessage: 'Confirm Password Required'
+                            })}
+                        />
+                    </div>
+                </fieldset>
+
+                <fieldset className={classes.fieldset}>
+                    <legend className={classes.legend}>
+                        <FormattedMessage id={'createAccount.addressInformation'} defaultMessage={'Address'} />
+                    </legend>
+                    <div className={classes.sectionGrid}>
+                        <Field
+                        id="street1"
+                        label={formatMessage({
+                            id: 'global.streetAddress',
+                            defaultMessage: 'Street Address'
                         })}
-                    />
-                </Field>
-                <Field
-                    id="lastName"
-                    label={formatMessage({
-                        id: 'createAccount.lastNameText',
-                        defaultMessage: 'Last Name'
-                    })}
-                    classes={{
-                        label: "font-normal text-left mb-2 text-[14px] block mb-2"
-                    }}
-                >
-                    <TextInput
-                        id="lastName"
-                        field="customer.lastname"
-                        autoComplete="family-name"
-                        validate={isRequired}
-                        validateOnBlur
-                        mask={value => value && value.trim()}
-                        maskOnBlur={true}
-                        data-cy="customer-lastname"
-                        aria-label={formatMessage({
-                            id: 'global.lastNameRequired',
-                            defaultMessage: 'Last Name Required'
+                        classes={{
+                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                        }}
+                        >
+                            <TextInput
+                                field="address.street[0]"
+                                data-cy="address-street-0"
+                            />
+                        </Field>
+                        <Field
+                        id="street2"
+                        label={formatMessage({
+                            id: 'global.streetAddress2',
+                            defaultMessage: 'Street Address 2'
                         })}
-                    />
-                </Field>
-                <Field
-                    id="Email"
-                    label={formatMessage({
-                        id: 'createAccount.emailText',
-                        defaultMessage: 'Email'
-                    })}
-                    classes={{
-                        label: "font-normal text-left mb-2 text-[14px] block mb-2"
-                    }}
-                >
-                    <TextInput
-                        id="EmailField"
-                        field="customer.email"
-                        autoComplete="email"
-                        validate={isRequired}
-                        validateOnBlur
-                        mask={value => value && value.trim()}
-                        maskOnBlur={true}
-                        data-cy="customer-email"
-                        aria-label={formatMessage({
-                            id: 'global.emailRequired',
-                            defaultMessage: 'Email Required'
+                        classes={{
+                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                        }}
+                        >
+                            <TextInput
+                                field="address.street[1]"
+                                data-cy="address-street-1"
+                            />
+                        </Field>
+                        <Field
+                        id="city"
+                        label={formatMessage({
+                            id: 'global.city',
+                            defaultMessage: 'City'
                         })}
-                    />
-                </Field>
-                <Field
-                    id="PhoneNumberField"
-                    label={formatMessage({
-                        id: 'createAccount.phoneNumber',
-                        defaultMessage: 'Phone Number'
-                    })}
-                    classes={{
-                        label: "font-normal text-left mb-2 text-[14px] block mb-2"
-                    }}
-                >
-                    <TextInput
-                        id="phoneNumber"
-                        field="customer.phoneNumber"
-                        autoComplete="phoneNumber"
-                        // validate={isRequired}
-                        validateOnBlur
-                        mask={value => value && value.trim()}
-                        maskOnBlur={true}
-                        data-cy="customer-phoneNumber"
-                        aria-label={formatMessage({
-                            id: 'global.phoneNumberRequired',
-                            defaultMessage: 'Phone Number Required'
-                        })}
-                    />
-                </Field>
-                <Password
-                    id="Password"
-                    autoComplete="new-password"
-                    fieldName="password"
-                    isToggleButtonHidden={false}
-                    label={formatMessage({
-                        id: 'createAccount.passwordText',
-                        defaultMessage: 'Password'
-                    })}
-                    validate={combine([
-                        isRequired,
-                        [hasLengthAtLeast, 8],
-                        validatePassword
-                    ])}
-                    validateOnBlur
-                    mask={value => value && value.trim()}
-                    maskOnBlur={true}
-                    data-cy="password"
-                    aria-label={formatMessage({
-                        id: 'global.passwordRequired',
-                        defaultMessage: 'Password Required'
-                    })}
-                />
-                <Password
-                    id="ConfirmPassword"
-                    autoComplete="confirm-password"
-                    fieldName="confirmpassword"
-                    isToggleButtonHidden={false}
-                    label={formatMessage({
-                        id: 'createAccount.confirmPassword',
-                        defaultMessage: 'Confirm Password'
-                    })}
-                    validate={combine([
-                        isRequired,
-                        [hasLengthAtLeast, 8],
-                        validatePassword
-                    ])}
-                    validateOnBlur
-                    mask={value => value && value.trim()}
-                    maskOnBlur={true}
-                    data-cy="password"
-                    aria-label={formatMessage({
-                        id: 'global.confirmPasswordRequired',
-                        defaultMessage: 'Confirm Password Required'
-                    })}
-                />
+                        classes={{
+                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                        }}
+                        >
+                            <TextInput
+                                field="address.city"
+                                data-cy="address-city"
+                            />
+                        </Field>
+                        <div>
+                            <Country
+                                field={'address.country_code'}
+                                data-cy="address-country"
+                            />
+                        </div>
+                        <div>
+                            <Region
+                                countryCodeField={'address.country_code'}
+                                fieldInput={'address.region.region'}
+                                fieldSelect={'address.region.region_id'}
+                                optionValueKey="id"
+                                data-cy="address-region"
+                            />
+                        </div>
+                        <div>
+                            <Postcode
+                                fieldInput="address.postcode"
+                                data-cy="address-postcode"
+                            />
+                        </div>
+                    </div>
+                </fieldset>
             </div>
-            <div className={classes.subscribe}>
+
+            {/* <div className={classes.subscribe}>
                 <Checkbox
                     field="subscribe"
                     id="subscribe"
@@ -250,9 +336,9 @@ const CreateAccount = props => {
                         defaultMessage: 'Subscribe to news and updates'
                     })}
                 />
-            </div>
+            </div> */}
             <GoogleRecaptcha {...recaptchaWidgetProps} />
-            <div className="flex w-full justify-center">
+            <div className="flex w-full justify-center mt-6">
                 {submitButton}
                 {/* {cancelButton} */}
             </div>

@@ -8,7 +8,7 @@ import { useAwaitQuery } from '@magento/peregrine/lib/hooks/useAwaitQuery';
 import { retrieveCartId } from '@magento/peregrine/lib/store/actions/cart';
 import { useGoogleReCaptcha } from '@magento/peregrine/lib/hooks/useGoogleReCaptcha';
 
-import DEFAULT_OPERATIONS from '@magento/peregrine/lib/talons/CreateAccount/createAccount.gql';
+import DEFAULT_OPERATIONS from '@riosst100/pwa-marketplace/src/overwrites/peregrine/lib/talons/CreateAccount/createAccount.gql';
 import { useEventingContext } from '@magento/peregrine/lib/context/eventing';
 
 import { useHistory } from 'react-router-dom';
@@ -76,6 +76,8 @@ export const useCreateAccount = props => {
         fetchPolicy: 'no-cache'
     });
 
+    // No separate address creation mutation; address is sent with createCustomer
+
     const fetchUserDetails = useAwaitQuery(getCustomerQuery);
     const fetchCartDetails = useAwaitQuery(getCartDetailsQuery);
 
@@ -110,14 +112,44 @@ export const useCreateAccount = props => {
                 // Get reCaptchaV3 Data for createAccount mutation
                 const recaptchaDataForCreateAccount = await generateReCaptchaData();
 
-                // Create the account and then sign in.
+                // Build address payload (required by backend createCustomer)
+                const addr = formValues.address || {};
+                const addressInput = {
+                    city: addr.city,
+                    country_code: addr.country_code,
+                    firstname:
+                        addr.firstname || formValues.customer.firstname,
+                    lastname:
+                        addr.lastname || formValues.customer.lastname,
+                    postcode: addr.postcode,
+                    street: Array.isArray(addr.street) ? addr.street : (addr.street ? [addr.street] : []),
+                    telephone: formValues.customer.phoneNumber || addr.telephone || '',
+                    default_shipping: addr.default_shipping || false,
+                    default_billing: addr.default_billing || false
+                };
+
+                if (addr.middlename) {
+                    addressInput.middlename = addr.middlename;
+                }
+                if (addr.region) {
+                    addressInput.region = {
+                        region: addr.region.region,
+                        region_code: addr.region.region_code,
+                        region_id: addr.region.region_id
+                            ? parseInt(addr.region.region_id)
+                            : undefined
+                    };
+                }
+
+                // Create the account (with address) then redirect to verify-email.
                 await createAccount({
                     variables: {
                         email: formValues.customer.email,
                         firstname: formValues.customer.firstname,
                         lastname: formValues.customer.lastname,
                         password: formValues.password,
-                        is_subscribed: !!formValues.subscribe
+                        is_subscribed: !!formValues.subscribe,
+                        address: addressInput
                     },
                     ...recaptchaDataForCreateAccount
                 });
@@ -132,8 +164,11 @@ export const useCreateAccount = props => {
                     }
                 });
 
+                // Store email for verification page
                 storage.setItem('confirm_email', formValues.customer.email);
+                // Address already sent with createCustomer; no need to store locally
 
+                // Redirect to email verification page
                 history.push('/verify-email');
 
                 // Get reCaptchaV3 Data for signIn mutation

@@ -23,7 +23,6 @@ const brandLinks = new Map()
 const getToKnowUsLinks = new Map()
     .set('Get to Know Us', null)
     .set('About Us', '/about-us')
-    .set('Careers', '/career')
     .set('Contact Us', '/contact-us');
 
 const sitesLinks = new Map()

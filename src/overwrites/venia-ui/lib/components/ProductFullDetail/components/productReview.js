@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Review from '@riosst100/pwa-marketplace/src/components/ProductReviewItem';
 import { Star1 } from 'iconsax-react';
 import Button from '../../Button';
+// import ModalFormReview from './modalFormReview';
 
 const productReview = (props) => {
     const {
@@ -11,7 +12,7 @@ const productReview = (props) => {
         errorProductReview,
         ratingsMetadataData,
         loadingRatingsMetadata,
-        handleSubmitReview,
+        // handleSubmitReview,
         defaultNickname,
         product
     } = props;
@@ -93,7 +94,7 @@ const productReview = (props) => {
 
     return (
         <>
-            <ModalFormReview
+            {/* <ModalFormReview
                 open={open}
                 setOpen={setOpen}
                 defaultNickname={defaultNickname}
@@ -113,7 +114,7 @@ const productReview = (props) => {
                     if (result.success) setOpen(false);
                 }}
                 submitting={submitting}
-            />
+            /> */}
             <div className={className}>
                 <div className="w-full flex items-start xs_flex-col lg_flex-row gap-[30px]">
                     <div className="w-full xs_max-w-full lg_max-w-[365px] border border-[#E6E9EA] rounded-md p-6">
@@ -172,7 +173,7 @@ const productReview = (props) => {
                                     <option value="1">1 Stars</option>
                                 </select>
                             </div>
-                            <Button
+                            {/* <Button
                                 priority='low'
                                 classes={{
                                     content: 'normal-case font-normal text-base'
@@ -180,7 +181,7 @@ const productReview = (props) => {
                                 onClick={() => setOpen(true)}
                             >
                                 Write a review
-                            </Button>
+                            </Button> */}
                         </div>
                         {/* Reviews List */}
                         <div className='space-y-4 mb-6'>
