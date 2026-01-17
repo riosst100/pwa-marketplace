@@ -118,6 +118,12 @@ const ProductFullDetail = props => {
         addToCartResponseData,
         errorAddingProductToCart,
         isAddProductLoading,
+        productReviewData,
+        loadingProductReview,
+        errorProductReview,
+        ratingsMetadataData,
+        loadingRatingsMetadata,
+        defaultNickname
     } = talonProps;
    
     const [, { addToast }] = useToasts();
@@ -689,7 +695,16 @@ const ProductFullDetail = props => {
         {
             id: 'product-reviews',
             title: 'Reviews',
-            content: <ProductReviews className={cn(contentContainerClass, classes.contentContainerTabOverride)} />
+            content: <ProductReviews 
+                        className={cn(contentContainerClass, classes.contentContainerTabOverride)}
+                        productReviewData={productReviewData}
+                        loadingProductReview={loadingProductReview}
+                        errorProductReview={errorProductReview}
+                        ratingsMetadataData={ratingsMetadataData}
+                        loadingRatingsMetadata={loadingRatingsMetadata}
+                        defaultNickname={defaultNickname}
+                        product={product} 
+                    />
         }
     ];
 

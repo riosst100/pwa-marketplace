@@ -11,6 +11,7 @@ import CollapsedImageGallery from './collapsedImageGallery';
 import OrderProgressBar from './orderProgressBar';
 import OrderDetails from './OrderDetails';
 import defaultClasses from './orderRow.module.css';
+import { getRowStatusLabel, getOrderGroup, GROUPS } from '@riosst100/pwa-marketplace/src/talons/OrderHistoryPage/statusMapper';
 import cn from 'classnames';
 import { Verify, Shop, ConvertCard } from 'iconsax-react';
 import PlaceholderImage from '@magento/venia-ui/lib/components/Image/placeholderImage';
@@ -46,28 +47,8 @@ const OrderRow = props => {
 
     const hasInvoice = !!invoices.length;
     const hasShipment = !!shipments.length;
-    let derivedStatus;
-    if (status === 'Complete') {
-        derivedStatus = formatMessage({
-            id: 'orderRow.deliveredText',
-            defaultMessage: 'Delivered'
-        });
-    } else if (hasShipment) {
-        derivedStatus = formatMessage({
-            id: 'orderRow.shippedText',
-            defaultMessage: 'Shipped'
-        });
-    } else if (hasInvoice) {
-        derivedStatus = formatMessage({
-            id: 'orderRow.readyToShipText',
-            defaultMessage: 'Ready to ship'
-        });
-    } else {
-        derivedStatus = formatMessage({
-            id: 'orderRow.processingText',
-            defaultMessage: 'Processing'
-        });
-    }
+    const mainStatusLabel = getRowStatusLabel(status);
+    const group = getOrderGroup(status, shipments);
 
     const talonProps = useOrderRow({ items });
     const { loading, isOpen, handleContentToggle, imagesData } = talonProps;
@@ -136,7 +117,7 @@ const OrderRow = props => {
         return { url, label };
     };
 
-    const showNewReturnButton = status === 'Complete' || derivedStatus === formatMessage({ id: 'orderRow.deliveredText', defaultMessage: 'Delivered' });
+    const showNewReturnButton = group === GROUPS.COMPLETE;
 
     const handleNewReturn = () => {
         // Inject product_image per item with safe fallbacks (prefer product_image_url from query)
@@ -180,7 +161,6 @@ const OrderRow = props => {
     };
 
     const handleWriteReview = useCallback(( order ) => {
-        console.log('order',order)
         if (order) {
             setReviewOrder(order);
         }
@@ -210,8 +190,14 @@ const OrderRow = props => {
                 <div className='flex flex-col'>
                     <div className='flex w-full justify-start mt-2.5 md_mt-0 md_justify-end'>
                         <span className={cn(classes.orderStatusBadge, badgeStatusStyle())}>
-                            {derivedStatus}
+                            {mainStatusLabel}
                         </span>
+                        {/* {group === GROUPS.SHIPPED ? (
+                            <span className={cn(classes.orderStatusBadge, 'ml-2 text-[12px] px-2 py-1 rounded-full border border-blue-100 bg-blue-50 text-blue-700')}
+                                title={formatMessage({ id: 'orderRow.shippedText', defaultMessage: 'Shipped' })}>
+                                {formatMessage({ id: 'orderRow.shippedText', defaultMessage: 'Shipped' })}
+                            </span>
+                        ) : null} */}
                     </div>
                 </div>
             </div>

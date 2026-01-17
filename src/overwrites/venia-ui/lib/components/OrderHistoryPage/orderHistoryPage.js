@@ -49,7 +49,10 @@ const OrderHistoryPage = props => {
         orders,
         pageInfo,
         searchText,
-        pageControl
+        pageControl,
+        setStatusFilter,
+        statusFilter,
+        tabCounts
     } = talonProps;
     const [, { addToast }] = useToasts();
     const { formatMessage } = useIntl();
@@ -81,7 +84,9 @@ const OrderHistoryPage = props => {
     }, [orders]);
 
     const pageContents = useMemo(() => {
-        if (isLoadingWithoutData) {
+        // Block list rendering while any background load/aggregation is happening
+        // to avoid flicker and partial lists after navigation.
+        if (isLoadingWithoutData || isBackgroundLoading) {
             return <LoadingIndicator />;
         } else if (!isBackgroundLoading && searchText && !orders.length) {
             return (
@@ -166,8 +171,6 @@ const OrderHistoryPage = props => {
         }
     }, [addToast, errorMessage]);
 
-    console.log('reviewOrder',reviewOrder)
-
     return (
         <OrderHistoryContextProvider>
             <ReviewModal
@@ -202,7 +205,7 @@ const OrderHistoryPage = props => {
                 </div> */}
 
                 <div className={classes.filterRow}>
-                    <Form className={cn(classes.search, 'border border-gray-100 rounded-full px-[15px]')} onSubmit={handleSubmit}>
+                    <Form className={cn(classes.search, 'border border-gray-100 rounded-full mt-5 mb-5 px-[15px]')} onSubmit={handleSubmit}>
                         <TextInput
                             // after={resetButtonElement}
                             // before={searchIcon}
@@ -233,12 +236,48 @@ const OrderHistoryPage = props => {
                     </Form>
                     <span className={classes.pageInfo}>{pageInfoLabel}</span>
                 </div>
+                {/* Status Tabs - placed below search bar */}
+                <div className="mb-0">
+                    <nav aria-label="Order status filters" className={classes.tabsContainer}>
+                        {[
+                            { label: 'All', value: 'ALL' },
+                            { label: 'Processing', value: 'Processing' },
+                            { label: 'Shipped', value: 'Shipped' },
+                            { label: 'Complete', value: 'Complete' },
+                            { label: 'Canceled', value: 'Canceled' }
+                        ].map(tab => (
+                            <button
+                                key={tab.value}
+                                onClick={() => {
+                                    if (tab.value === 'ALL') {
+                                        // All tab resets filters and shows full dataset
+                                        handleReset();
+                                    } else {
+                                        setStatusFilter(tab.value);
+                                        pageControl?.setPage?.(1);
+                                    }
+                                }}
+                                className={cn(classes.tab, statusFilter === tab.value && classes.tabActive)}
+                                disabled={isBackgroundLoading}
+                                type="button"
+                            >
+                                {tab.label}
+                                <span className={cn('ml-2 text-xs rounded-full px-2 py-0.5', statusFilter === tab.value ? classes.badgeActive : classes.badge)}>
+                                    {(
+                                        tabCounts && typeof tabCounts[tab.value] !== 'undefined'
+                                            ? tabCounts[tab.value]
+                                            : (tab.value === 'ALL'
+                                                ? (pageInfo && pageInfo.total ? pageInfo.total : 0)
+                                                : 0)
+                                    )}
+                                </span>
+                            </button>
+                        ))}
+                    </nav>
+                </div>
                 {pageContents}
-                {/* Pagination Controls */}
                 <div className="mt-4">
-                    {pageControl?.totalPages > 1 ? (
-                        <Pagination pageControl={pageControl} />
-                    ) : null}
+                    <Pagination pageControl={pageControl} />
                 </div>
                 {loadMoreButton}
             </div>

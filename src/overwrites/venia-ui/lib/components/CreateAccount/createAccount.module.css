@@ -1,8 +1,11 @@
 .root {
-    composes: gap-6 from global;
     composes: grid from global;
+    composes: gap-8 from global;
     composes: justify-items-stretch from global;
-    composes: p-[30px] from global;
+    composes: p-[24px] from global;
+    composes: w-full from global;
+    composes: max-w-[980px] from global;
+    composes: mx-auto from global;
 }
 
 .message {
@@ -49,4 +52,34 @@
     composes: capitalize from global;
     composes: text-lg from global;
     composes: font-medium from global;
+}
+
+.fieldset {
+    composes: p-[20px] from global;
+    composes: border from global;
+    composes: border-subtle from global;
+    composes: rounded-lg from global;
+    composes: bg-white from global;
+    border-color: #E6E9EA;
+}
+
+.legend {
+    composes: text-lg from global;
+    composes: font-medium from global;
+    composes: mb-4 from global;
+    composes: text-center from global;
+}
+
+.twoColumn {
+    composes: grid from global;
+    composes: gap-8 from global;
+    composes: grid-cols-1 from global;
+    composes: lg_grid-cols-2 from global;
+}
+
+.sectionGrid {
+    composes: grid from global;
+    composes: gap-6 from global;
+    composes: grid-cols-1 from global;
+    composes: md_grid-cols-2 from global;
 }

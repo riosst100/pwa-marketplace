@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useMemo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { StoreTitle } from '@magento/venia-ui/lib/components/Head';
+import LoadingIndicator from '@magento/venia-ui/lib/components/LoadingIndicator';
 import Button from '@magento/venia-ui/lib/components/Button';
 import cn from 'classnames';
 import { Printer, ConvertCard } from 'iconsax-react';
@@ -36,11 +37,10 @@ const OrderDetail = (props) => {
         if (!status) return false;
         return (
             status === 'Complete' ||
-            status.toLowerCase() === 'delivered' // antisipasi backend bisa lowercase
+            status.toLowerCase() === 'delivered' 
         );
     }, [order]);
 
-    // Handler sama seperti orderRow
     const handleNewReturn = useCallback(() => {
         if (!order) return;
         let orderWithImages = { ...order };
@@ -69,7 +69,7 @@ const OrderDetail = (props) => {
     }, [order, history]);
 
     // Fallback: fetch order by orderNumber from order history if not found
-    const { orders } = useOrderHistoryPage();
+    const { orders, isBackgroundLoading: ordersLoading, isLoadingWithoutData: ordersInitialLoading } = useOrderHistoryPage();
 
     const fallbackOrder = useMemo(() => {
         if (!order && orderNumberParam && orders && orders.length > 0) {
@@ -86,7 +86,7 @@ const OrderDetail = (props) => {
         }
     }, [fallbackOrder, order]);
     // Fetch RMA data for this order
-    const { rmas, isLoadingWithoutData } = useRmaPage({ orderNumber: orderNumberParam });
+    const { rmas, isLoadingWithoutData: rmaLoading } = useRmaPage({ orderNumber: orderNumberParam });
 
     // Extract order data
     const invoiceNumber = order?.invoices?.[0]?.number || '-';
@@ -138,14 +138,14 @@ const OrderDetail = (props) => {
             }, 500);
         }, []);
 
-    // Early guard: show skeleton if order still resolving
-    if (!order && !fallbackOrder) {
+    // Guard: show a consistent loader while any detail-related query is in flight
+    const isDetailLoading = (!order && !fallbackOrder) || ordersInitialLoading || ordersLoading || rmaLoading;
+
+    if (isDetailLoading) {
         return (
             <div className='print-area relative grid gap-y-md' ref={printRef}>
                 <StoreTitle>{PAGE_TITLE}</StoreTitle>
-                <div aria-live="polite" className="text-xl font-medium text-left">
-                    {PAGE_TITLE} - #-
-                </div>
+                <LoadingIndicator />
             </div>
         );
     }
@@ -272,7 +272,7 @@ const OrderDetail = (props) => {
                             })
                         }
                     </div>
-                    <RMAList rmas={rmas} isLoadingWithoutData={isLoadingWithoutData} />
+                    <RMAList rmas={rmas} isLoadingWithoutData={rmaLoading} />
                 </div>
             )}
             <div className="block block-order-details-view">
