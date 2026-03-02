@@ -110,7 +110,7 @@ const CreateAccount = props => {
                         defaultMessage: 'First Name'
                     })}
                     classes={{
-                        label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                        label: "font-normal text-left mb-2 text-[14px] block mb-3"
                     }}
                         >
                             <TextInput
@@ -135,7 +135,7 @@ const CreateAccount = props => {
                                 defaultMessage: 'Last Name'
                             })}
                             classes={{
-                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                                label: "font-normal text-left mb-2 text-[14px] block mb-3"
                             }}
                         >
                             <TextInput
@@ -160,7 +160,7 @@ const CreateAccount = props => {
                                 defaultMessage: 'Email'
                             })}
                             classes={{
-                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                                label: "font-normal text-left mb-2 text-[14px] block mb-3"
                             }}
                         >
                             <TextInput
@@ -185,7 +185,7 @@ const CreateAccount = props => {
                                 defaultMessage: 'Phone Number'
                             })}
                             classes={{
-                                label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                                label: "font-normal text-left mb-2 text-[14px] block mb-3"
                             }}
                         >
                             <TextInput
@@ -264,7 +264,7 @@ const CreateAccount = props => {
                             defaultMessage: 'Street Address'
                         })}
                         classes={{
-                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            label: "font-normal text-left mb-2 text-[14px] block mb-3"
                         }}
                         >
                             <TextInput
@@ -279,7 +279,7 @@ const CreateAccount = props => {
                             defaultMessage: 'Street Address 2'
                         })}
                         classes={{
-                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            label: "font-normal text-left mb-2 text-[14px] block mb-3"
                         }}
                         >
                             <TextInput
@@ -294,7 +294,7 @@ const CreateAccount = props => {
                             defaultMessage: 'City'
                         })}
                         classes={{
-                            label: "font-normal text-left mb-2 text-[14px] block mb-2"
+                            label: "font-normal text-left mb-2 text-[14px] block mb-3"
                         }}
                         >
                             <TextInput
@@ -302,13 +302,13 @@ const CreateAccount = props => {
                                 data-cy="address-city"
                             />
                         </Field>
-                        <div>
+                        <div className={classes.countryField}>
                             <Country
                                 field={'address.country_code'}
                                 data-cy="address-country"
                             />
                         </div>
-                        <div>
+                        <div className={classes.regionField}>
                             <Region
                                 countryCodeField={'address.country_code'}
                                 fieldInput={'address.region.region'}
@@ -317,7 +317,7 @@ const CreateAccount = props => {
                                 data-cy="address-region"
                             />
                         </div>
-                        <div>
+                        <div className={classes.postcodeField}>
                             <Postcode
                                 fieldInput="address.postcode"
                                 data-cy="address-postcode"
