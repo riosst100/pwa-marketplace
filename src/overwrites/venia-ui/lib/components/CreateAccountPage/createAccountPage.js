@@ -16,6 +16,21 @@ const CreateAccountPage = props => {
     const { formatMessage } = useIntl();
 
     return (
+        <>
+        <div className={cn(classes.leftContentContainer, '')}>
+            <div class="auth-left">
+                <p style={{
+                    "fontSize": "24px",
+                    "fontWeight": 500,
+                    "textAlign": "center",
+                    "marginTop": "2rem",
+                    "borderBottom": "1px solid #F2F2F2",
+                    "paddingBottom": "1rem"
+                    
+                }}>Create an account to start shopping or selling your collectibles</p>
+                {/* <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" /> */}
+            </div>
+        </div>
         <div className={classes.signInRootContainer}>
             {/* <div className={cn(classes.root, classes.leftPane, '!py-[60px]')}>
                 <StoreTitle>
@@ -46,6 +61,7 @@ const CreateAccountPage = props => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
@@ -65,3 +81,4 @@ CreateAccountPage.propTypes = {
 };
 
 export default CreateAccountPage;
+
