@@ -7,6 +7,7 @@ import { shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import { useBecomeSellerLink } from '@riosst100/pwa-marketplace/src/talons/BecomeSellerLink/useBecomeSellerLink';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
+import {Shop} from 'iconsax-react';
 
 const storage = new BrowserPersistence();
 
@@ -23,6 +24,7 @@ const BecomeSellerLink = props => {
 
     return isSeller ? (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
+            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#fff]' />
             <a href={sellerDashboardUrl + "/lofmarketplace/seller/login"}>
                 {formatMessage({
                     id: 'sellerDashboard.title',
@@ -32,6 +34,7 @@ const BecomeSellerLink = props => {
         </div>
     ) : (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
+            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#fff]' />
             <Link
                 to={resourceUrl('/become-seller')}
                 className='text-base leading-[16px]'

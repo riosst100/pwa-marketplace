@@ -1,9 +1,16 @@
 .root {
-    composes: grid from global;
-    composes: items-center from global;
-    composes: justify-items-start from global;
-    composes: mx-auto from global;
-    composes: my-0 from global;
-    composes: relative from global;
-    composes: sm_justify-items-end from global;
+  /* composes: grid from global; */
+  composes: items-center from global;
+  composes: justify-items-start from global;
+  composes: mx-auto from global;
+  composes: my-0 from global;
+  composes: relative from global;
+  composes: sm_justify-items-end from global;
+  composes: bg-blue-700 from global;
+  composes: text-white from global;
+  composes: px-2 from global;
+  composes: py-1 from global;
+  composes: rounded-md from global;
+  composes: flex from global;
+  composes: gap-2 from global;
 }
