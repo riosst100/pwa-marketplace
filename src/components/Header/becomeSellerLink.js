@@ -7,7 +7,7 @@ import { shape, string } from 'prop-types';
 
 const BecomeSellerLink = props => {
     const classes = useStyle(defaultClasses, props.classes);
-    const becomeSellerLabel = "Become a Seller";
+    const becomeSellerLabel = "Become a Seller header";
 
     return (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
