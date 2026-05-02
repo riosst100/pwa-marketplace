@@ -101,10 +101,10 @@ const Footer = props => {
                 <p className="text-colorDefault">{copyrightText || null}</p>
                 <ul className="flex flex-row gap-x-2.5">
                     <li data-cy="Footer-terms" className={classes.terms}>
-                        <Link to="/terms-of-use" className="text-colorDefault underline">
+                        <Link to="/terms-and-conditions" className="text-colorDefault underline">
                             <FormattedMessage
                                 id={'footer.termsText'}
-                                defaultMessage={'Terms of Use'}
+                                defaultMessage={'Terms & Conditions'}
                             />
                         </Link>
                     </li>
