@@ -25,7 +25,7 @@ const BecomeSellerLink = props => {
     return isSeller ? (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
             <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#fff]' />
-            <a href={sellerDashboardUrl + "/lofmarketplace/seller/login"}>
+            <a href={sellerDashboardUrl + "/lofmarketplace/seller/login"} target="_blank">
                 {formatMessage({
                     id: 'sellerDashboard.title',
                     defaultMessage: 'Seller Dashboard'
@@ -34,7 +34,7 @@ const BecomeSellerLink = props => {
         </div>
     ) : (
         <div className={classes.root} data-cy="BecomeSellerLink-root">
-            <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#fff]' />
+            {/* <Shop color="#f76b1c" size={14} variant="Outline" className='stroke-[#fff]' /> */}
             <Link
                 to={resourceUrl('/become-seller')}
                 className='text-base leading-[16px]'
