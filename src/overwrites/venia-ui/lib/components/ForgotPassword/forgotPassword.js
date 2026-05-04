@@ -6,12 +6,12 @@ import { useForgotPassword } from '@magento/peregrine/lib/talons/ForgotPassword/
 
 import FormErrors from '@magento/venia-ui/lib/components/FormError';
 import { useStyle } from '@magento/venia-ui/lib/classify';
-import ForgotPasswordForm from '@magento/venia-ui/lib/components/ForgotPassword/ForgotPasswordForm';
-import FormSubmissionSuccessful from '@magento/venia-ui/lib/components/ForgotPassword/FormSubmissionSuccessful';
+import ForgotPasswordForm from './ForgotPasswordForm';
+import FormSubmissionSuccessful from './FormSubmissionSuccessful';
 
 import forgotPasswordOperations from '@magento/venia-ui/lib/components/ForgotPassword/forgotPassword.gql';
 
-import defaultClasses from '@magento/venia-ui/lib/components/ForgotPassword/forgotPassword.module.css';
+import defaultClasses from './forgotPassword.module.css';
 
 const ForgotPassword = props => {
     const { initialValues, onCancel } = props;

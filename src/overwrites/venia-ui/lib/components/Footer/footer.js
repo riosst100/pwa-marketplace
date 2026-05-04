@@ -98,10 +98,10 @@ const Footer = props => {
                 {linkGroups}
             </div>}
             <div className={"flex flex-row justify-between py-4 border-t border-gray-100 w-full py-[15px] mx-[auto] flex justify-between items-center" + (isCheckoutPage ? " max-w-[1000px]" : " max-w-[1300px]")}>
-                <p className="text-colorDefault">{copyrightText || null}</p>
+                <p className="text-colorDefault" style={{"fontSize": "12px"}}>{copyrightText || null}</p>
                 <ul className="flex flex-row gap-x-2.5">
                     <li data-cy="Footer-terms" className={classes.terms}>
-                        <Link to="/terms-and-conditions" className="text-colorDefault underline">
+                        <Link to="/terms-and-conditions" className="text-grey" style={{"fontSize": "12px"}}>
                             <FormattedMessage
                                 id={'footer.termsText'}
                                 defaultMessage={'Terms & Conditions'}
@@ -110,7 +110,7 @@ const Footer = props => {
                     </li>
                     <Divider className="w-[1px] !h-[20px]" />
                     <li data-cy="Footer-privacy" className={classes.privacy}>
-                        <Link to="/privacy-policy" className="text-colorDefault underline">
+                        <Link to="/privacy-policy" className="text-grey" style={{"fontSize": "12px"}}>
                             <FormattedMessage
                                 id={'footer.privacyText'}
                                 defaultMessage={'Privacy Policy'}
