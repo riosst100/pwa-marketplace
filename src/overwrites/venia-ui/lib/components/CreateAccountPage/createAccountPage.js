@@ -16,23 +16,8 @@ const CreateAccountPage = props => {
     const { formatMessage } = useIntl();
 
     return (
-        <>
-        <div className={cn(classes.leftContentContainer, '')}>
-            <div class="auth-left">
-                <p style={{
-                    "fontSize": "24px",
-                    "fontWeight": 500,
-                    "textAlign": "center",
-                    "marginTop": "2rem",
-                    "borderBottom": "1px solid #F2F2F2",
-                    "paddingBottom": "1rem"
-                    
-                }}>Create an account to start shopping or selling your collectibles</p>
-                {/* <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" /> */}
-            </div>
-        </div>
         <div className={classes.signInRootContainer}>
-            {/* <div className={cn(classes.root, classes.leftPane, '!py-[60px]')}>
+            <div className={cn(classes.root, classes.leftPane, '!py-[35px]')}>
                 <StoreTitle>
                     {formatMessage({
                         id: 'signInPage.title',
@@ -45,10 +30,10 @@ const CreateAccountPage = props => {
                             "fontSize": "20px",
                             "fontWeight": 500
                         }}>Create an account to start shopping or selling your collectibles.</p>
-                        <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="50%" />
+                        <img src="https://img.freepik.com/premium-vector/sign-up-concept-illustration_114360-7965.jpg?semt=ais_hybrid&w=740&q=80" width="100%" />
                     </div>
                 </div>
-            </div> */}
+            </div>
             <div className={cn(classes.root, classes.rightPane)}>
                 <StoreTitle>
                     {formatMessage({
@@ -61,7 +46,6 @@ const CreateAccountPage = props => {
                 </div>
             </div>
         </div>
-        </>
     );
 };
 

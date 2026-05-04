@@ -2,7 +2,7 @@
   composes: gap-y-md from global;
   composes: grid from global;
   composes: justify-center from global;
-  composes: px-6 from global;
+  /* composes: px-6 from global; */
   composes: py-[30px] from global;
   composes: text-center from global;
   grid-template-columns: minmax(auto, 1300px);
@@ -28,17 +28,18 @@
   justify-content: space-around;
   display: flex;
   align-items: normal;
+  gap: 20px;
 }
 
-.leftPane {
+/* .leftPane {
   flex: 0 0 40%;
   max-width: 520px;
   padding-right: 16px;
-}
+} */
 
-.rightPane {
+/* .rightPane {
   flex: 1 0 60%;
   max-width: 1300px;
   padding-left: 0;
   padding-right: 0;
-}
+} */
