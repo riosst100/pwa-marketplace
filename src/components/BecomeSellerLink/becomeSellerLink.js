@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl';
 import { useBecomeSellerLink } from '@riosst100/pwa-marketplace/src/talons/BecomeSellerLink/useBecomeSellerLink';
 import { BrowserPersistence } from '@magento/peregrine/lib/util';
 import { Shop } from 'iconsax-react';
+import { Link } from 'react-router-dom';
 
 import { useHistory } from 'react-router-dom';
 import { useUserContext } from '@magento/peregrine/lib/context/user';
